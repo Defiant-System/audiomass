@@ -1,8 +1,69 @@
 
+background: #1b2642;
+
 content {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+	padding: 7px;
+	display: flex;
+
+	.box {
+		width: 100%;
+		height: 100%;
+		border-radius: 3px;
+	}
+
+	.sidebar {
+		position: relative;
+		width: 180px;
+		margin-right: 6px;
+
+		.box {
+			background: #284267;
+			background: linear-gradient(180deg, #324e76 0%, #26385d 100%);
+		}
+	}
+
+	.body {
+		position: relative;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		> div {
+			position: relative;
+
+			&:not(:first-child) {
+				margin-top: 6px;
+			}
+
+			&.top {
+				height: 180px;
+			}
+
+			&.middle {
+				flex: 1;
+
+				.box {
+					background: linear-gradient(180deg, #324e76 0%, #2b3e67 100%);
+				}
+			}
+
+			&.bottom {
+				height: 200px;
+				display: flex;
+
+				.box {
+					background: linear-gradient(180deg, #2d416c 0%, #233254 100%);
+
+					&:not(:first-child) {
+						margin-left: 6px;
+					}
+				}
+			}
+		}
+	}
 }

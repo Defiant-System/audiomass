@@ -4,17 +4,21 @@
 		<meta name="title" value="Loop Slicer" version="1.0"/>
 		<meta name="author" value="Hakan Bilgin" namespace="ant"/>
 		<meta name="license" value="AGPL-3.0"/>
-		<meta name="width" value="600"/>
-		<meta name="height" value="400"/>
+		<meta name="repository" value="https://github.com/Defiant-System/loopslicer"/>
+		<meta name="width" value="960"/>
+		<meta name="height" value="660"/>
 		<meta name="top" value="120"/>
 		<meta name="left" value="120"/>
 		<meta name="minimize"/>
 		<meta name="maximize"/>
 		<meta name="resize"/>
+		<meta name="icons" value="src/svg/icons.svg"/>
 		<meta name="script" value="src/js/main.js"/>
 		<meta name="style" value="src/css/main.less"/>
+		<meta name="toolbar-style" value="src/css/toolbar.less"/>
 		<meta name="content" value="src/partials/content.htm"/>
 
 		@import "src/partials/menubar.xml"
+		@import "src/partials/caption-toolbar.xml"
 	</Head>
 </Application>

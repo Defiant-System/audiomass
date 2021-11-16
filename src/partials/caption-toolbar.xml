@@ -1,0 +1,23 @@
+<CaptionToolBar>
+	<Group width="37%" class="tools-left">
+		<Options>
+			<Tool symbol="icon-rewind"/>
+			<Tool symbol="icon-forward"/>
+			<Tool symbol="icon-stop"/>
+			<Tool symbol="icon-play"/>
+			<Tool symbol="icon-record"/>
+			<Tool symbol="icon-loop"/>
+		</Options>
+	</Group>
+	<Group class="timer">
+		<Field>
+		</Field>
+	</Group>
+	<Group width="41%" class="tools-right">
+		<Options>
+			<Tool />
+			<Tool />
+			<Tool />
+		</Options>
+	</Group>
+</CaptionToolBar>

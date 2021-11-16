@@ -1,0 +1,58 @@
+
+@bg: #182c40;
+@text: #b7cbe0;
+
+.tools-left {
+	text-align: right;
+
+	> div:last-child {
+		margin-right: 0;
+	}
+}
+
+.timer {
+	padding-left: 17px;
+	padding-right: 17px;
+
+	.toolbar-field_ {
+		background: @bg;
+		position: relative;
+		top: -2px;
+		border: 0;
+		border-radius: 4px;
+		box-shadow: inset 0 2px 5px darken(@bg, 7%);
+		height: 26px;
+		padding: 3px 0 0;
+		font-size: 14px;
+		color: @text;
+
+		&:before {
+			content: "00:00:00";
+			text-shadow: 0 0 5px darken(@text, 7%);
+		}
+
+		&:after {
+			content: "";
+			position: absolute;
+			top: 1px;
+			left: 1px;
+			right: 1px;
+			bottom: 1px;
+			background: linear-gradient(0deg, transparent 23%, rgba(230,230,255,.35));
+			border-radius: 2px;
+		}
+	}
+}
+
+.tools-right {
+	&:last-child {
+		text-align: left;
+	}
+
+	.toolbar-options_ {
+		.toolbar-tool_ {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+}

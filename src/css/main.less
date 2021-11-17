@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+
 background: #1b2642;
 
 content {
@@ -9,6 +11,7 @@ content {
 	bottom: 0;
 	padding: 7px;
 	display: flex;
+	font-family: 'Quicksand', sans-serif;
 
 	.box {
 		width: 100%;
@@ -41,14 +44,41 @@ content {
 			}
 
 			&.top {
-				height: 180px;
+				flex: 1;
 			}
 
 			&.middle {
-				flex: 1;
+				height: 260px;
 
 				.box {
 					background: linear-gradient(180deg, #324e76 0%, #2b3e67 100%);
+					padding: 23px 11px 29px 5px;
+					display: flex;
+
+					.info {
+						width: 180px;
+						padding-top: 55px;
+						text-align: center;
+						color: #efeeff;
+
+						h2 {
+							font-size: 59px;
+							font-weight: 100;
+							line-height: 1.25;
+						}
+
+						h3 {
+							font-size: 31px;
+							font-weight: 100;
+						}
+					}
+
+					canvas {
+						background: #1f2c4c;
+						flex: 1;
+						height: 100%;
+						border-radius: 3px;
+					}
 				}
 			}
 
@@ -61,6 +91,18 @@ content {
 
 					&:not(:first-child) {
 						margin-left: 6px;
+					}
+
+					&:nth-child(1) {
+						flex: 1;
+					}
+
+					&:nth-child(2) {
+						width: 190px;
+					}
+
+					&:nth-child(3) {
+						width: 280px;
 					}
 				}
 			}

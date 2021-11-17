@@ -29,8 +29,8 @@ const loopslicer = {
 
 				Audio.init(APP.els.cvs);
 
-				await Audio.visualizeFile({ url: "~/audio/TheUnderworld.ogg" });
-				// await Audio.visualizeFile({ url: "~/audio/ol2.wav" });
+				// await Audio.visualizeFile({ url: "~/audio/TheUnderworld.ogg" });
+				await Audio.visualizeFile({ url: "~/audio/ol2.wav" });
 
 				break;
 		}

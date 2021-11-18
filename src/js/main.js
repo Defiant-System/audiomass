@@ -1,5 +1,5 @@
 
-@import "modules/audio.js"
+@import "modules/waves.js"
 
 
 const loopslicer = {
@@ -7,13 +7,14 @@ const loopslicer = {
 		// fast references
 		this.els = {
 			content: window.find("content"),
-			cvs: window.find("canvas"),
+			cvsFull: window.find(".cvs-full canvas"),
+			cvsZoom: window.find(".cvs-zoom canvas"),
 		};
 
 		// temp
-		this.dispatch({ type: "set-canvas-width-height" });
+		this.dispatch({ type: "draw-audio" });
 	},
-	dispatch(event) {
+	async dispatch(event) {
 		let APP = loopslicer,
 			el;
 		switch (event.type) {
@@ -21,17 +22,24 @@ const loopslicer = {
 			case "window.open":
 				break;
 			// custom events
-			case "set-canvas-width-height":
-				APP.els.cvs.attr({
-					width: APP.els.cvs.prop("offsetWidth"),
-					height: APP.els.cvs.prop("offsetHeight"),
+			case "draw-audio":
+				await Waves.init({
+					url: "~/audio/ol2.wav",
+					cvsFull: APP.els.cvsFull,
+					cvsZoom: APP.els.cvsZoom,
 				});
 
-				Audio.init(APP.els.cvs);
+				Waves.draw({
+					cvs: "cvsFull",
+					start: 0,
+					end: 100,
+				});
 
-				// await Audio.visualizeFile({ url: "~/audio/TheUnderworld.ogg" });
-				Audio.visualizeFile({ url: "~/audio/ol2.wav" });
-
+				Waves.draw({
+					cvs: "cvsZoom",
+					start: 0,
+					end: 30,
+				});
 				break;
 		}
 	}

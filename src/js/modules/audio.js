@@ -49,8 +49,8 @@ const Audio = {
 		this.ctx.clearRect(0, 0, width, height);
 		this.ctx.lineWidth = 1;
 		this.ctx.strokeStyle = "#71a1ca";
-		this.ctx.shadowColor = "#ffffff88";
-		this.ctx.shadowBlur = 11;
+		this.ctx.shadowColor = "#ffffff66";
+		this.ctx.shadowBlur = 7;
 		this.ctx.translate(0.5, 0.5);
 
 		// iterate points

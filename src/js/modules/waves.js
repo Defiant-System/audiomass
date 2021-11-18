@@ -18,6 +18,11 @@ const Waves = {
 			gradient = ctx.createLinearGradient(0, 0, 0, height);
 		// set width & height of canvas
 		el.attr({ width, height });
+
+		ctx.fillStyle = "#71a1ca";
+		// ctx.shadowColor = "#ffffff66";
+		// ctx.shadowBlur = 7;
+
 		// prepare overlay gradient
 		gradient.addColorStop(0.0, "#0c1c36");
 		gradient.addColorStop(0.495, "#6cf7ff");
@@ -29,14 +34,14 @@ const Waves = {
 	},
 	draw(opt) {
 		let o = this[opt.cvs],
-			data = this.data.slice(0, this.data.length * (opt.end / 100)),
+			len = this.data.length,
+			start = Math.round(len * opt.start),
+			end = Math.round(len * opt.end),
+			data = this.data.slice(start, end),
 			step = Math.ceil(data.length / o.width),
 			amp = Math.floor(o.height >> 1);
 
 		o.ctx.clearRect(0, 0, o.width, o.height);
-		o.ctx.fillStyle = "#71a1ca";
-		o.ctx.shadowColor = "#ffffff66";
-		o.ctx.shadowBlur = 7;
 
 		for(var i=0; i<o.width; i++){
 	        var min = 1.0,
@@ -54,10 +59,10 @@ const Waves = {
 	    }
 
 		// gradient overlay
-		o.ctx.save();
-		o.ctx.globalCompositeOperation = "source-atop";
-		o.ctx.fillStyle = o.gradient;
-		o.ctx.fillRect(0, 0, o.width, o.height);
-		o.ctx.restore();
+		// o.ctx.save();
+		// o.ctx.globalCompositeOperation = "source-atop";
+		// o.ctx.fillStyle = o.gradient;
+		// o.ctx.fillRect(0, 0, o.width, o.height);
+		// o.ctx.restore();
 	}
 };

@@ -3,9 +3,8 @@ const Audio = {
 	init(canvas) {
 		this.cvs = canvas[0];
 		this.ctx = this.cvs.getContext("2d");
-
 		this.margin = 3;
-
+		// prepare overlay gradient
 		this.gradient = this.ctx.createLinearGradient(0, 0, 0, this.cvs.height);
 		this.gradient.addColorStop(0.0, "#0c1c36");
 		this.gradient.addColorStop(0.495, "#6cf7ff");
@@ -14,19 +13,18 @@ const Audio = {
 		this.gradient.addColorStop(1.0, "#0c1c36");
 	},
 	async visualizeFile(opt) {
-		let arrayBuffer = await window.fetch(opt.url),
+		let m = this.margin,
+			width = Math.floor(this.cvs.width - (m * 2)),
+			height = this.cvs.height,
+			arrayBuffer = await window.fetch(opt.url),
 			audioContext = new AudioContext(),
 			buffer = await audioContext.decodeAudioData(arrayBuffer),
-			samples = Math.floor(this.cvs.width - (this.margin * 2)),
 			data = buffer.getChannelData(0),
-			width = this.cvs.width,
-			height = this.cvs.height,
-			amp = Math.floor(height >> 1),
-			step = Math.ceil(data.length / width);
+			step = Math.ceil(data.length / width),
+			amp = Math.floor(height >> 1);
 
 		this.ctx.clearRect(0, 0, width, height);
-		this.ctx.lineWidth = 1;
-		this.ctx.strokeStyle = "#71a1ca";
+		this.ctx.fillStyle = "#71a1ca";
 		this.ctx.shadowColor = "#ffffff66";
 		this.ctx.shadowBlur = 7;
 
@@ -38,64 +36,12 @@ const Audio = {
 	            if (datum < min) min = datum;
 	            if (datum > max) max = datum;
 	        }
-	        let x = i,
+	        let x = m + i,
 	        	y = (1+min)*amp,
 	        	w = 1,
 	        	h = Math.max(1,(max-min)*amp);
 	        this.ctx.fillRect(x, y, w, h);
 	    }
-
-		// gradient overlay
-		this.ctx.save();
-		this.ctx.globalCompositeOperation = "source-atop";
-		this.ctx.fillStyle = this.gradient;
-		this.ctx.fillRect(0, 0, width, height);
-		this.ctx.restore();
-	},
-	async visualizeFile2(opt) {
-		let arrayBuffer = await window.fetch(opt.url),
-			audioContext = new AudioContext(),
-			buffer = await audioContext.decodeAudioData(arrayBuffer),
-			samples = Math.floor(this.cvs.width - (this.margin * 2)),
-			rawData = buffer.getChannelData(0),
-			blockSize = Math.floor(rawData.length / samples),
-			data = [];
-
-		for (let i=0; i<samples; i++) {
-			let blockStart = blockSize * i,
-				sum = 0;
-			for (let j=0; j<blockSize; j++) {
-				sum = sum + Math.abs(rawData[blockStart + j])
-			}
-			data.push(sum / blockSize);
-		}
-
-		let multiplier = Math.pow(Math.max(...data), -1);
-		data = data.map(n => n * multiplier);
-
-		this.draw(data);
-	},
-	draw(data) {
-		let width = this.cvs.width,
-			height = this.cvs.height,
-			m = this.margin,
-			h = Math.floor(height >> 1);
-		
-		this.ctx.clearRect(0, 0, width, height);
-		this.ctx.lineWidth = 1;
-		this.ctx.strokeStyle = "#71a1ca";
-		this.ctx.shadowColor = "#ffffff66";
-		this.ctx.shadowBlur = 7;
-		this.ctx.translate(0.5, 0.5);
-
-		// iterate points
-		data.map((v, x) => {
-			let t = Math.round(v * (h - 4)) || .25;
-			this.ctx.beginPath();
-			this.ctx.moveTo(x + m, h + t);
-			this.ctx.lineTo(x + m, h - t);
-			this.ctx.stroke();
-		});
 
 		// gradient overlay
 		this.ctx.save();

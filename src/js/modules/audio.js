@@ -17,14 +17,49 @@ const Audio = {
 		let arrayBuffer = await window.fetch(opt.url),
 			audioContext = new AudioContext(),
 			buffer = await audioContext.decodeAudioData(arrayBuffer),
-			data = this.visualize(buffer, Math.floor(this.cvs.width - (this.margin * 2)));
+			samples = Math.floor(this.cvs.width - (this.margin * 2)),
+			data = buffer.getChannelData(0),
+			width = this.cvs.width,
+			height = this.cvs.height,
+			amp = Math.floor(height >> 1),
+			step = Math.ceil(data.length / width);
 
-		this.draw(data);
+		this.ctx.clearRect(0, 0, width, height);
+		this.ctx.lineWidth = 1;
+		this.ctx.strokeStyle = "#71a1ca";
+		this.ctx.shadowColor = "#ffffff66";
+		this.ctx.shadowBlur = 7;
+
+		for(var i=0; i<width; i++){
+	        var min = 1.0,
+	        	max = -1.0;
+	        for (var j=0; j<step; j++) {
+	            var datum = data[(i * step) + j]; 
+	            if (datum < min) min = datum;
+	            if (datum > max) max = datum;
+	        }
+	        let x = i,
+	        	y = (1+min)*amp,
+	        	w = 1,
+	        	h = Math.max(1,(max-min)*amp);
+	        this.ctx.fillRect(x, y, w, h);
+	    }
+
+		// gradient overlay
+		this.ctx.save();
+		this.ctx.globalCompositeOperation = "source-atop";
+		this.ctx.fillStyle = this.gradient;
+		this.ctx.fillRect(0, 0, width, height);
+		this.ctx.restore();
 	},
-	visualize(buffer, samples) {
-		let rawData = buffer.getChannelData(0),
+	async visualizeFile2(opt) {
+		let arrayBuffer = await window.fetch(opt.url),
+			audioContext = new AudioContext(),
+			buffer = await audioContext.decodeAudioData(arrayBuffer),
+			samples = Math.floor(this.cvs.width - (this.margin * 2)),
+			rawData = buffer.getChannelData(0),
 			blockSize = Math.floor(rawData.length / samples),
-			filteredData = [];
+			data = [];
 
 		for (let i=0; i<samples; i++) {
 			let blockStart = blockSize * i,
@@ -32,13 +67,13 @@ const Audio = {
 			for (let j=0; j<blockSize; j++) {
 				sum = sum + Math.abs(rawData[blockStart + j])
 			}
-			filteredData.push(sum / blockSize);
+			data.push(sum / blockSize);
 		}
 
-		let multiplier = Math.pow(Math.max(...filteredData), -1);
-		filteredData = filteredData.map(n => n * multiplier);
+		let multiplier = Math.pow(Math.max(...data), -1);
+		data = data.map(n => n * multiplier);
 
-		return filteredData;
+		this.draw(data);
 	},
 	draw(data) {
 		let width = this.cvs.width,

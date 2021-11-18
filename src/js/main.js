@@ -13,7 +13,7 @@ const loopslicer = {
 		// temp
 		this.dispatch({ type: "set-canvas-width-height" });
 	},
-	async dispatch(event) {
+	dispatch(event) {
 		let APP = loopslicer,
 			el;
 		switch (event.type) {
@@ -30,7 +30,7 @@ const loopslicer = {
 				Audio.init(APP.els.cvs);
 
 				// await Audio.visualizeFile({ url: "~/audio/TheUnderworld.ogg" });
-				await Audio.visualizeFile({ url: "~/audio/ol2.wav" });
+				Audio.visualizeFile({ url: "~/audio/ol2.wav" });
 
 				break;
 		}

@@ -18,17 +18,14 @@ const Waves = {
 			gradient = ctx.createLinearGradient(0, 0, 0, height);
 		// set width & height of canvas
 		el.attr({ width, height });
-
+		// defaults
 		ctx.fillStyle = "#71a1ca";
-		// ctx.shadowColor = "#ffffff66";
-		// ctx.shadowBlur = 7;
-
 		// prepare overlay gradient
-		gradient.addColorStop(0.0, "#0c1c36");
-		gradient.addColorStop(0.495, "#6cf7ff");
+		gradient.addColorStop(0.1, "#0c1c36");
+		gradient.addColorStop(0.495, "#5dcad0");
 		gradient.addColorStop(0.5, "#fff");
-		gradient.addColorStop(0.505, "#6cf7ff");
-		gradient.addColorStop(1.0, "#0c1c36");
+		gradient.addColorStop(0.505, "#5dcad0");
+		gradient.addColorStop(0.9, "#0c1c36");
 		// essential canvas properties
 		return { cvs, ctx, gradient, width, height };
 	},
@@ -43,26 +40,25 @@ const Waves = {
 
 		o.ctx.clearRect(0, 0, o.width, o.height);
 
-		for(var i=0; i<o.width; i++){
-	        var min = 1.0,
+		for(let x=0; x<o.width; x++){
+	        let min = 1.0,
 	        	max = -1.0;
-	        for (var j=0; j<step; j++) {
-	            var datum = data[(i * step) + j]; 
+	        for (let j=0; j<step; j++) {
+	            let datum = data[(x * step) + j]; 
 	            if (datum < min) min = datum;
 	            if (datum > max) max = datum;
 	        }
-	        let x = i,
-	        	y = (1 + min) * amp,
+	        let y = (1 + min) * amp,
 	        	w = 1,
 	        	h = Math.max(1, (max - min) * amp);
 	        o.ctx.fillRect(x, y, w, h);
 	    }
 
 		// gradient overlay
-		// o.ctx.save();
-		// o.ctx.globalCompositeOperation = "source-atop";
-		// o.ctx.fillStyle = o.gradient;
-		// o.ctx.fillRect(0, 0, o.width, o.height);
-		// o.ctx.restore();
+		o.ctx.save();
+		o.ctx.globalCompositeOperation = "source-atop";
+		o.ctx.fillStyle = o.gradient;
+		o.ctx.fillRect(0, 0, o.width, o.height);
+		o.ctx.restore();
 	}
 };

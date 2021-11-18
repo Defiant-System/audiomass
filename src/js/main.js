@@ -13,7 +13,7 @@ const loopslicer = {
 		};
 
 		// bind event handlers
-		this.els.wavesFull.on("mousedown", this.doFullView);
+		this.els.wavesFull.on("mousedown", this.fullViewMove);
 
 		// temp
 		this.dispatch({ type: "draw-audio" });
@@ -28,26 +28,19 @@ const loopslicer = {
 			// custom events
 			case "draw-audio":
 				await Waves.init({
-					url: "~/audio/ol2.wav",
+					url: "~/audio/TheUnderworld.ogg",
+					// url: "~/audio/ol2.wav",
 					cvsFull: APP.els.wavesFull.find("canvas"),
 					cvsZoom: APP.els.wavesZoom.find("canvas"),
+					zoom: .3,
 				});
 
-				Waves.draw({
-					cvs: "cvsFull",
-					start: 0,
-					end: 1,
-				});
-
-				Waves.draw({
-					cvs: "cvsZoom",
-					start: 0,
-					end: .3,
-				});
+				Waves.draw({ cvs: "cvsFull", start: 0, end: 1 });
+				Waves.draw({ cvs: "cvsZoom", start: 0, end: .3 });
 				break;
 		}
 	},
-	doFullView(event) {
+	fullViewMove(event) {
 		let APP = loopslicer,
 			Self = APP,
 			Drag = Self.drag;
@@ -55,7 +48,7 @@ const loopslicer = {
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-
+				// prepare drag info
 				let pEl = APP.els.wavesFull,
 					el = pEl.find(".area"),
 					offset = {
@@ -63,32 +56,35 @@ const loopslicer = {
 						w: el.prop("offsetWidth"),
 					},
 					clickX = event.clientX - offset.x,
-					minX = -3,
-					maxX = pEl.prop("offsetWidth") - offset.w + 3;
-				
+					min = { x: -3 },
+					max = {
+						x: pEl.prop("offsetWidth") - offset.w + 3,
+						wx: pEl.prop("offsetWidth") + 6,
+						ex: offset.w / (pEl.prop("offsetWidth") + 6),
+					};
 				// create drag object
 				Self.drag = {
 					el,
 					offset,
 					clickX,
-					minX,
-					maxX,
+					min,
+					max,
 				};
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.doFullView);
+				Self.els.doc.on("mousemove mouseup", Self.fullViewMove);
 				break;
 			case "mousemove":
-				let left = Math.min(Math.max(event.clientX - Drag.clickX, Drag.minX), Drag.maxX),
-					start = left / Drag.maxX,
-					end = (left + Drag.offset.w) / Drag.maxX;
+				let left = Math.min(Math.max(event.clientX - Drag.clickX, Drag.min.x), Drag.max.x),
+					start = (left + 3) / Drag.max.wx,
+					end = start + Drag.max.ex;
 				// move element
 				Drag.el.css({ left });
-
+				// update zoomed canvas
 				Waves.draw({ cvs: "cvsZoom", start, end });
 				break;
 			case "mouseup":
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.doFullView);
+				Self.els.doc.off("mousemove mouseup", Self.fullViewMove);
 				break;
 		}
 	}

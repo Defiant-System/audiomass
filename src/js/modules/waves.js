@@ -1,16 +1,41 @@
 
 const Waves = {
 	async init(opt) {
-		let arrayBuffer = await window.fetch(opt.url);
+		let arrayBuffer = await window.fetch(opt.url),
+			gArray;
 		
 		this.audioContext = new AudioContext();
 		this.buffer = await this.audioContext.decodeAudioData(arrayBuffer);
 		this.data = this.buffer.getChannelData(0);
 
-		this.cvsFull = this.prepareCanvas(opt.cvsFull);
-		this.cvsZoom = this.prepareCanvas(opt.cvsZoom);
+		// this is swap canvas
+		this.swap = this.createCanvas();
+		// prepare UI canvases
+		gArray = [
+			{ color: "#555", offset: 0 },
+			{ color: "#ccc", offset: 0.5 },
+			{ color: "#555", offset: 1 },
+		];
+		this.cvsFull = this.prepareCanvas(opt.cvsFull, gArray);
+
+		gArray = [
+			{ color: "#101c32", offset: 0 },
+			{ color: "#2957b9", offset: 0.35 },
+			{ color: "#6ff7ff", offset: 0.495 },
+			{ color: "#ffffff", offset: 0.5 },
+			{ color: "#6ff7ff", offset: 0.505 },
+			{ color: "#2957b9", offset: 0.65 },
+			{ color: "#101c32", offset: 1 },
+		];
+		this.cvsZoom = this.prepareCanvas(opt.cvsZoom, gArray);
 	},
-	prepareCanvas(el) {
+	createCanvas(width=1, height=1) {
+		let cvs = $(document.createElement("canvas")),
+			ctx = cvs[0].getContext("2d");
+		cvs.prop({ width, height });
+		return { cvs, ctx }
+	},
+	prepareCanvas(el, gArray) {
 		let cvs = el[0],
 			ctx = cvs.getContext("2d"),
 			width = el.prop("offsetWidth"),
@@ -21,13 +46,12 @@ const Waves = {
 		// defaults
 		ctx.fillStyle = "#71a1ca";
 		// prepare overlay gradient
-		gradient.addColorStop(0.1, "#0c1c36");
-		gradient.addColorStop(0.495, "#5dcad0");
-		gradient.addColorStop(0.5, "#fff");
-		gradient.addColorStop(0.505, "#5dcad0");
-		gradient.addColorStop(0.9, "#0c1c36");
+		gArray.map(stop => gradient.addColorStop(stop.offset, stop.color));
 		// essential canvas properties
 		return { cvs, ctx, gradient, width, height };
+	},
+	zoomData() {
+		
 	},
 	draw(opt) {
 		let o = this[opt.cvs],

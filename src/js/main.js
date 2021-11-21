@@ -28,8 +28,8 @@ const loopslicer = {
 			// custom events
 			case "draw-audio":
 				await Waves.init({
-					// url: "~/audio/TheUnderworld.ogg",
-					url: "~/audio/ol2.wav",
+					url: "~/audio/TheUnderworld.ogg",
+					// url: "~/audio/ol2.wav",
 					cvsFull: APP.els.wavesFull.find("canvas"),
 					cvsZoom: APP.els.wavesZoom.find("canvas"),
 					zoom: .17,

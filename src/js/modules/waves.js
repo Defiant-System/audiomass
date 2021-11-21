@@ -8,6 +8,17 @@ const Waves = {
 		this.buffer = await this.audioContext.decodeAudioData(arrayBuffer);
 		this.data = this.buffer.getChannelData(0);
 
+		this.source = this.audioContext.createBufferSource();
+		this.source.buffer = this.buffer;
+		this.source.connect(this.audioContext.destination);
+		this.source.loop = true;
+		this.source.loopEnd = 5;
+		this.source.loopStart = 3;
+		// this.source.start(0);
+
+		console.log( this.buffer );
+		console.log( this.audioContext );
+
 		// this is swap canvas
 		this.swap = this.createCanvas();
 		// prepare UI canvases
@@ -49,9 +60,6 @@ const Waves = {
 		gArray.map(stop => gradient.addColorStop(stop.offset, stop.color));
 		// essential canvas properties
 		return { cvs, ctx, gradient, width, height };
-	},
-	zoomData() {
-		
 	},
 	draw(opt) {
 		let o = this[opt.cvs],

@@ -15,6 +15,21 @@ content {
 	display: flex;
 	color: #efeeff;
 
+	&.cover:before {
+		// background: rgba(255,0,0,.1);
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 109;
+	}
+
+	&.hideMouse:before {
+		cursor: none;
+	}
+
 	.box {
 		width: 100%;
 		height: 100%;
@@ -86,20 +101,7 @@ content {
 			height: 110px;
 			padding: 10px 0 0;
 			border-radius: 50%;
-
-			.range {
-				display: none;
-				position: absolute;
-				top: 6px;
-				left: 6px;
-				z-index: 1;
-				width: 98px;
-				height: 98px;
-				border-radius: inherit;
-				border-left: 1px solid #9fcef6;
-				border-top: 0;
-				border-bottom: 0;
-			}
+			--volume: -135deg;
 
 			.knob {
 				background: linear-gradient(0deg, #2f476e 0%, #324f76 100%);
@@ -108,6 +110,7 @@ content {
 				width: 90px;
 				height: 90px;
 				border-radius: inherit;
+				pointer-events: none;
 				box-shadow: 0 0 0 1px fadeout(#1b2642, 47%),
 							0 0 7px rgba(0,0,0,.225),
 							0 2px 5px rgba(0,0,0,.225),
@@ -119,7 +122,7 @@ content {
 					width: 100%;
 					height: 100%;
 					border-radius: inherit;
-					transform: rotate(-135deg);
+					transform: rotate( var( --volume ) );
 					transform-origin: 50% 50%;
 
 					.light {

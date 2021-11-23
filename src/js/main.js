@@ -13,7 +13,7 @@ const loopslicer = {
 		};
 
 		// bind event handlers
-		this.els.wavesFull.on("mousedown", this.fullViewMove);
+		this.els.content.on("mousedown", this.dispatch);
 
 		// temp
 		this.dispatch({ type: "draw-audio" });
@@ -22,6 +22,12 @@ const loopslicer = {
 		let APP = loopslicer,
 			el;
 		switch (event.type) {
+			// native events
+			case "mousedown":
+				el = $(event.target);
+				if (el.hasClass("area")) APP.minimapMove(event);
+				else if (el.hasClass("volume-knob")) APP.volumeMove(event);
+				break;
 			// system events
 			case "window.open":
 				break;
@@ -40,7 +46,49 @@ const loopslicer = {
 				break;
 		}
 	},
-	fullViewMove(event) {
+	volumeMove(event) {
+		let APP = loopslicer,
+			Self = APP,
+			Drag = Self.drag;
+		switch (event.type) {
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+				// cover content
+				Self.els.content.addClass("cover hideMouse");
+
+				// prepare drag info
+				let el = $(event.target),
+					deg = parseInt(el.cssProp("--volume"), 10),
+					click = {
+						y: event.clientY - deg,
+					},
+					min = -135,
+					max = 135;
+				// create drag object
+				Self.drag = {
+					el,
+					click,
+					deg,
+					min,
+					max,
+				};
+				// bind event
+				Self.els.doc.on("mousemove mouseup", Self.volumeMove);
+				break;
+			case "mousemove":
+				let volume = Math.min(Math.max(event.clientY - Drag.click.y, Drag.min), Drag.max);
+				Drag.el.css({ "--volume": `${volume}deg` });
+				break;
+			case "mouseup":
+				// cover content
+				Self.els.content.removeClass("cover hideMouse");
+				// unbind event
+				Self.els.doc.off("mousemove mouseup", Self.volumeMove);
+				break;
+		}
+	},
+	minimapMove(event) {
 		let APP = loopslicer,
 			Self = APP,
 			Drag = Self.drag;
@@ -71,7 +119,7 @@ const loopslicer = {
 					max,
 				};
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.fullViewMove);
+				Self.els.doc.on("mousemove mouseup", Self.minimapMove);
 				break;
 			case "mousemove":
 				let left = Math.min(Math.max(event.clientX - Drag.clickX, Drag.min.x), Drag.max.x),
@@ -84,7 +132,7 @@ const loopslicer = {
 				break;
 			case "mouseup":
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.fullViewMove);
+				Self.els.doc.off("mousemove mouseup", Self.minimapMove);
 				break;
 		}
 	}

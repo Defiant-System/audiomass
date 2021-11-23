@@ -16,8 +16,8 @@ const Waves = {
 		this.source.loopStart = 3;
 		// this.source.start(0);
 
-		console.log( this.buffer );
-		console.log( this.audioContext );
+		// console.log( this.buffer );
+		// console.log( this.audioContext );
 
 		// this is swap canvas
 		this.swap = this.createCanvas();

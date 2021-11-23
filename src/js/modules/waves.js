@@ -9,7 +9,7 @@ const Waves = {
 		this.data = this.buffer.getChannelData(0);
 
 		this.analyser = this.audioContext.createAnalyser();
-		this.analyser.fftSize = 256;
+		this.analyser.fftSize = 32;
 		this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
 
 		this.source = this.audioContext.createBufferSource();
@@ -45,19 +45,25 @@ const Waves = {
 			{ color: "#555", offset: 1 },
 		];
 		this.asa = this.prepareCanvas(opt.asa, gArray);
+
+		this.renderFrame();
 	},
 	start() {
-		this._stopped = false;
-		this.source.start(0);
+		if (this._paused === undefined) {
+			this.source.start(0);
+		} else {
+			this.audioContext.resume();
+		}
+		this._paused = false;
 		
 		this.renderFrame();
 	},
 	stop() {
-		this._stopped = true;
-		this.source.stop(0);
+		this._paused = true;
+		this.audioContext.suspend();
 	},
 	renderFrame() {
-		if (!this._stopped) {
+		if (!this._paused) {
 			requestAnimationFrame(Waves.renderFrame.bind(this));
 		}
 		this.analyser.getByteFrequencyData(this.frequencyData);
@@ -65,20 +71,19 @@ const Waves = {
 		let o = this.asa,
 			data = this.frequencyData,
 			il = data.length,
-			sw = o.width / il,
-			h = o.height >> 1,
+			sw = (o.width - 2) / il,
 			x = 0;
 		
 		o.cvs.width = o.width;
+		o.ctx.fillStyle = "#124";
 		
 		for (let i=0; i<il; i++) {
-			var v = data[i] / 128,
-				y = o.height - (v * h);
-			o.ctx[ i === 0 ? "moveTo" : "lineTo" ](x, y);
+			var v = data[i] / 256,
+				h = v * o.height,
+				y = o.height - h;
+			o.ctx.fillRect(x, y, sw - 2, h);
 			x += sw;
 		}
-		o.ctx.lineTo(o.width, o.height);
-		o.ctx.stroke();
 	},
 	createCanvas(width=1, height=1) {
 		let cvs = $(document.createElement("canvas")),
@@ -113,18 +118,18 @@ const Waves = {
 		o.ctx.clearRect(0, 0, o.width, o.height);
 
 		for(let x=0; x<o.width; x++){
-	        let min = 1.0,
-	        	max = -1.0;
-	        for (let j=0; j<step; j++) {
-	            let datum = data[(x * step) + j]; 
-	            if (datum < min) min = datum;
-	            if (datum > max) max = datum;
-	        }
-	        let y = (1 + min) * amp,
-	        	w = 1,
-	        	h = Math.max(1, (max - min) * amp);
-	        o.ctx.fillRect(x, y, w, h);
-	    }
+			let min = 1.0,
+				max = -1.0;
+			for (let j=0; j<step; j++) {
+				let datum = data[(x * step) + j]; 
+				if (datum < min) min = datum;
+				if (datum > max) max = datum;
+			}
+			let y = (1 + min) * amp,
+				w = 1,
+				h = Math.max(1, (max - min) * amp);
+			o.ctx.fillRect(x, y, w, h);
+		}
 
 		// gradient overlay
 		o.ctx.save();

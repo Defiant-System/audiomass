@@ -56,28 +56,20 @@ const loopslicer = {
 				event.preventDefault();
 				// cover content
 				Self.els.content.addClass("cover hideMouse");
-
 				// prepare drag info
-				let el = $(event.target),
-					deg = parseInt(el.cssProp("--volume"), 10),
-					click = {
-						y: event.clientY - deg,
-					},
-					min = -135,
-					max = 135;
+				let el = $(event.target);
 				// create drag object
 				Self.drag = {
 					el,
-					click,
-					deg,
-					min,
-					max,
+					clickY: parseInt(el.cssProp("--volume"), 10) + event.clientY,
+					min_: Math.min,
+					max_: Math.max,
 				};
 				// bind event
 				Self.els.doc.on("mousemove mouseup", Self.volumeMove);
 				break;
 			case "mousemove":
-				let volume = Math.min(Math.max(event.clientY - Drag.click.y, Drag.min), Drag.max);
+				let volume = Drag.min_(Drag.max_(Drag.clickY - event.clientY, -135), 135);
 				Drag.el.css({ "--volume": `${volume}deg` });
 				break;
 			case "mouseup":

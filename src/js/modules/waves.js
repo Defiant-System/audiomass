@@ -30,13 +30,9 @@ const Waves = {
 		this.cvsFull = this.prepareCanvas(opt.cvsFull, gArray);
 
 		gArray = [
-			{ color: "#101c32", offset: 0 },
-			{ color: "#2957b9", offset: 0.35 },
-			{ color: "#6ff7ff", offset: 0.495 },
-			{ color: "#ffffff", offset: 0.5 },
-			{ color: "#6ff7ff", offset: 0.505 },
-			{ color: "#2957b9", offset: 0.65 },
-			{ color: "#101c32", offset: 1 },
+			{ color: "#113", offset: 0 },
+			{ color: "#ccc", offset: 0.5 },
+			{ color: "#113", offset: 1 },
 		];
 		this.cvsZoom = this.prepareCanvas(opt.cvsZoom, gArray);
 	},

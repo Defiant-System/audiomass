@@ -3,8 +3,8 @@
 		<Options>
 			<Tool symbol="icon-rewind"/>
 			<Tool symbol="icon-forward"/>
-			<Tool symbol="icon-stop"/>
-			<Tool symbol="icon-play"/>
+			<Tool symbol="icon-stop" click="stop-audio"/>
+			<Tool symbol="icon-play" click="play-audio"/>
 			<Tool symbol="icon-record"/>
 			<Tool symbol="icon-loop"/>
 		</Options>

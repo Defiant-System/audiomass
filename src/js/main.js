@@ -10,6 +10,7 @@ const loopslicer = {
 			content: window.find("content"),
 			wavesFull: window.find(".waves .cvs-full"),
 			wavesZoom: window.find(".waves .cvs-zoom"),
+			asa: window.find(".box .asa"),
 		};
 
 		// bind event handlers
@@ -32,12 +33,19 @@ const loopslicer = {
 			case "window.open":
 				break;
 			// custom events
+			case "stop-audio":
+				Waves.stop();
+				break;
+			case "play-audio":
+				Waves.start();
+				break;
 			case "draw-audio":
 				await Waves.init({
 					url: "~/audio/TheUnderworld.ogg",
 					// url: "~/audio/ol2.wav",
 					cvsFull: APP.els.wavesFull.find("canvas"),
 					cvsZoom: APP.els.wavesZoom.find("canvas"),
+					asa: APP.els.asa.find("canvas"),
 					zoom: .17,
 				});
 

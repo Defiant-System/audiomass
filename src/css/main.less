@@ -51,6 +51,16 @@ content {
 		text-shadow: 0 1px 0 #1b2642;
 	}
 
+	canvas {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: calc( 100% - 4px );
+		height: calc( 100% - 4px );
+		border-radius: 3px;
+		pointer-events: none;
+	}
+
 	.zoom {
 		background: #1f2c4c;
 		border-radius: 3px;
@@ -177,6 +187,11 @@ content {
 					width: auto;
 					margin-left: 6px;
 					background: linear-gradient(180deg, #426390 0%, #304a74 100%);
+
+					.asa {
+						position: relative;
+						height: 100%;
+					}
 				}
 			}
 
@@ -214,16 +229,6 @@ content {
 						flex: 1;
 						background: #1f2c4c;
 						border-radius: 3px;
-					}
-
-					canvas {
-						position: absolute;
-						top: 2px;
-						left: 2px;
-						width: calc( 100% - 4px );
-						height: calc( 100% - 4px );
-						border-radius: 3px;
-						pointer-events: none;
 					}
 				}
 			}

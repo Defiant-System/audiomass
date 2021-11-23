@@ -8,13 +8,17 @@ const Waves = {
 		this.buffer = await this.audioContext.decodeAudioData(arrayBuffer);
 		this.data = this.buffer.getChannelData(0);
 
+		this.analyser = this.audioContext.createAnalyser();
+		this.analyser.fftSize = 256;
+		this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+
 		this.source = this.audioContext.createBufferSource();
 		this.source.buffer = this.buffer;
+		this.source.connect(this.analyser);
 		this.source.connect(this.audioContext.destination);
-		this.source.loop = true;
-		this.source.loopEnd = 5;
-		this.source.loopStart = 3;
-		// this.source.start(0);
+		// this.source.loop = true;
+		// this.source.loopEnd = 5;
+		// this.source.loopStart = 3;
 
 		// console.log( this.buffer );
 		// console.log( this.audioContext );
@@ -35,6 +39,46 @@ const Waves = {
 			{ color: "#113", offset: 1 },
 		];
 		this.cvsZoom = this.prepareCanvas(opt.cvsZoom, gArray);
+
+		gArray = [
+			{ color: "#ccc", offset: 0 },
+			{ color: "#555", offset: 1 },
+		];
+		this.asa = this.prepareCanvas(opt.asa, gArray);
+	},
+	start() {
+		this._stopped = false;
+		this.source.start(0);
+		
+		this.renderFrame();
+	},
+	stop() {
+		this._stopped = true;
+		this.source.stop(0);
+	},
+	renderFrame() {
+		if (!this._stopped) {
+			requestAnimationFrame(Waves.renderFrame.bind(this));
+		}
+		this.analyser.getByteFrequencyData(this.frequencyData);
+
+		let o = this.asa,
+			data = this.frequencyData,
+			il = data.length,
+			sw = o.width / il,
+			h = o.height >> 1,
+			x = 0;
+		
+		o.cvs.width = o.width;
+		
+		for (let i=0; i<il; i++) {
+			var v = data[i] / 128,
+				y = o.height - (v * h);
+			o.ctx[ i === 0 ? "moveTo" : "lineTo" ](x, y);
+			x += sw;
+		}
+		o.ctx.lineTo(o.width, o.height);
+		o.ctx.stroke();
 	},
 	createCanvas(width=1, height=1) {
 		let cvs = $(document.createElement("canvas")),

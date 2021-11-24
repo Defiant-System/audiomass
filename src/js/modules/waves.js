@@ -81,7 +81,8 @@ const Waves = {
 			var v = data[i] / 256,
 				h = v * o.height,
 				y = o.height - h;
-			o.ctx.fillRect(x, y, sw - 2, h);
+			o.ctx.fillRect(x, y, sw - 2, 4);
+			// o.ctx.fillRect(x, y, sw - 2, h);
 			x += sw;
 		}
 	},

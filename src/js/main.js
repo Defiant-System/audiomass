@@ -29,9 +29,6 @@ const loopslicer = {
 				if (el.hasClass("area")) APP.minimapMove(event);
 				else if (el.hasClass("volume-knob")) APP.volumeMove(event);
 				break;
-			// system events
-			case "window.open":
-				break;
 			// custom events
 			case "stop-audio":
 				Waves.stop();

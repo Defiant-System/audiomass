@@ -1,5 +1,5 @@
 <CaptionToolBar>
-	<Group width="37%" class="tools-left">
+	<Group class="tools-left">
 		<Options>
 			<Tool symbol="icon-rewind"/>
 			<Tool symbol="icon-forward"/>
@@ -9,15 +9,16 @@
 			<Tool symbol="icon-loop"/>
 		</Options>
 	</Group>
-	<Group class="timer">
+	<Group class="display">
 		<Field>
 		</Field>
 	</Group>
-	<Group width="41%" class="tools-right">
+	<Group class="tools-right">
 		<Options>
 			<Tool />
 			<Tool />
 			<Tool />
 		</Options>
 	</Group>
+	<Group class="empty"/>
 </CaptionToolBar>

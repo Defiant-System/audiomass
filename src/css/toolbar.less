@@ -3,6 +3,7 @@
 @text: #b7cbe0;
 
 .tools-left {
+	width: 37%;
 	text-align: right;
 
 	> div:last-child {
@@ -10,7 +11,9 @@
 	}
 }
 
-.timer {
+.display {
+	width: 210px;
+	height: 37px;
 	padding-left: 17px;
 	padding-right: 17px;
 
@@ -45,6 +48,8 @@
 }
 
 .tools-right {
+	width: 31%;
+
 	&:last-child {
 		text-align: left;
 	}
@@ -55,4 +60,8 @@
 			margin-right: 0;
 		}
 	}
+}
+
+.toolbar-group_:last-child.empty {
+	width: 10%;
 }

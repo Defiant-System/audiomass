@@ -1,7 +1,7 @@
 <Application>
 	<Head>
 		<meta name="id" value="loopslicer"/>
-		<meta name="title" value="Loop Slicer" version="1.01"/>
+		<meta name="title" value="Loop Slicer" version="1.02"/>
 		<meta name="author" value="Hakan Bilgin" namespace="ant"/>
 		<meta name="license" value="AGPL-3.0"/>
 		<meta name="repository" value="https://github.com/Defiant-System/loopslicer"/>

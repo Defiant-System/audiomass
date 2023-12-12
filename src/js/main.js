@@ -2,7 +2,7 @@
 @import "modules/waves.js"
 
 
-const loopslicer = {
+const audiomass = {
 	init() {
 		// fast references
 		this.els = {
@@ -20,7 +20,7 @@ const loopslicer = {
 		this.dispatch({ type: "draw-audio" });
 	},
 	async dispatch(event) {
-		let APP = loopslicer,
+		let APP = audiomass,
 			el;
 		switch (event.type) {
 			// native events
@@ -53,7 +53,7 @@ const loopslicer = {
 		}
 	},
 	volumeMove(event) {
-		let APP = loopslicer,
+		let APP = audiomass,
 			Self = APP,
 			Drag = Self.drag;
 		switch (event.type) {
@@ -87,7 +87,7 @@ const loopslicer = {
 		}
 	},
 	minimapMove(event) {
-		let APP = loopslicer,
+		let APP = audiomass,
 			Self = APP,
 			Drag = Self.drag;
 		switch (event.type) {
@@ -136,4 +136,4 @@ const loopslicer = {
 	}
 };
 
-window.exports = loopslicer;
+window.exports = audiomass;

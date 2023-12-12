@@ -1,4 +1,4 @@
-<CaptionToolBar>
+<CaptionToolBar has="display">
 	<Group class="tools-left">
 		<Options>
 			<Tool symbol="icon-rewind"/>
@@ -10,14 +10,17 @@
 		</Options>
 	</Group>
 	<Group class="display">
-		<Field>
+		<Field class="blank-display">
+			
 		</Field>
+		<Canvas/>
 	</Group>
 	<Group class="tools-right">
 		<Options>
-			<Tool />
-			<Tool />
-			<Tool />
+			<Tool symbol="icon-copy"/>
+			<Tool symbol="icon-paste"/>
+			<Tool symbol="icon-cut"/>
+			<Tool symbol="icon-silence"/>
 		</Options>
 	</Group>
 	<Group class="empty"/>

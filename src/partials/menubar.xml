@@ -1,8 +1,48 @@
 <MenuBar>
-	<Menu name="Loop Slicer">
-		<Menu name="About Loop Slicer" shell="win -a"/>
+	<Menu name="Audiomass">
+		<Menu name="About Audiomass" shell="win -a"/>
 		<Menu type="divider"/>
-		<Menu name="Quit Loop Slicer" shell="win -c"/>
+		<Menu name="Quit Audiomass" shell="win -c"/>
+	</Menu>
+	<Menu name="File">
+		<Menu name="New Recording"/>
+		<Menu name="Save Draft Locally"/>
+		<Menu name="Open Local Drafts"/>
+		<Menu type="divider"/>
+		<Menu name="Export / Download"/>
+		<Menu name="Load from Computer"/>
+		<Menu name="Load Sample File"/>
+		<Menu name="Load From URL"/>
+	</Menu>
+	<Menu name="Edit">
+		<Menu name="Undo" hotkey="shift+z"/>
+		<Menu name="Redo" hotkey="shift+y"/>
+		<Menu type="divider"/>
+		<Menu name="Play" hotkey="Space"/>
+		<Menu name="Stop"/>
+		<Menu name="Select All" hotkey="shift+a"/>
+		<Menu name="Deselect All"/>
+	</Menu>
+	<Menu name="Effects">
+		<Menu name="Gain"/>
+		<Menu name="Fade In"/>
+		<Menu name="Fade Out"/>
+		<Menu name="Compressor"/>
+		<Menu name="Distortion"/>
+		<Menu name="Reverb"/>
+	</Menu>
+	<Menu name="View">
+		<Menu name="Follow Cursor" is-checked="1"/>
+		<Menu name="Peak Separators" is-checked="1"/>
+		<Menu name="Timeline" is-checked="1"/>
+		<Menu type="divider"/>
+		<Menu name="Frequency Analyser"/>
+		<Menu name="Spectrum Analyser"/>
+		<Menu name="Tempo Tools"/>
+		<Menu name="ID3 Tags"/>
+		<Menu type="divider"/>
+		<Menu name="Center to Cursor" hotkey="tab"/>
+		<Menu name="Reset Zoom"/>
 	</Menu>
 	<Menu name="Help">
 		<Menu name="Help" click="open-help"/>

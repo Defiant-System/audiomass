@@ -1,4 +1,8 @@
 <CaptionToolBar has="display">
+	<Group>
+		<Tool symbol="icon-sidebar" click="toggle-sidebar"/>
+		<Tool symbol="icon-dock" click="toggle-dock"/>
+	</Group>
 	<Group class="tools-left">
 		<Options>
 			<Tool symbol="icon-rewind" state="disabled"/>

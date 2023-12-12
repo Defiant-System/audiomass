@@ -1,5 +1,5 @@
-<content>
-	<div class="sidebar">
+<content class="show-sidebar show-dock">
+	<div class="sidebar" data-area="sidebar">
 		<div class="box">
 			<div></div>
 			<div>
@@ -17,9 +17,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="body">
+	<div class="area">
 		<div class="workarea">
-			<div class="box waves">
+			<div class="box waves" data-area="waves">
 				<div class="cvs-wrapper">
 					
 				</div>
@@ -33,6 +33,7 @@
 					<div class="zoom-v">
 						<span class="handle"></span>
 					</div>
+					<i class="icon-reset" data-click="reset-zoom"></i>
 				</div>
 				<div class="gutter-h">
 					<div class="zoom-h">
@@ -43,7 +44,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="box speaker">
+			<div class="box speaker" data-area="speaker">
 				<div class="volume-bar left">
 					<div class="volume"></div>
 					<div class="peaker"></div>
@@ -56,8 +57,16 @@
 			</div>
 		</div>
 		<div class="dock">
-			<div class="box"></div>
-			<div class="box"></div>
+			<div class="box on" data-area="frequency">
+				<i class="icon-switch" data-click="toggle-analyser"></i>
+				<div class="head">Frequency Analyser</div>
+				<div class="body"></div>
+			</div>
+			<div class="box on" data-area="spectrum">
+				<i class="icon-switch" data-click="toggle-analyser"></i>
+				<div class="head">Spectrum Analyser</div>
+				<div class="body"></div>
+			</div>
 		</div>
 	</div>
 </content>

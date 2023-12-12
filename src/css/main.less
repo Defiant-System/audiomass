@@ -35,6 +35,15 @@ content {
 	}
 
 	&.show-dock {
+		.area {
+			.workarea {
+				.waves:before,
+				.speaker:before {
+					opacity: 1;
+				}
+			}
+		}
+
 		.area .dock {
 			opacity: 1;
 			height: 200px;
@@ -200,11 +209,24 @@ content {
 			flex-direction: rows;
 
 			.waves {
-				background: linear-gradient(180deg, #3d5b88 0%, #2b3e67 100%);
+				background: linear-gradient(180deg, #3d5b88 0%, #233254 100%);
 				padding: 7px;
 				display: flex;
 				flex-direction: column;
 				margin-right: 5px;
+
+				&:before {
+					content: "";
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					border-radius: inherit;
+					opacity: 0;
+					background: linear-gradient(180deg, #3d5b88 0%, #2b3e67 100%);
+					transition: opacity 200ms ease-in-out;
+				}
 
 				.cvs-wrapper {
 					background: rgba(#000,.075);
@@ -406,12 +428,25 @@ content {
 			}
 
 			.speaker {
-				background: linear-gradient(180deg, #3d5b88 0%, #2b3e67 100%);
+				background: linear-gradient(180deg, #3d5b88 0%, #233254 100%);
 				width: 49px;
 				padding: 7px;
 				display: flex;
 
 				&:before {
+					content: "";
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					border-radius: inherit;
+					opacity: 0;
+					background: linear-gradient(180deg, #3d5b88 0%, #2b3e67 100%);
+					transition: opacity 200ms ease-in-out;
+				}
+
+				&:after {
 					content: "";
 					background: rgba(#002,.075);
 					position: absolute;
@@ -420,16 +455,6 @@ content {
 					bottom: 5px;
 					width: 13px;
 					border-radius: 2px;
-				}
-
-				&:after {
-					content: "";
-					background: rgba(#fff,.125);
-					position: absolute;
-					top: 40px;
-					left: 5px;
-					height: 3px;
-					width: 15px;
 				}
 
 				.volume-bar {
@@ -460,6 +485,15 @@ content {
 						height: 34px;
 						background: rgba(#003,.1);
 					}
+				}
+
+				.peaker-dash {
+					background: rgba(#fff,.125);
+					position: absolute;
+					top: 40px;
+					left: 5px;
+					height: 3px;
+					width: 15px;
 				}
 
 				.volume-markers {

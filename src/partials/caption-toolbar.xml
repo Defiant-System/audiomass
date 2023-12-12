@@ -1,12 +1,12 @@
 <CaptionToolBar has="display">
 	<Group class="tools-left">
 		<Options>
-			<Tool symbol="icon-rewind"/>
-			<Tool symbol="icon-forward"/>
-			<Tool symbol="icon-stop" click="stop-audio"/>
-			<Tool symbol="icon-play" click="play-audio"/>
-			<Tool symbol="icon-record"/>
-			<Tool symbol="icon-loop"/>
+			<Tool symbol="icon-rewind" state="disabled"/>
+			<Tool symbol="icon-forward" state="disabled"/>
+			<Tool symbol="icon-stop" click="stop-audio" state="disabled"/>
+			<Tool symbol="icon-play" click="play-audio" state="disabled"/>
+			<Tool symbol="icon-record" state="disabled"/>
+			<Tool symbol="icon-loop" state="disabled"/>
 		</Options>
 	</Group>
 	<Group class="display">
@@ -17,10 +17,10 @@
 	</Group>
 	<Group class="tools-right">
 		<Options>
-			<Tool symbol="icon-copy"/>
-			<Tool symbol="icon-paste"/>
-			<Tool symbol="icon-cut"/>
-			<Tool symbol="icon-silence"/>
+			<Tool symbol="icon-copy" state="disabled"/>
+			<Tool symbol="icon-paste" state="disabled"/>
+			<Tool symbol="icon-cut" state="disabled"/>
+			<Tool symbol="icon-silence" state="disabled"/>
 		</Options>
 	</Group>
 	<Group class="empty"/>

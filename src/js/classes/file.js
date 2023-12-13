@@ -4,15 +4,54 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
+		let topTimeline = TimelinePlugin.create({
+				height: 10,
+				insertPosition: "beforebegin",
+				// duration: .25,
+				timeInterval: 0.05,
+				primaryLabelInterval: 1,
+				secondaryLabelInterval: 1,
+				formatTimeCallback(seconds) {
+					return seconds.toFixed(2);
+				},
+				style: {
+					fontSize: "10px",
+					color: "#71a1ca99",
+				},
+			}),
+			bottomTimeline = TimelinePlugin.create({
+				height: 10,
+				timeInterval: 0.05,
+				primaryLabelInterval: 1,
+				secondaryLabelInterval: 1,
+				formatTimeCallback(seconds) {
+					return seconds.toFixed(2);
+				},
+				style: {
+					fontSize: "10px",
+					color: "#71a1ca77",
+				},
+			});
+
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
 			container: el[0],
-			waveColor: "#71a1ca",
-			// progressColor: "#71a1ca",
-			height: 300,
+			waveColor: "#9fcef6",
+			progressColor: "#71a1ca",
+			splitChannels: true,
+			autoCenter: true,
+			height: (+el.parent().prop("offsetHeight") - 10) / 2,
+			minPxPerSec: 100,
+  			plugins: [topTimeline, bottomTimeline],
 		});
 
 		this._ws.loadBlob(this._file.blob);
+
+		// setTimeout(() => {
+			// this._ws.registerPlugin(TimelinePlugin.create());
+			// this._ws.registerPlugin(RegionsPlugin.create());
+			// console.log( this._ws );
+		// }, 500);
 	}
 
 	get kind() {

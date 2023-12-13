@@ -5,7 +5,7 @@
 	<Head>
 		<meta name="id" value="audiomass"/>
 		<meta name="title" value="Audiomass" version="1.01"/>
-		<meta name="author" value="Pantelis Kalogiros" namespace="ant" ported="Hakan Bilgin"/>
+		<meta name="author" value="Hakan Bilgin" namespace="ant"/>
 		<meta name="license" value="AGPL-3.0"/>
 		<meta name="repository" value="https://github.com/Defiant-System/audiomass"/>
 		<meta name="width" value="980" min="820"/>

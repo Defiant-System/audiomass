@@ -1,10 +1,10 @@
 <CaptionToolBar has="display">
 	<Group>
+		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="disabled"/>
 		<Options>
-			<Tool symbol="icon-undo" click="editor.undo" state="disabled"/>
-			<Tool symbol="icon-redo" click="editor.redo" state="disabled"/>
+			<Tool symbol="icon-undo" state="disabled"/>
+			<Tool symbol="icon-redo" state="disabled"/>
 		</Options>
-		<Tool symbol="icon-cogs" menu="view-settings" state="disabled"/>
 	</Group>
 	<Group class="tools-left">
 		<Options>
@@ -29,6 +29,7 @@
 			<Tool symbol="icon-cut" state="disabled"/>
 			<Tool symbol="icon-silence" state="disabled"/>
 		</Options>
+		<Tool symbol="icon-cogs" menu="view-settings" state="disabled"/>
 	</Group>
 	<Group class="empty"/>
 </CaptionToolBar>

@@ -89,6 +89,15 @@
 	c0,2.1-1.7,3.9-3.9,3.9c-1.4,0-2.6-0.7-3.3-1.8l-1,0.6c0.9,1.4,2.5,2.4,4.3,2.4c2.8,0,5-2.2,5-5C11.9,3.7,9.7,1.5,6.9,1.5z M6.4,4.2
 	v2.3v0.3l0.2,0.2L8,8.1l0.4,0.4l0.7-0.9L8.7,7.2l-1.2-1v-2H6.4z"/>
 	</svg>
+	
+	<svg id="icon-sidebar" viewBox="0 0 13 13">
+		<style type="text/css">
+			.st0{fill:#333;}
+		</style>
+		<path class="st0" d="M12,1H5H4H1H0v1v9v1h1h3h1h7h1v-1V2V1H12z M1,11V2h3v9H1z M12,11H5V2h7V11z"/>
+		<rect x="2" y="3" class="st0" width="1" height="1"/>
+		<rect x="2" y="5" class="st0" width="1" height="1"/>
+	</svg>
 
 	<svg id="icon-folder-open" viewBox="0 0 17 17">
 		<style type="text/css">

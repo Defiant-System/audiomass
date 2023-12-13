@@ -13,6 +13,8 @@
 		<Menu name="Load from Computer"/>
 		<Menu name="Load Sample File"/>
 		<Menu name="Load From URL"/>
+		<Menu type="divider"/>
+		<Menu name="Close File" click="close-tab" hotkey="alt+w"/>
 	</Menu>
 	<Menu name="Edit">
 		<Menu name="Undo" hotkey="shift+z"/>

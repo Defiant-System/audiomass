@@ -27,6 +27,9 @@ const audiomass = {
 	dispatch(event) {
 		let Self = audiomass,
 			Tabs = Self.data ? Self.data.tabs : false,
+			name,
+			value,
+			data,
 			el;
 		// console.log(event);
 		switch (event.type) {
@@ -54,6 +57,22 @@ const audiomass = {
 				Tabs.dispatch({ ...event, type: "hide-blank-view" });
 				// open file with Files
 				Tabs.add(event.file);
+				break;
+
+
+			case "close-tab":
+				value = Tabs.length;
+				if (event.delayed) {
+					Tabs.removeDelayed();
+				} else if (value > 1) {
+					Tabs.active.tabEl.find(`[sys-click]`).trigger("click");
+				} else if (value === 1) {
+					Self.dispatch({ ...event, type: "close-window" });
+				}
+				break;
+			case "close-window":
+				// system close window / spawn
+				karaqu.shell("win -c");
 				break;
 
 			default:

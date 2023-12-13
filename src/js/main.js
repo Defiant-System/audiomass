@@ -1,9 +1,10 @@
 
+
 @import "./classes/file.js"
 @import "./classes/file-tabs.js"
-
 @import "./modules/test.js"
 
+const { WaveSurfer } = await window.fetch("~/js/bundle.js");
 
 const audiomass = {
 	init() {
@@ -12,7 +13,7 @@ const audiomass = {
 			doc: $(document),
 			content: window.find("content"),
 		};
-
+		// initiate file tabs
 		this.data = { tabs: new FileTabs(this) };
 
 		// init all sub-objects
@@ -40,6 +41,29 @@ const audiomass = {
 				break;
 
 			// custom events
+			case "init-wavesurfer":
+				el = Self.els.content.find(".cvs-wrapper");
+				Self.WS = WaveSurfer.create ({
+						container: el[0],
+						scrollParent: false,
+						hideScrollbar: true,
+						partialRender: false,
+						fillParent: false,
+						pixelRatio: 1,
+						progressColor: 'rgba(128,85,85,0.24)',
+						splitChannels: true,
+						autoCenter: true,
+						height: +el.prop("offsetHeight"),
+						plugins: [
+							WaveSurfer.regions.create({
+								dragSelection: {
+									slop: 5
+								}
+							})
+						]
+					});
+				Self.WS.loadBlob(event.file.blob);
+				break;
 			case "load-samples":
 				// opening image file from application package
 				event.names.map(async name => {
@@ -57,6 +81,9 @@ const audiomass = {
 				Tabs.dispatch({ ...event, type: "hide-blank-view" });
 				// open file with Files
 				Tabs.add(event.file);
+
+				// init wavesurfer, if not already
+				Self.dispatch({ type: "init-wavesurfer", file: event.file });
 				break;
 
 

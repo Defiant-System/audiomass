@@ -66,7 +66,8 @@ class FileTabs {
 	}
 
 	openLocal(url) {
-		let parts = url.slice(url.lastIndexOf("/") + 1),
+		let APP = audiomass,
+			parts = url.slice(url.lastIndexOf("/") + 1),
 			[ name, kind ] = parts.split("."),
 			file = new karaqu.File({ name, kind });
 		// return promise

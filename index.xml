@@ -1,4 +1,7 @@
 <Application>
+	<Build>
+		<task action1="skip" source="src/js/bundle.js" destination="public/js/bundle.js"/>
+	</Build>
 	<Head>
 		<meta name="id" value="audiomass"/>
 		<meta name="title" value="Audiomass" version="1.01"/>

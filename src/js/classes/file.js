@@ -5,7 +5,8 @@ class File {
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
 		switch (this.kind) {
-			case "mp3": break;
+			case "mp3":
+				break;
 			case "wav": break;
 			case "ogg": break;
 		}

@@ -52,7 +52,12 @@
 				APP.data.tabs.active.file._ws.seekTo(0);
 				break;
 			case "play-audio":
-				APP.data.tabs.active.file._ws.play();
+				el = event.el.find(".icon-play");
+				isOn = el.hasClass("icon-pause");
+				el.toggleClass("icon-pause", isOn);
+				el.css({ "background-image": `url("~/icons/icon-${!isOn ? "pause" : "play"}.png")` });
+				// call appropriate method
+				APP.data.tabs.active.file._ws[isOn ? "pause" : "play"]();
 				break;
 		}
 	}

@@ -2,6 +2,11 @@
 	<Menu name="Audiomass">
 		<Menu name="About Audiomass" shell="win -a"/>
 		<Menu type="divider"/>
+		<Menu name="Settings" for="view-settings">
+			<Menu name="Show Sidebar" click="toggle-sidebar" is-checked="1"/>
+			<Menu name="Show Dock" click="toggle-dock"/>
+		</Menu>
+		<Menu type="divider"/>
 		<Menu name="Quit Audiomass" shell="win -c"/>
 	</Menu>
 	<Menu name="File">

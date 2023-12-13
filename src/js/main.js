@@ -1,4 +1,7 @@
 
+@import "./classes/file.js"
+@import "./classes/file-tabs.js"
+
 @import "./modules/test.js"
 
 
@@ -10,6 +13,8 @@ const audiomass = {
 			content: window.find("content"),
 		};
 
+		this.data = { tabs: new FileTabs(this) };
+
 		// init all sub-objects
 		Object.keys(this)
 			.filter(i => typeof this[i].init === "function")
@@ -20,7 +25,8 @@ const audiomass = {
 		// DEV-ONLY-END
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let Self = audiomass,
+			Tabs = Self.data ? Self.data.tabs : false,
 			el;
 		// console.log(event);
 		switch (event.type) {
@@ -29,12 +35,33 @@ const audiomass = {
 			case "window.resize":
 			case "window.keystroke":
 				break;
+
+			// custom events
+			case "load-samples":
+				// opening image file from application package
+				event.names.map(async name => {
+					// forward event to app
+					let file = await Tabs.openLocal(`~/samples/${name}`);
+					Self.dispatch({ ...event, type: "prepare-file", isSample: true, file });
+				});
+				break;
+			case "prepare-file":
+				if (!event.isSample) {
+					// add file to "recent" list
+					Self.blankView.dispatch({ ...event, type: "add-recent-file" });
+				}
+				// hide blank view
+				Tabs.dispatch({ ...event, type: "hide-blank-view" });
+				// open file with Files
+				Tabs.add(event.file);
+				break;
+
 			default:
 				if (event.el) {
 					let pEl = event.el.parents(`div[data-area]`);
 					if (pEl.length) {
 						let name = pEl.data("area");
-						return APP[name].dispatch(event);
+						return Self[name].dispatch(event);
 					}
 				}
 		}

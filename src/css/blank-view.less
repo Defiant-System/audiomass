@@ -83,13 +83,13 @@
 		}
 	}
 
-	.block-presets {
+	.block-samples {
 		// height: 167px;
 		padding: 17px 0;
 		margin: 10px auto;
 		width: 553px;
 
-		.preset {
+		.sample {
 			display: inline-block;
 			background: rgba(#fff,.25);
 			position: relative;
@@ -112,20 +112,18 @@
 				margin-right: 0;
 			}
 
-			&.fs-open {
-				top: -6px;
-
-				i {
-					margin: 11px 0 3px;
-				}
-			}
-
 			i {
+				display: inline-block;
 				width: 60px;
 				height: 60px;
-				opacity: .175;
+				opacity: .2;
+				background: 50% 50% no-repeat;
 				margin-bottom: 5px;
 				pointer-events: none;
+
+				&.file-ogg { background-image: url("/app/icons/file-ogg.png"); }
+				&.file-mp3 { background-image: url("/app/icons/file-mp3.png"); }
+				&.file-wav { background-image: url("/app/icons/file-wav.png"); }
 			}
 
 			h4 {

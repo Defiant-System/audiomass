@@ -12,7 +12,7 @@
 		
 		// get settings, if any
 		let xList = $.xmlFromString(`<Recents/>`);
-		let xSamples = window.bluePrint.selectSingleNode(`//Presets`);
+		let xSamples = window.bluePrint.selectSingleNode(`//Samples`);
 		this.xRecent = window.settings.getItem("recents") || xList.documentElement;
 
 		Promise.all(this.xRecent.selectNodes("./*").map(async xItem => {
@@ -56,8 +56,8 @@
 				el = $(event.target);
 				if (!el.hasClass("sample")) return;
 
-				name = el.data("url");
-				APP.dispatch({ type: "load-samples", names: [name.slice(name.lastIndexOf("/")+1)] });
+				name = el.find("h4").html();
+				APP.dispatch({ type: "load-samples", names: [name] });
 				break;
 			case "select-recent-file":
 				el = $(event.target);

@@ -1,5 +1,7 @@
 
-background: #1b2642;
+// for dark theme
+@import "theme-dark";
+@import "blank-view";
 
 
 content {
@@ -8,8 +10,6 @@ content {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	padding: 5px;
-	display: flex;
 	color: #efeeff;
 
 	&.cover:before {
@@ -24,6 +24,11 @@ content {
 
 	&.hideMouse:before {
 		cursor: none;
+	}
+
+	&.show-blank-view {
+		.blank-view { display: block; }
+		.workspace { display: none; }
 	}
 
 	&.show-sidebar {
@@ -48,6 +53,30 @@ content {
 			opacity: 1;
 			height: 200px;
 			margin-top: 5px;
+		}
+	}
+
+	.workspace {
+		background: #1b2642;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 5px;
+		display: flex;
+
+		h2 {
+			font-size: 53px;
+			font-weight: 100;
+			line-height: 1.25;
+			text-shadow: 0 1px 1px #1b2642;
+		}
+
+		h3 {
+			font-size: 29px;
+			font-weight: 100;
+			text-shadow: 0 1px 0 #1b2642;
 		}
 	}
 
@@ -98,19 +127,6 @@ content {
 			right: 5px;
 			border-radius: 4px;
 		}
-	}
-
-	h2 {
-		font-size: 53px;
-		font-weight: 100;
-		line-height: 1.25;
-		text-shadow: 0 1px 1px #1b2642;
-	}
-
-	h3 {
-		font-size: 29px;
-		font-weight: 100;
-		text-shadow: 0 1px 0 #1b2642;
 	}
 
 	.sidebar {

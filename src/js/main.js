@@ -22,6 +22,7 @@ const audiomass = {
 	dispatch(event) {
 		let APP = audiomass,
 			el;
+		// console.log(event);
 		switch (event.type) {
 			// native events
 			case "window.init":
@@ -38,6 +39,7 @@ const audiomass = {
 				}
 		}
 	},
+	blankView: @import "./areas/blank-view.js",
 	toolbar: @import "./areas/toolbar.js",
 	sidebar: @import "./areas/sidebar.js",
 	waves: @import "./areas/waves.js",

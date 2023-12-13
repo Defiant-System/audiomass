@@ -1,7 +1,7 @@
 <CaptionToolBar has="display">
 	<Group>
-		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="active"/>
-		<Tool symbol="icon-dock" click="toggle-dock"/>
+		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="disabled"/>
+		<Tool symbol="icon-dock" click="toggle-dock" state="disabled"/>
 	</Group>
 	<Group class="tools-left">
 		<Options>

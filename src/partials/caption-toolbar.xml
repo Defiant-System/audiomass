@@ -1,6 +1,6 @@
 <CaptionToolBar has="display">
 	<Group>
-		<Tool symbol="icon-sidebar" click="toggle-sidebar"/>
+		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="active"/>
 		<Tool symbol="icon-dock" click="toggle-dock"/>
 	</Group>
 	<Group class="tools-left">

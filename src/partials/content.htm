@@ -1,4 +1,4 @@
-<content class="show-sidebar show-dock">
+<content class="show-sidebar show-dock1">
 	<div class="sidebar" data-area="sidebar">
 		<div class="box">
 			<div></div>
@@ -25,10 +25,10 @@
 				</div>
 				<div class="gutter-v">
 					<div class="btn-wrapper">
-						<div class="channel-btn left on">Left</div>
+						<div class="channel-btn left on" data-click="toggle-channel">Left</div>
 					</div>
 					<div class="btn-wrapper">
-						<div class="channel-btn right on">Right</div>
+						<div class="channel-btn right on" data-click="toggle-channel">Right</div>
 					</div>
 					<div class="zoom-v">
 						<span class="handle"></span>
@@ -58,12 +58,12 @@
 			</div>
 		</div>
 		<div class="dock">
-			<div class="box on" data-area="frequency">
+			<div class="box" data-area="frequency">
 				<i class="icon-switch" data-click="toggle-analyser"></i>
 				<div class="head">Frequency Analyser</div>
 				<div class="body"></div>
 			</div>
-			<div class="box on" data-area="spectrum">
+			<div class="box" data-area="spectrum">
 				<i class="icon-switch" data-click="toggle-analyser"></i>
 				<div class="head">Spectrum Analyser</div>
 				<div class="body"></div>

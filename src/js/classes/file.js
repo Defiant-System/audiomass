@@ -20,6 +20,10 @@ class File {
 			}),
 			zoom = ZoomPlugin.create({ scale: 0.2 });
 
+		// disable default mouse wheel handler
+		zoom._onWheel = zoom.onWheel;
+		delete zoom.onWheel;
+
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
 			container: el[0],

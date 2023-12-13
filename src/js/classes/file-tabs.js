@@ -51,9 +51,13 @@ class FileTabs {
 		if (this._active.file) {
 			// reset view / show blank view
 			this.dispatch({ type: "hide-blank-view" });
+			// enable toolbar tools
+			this._APP.toolbar.dispatch({ type: "enable-tools" });
 		} else {
 			// reset view / show blank view
 			this.dispatch({ type: "show-blank-view" });
+			// disable toolbar tools
+			this._APP.toolbar.dispatch({ type: "disable-tools" });
 		}
 	}
 

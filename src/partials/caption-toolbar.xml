@@ -2,18 +2,18 @@
 	<Group>
 		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="disabled"/>
 		<Options>
-			<Tool symbol="icon-undo" state="disabled"/>
-			<Tool symbol="icon-redo" state="disabled"/>
+			<Tool symbol="icon-undo" click="file-undo" state="disabled"/>
+			<Tool symbol="icon-redo" click="file-redo" state="disabled"/>
 		</Options>
 	</Group>
 	<Group class="tools-left">
 		<Options>
-			<Tool symbol="icon-rewind" state="disabled"/>
-			<Tool symbol="icon-forward" state="disabled"/>
+			<Tool symbol="icon-rewind" click="rewind-audio" state="disabled"/>
+			<Tool symbol="icon-forward" click="forward-audio" state="disabled"/>
 			<Tool symbol="icon-stop" click="stop-audio" state="disabled"/>
 			<Tool symbol="icon-play" click="play-audio" state="disabled"/>
-			<Tool symbol="icon-record" state="disabled"/>
-			<Tool symbol="icon-loop" state="disabled"/>
+			<Tool symbol="icon-record" click="record-audio" state="disabled"/>
+			<Tool symbol="icon-loop" click="loop-audio" state="disabled"/>
 		</Options>
 	</Group>
 	<Group class="display">
@@ -24,10 +24,10 @@
 	</Group>
 	<Group class="tools-right">
 		<Options>
-			<Tool symbol="icon-copy" state="disabled"/>
-			<Tool symbol="icon-paste" state="disabled"/>
-			<Tool symbol="icon-cut" state="disabled"/>
-			<Tool symbol="icon-silence" state="disabled"/>
+			<Tool symbol="icon-copy" click="copy-selection" state="disabled"/>
+			<Tool symbol="icon-paste" click="paste-selection" state="disabled"/>
+			<Tool symbol="icon-cut" click="cut-selection" state="disabled"/>
+			<Tool symbol="icon-silence" click="silence-selection" state="disabled"/>
 		</Options>
 		<Tool symbol="icon-cogs" menu="view-settings" state="disabled"/>
 	</Group>

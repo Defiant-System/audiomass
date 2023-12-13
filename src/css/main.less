@@ -446,7 +446,8 @@ content {
 					}
 					
 					.scrollbar {
-						background: rgba(#000,.1);
+						background: rgba(#000,.05);
+						box-shadow: inset 0 0 0 1px rgba(#000,.05);
 						position: absolute;
 						top: 0;
 						right: 0;
@@ -459,8 +460,9 @@ content {
 							position: absolute;
 							top: 1px;
 							bottom: 1px;
-							left: 137px;
-							width: 223px;
+							left: 1px;
+							// width: calc( 100% - 2px );
+							// width: 31%;
 							border-radius: 5px;
 							pointer-events: none;
 							// cursor: pointer;
@@ -507,8 +509,8 @@ content {
 					margin: 0 1px;
 					overflow: hidden;
 
-					&:nth-child(1) .volume { transform: translateY(-41%); }
-					&:nth-child(2) .volume { transform: translateY(-43%); }
+					// &:nth-child(1) .volume { transform: translateY(-41%); }
+					// &:nth-child(2) .volume { transform: translateY(-43%); }
 
 					.volume {
 						position: absolute;
@@ -516,7 +518,7 @@ content {
 						left: 0;
 						width: 3px;
 						height: 100%;
-						background: linear-gradient(180deg, #324266 0%, #2b3e67 100%);
+						background: linear-gradient(180deg, #34466f 0%, #21345d 100%);
 					}
 
 					.peaker {

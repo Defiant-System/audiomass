@@ -6,14 +6,16 @@
 		// fast references
 		this.els = {
 			doc: $(document),
+			cvsWrapper: window.find(".cvs-wrapper"),
 			zoomH: window.find(".zoom-h"),
 			zoomV: window.find(".zoom-v"),
-			scrollbar: window.find(".gutter-h .scrollbar"),
+			scrollTrack: window.find(".gutter-h .scrollbar"),
+			scrollHandle: window.find(".gutter-h .scrollbar .handle"),
 		};
 		// bind event handlers
 		this.els.zoomV.on("mousedown", this.doZoomV);
 		this.els.zoomH.on("mousedown", this.doZoomH);
-		this.els.scrollbar.on("mousedown", this.doScrollbar);
+		this.els.scrollTrack.on("mousedown", this.doScrollbar);
 	},
 	dispatch(event) {
 		let APP = audiomass,
@@ -26,6 +28,20 @@
 				break;
 			case "toggle-channel":
 				event.el.toggleClass("on", event.el.hasClass("on"));
+				break;
+			case "ui-sync-gutter":
+				// to avoid feedback loop on scrollbar DnD
+				if (!Self.drag) {
+					let stWidth = +Self.els.scrollTrack.prop("offsetWidth"),
+						vWidth = +Self.els.cvsWrapper.prop("offsetWidth"),
+						cWidth = event.ws.getWrapper().clientWidth || 1,
+						width = parseInt(stWidth * (vWidth / cWidth), 10),
+						scroll = event.ws.getScroll(),
+						available = cWidth - vWidth + 2,
+						left = parseInt((scroll / available) * (stWidth - width), 10) + 1;
+					// sync scrollbar
+					Self.els.scrollHandle.css({ width, left });
+				}
 				break;
 		}
 	},
@@ -119,30 +135,41 @@
 				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
 				let track = $(event.target),
-					el = track.find(".handle");
+					el = track.find(".handle"),
+					ws = APP.data.tabs.active.file._ws,
+					vWidth = +Self.els.cvsWrapper.prop("offsetWidth"),
+					cWidth = ws.getWrapper().clientWidth - vWidth;
+
 				// create drag object
 				Self.drag = {
 					el,
+					ws,
+					cWidth,
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
 						min: 1,
-						max: 418,
+						max: +track.prop("offsetWidth") - +el.prop("offsetWidth") - 1,
 					},
 					min_: Math.min,
 					max_: Math.max,
 				};
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.doZoomH);
+				Self.els.doc.on("mousemove mouseup", Self.doScrollbar);
 				break;
 			case "mousemove":
-				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max);
+				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max),
+					perc = (left - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
 				Drag.el.css({ left });
+				// scroll / move view
+				Drag.ws.renderer.scrollContainer.scrollLeft = perc * Drag.cWidth;
 				break;
 			case "mouseup":
+				// reset drag object
+				delete Self.drag;
 				// cover content
 				APP.els.content.removeClass("cover hideMouse");
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.doZoomH);
+				Self.els.doc.off("mousemove mouseup", Self.doScrollbar);
 				break;
 		}
 	}

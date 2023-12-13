@@ -1,5 +1,0 @@
-{
-	"imports": {
-		"wavesurfer": "./modules/wavesurfer/wavesurfer.esm.js"
-	}
-}

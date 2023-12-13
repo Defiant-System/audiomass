@@ -34,7 +34,7 @@ class FileTabs {
 
 		} else {
 			let fileEl = this._cvsWrapper.append(this._template.clone(true)),
-				file = new File(fsFile, fileEl),
+				file = new File(this, fsFile, fileEl),
 				history = new window.History;
 
 			this._stack[file.id] = { history, file };

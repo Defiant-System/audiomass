@@ -1831,7 +1831,7 @@ var MultiCanvas = function (_Drawer) {
 			if (timeline)
 			{
 				ctx.fillStyle = '#fff';
-				console.log( test123 );
+
 				// draw ruler
 				var durr = PKAudioEditor.engine.wavesurfer.VisibleDuration;
 				var offs = PKAudioEditor.engine.wavesurfer.LeftProgress;

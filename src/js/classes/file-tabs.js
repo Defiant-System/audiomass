@@ -1,9 +1,16 @@
 
 class FileTabs {
-	constructor(parent) {
-		this._parent = parent;
+	constructor(APP) {
+		this._APP = APP;
 		this._stack = {};
 		this._active = null;
+
+		this._cvsWrapper = APP.els.content.find(".cvs-wrapper");
+
+		// canvas / file wrapper
+		let template = this._cvsWrapper.find("> .file");
+		this._template = template.clone(true);
+		template.remove();
 	}
 
 	get length() {
@@ -26,7 +33,8 @@ class FileTabs {
 		if (fsFile.new) {
 
 		} else {
-			let file = new File(fsFile),
+			let fileEl = this._cvsWrapper.append(this._template.clone(true)),
+				file = new File(fsFile, fileEl),
 				history = new window.History;
 
 			this._stack[file.id] = { history, file };

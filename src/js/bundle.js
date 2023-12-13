@@ -1,18 +1,22 @@
 
-let WaveSurfer = (function() {
-	@import "./modules/ext/wavesurfer-2.0.5.js"
+// https://unpkg.com/wavesurfer.js@7.5.2/
 
-	let test123 = 1212;
-
-	return module.exports;
-})();
-
-WaveSurfer.regions = (function() {
-	@import "./modules/ext/wavesurfer.regions-2.0.5.js"
-	return module.exports;
-})();
-
+import WaveSurfer from "./modules/wavesurfer/wavesurfer.esm.js";
+import RegionsPlugin from "./modules/wavesurfer/wavesurfer.esm.js";
+import TimelinePlugin from "./modules/wavesurfer/wavesurfer.esm.js";
+import Minimap from "./modules/wavesurfer/wavesurfer.esm.js";
+import EnvelopePlugin from "./modules/wavesurfer/envelope.esm.js";
+import Spectrogram from "./modules/wavesurfer/spectrogram.esm.js";
+import RecordPlugin from "./modules/wavesurfer/record.esm.js";
+import ZoomPlugin from "./modules/wavesurfer/zoom.esm.js";
 
 module.exports = {
 	WaveSurfer,
+	RegionsPlugin,
+	TimelinePlugin,
+	Minimap,
+	EnvelopePlugin,
+	Spectrogram,
+	RecordPlugin,
+	ZoomPlugin,
 };

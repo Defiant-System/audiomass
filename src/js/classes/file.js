@@ -27,6 +27,7 @@ class File {
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
 			container: el[0],
+			cursorColor: "#afdeff",
 			waveColor: "#9fcef6",
 			progressColor: "#71a1ca",
 			hideScrollbar: true,
@@ -54,24 +55,6 @@ class File {
 		this._ws.on("drag", relativeX => this.dispatch({ type: "ws-drag", relativeX }));
 		this._ws.on("scroll", (visibleStartTime, visibleEndTime) => this.dispatch({ type: "ws-scroll", visibleStartTime, visibleEndTime }));
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
-
-		let fEl = window.find(`.box[data-area="frequency"] .body`)[0],
-			opt = {
-				source: this._ws.media,
-				height: +fEl.offsetHeight,
-				mode: 6,
-				barSpace: .35,
-				ledBars: true,
-				gradient: "prism",
-				bgAlpha: 0,
-				overlay: true,
-				// showBgColor: true,
-				showPeaks: true,
-				showScaleX: false,
-				// trueLeds: false,
-			};
-		// insert motion analyzer
-		new AudioMotionAnalyzer(fEl, opt);
 	}
 
 	dispatch(event) {
@@ -82,7 +65,7 @@ class File {
 			// native events
 			case "ws-ready":
 				// temp
-				ws.zoom(150);
+				// ws.zoom(150);
 				// ws.skip(1.35);
 				break;
 			case "ws-load": break;

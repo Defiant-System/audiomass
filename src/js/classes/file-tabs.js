@@ -51,6 +51,8 @@ class FileTabs {
 		if (this._active.file) {
 			// reset view / show blank view
 			this.dispatch({ type: "hide-blank-view" });
+			// connect analyzer to file
+			this._APP.frequency.dispatch({ type: "connect-file-output", file: this._active.file });
 			// enable toolbar tools
 			this._APP.toolbar.dispatch({ type: "enable-tools" });
 		} else {

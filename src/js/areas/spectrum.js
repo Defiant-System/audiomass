@@ -80,11 +80,9 @@
 		this.cvs.width = width;
 
 		for (; i<il; i++) {
-			let value = data[i],
-				y = Math.round (i/il * height);
-			
+			let y = Math.round (i/il * height);
 			// draw the line at the right side of the canvas
-			ctx.fillStyle = this.getFullColor(value);
+			ctx.fillStyle = this.getFullColor(data[i]);
 			ctx.fillRect(width - speed, height - y, speed, speed);
 		}
 		ctx.translate(-speed, 0);
@@ -96,7 +94,8 @@
 	getFullColor(value) {
 		let palette = {
 				0: [0, 0, 0, 0],
-				10: [75, 0, 159, 1],
+				10: [35, 52, 87, 1],
+				// 10: [75, 0, 159, 1],
 				20: [104, 0, 251, 1],
 				30: [131, 0, 255, 1],
 				40: [155, 18, 157, 1],

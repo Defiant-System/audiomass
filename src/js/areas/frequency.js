@@ -9,8 +9,6 @@
 		};
 
 		let opt = {
-				// source: this._ws.media,
-				// height: +this.els.el.prop("offsetHeight") - 2,
 				mode: 6,
 				barSpace: .35,
 				ledBars: true,
@@ -33,12 +31,14 @@
 		switch (event.type) {
 			// custom events
 			case "connect-file-output":
-				// update element dimensions
-				let width = +this.els.el.prop("offsetWidth"),
-					height = +this.els.el.prop("offsetHeight") - 2;
-				this.analyzer.setCanvasSize(width, height);
-				// connect file output
-				this.analyzer.connectInput(event.file._ws.media);
+				if (Self.analyzer) {
+					// update element dimensions
+					let width = +Self.els.el.prop("offsetWidth"),
+						height = +Self.els.el.prop("offsetHeight") - 2;
+					Self.analyzer.setCanvasSize(width, height);
+					// connect file output
+					Self.analyzer.connectInput(event.file._ws.media);
+				}
 				break;
 			case "toggle-analyser":
 				isOn = event.el.parent().hasClass("on");

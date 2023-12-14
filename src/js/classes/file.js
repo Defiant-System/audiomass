@@ -66,13 +66,14 @@ class File {
 			// native events
 			case "ws-ready":
 				// temp
-				ws.zoom(200);
-				// ws.skip(1.35);
+				// ws.zoom(200);
+				// ws.skip(4.5);
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;
 			case "ws-decode": break;
-			case "ws-redraw": break;
+			case "ws-redraw":
+				break;
 			case "ws-destroy": break;
 			case "ws-timeupdate":
 				// console.log(ws.media);

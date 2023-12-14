@@ -52,9 +52,8 @@ class FileTabs {
 			// reset view / show blank view
 			this.dispatch({ type: "hide-blank-view" });
 			// connect frequency analyzer to file
-			this._APP.frequency.dispatch({ type: "connect-file-output", file: this._active.file });
-			// connect spectrum analyzer to file
-			this._APP.spectrum.dispatch({ type: "connect-file-output", file: this._active.file });
+			["frequency", "spectrum"].map(name =>
+				this._APP[name].dispatch({ type: "connect-file-output", file: this._active.file }));
 			// enable toolbar tools
 			this._APP.toolbar.dispatch({ type: "enable-tools" });
 		} else {

@@ -4,7 +4,7 @@ let Test = {
 
 		// return;
 		setTimeout(() => APP.toolbar.els.play.trigger("click"), 200);
-		setTimeout(() => APP.toolbar.els.play.trigger("click"), 700);
+		// setTimeout(() => APP.toolbar.els.play.trigger("click"), 1400);
 
 	}
 };

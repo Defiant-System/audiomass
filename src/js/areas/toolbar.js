@@ -55,6 +55,8 @@
 				Self.els.play.find(".icon-play")
 					.removeClass("icon-pause")
 					.css({ "background-image": `url("~/icons/icon-play.png")` });
+				// emit event
+				window.emit("audio-stop");
 				break;
 			case "play-audio":
 				el = event.el.find(".icon-play");
@@ -63,6 +65,9 @@
 				el.css({ "background-image": `url("~/icons/icon-${!isOn ? "pause" : "play"}.png")` });
 				// call appropriate method
 				APP.data.tabs.active.file._ws[isOn ? "pause" : "play"]();
+				// emit event
+				if (!isOn) window.emit("audio-play");
+				else window.emit("audio-pause");
 				break;
 		}
 	}

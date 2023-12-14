@@ -21,9 +21,14 @@
 		switch (event.type) {
 			// subscribed events
 			case "audio-play":
+				// turn on flag
+				Self._playing = true;
+				Self.draw();
+				break;
 			case "audio-pause":
 			case "audio-stop":
-				console.log(event);
+				// reset flag
+				delete Self._playing;
 				break;
 			// custom events
 			case "connect-file-output":
@@ -37,5 +42,10 @@
 				event.el.parent().toggleClass("on", isOn);
 				break;
 		}
+	},
+	draw(data) {
+		if (!this._playing) return;
+		this.rafId = requestAnimationFrame(() => this.draw());
+		console.log(data);
 	}
 }

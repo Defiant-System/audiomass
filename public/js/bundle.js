@@ -2590,6 +2590,8 @@ class AudioMotionAnalyzer {
 }
 
 module.exports = {
+	AudioContext: window.AudioContext || window.webkitAudioContext,
+	AudioMotionAnalyzer,
 	WaveSurfer: l$1,
 	RegionsPlugin: s$5,
 	TimelinePlugin: n$2,
@@ -2598,5 +2600,4 @@ module.exports = {
 	Spectrogram: i$2,
 	RecordPlugin: r,
 	ZoomPlugin: i,
-	AudioMotionAnalyzer,
 };

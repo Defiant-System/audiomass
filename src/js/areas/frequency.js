@@ -10,9 +10,9 @@
 		gradient: "prism",
 		bgAlpha: 0,
 		overlay: true,
-		// showBgColor: true,
 		showPeaks: true,
 		showScaleX: false,
+		// showBgColor: true,
 		// trueLeds: false,
 	},
 	init() {

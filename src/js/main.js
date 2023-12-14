@@ -5,6 +5,8 @@
 
 
 let {
+	AudioContext,
+	AudioMotionAnalyzer,
 	WaveSurfer,
 	RegionsPlugin,
 	TimelinePlugin,
@@ -13,7 +15,6 @@ let {
 	Spectrogram,
 	RecordPlugin,
 	ZoomPlugin,
-	AudioMotionAnalyzer,
 } = await window.fetch("~/js/bundle.js");
 
 

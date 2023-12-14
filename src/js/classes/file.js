@@ -66,7 +66,7 @@ class File {
 			// native events
 			case "ws-ready":
 				// temp
-				// ws.zoom(150);
+				ws.zoom(200);
 				// ws.skip(1.35);
 				break;
 			case "ws-load": break;

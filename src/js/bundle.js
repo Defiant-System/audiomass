@@ -12,7 +12,10 @@ import ZoomPlugin from "./modules/wavesurfer/plugin-zoom.esm.js";
 
 import AudioMotionAnalyzer from "./modules/audio-motion/audio-motion-analyzer.js";
 
+
 module.exports = {
+	AudioContext: window.AudioContext || window.webkitAudioContext,
+	AudioMotionAnalyzer,
 	WaveSurfer,
 	RegionsPlugin,
 	TimelinePlugin,
@@ -21,5 +24,4 @@ module.exports = {
 	Spectrogram,
 	RecordPlugin,
 	ZoomPlugin,
-	AudioMotionAnalyzer,
 };

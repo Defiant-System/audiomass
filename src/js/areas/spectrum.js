@@ -23,12 +23,13 @@
 			case "audio-play":
 				// turn on flag
 				Self._playing = true;
-				Self.draw();
+				// Self.draw();
 				break;
 			case "audio-pause":
 			case "audio-stop":
 				// reset flag
 				delete Self._playing;
+				cancelAnimationFrame(Self._rafId);
 				break;
 			// custom events
 			case "connect-file-output":
@@ -36,6 +37,11 @@
 				let width = +Self.els.cvs.parent().prop("offsetWidth"),
 					height = +Self.els.cvs.parent().prop("offsetHeight");
 				Self.els.cvs.attr({ width, height });
+
+				// Self._ws = event.file._ws;
+				// Self.audioCtx = new AudioContext();
+				// Self.node = Self.audioCtx.createMediaElementSource(Self._ws.media);
+				// console.log(Self.node);
 				break;
 			case "toggle-analyser":
 				isOn = event.el.parent().hasClass("on");
@@ -43,9 +49,11 @@
 				break;
 		}
 	},
-	draw(data) {
+	draw() {
 		if (!this._playing) return;
-		this.rafId = requestAnimationFrame(() => this.draw());
-		console.log(data);
+		this._rafId = requestAnimationFrame(() => this.draw());
+
+		// let data = 1;
+		// console.log(data);
 	}
 }

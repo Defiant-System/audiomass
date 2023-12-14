@@ -1,5 +1,5 @@
 
-// audiomass.blankView
+// imaudio.blankView
 
 {
 	init() {
@@ -34,11 +34,11 @@
 				});
 
 				// setTimeout(() => window.find(".sample:nth(0)").trigger("click"), 100);
-				// setTimeout(() => audiomass.dispatch({ type: "close-file" }), 500);
+				// setTimeout(() => imaudio.dispatch({ type: "close-file" }), 500);
 			});
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.blankView,
 			file,
 			name,

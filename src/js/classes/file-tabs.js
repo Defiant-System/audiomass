@@ -64,7 +64,7 @@ class FileTabs {
 	}
 
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			name,
 			value;
 		switch (event.type) {
@@ -80,7 +80,7 @@ class FileTabs {
 	}
 
 	openLocal(url) {
-		let APP = audiomass,
+		let APP = imaudio,
 			parts = url.slice(url.lastIndexOf("/") + 1),
 			[ name, kind ] = parts.split("."),
 			file = new karaqu.File({ name, kind });

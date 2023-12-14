@@ -1,5 +1,5 @@
 
-// audiomass.frequency
+// imaudio.frequency
 
 {
 	init() {
@@ -24,7 +24,7 @@
 		this.analyzer = new AudioMotionAnalyzer(this.els.el[0], opt);
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.frequency,
 			isOn,
 			el;

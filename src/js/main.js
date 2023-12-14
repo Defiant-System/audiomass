@@ -18,7 +18,7 @@ let {
 
 
 
-const audiomass = {
+const imaudio = {
 	init() {
 		// fast references
 		this.els = {
@@ -38,7 +38,7 @@ const audiomass = {
 		// DEV-ONLY-END
 	},
 	dispatch(event) {
-		let Self = audiomass,
+		let Self = imaudio,
 			Tabs = Self.data ? Self.data.tabs : false,
 			name,
 			value,
@@ -107,4 +107,4 @@ const audiomass = {
 	spectrum: @import "./areas/spectrum.js",
 };
 
-window.exports = audiomass;
+window.exports = imaudio;

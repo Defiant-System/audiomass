@@ -1,7 +1,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template name="blank-view">
-	<h2>Welcome to Audiomass.</h2>
+	<h2>Welcome to ImAudio.</h2>
 
 	<div class="block-buttons">
 		<div class="btn" data-click="open-filesystem">

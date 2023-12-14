@@ -1,5 +1,5 @@
 
-// audiomass.waves
+// imaudio.waves
 
 {
 	init() {
@@ -18,7 +18,7 @@
 		this.els.scrollTrack.on("mousedown", this.doScrollbar);
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.waves,
 			el;
 		switch (event.type) {
@@ -46,7 +46,7 @@
 		}
 	},
 	doZoomV(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.waves,
 			Drag = Self.drag;
 		switch (event.type) {
@@ -90,7 +90,7 @@
 		}
 	},
 	doZoomH(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.waves,
 			Drag = Self.drag;
 		switch (event.type) {
@@ -139,7 +139,7 @@
 		}
 	},
 	doScrollbar(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.waves,
 			Drag = Self.drag;
 		switch (event.type) {

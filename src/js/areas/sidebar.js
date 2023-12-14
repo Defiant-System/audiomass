@@ -1,5 +1,5 @@
 
-// audiomass.sidebar
+// imaudio.sidebar
 
 {
 	init() {
@@ -13,7 +13,7 @@
 		this.els.volume.on("mousedown", this.volumeMove);
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.speaker,
 			el;
 		switch (event.type) {
@@ -23,7 +23,7 @@
 		}
 	},
 	volumeMove(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.sidebar,
 			Drag = Self.drag;
 		switch (event.type) {

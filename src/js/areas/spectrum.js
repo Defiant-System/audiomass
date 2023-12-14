@@ -1,12 +1,12 @@
 
-// audiomass.spectrum
+// imaudio.spectrum
 
 {
 	init() {
 
 	},
 	dispatch(event) {
-		let APP = audiomass,
+		let APP = imaudio,
 			Self = APP.spectrum,
 			isOn,
 			el;

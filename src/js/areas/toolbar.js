@@ -51,6 +51,11 @@
 			case "rewind-audio":
 				APP.data.tabs.active.file._ws.seekTo(0);
 				break;
+			case "reset-play-button":
+				Self.els.play.find(".icon-play")
+					.removeClass("icon-pause")
+					.css({ "background-image": `url("~/icons/icon-play.png")` });
+				break;
 			case "play-audio":
 				el = event.el.find(".icon-play");
 				isOn = el.hasClass("icon-pause");

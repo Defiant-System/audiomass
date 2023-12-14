@@ -54,36 +54,58 @@ class File {
 		this._ws.on("drag", relativeX => this.dispatch({ type: "ws-drag", relativeX }));
 		this._ws.on("scroll", (visibleStartTime, visibleEndTime) => this.dispatch({ type: "ws-scroll", visibleStartTime, visibleEndTime }));
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
+
+		let fEl = window.find(`.box[data-area="frequency"] .body`)[0],
+			opt = {
+				source: this._ws.media,
+				height: +fEl.offsetHeight,
+				mode: 6,
+				barSpace: .35,
+				ledBars: true,
+				gradient: "prism",
+				bgAlpha: 0,
+				overlay: true,
+				// showBgColor: true,
+				showPeaks: true,
+				showScaleX: false,
+				// trueLeds: false,
+			};
+		// insert motion analyzer
+		new AudioMotionAnalyzer(fEl, opt);
 	}
 
 	dispatch(event) {
-		let name,
-			value;
+		let APP = this._parent._APP,
+			ws = this._ws;
 		// console.log(event);
 		switch (event.type) {
 			// native events
 			case "ws-ready":
 				// temp
-				this._ws.zoom(150);
-				this._ws.skip(1.35);
+				ws.zoom(150);
+				// ws.skip(1.35);
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;
 			case "ws-decode": break;
 			case "ws-redraw": break;
-			case "ws-play": break;
-			case "ws-pause": break;
 			case "ws-destroy": break;
-			case "ws-timeupdate": break;
+			case "ws-timeupdate":
+				// console.log(ws.media);
+				break;
 			case "ws-seeking": break;
 			case "ws-interaction": break;
 			case "ws-click": break;
 			case "ws-drag": break;
+			case "ws-play": break;
+			case "ws-pause":
+				// sync gutter UI
+				APP.toolbar.dispatch({ type: "reset-play-button", ws });
+				break;
 			case "ws-scroll":
 			case "ws-zoom":
-				// console.log( event.minPxPerSec +" px/s" );
 				// sync gutter UI
-				this._parent._APP.waves.dispatch({ type: "ui-sync-gutter", ws: this._ws });
+				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
 				break;
 		}
 	}

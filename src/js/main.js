@@ -13,7 +13,9 @@ let {
 	Spectrogram,
 	RecordPlugin,
 	ZoomPlugin,
+	AudioMotionAnalyzer,
 } = await window.fetch("~/js/bundle.js");
+
 
 
 const audiomass = {

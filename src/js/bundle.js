@@ -10,6 +10,8 @@ import Spectrogram from "./modules/wavesurfer/plugin-spectrogram.esm.js";
 import RecordPlugin from "./modules/wavesurfer/plugin-record.esm.js";
 import ZoomPlugin from "./modules/wavesurfer/plugin-zoom.esm.js";
 
+import AudioMotionAnalyzer from "./modules/audio-motion/audio-motion-analyzer.js";
+
 module.exports = {
 	WaveSurfer,
 	RegionsPlugin,
@@ -19,4 +21,5 @@ module.exports = {
 	Spectrogram,
 	RecordPlugin,
 	ZoomPlugin,
+	AudioMotionAnalyzer,
 };

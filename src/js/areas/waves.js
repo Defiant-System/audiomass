@@ -31,7 +31,7 @@
 				break;
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD
-				if (!Self.drag) {
+				if (!Self.drag || Self.drag.type !== "scroll") {
 					let stWidth = +Self.els.scrollTrack.prop("offsetWidth"),
 						vWidth = +Self.els.cvsWrapper.prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
@@ -56,11 +56,12 @@
 				// cover content
 				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
-				let track = $(event.target),
+				let track = $(event.target).addClass("active"),
 					el = track.find(".handle");
 				// create drag object
 				Self.drag = {
 					el,
+					type: "zoomV",
 					clickY: event.clientY - +el.prop("offsetTop"),
 					limit: {
 						min: 1,
@@ -77,6 +78,10 @@
 				Drag.el.css({ top });
 				break;
 			case "mouseup":
+				// reset drag object
+				delete Self.drag;
+				// reset element
+				Drag.el.parent().removeClass("active");
 				// cover content
 				APP.els.content.removeClass("cover hideMouse");
 				// unbind event
@@ -95,11 +100,14 @@
 				// cover content
 				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
-				let track = $(event.target),
-					el = track.find(".handle");
+				let track = $(event.target).addClass("active"),
+					el = track.find(".handle"),
+					ws = APP.data.tabs.active.file._ws;
 				// create drag object
 				Self.drag = {
 					el,
+					ws,
+					type: "zoomH",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
 						min: 1,
@@ -112,10 +120,17 @@
 				Self.els.doc.on("mousemove mouseup", Self.doZoomH);
 				break;
 			case "mousemove":
-				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max);
+				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max),
+					perc = (left - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
 				Drag.el.css({ left });
+				// update zoom
+				Drag.ws.zoom(10 + (perc * 1000));
 				break;
 			case "mouseup":
+				// reset drag object
+				delete Self.drag;
+				// reset element
+				Drag.el.parent().removeClass("active");
 				// cover content
 				APP.els.content.removeClass("cover hideMouse");
 				// unbind event
@@ -145,6 +160,7 @@
 					el,
 					ws,
 					cWidth,
+					type: "scroll",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
 						min: 1,

@@ -7,6 +7,11 @@
 		this.els = {
 			cvs: window.find(`.dock .box[data-area="spectrum"] canvas`),
 		};
+
+		// subscribe to events
+		window.on("audio-play", this.dispatch);
+		window.on("audio-pause", this.dispatch);
+		window.on("audio-stop", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -14,6 +19,12 @@
 			isOn,
 			el;
 		switch (event.type) {
+			// subscribed events
+			case "audio-play":
+			case "audio-pause":
+			case "audio-stop":
+				console.log(event);
+				break;
 			// custom events
 			case "connect-file-output":
 				// fit canvas

@@ -40,13 +40,16 @@
 				// prepare drag info
 				let el = $(event.target),
 					txt = el.parent().find(".txt-volume h2"),
+					ws = APP.data.tabs.active.file._ws,
 					limit = {
 						min: -135,
 						max: 135,
 					};
+
 				// create drag object
 				Self.drag = {
 					el,
+					ws,
 					txt,
 					limit,
 					clickY: parseInt(el.cssProp("--angle"), 10) + event.clientY,
@@ -62,6 +65,8 @@
 				Drag.el.css({ "--angle": `${angle}deg` });
 				// update volume knob value
 				Drag.txt.html(val);
+				// update wavesurfer
+				Drag.ws.setVolume(val/100);
 				break;
 			case "mouseup":
 				// cover content

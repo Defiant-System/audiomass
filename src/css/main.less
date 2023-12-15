@@ -342,16 +342,23 @@ content {
 							border-bottom: 1px solid rgba(#fff,.04);
 						}
 
-						// ::part(wrapper):before {
-						// 	content: "";
-						// 	position: absolute;
-						// 	top: 0;
-						// 	left: 0;
-						// 	right: 0;
-						// 	height: 50%;
-						// 	pointer-events: none;
-						// 	background: rgba(#fff,.15);
-						// }
+						::part(wrapper):before,
+						::part(wrapper):after {
+							content: "";
+							position: absolute;
+							top: 0;
+							left: 0;
+							right: 0;
+							height: 50%;
+							z-index: 2;
+							pointer-events: none;
+							background: rgba(#369,.15);
+						}
+
+						::part(wrapper):after {
+							top: 50%;
+						}
+
 
 						::part(region-selected) {
 							// background-color: rgba(#090,.25) !important;
@@ -359,12 +366,12 @@ content {
 						}
 						
 						::part(region-handle-left) {
-							border-left: 1px solid #9fcef666;
+							border-left: 1px solid #9fcef633;
 							border-radius: 0;
 						}
 						
 						::part(region-handle-right) {
-							border-right: 1px solid #9fcef666;
+							border-right: 1px solid #9fcef633;
 							border-radius: 0;
 						}
 					}

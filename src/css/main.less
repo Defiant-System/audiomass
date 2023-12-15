@@ -68,19 +68,6 @@ content {
 		bottom: 0;
 		padding: 5px;
 		display: flex;
-
-		h2 {
-			font-size: 53px;
-			font-weight: 100;
-			line-height: 1.25;
-			text-shadow: 0 1px 1px #1b2642;
-		}
-
-		h3 {
-			font-size: 29px;
-			font-weight: 100;
-			text-shadow: 0 1px 0 #1b2642;
-		}
 	}
 
 	.box {
@@ -144,73 +131,92 @@ content {
 
 		.box {
 			background: linear-gradient(180deg, #3c5b87 0%, #2f466e 50%, #233254 100%);
-			display: flex;
-			flex-direction: column;
-
-			> div {
-				text-align: center;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-
-				&:nth-child(1) {
-					flex: 1;
-				}
-
-				&:nth-child(2) {
-					height: 180px;
-				}
-
-				&:nth-child(3) {
-					flex: 1;
-				}
-			}
 		}
 
-		.volume-knob {
-			background: linear-gradient(180deg, #2c4267 0%, #304d72 100%);
-			position: relative;
-			display: inline-block;
-			width: 110px;
+		.volume-wrapper {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			right: 0;
+			margin-top: -55px;
 			height: 110px;
-			padding: 10px 0 0;
-			border-radius: 50%;
-			--volume: -35deg;
+			text-align: center;
+			align-items: center;
 
-			.knob {
-				background: linear-gradient(0deg, #2f476e 0%, #324f76 100%);
+			&.show-text .txt-volume {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			.txt-volume {
+				opacity: 0;
+				visibility: hidden;
+				position: absolute;
+				bottom: -130px;
+				left: 0;
+				right: 0;
+				transition: opacity 100ms ease-in-out;
+
+				h3 {
+					font-size: 29px;
+					font-weight: 100;
+					text-shadow: 0 1px 0 #1b2642;
+				}
+
+				h2 {
+					font-size: 53px;
+					font-weight: 100;
+					line-height: 1.25;
+					text-shadow: 0 1px 1px #1b2642;
+
+					&:after { content: "%"; }
+				}
+			}
+
+			.volume-knob {
+				background: linear-gradient(180deg, #2c4267 0%, #304d72 100%);
 				position: relative;
 				display: inline-block;
-				width: 90px;
-				height: 90px;
-				border-radius: inherit;
-				pointer-events: none;
-				box-shadow: 0 0 0 1px fadeout(#1b2642, 47%),
-							0 0 7px rgba(0,0,0,.225),
-							0 2px 5px rgba(0,0,0,.225),
-							inset 0 -1px 0 rgba(0,0,0,.125),
-							inset 0 1px 0 rgba(255,255,255,.125);
+				width: 110px;
+				height: 110px;
+				padding: 10px 0 0;
+				border-radius: 50%;
+				--angle: -35deg;
 
-				.inner {
+				.knob {
+					background: linear-gradient(0deg, #2f476e 0%, #324f76 100%);
 					position: relative;
-					width: 100%;
-					height: 100%;
+					display: inline-block;
+					width: 90px;
+					height: 90px;
 					border-radius: inherit;
-					transform: rotate( var( --volume ) );
-					transform-origin: 50% 50%;
+					pointer-events: none;
+					box-shadow: 0 0 0 1px fadeout(#1b2642, 47%),
+								0 0 7px rgba(0,0,0,.225),
+								0 2px 5px rgba(0,0,0,.225),
+								inset 0 -1px 0 rgba(0,0,0,.125),
+								inset 0 1px 0 rgba(255,255,255,.125);
 
-					.light {
-						position: absolute;
-						top: 7px;
-						left: calc( 50% - 1px );
-						width: 3px;
-						height: 7px;
-						border-radius: 5px;
-						background: #9fcef6;
-						box-shadow: 0 0 17px #71a1ca,
-									0 0 7px #71a1ca,
-									0 0 3px #71a1ca;
+					.inner {
+						position: relative;
+						width: 100%;
+						height: 100%;
+						border-radius: inherit;
+						transform: rotate( var( --angle ) );
+						transform-origin: 50% 50%;
+
+						.light {
+							position: absolute;
+							top: 7px;
+							left: calc( 50% - 1px );
+							width: 3px;
+							height: 7px;
+							border-radius: 5px;
+							background: #9fcef6;
+							box-shadow: 0 0 17px #71a1ca,
+										0 0 7px #71a1ca,
+										0 0 3px #71a1ca;
+						}
 					}
 				}
 			}

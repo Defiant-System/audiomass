@@ -75,15 +75,15 @@ class File {
 				// ws.zoom(200);
 				// ws.skip(4.5);
 
-				// this._regions.addRegion({
-				// 	id: "region-green",
-				// 	start: 2,
-				// 	end: 4,
-				// });
-
-				this._regions.enableDragSelection({
-					color: "rgba(255,255,255,.1)",
+				this._regions.addRegion({
+					id: "region-selected",
+					start: 2,
+					end: 4,
 				});
+
+				// this._regions.enableDragSelection({
+				// 	color: "rgba(255,255,255,.1)",
+				// });
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;

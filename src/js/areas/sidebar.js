@@ -39,11 +39,16 @@
 				Self.els.vWrapper.addClass("show-text");
 				// prepare drag info
 				let el = $(event.target),
-					txt = el.parent().find(".txt-volume");
+					txt = el.parent().find(".txt-volume h2"),
+					limit = {
+						min: -135,
+						max: 135,
+					};
 				// create drag object
 				Self.drag = {
 					el,
 					txt,
+					limit,
 					clickY: parseInt(el.cssProp("--angle"), 10) + event.clientY,
 					min_: Math.min,
 					max_: Math.max,
@@ -52,8 +57,11 @@
 				Self.els.doc.on("mousemove mouseup", Self.volumeMove);
 				break;
 			case "mousemove":
-				let angle = Drag.min_(Drag.max_(Drag.clickY - event.clientY, -135), 135);
+				let angle = Drag.min_(Drag.max_(Drag.clickY - event.clientY, Drag.limit.min), Drag.limit.max),
+					val = Math.round(((angle / Drag.limit.max) + 1) * 50);
 				Drag.el.css({ "--angle": `${angle}deg` });
+				// update volume knob value
+				Drag.txt.html(val);
 				break;
 			case "mouseup":
 				// cover content

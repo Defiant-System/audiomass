@@ -283,6 +283,7 @@ content {
 					}
 
 					.timeline {
+						position: relative;
 						height: 14px;
 						box-shadow: 0 1px 0 rgba(#002,.1);
 						border-top: 1px solid rgba(#fff,.04);
@@ -290,6 +291,33 @@ content {
 						border-radius: inherit;
 						border-bottom-left-radius: 0;
 						border-bottom-right-radius: 0;
+
+						&:before {
+							content: "";
+							position: absolute;
+							bottom: -1px;
+							left: 0;
+							right: 0;
+							height: 5px;
+							background: repeating-linear-gradient(90deg,
+								rgba(#000,.15) 10px, rgba(#000,.15) 11px, transparent 11px, transparent 20px,
+								rgba(#000,.15) 20px, rgba(#000,.15) 21px, transparent 21px, transparent 30px,
+								rgba(#000,.15) 30px, rgba(#000,.15) 31px, transparent 31px, transparent 40px,
+								rgba(#000,.15) 40px, rgba(#000,.15) 41px, transparent 41px, transparent 60px
+							);
+						}
+
+						&:after {
+							content: "";
+							position: absolute;
+							bottom: -1px;
+							left: 0;
+							right: 0;
+							height: 7px;
+							background: repeating-linear-gradient(90deg,
+								rgba(#000,.15) 0px, rgba(#000,.15) 1px, transparent 1px, transparent 50px
+							);
+						}
 					}
 
 					.files-wrapper {
@@ -323,6 +351,11 @@ content {
 						// 	height: 50%;
 						// 	background: rgba(255,0,0,.35);
 						// }
+
+						::part(region-selected) {
+							// background-color: rgba(#090,.25) !important;
+							background: linear-gradient(-65deg, #43b7c644, #d186d244) !important;
+						}
 					}
 				}
 

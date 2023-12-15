@@ -20,6 +20,8 @@
 	dispatch(event) {
 		let APP = imaudio,
 			Self = APP.waves,
+			value,
+			file,
 			isOn,
 			el;
 		switch (event.type) {
@@ -30,12 +32,10 @@
 			case "toggle-channel":
 				isOn = event.el.hasClass("on");
 				event.el.toggleClass("on", isOn);
-
-				if (isOn) {
-					console.log("turn off channel");
-				} else {
-					
-				}
+				// signal file
+				file = APP.data.tabs.active.file;
+				value = [event.el.hasClass("left") ? 0 : 1, !isOn ? 1 : 0];
+				file.dispatch({ type: "toggle-channel", value });
 				break;
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD

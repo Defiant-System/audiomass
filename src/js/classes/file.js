@@ -7,6 +7,9 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
+		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#71a1ca" };
+		this.channelOff = { waveColor: "#888888", progressColor: "#888888" };
+
 		// let timeline = TimelinePlugin.create({
 		// 		height: 8,
 		// 		insertPosition: "beforebegin",
@@ -30,10 +33,8 @@ class File {
 		this._ws = WaveSurfer.create({
 			container: el[0],
 			cursorColor: "#f90", // afdeff
-			waveColor: "#9fcef6",
-			progressColor: "#71a1ca",
 			hideScrollbar: true,
-			splitChannels: true,
+			splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
 			// autoCenter: true,
 			// autoScroll: false,
 			height: +el.parent().prop("offsetHeight") >> 1,
@@ -66,7 +67,8 @@ class File {
 
 	dispatch(event) {
 		let APP = this._parent._APP,
-			ws = this._ws;
+			ws = this._ws,
+			value;
 		// console.log(event);
 		switch (event.type) {
 			// custom events
@@ -107,6 +109,12 @@ class File {
 			case "ws-zoom":
 				// sync gutter UI
 				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
+				break;
+			// external events
+			case "toggle-channel":
+				value = [...ws.options.splitChannels];
+				value[event.value[0]] = event.value[1] ? { ...this.channelOn } : { ...this.channelOff };
+				ws.setOptions({ splitChannels: value });
 				break;
 		}
 	}

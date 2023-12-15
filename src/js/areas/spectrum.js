@@ -2,6 +2,7 @@
 // imaudio.spectrum
 
 {
+	prism: [ '#a35', '#c66', '#e94', '#ed0', '#9d5', '#4d8', '#2cb', '#0bc', '#09c', '#36b' ],
 	init() {
 		// fast references
 		this.els = {
@@ -13,6 +14,21 @@
 		// swap canvas
 		this.swapCvs = document.createElement("canvas");
 		this.swapCtx = this.swapCvs.getContext("2d");
+
+		this.palette = {
+			0: [0, 0, 0, 0],
+			// 10: [35, 52, 87, 1],
+			10: [75, 0, 159, 1],
+			20: [104, 0, 251, 1],
+			30: [131, 0, 255, 1],
+			40: [155, 18, 157, 1],
+			50: [175, 37, 0, 1],
+			60: [191, 59, 0, 1],
+			70: [206, 88, 0, 1],
+			80: [223, 132, 0, 1],
+			90: [240, 188, 0, 1],
+			100: [255, 252, 0, 1]      
+		};
 
 		// subscribe to events
 		window.on("audio-play", this.dispatch);
@@ -92,20 +108,7 @@
 		this.value_changed = false;
 	},
 	getFullColor(value) {
-		let palette = {
-				0: [0, 0, 0, 0],
-				10: [35, 52, 87, 1],
-				// 10: [75, 0, 159, 1],
-				20: [104, 0, 251, 1],
-				30: [131, 0, 255, 1],
-				40: [155, 18, 157, 1],
-				50: [175, 37, 0, 1],
-				60: [191, 59, 0, 1],
-				70: [206, 88, 0, 1],
-				80: [223, 132, 0, 1],
-				90: [240, 188, 0, 1],
-				100: [255, 252, 0, 1]      
-			},
+		let palette = this.palette,
 			//floor to nearest 10:
 			dec = 100 * value / 255,
 			floored = 10 * Math.floor(dec / 10),

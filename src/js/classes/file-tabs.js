@@ -5,10 +5,10 @@ class FileTabs {
 		this._stack = {};
 		this._active = null;
 
-		this._cvsWrapper = APP.els.content.find(".cvs-wrapper");
+		this._filesWrapper = APP.els.content.find(".files-wrapper");
 
 		// canvas / file wrapper
-		let template = this._cvsWrapper.find("> .file");
+		let template = this._filesWrapper.find("> .file");
 		this._template = template.clone(true);
 		template.remove();
 	}
@@ -33,7 +33,7 @@ class FileTabs {
 		if (fsFile.new) {
 
 		} else {
-			let fileEl = this._cvsWrapper.append(this._template.clone(true)),
+			let fileEl = this._filesWrapper.append(this._template.clone(true)),
 				file = new File(this, fsFile, fileEl),
 				history = new window.History;
 

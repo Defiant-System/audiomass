@@ -27,8 +27,7 @@
 		width: auto;
 		z-index: 3;
 		background: transparent;
-		font-size: 15px;
-		font-family: Lucida Console;
+		font-family: Lucida Console, Courier New, Menlo;
 		text-transform: uppercase;
 		text-shadow: 0 1px 0 rgba(0,0,0,.175);
 		border: 0;
@@ -37,6 +36,29 @@
 
 		&.blank-display {
 			
+		}
+
+		.currTime {
+			position: absolute;
+			top: 8px;
+			left: 19px;
+			font-size: 20px;
+		}
+
+		.totalTime {
+			position: absolute;
+			top: 0;
+			right: 19px;
+			font-size: 11px;
+			opacity: .5;
+		}
+
+		.hoverTime {
+			position: absolute;
+			top: 15px;
+			right: 19px;
+			font-size: 11px;
+			opacity: .5;
 		}
 	}
 }

@@ -6,19 +6,20 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
-		let timeline = TimelinePlugin.create({
-				height: 8,
-				insertPosition: "beforebegin",
-				timeInterval: 0.05,
-				primaryLabelInterval: 1,
-				secondaryLabelInterval: 1,
-				formatTimeCallback: seconds => seconds.toFixed(2),
-				style: {
-					fontSize: "9px",
-					color: "#71a1ca77",
-				},
-			}),
-			zoom = ZoomPlugin.create({ scale: 0.2 });
+		// let timeline = TimelinePlugin.create({
+		// 		height: 8,
+		// 		insertPosition: "beforebegin",
+		// 		timeInterval: 0.05,
+		// 		primaryLabelInterval: 1,
+		// 		secondaryLabelInterval: 1,
+		// 		formatTimeCallback: seconds => seconds.toFixed(2),
+		// 		style: {
+		// 			fontSize: "9px",
+		// 			color: "#71a1ca77",
+		// 		},
+		// 	});
+		let zoom = ZoomPlugin.create({ scale: 0.2 });
+		let regions = RegionsPlugin.create();
 
 		// disable default mouse wheel handler
 		zoom._onWheel = zoom.onWheel;
@@ -34,12 +35,17 @@ class File {
 			splitChannels: true,
 			// autoCenter: true,
 			// autoScroll: false,
-			height: (+el.parent().prop("offsetHeight") - 4) / 2,
+			height: +el.parent().prop("offsetHeight") >> 1,
 			minPxPerSec: 100,
-  			plugins: [timeline, zoom],
+  			// plugins: [timeline, zoom, regions],
+  			plugins: [zoom, regions],
 		});
+		// reference to regions
+		this._regions = regions;
 
 		this._ws.loadBlob(this._file.blob);
+
+		// this._regions.clearRegions();
 
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));
 		this._ws.on("loading", percent => this.dispatch({ type: "ws-loading", percent }));
@@ -68,6 +74,16 @@ class File {
 				// temp
 				// ws.zoom(200);
 				// ws.skip(4.5);
+
+				// this._regions.addRegion({
+				// 	id: "region-green",
+				// 	start: 2,
+				// 	end: 4,
+				// });
+
+				this._regions.enableDragSelection({
+					color: "rgba(255,255,255,.1)",
+				});
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;

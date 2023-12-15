@@ -256,38 +256,57 @@ content {
 					bottom: 19px;
 					left: 19px;
 					right: 5px;
-					padding: 3px 1px 0;
+					padding: 1px 1px 0;
 					border-radius: 4px;
 					overflow: hidden;
+					display: flex;
+					flex-direction: column;
 
 					&:before {
 						content: "";
 						position: absolute;
-						top: 13px;
+						top: 14px;
 						left: 0;
 						right: 0;
 						bottom: 0;
-						box-shadow: inset 0 0 7px rgba(#000,.1);
-						background: rgba(#000,.075);
+						box-shadow: inset 0 1px 5px rgba(#002,.05);
+						background: rgba(#002,.025);
 						border-radius: inherit;
 						border-top-left-radius: 0;
 						border-top-right-radius: 0;
 					}
 
-					&:after {
-						content: "";
-						position: absolute;
-						top: 50%;
-						left: 0;
-						right: 0;
-						height: 0;
-						border-top: 1px solid rgba(#000,.1);
-						border-bottom: 1px solid rgba(#fff,.04);
+					.timeline {
+						height: 14px;
+						box-shadow: 0 1px 0 rgba(#002,.1);
+						border-top: 1px solid rgba(#fff,.04);
+						border-bottom: 1px solid rgba(#000,.075);
+						border-radius: inherit;
+						border-bottom-left-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+
+					.files-wrapper {
+						flex: 1;
+						box-shadow: inset 0 0 7px rgba(#000,.1);
+						background: rgba(#000,.075);
 					}
 
 					.file {
+						position: relative;
 						width: 100%;
 						height: 100%;
+
+						&:after {
+							content: "";
+							position: absolute;
+							top: 50%;
+							left: 0;
+							right: 0;
+							height: 0;
+							border-top: 1px solid rgba(#000,.1);
+							border-bottom: 1px solid rgba(#fff,.04);
+						}
 
 						// &:before {
 						// 	content: "";

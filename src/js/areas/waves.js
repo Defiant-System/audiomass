@@ -6,7 +6,7 @@
 		// fast references
 		this.els = {
 			doc: $(document),
-			cvsWrapper: window.find(".cvs-wrapper"),
+			filesWrapper: window.find(".files-wrapper"),
 			zoomH: window.find(".zoom-h"),
 			zoomV: window.find(".zoom-v"),
 			scrollTrack: window.find(".gutter-h .scrollbar"),
@@ -33,7 +33,7 @@
 				// to avoid feedback loop on scrollbar DnD
 				if (!Self.drag || Self.drag.type !== "scroll") {
 					let stWidth = +Self.els.scrollTrack.prop("offsetWidth"),
-						vWidth = +Self.els.cvsWrapper.prop("offsetWidth"),
+						vWidth = +Self.els.filesWrapper.prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
 						width = parseInt(stWidth * (vWidth / cWidth), 10),
 						scroll = event.ws.getScroll(),
@@ -152,7 +152,7 @@
 				let track = $(event.target),
 					el = track.find(".handle"),
 					ws = APP.data.tabs.active.file._ws,
-					vWidth = +Self.els.cvsWrapper.prop("offsetWidth"),
+					vWidth = +Self.els.filesWrapper.prop("offsetWidth"),
 					cWidth = ws.getWrapper().clientWidth - vWidth;
 
 				// create drag object

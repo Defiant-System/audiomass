@@ -45,7 +45,6 @@ class File {
 		this._regions = regions;
 		this._regions.enableDragSelection({ id: "region-selected" });
 
-
 		this._ws.loadBlob(this._file.blob);
 
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));
@@ -76,21 +75,15 @@ class File {
 				// ws.zoom(200);
 				// ws.skip(4.5);
 
-				// this._ws.addEventListener("mousedown", this.dispatch);
-				let cvs = this._el.find("> div").shadowRoot().find(".canvases canvas");
-				console.log( cvs );
+				// clear regions on mousedown
+				this._el.find("> div").shadowRoot().find(".wrapper")
+					.on("pointerdown", e => this._regions.clearRegions());
 
-				cvs[0].addEventListener("mousedown", e => console.log(e));
-
-				// this._el.find("> div").shadowRoot()
-				// 	.find(".canvases canvas")
-				// 	.on("mousedown", e => console.log(e));
-
-				this._regions.addRegion({
-					id: "region-selected",
-					start: 2,
-					end: 4,
-				});
+				// this._regions.addRegion({
+				// 	id: "region-selected",
+				// 	start: 2,
+				// 	end: 4,
+				// });
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;

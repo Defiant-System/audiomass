@@ -20,6 +20,7 @@
 	dispatch(event) {
 		let APP = imaudio,
 			Self = APP.waves,
+			isOn,
 			el;
 		switch (event.type) {
 			// custom events
@@ -27,7 +28,14 @@
 				console.log(event);
 				break;
 			case "toggle-channel":
-				event.el.toggleClass("on", event.el.hasClass("on"));
+				isOn = event.el.hasClass("on");
+				event.el.toggleClass("on", isOn);
+
+				if (isOn) {
+					console.log("turn off channel");
+				} else {
+					
+				}
 				break;
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD

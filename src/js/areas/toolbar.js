@@ -39,6 +39,13 @@
 			case "disable-tools":
 				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
 				break;
+			case "disable-range-edit":
+				["copy", "cut", "silence"].map(key => Self.els[key].addClass("tool-disabled_"));
+				break;
+			case "enable-range-edit":
+				["copy", "cut", "silence"].map(key => Self.els[key].removeClass("tool-disabled_"));
+				console.log(event);
+				break;
 			case "toggle-sidebar":
 				isOn = event.value || APP.els.content.hasClass("show-sidebar");
 				APP.els.content.toggleClass("show-sidebar", isOn);

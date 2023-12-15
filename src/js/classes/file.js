@@ -81,7 +81,7 @@ class File {
 			case "ws-ready":
 				// clear regions on mousedown
 				this._el.find("> div").shadowRoot().find(".wrapper")
-					.on("pointerdown", e => this._regions.clearRegions());
+					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset" }));
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;
@@ -107,9 +107,15 @@ class File {
 				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
 				break;
 			// region events
+			case "ws-region-reset":
+				this._regions.clearRegions();
+				// update toolbar
+				APP.toolbar.dispatch({ type: "disable-range-edit" });
+				break;
 			case "ws-region-created":
 			case "ws-region-updated":
-				console.log(event);
+				// update toolbar
+				APP.toolbar.dispatch({ type: "enable-range-edit", region: event.region });
 				break;
 			// external events
 			case "toggle-channel":

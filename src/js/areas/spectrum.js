@@ -2,7 +2,8 @@
 // imaudio.spectrum
 
 {
-	prism: [ '#a35', '#c66', '#e94', '#ed0', '#9d5', '#4d8', '#2cb', '#0bc', '#09c', '#36b' ],
+	def: ["#000", "#4b009f", "#6800fb", "#8300ff", "#9b129d", "#af2500", "#bf3b00", "#ce5800", "#df8400", "#f0bc00", "#fffc00"],
+	// prism: ["#000", "#a35", "#c66", "#e94", "#ed0", "#9d5", "#4d8", "#2cb", "#0bc", "#09c", "#36b"],
 	init() {
 		// fast references
 		this.els = {
@@ -15,21 +16,16 @@
 		this.swapCvs = document.createElement("canvas");
 		this.swapCtx = this.swapCvs.getContext("2d");
 
-		this.palette = {
-			0: [0, 0, 0, 0],
-			// 10: [35, 52, 87, 1],
-			10: [75, 0, 159, 1],
-			20: [104, 0, 251, 1],
-			30: [131, 0, 255, 1],
-			40: [155, 18, 157, 1],
-			50: [175, 37, 0, 1],
-			60: [191, 59, 0, 1],
-			70: [206, 88, 0, 1],
-			80: [223, 132, 0, 1],
-			90: [240, 188, 0, 1],
-			100: [255, 252, 0, 1]      
-		};
-
+		// translate palette hex to rgba array
+		this.palette = {};
+		this.def.map((color, i) => {
+			let { style } = new Option();
+			style.color = color;
+			let v = style.color.match(/^rgb?\((\d+),\s*(\d+),\s*(\d+)\)$/),
+				a = color === "#000" ? 0 : 1;
+			this.palette[(i * 10).toString()] = [+v[1], +v[2], +v[3], a];
+		});
+		
 		// subscribe to events
 		window.on("audio-play", this.dispatch);
 		window.on("audio-pause", this.dispatch);
@@ -114,25 +110,22 @@
 			floored = 10 * Math.floor(dec / 10),
 			dist = dec - floored / 10,
 			next;
-
 		if (dec < 100){
 			next = [
 				palette[floored + 10][0] - palette[floored + 10][0],
 				palette[floored + 10][1] - palette[floored + 10][1],
 				palette[floored + 10][2] - palette[floored + 10][2],
-				palette[floored + 10][3] - palette[floored + 10][3]
+				palette[floored + 10][3] - palette[floored + 10][3],
 			];
 		} else {
 			next = [0, 0, 0, 0];
 		}
-
 		let c = [
 			palette[floored][0] + dist * next[0],
 			palette[floored][1] + dist * next[1],
 			palette[floored][2] + dist * next[2],
-			palette[floored][3] + dist * next[3]
+			palette[floored][3] + dist * next[3],
 		];
-
 		return `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${c[3]})`;
 	}
 }

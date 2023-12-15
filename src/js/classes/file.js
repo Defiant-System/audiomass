@@ -8,7 +8,7 @@ class File {
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#71a1ca" };
-		this.channelOff = { waveColor: "#888888", progressColor: "#888888" };
+		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
 		// let timeline = TimelinePlugin.create({
 		// 		height: 8,
@@ -46,8 +46,11 @@ class File {
 		this._regions = regions;
 		this._regions.enableDragSelection({ id: "region-selected" });
 
-		this._ws.loadBlob(this._file.blob);
+		// regions events
+		this._regions.on("region-created", region => this.dispatch({ type: "ws-region-created", region }));
+		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
 
+		// wavesurfer events
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));
 		this._ws.on("loading", percent => this.dispatch({ type: "ws-loading", percent }));
 		this._ws.on("decode", duration => this.dispatch({ type: "ws-decode", duration }));
@@ -63,6 +66,9 @@ class File {
 		this._ws.on("drag", (relativeX, number) => this.dispatch({ type: "ws-drag", relativeX, number }));
 		this._ws.on("scroll", (visibleStartTime, visibleEndTime) => this.dispatch({ type: "ws-scroll", visibleStartTime, visibleEndTime }));
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
+
+		// load file blob
+		this._ws.loadBlob(this._file.blob);
 	}
 
 	dispatch(event) {
@@ -73,19 +79,9 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
-				// temp
-				// ws.zoom(200);
-				// ws.skip(4.5);
-
 				// clear regions on mousedown
 				this._el.find("> div").shadowRoot().find(".wrapper")
 					.on("pointerdown", e => this._regions.clearRegions());
-
-				// this._regions.addRegion({
-				// 	id: "region-selected",
-				// 	start: 2,
-				// 	end: 4,
-				// });
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;
@@ -109,6 +105,11 @@ class File {
 			case "ws-zoom":
 				// sync gutter UI
 				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
+				break;
+			// region events
+			case "ws-region-created":
+			case "ws-region-updated":
+				console.log(event);
 				break;
 			// external events
 			case "toggle-channel":

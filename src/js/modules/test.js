@@ -2,9 +2,15 @@
 let Test = {
 	init(APP) {
 
-		// setTimeout(() => {
-		// 	window.find(`.workarea .channel-btn[data-click="toggle-channel"]`).trigger("click");
-		// }, 500);
+		// ws.zoom(200);
+		// ws.skip(4.5);
+		// this._regions.addRegion({
+		// 	id: "region-selected",
+		// 	start: 2,
+		// 	end: 4,
+		// });
+
+		// setTimeout(() => window.find(`.channel-btn[data-click="toggle-channel"]`).trigger("click"), 500);
 
 		return;
 		setTimeout(() => {

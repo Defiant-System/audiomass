@@ -3,6 +3,7 @@ class File {
 	constructor(parent, fsFile, el) {
 		// save reference to parent object
 		this._parent = parent;
+		this._el = el;
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
@@ -28,7 +29,7 @@ class File {
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
 			container: el[0],
-			cursorColor: "#afdeff",
+			cursorColor: "#f90", // afdeff
 			waveColor: "#9fcef6",
 			progressColor: "#71a1ca",
 			hideScrollbar: true,
@@ -42,10 +43,10 @@ class File {
 		});
 		// reference to regions
 		this._regions = regions;
+		this._regions.enableDragSelection({ id: "region-selected" });
+
 
 		this._ws.loadBlob(this._file.blob);
-
-		// this._regions.clearRegions();
 
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));
 		this._ws.on("loading", percent => this.dispatch({ type: "ws-loading", percent }));
@@ -59,7 +60,7 @@ class File {
 		this._ws.on("seeking", currentTime => this.dispatch({ type: "ws-seeking", currentTime }));
 		this._ws.on("interaction", newTime => this.dispatch({ type: "ws-interaction", newTime }));
 		this._ws.on("click", relativeX => this.dispatch({ type: "ws-click", relativeX }));
-		this._ws.on("drag", relativeX => this.dispatch({ type: "ws-drag", relativeX }));
+		this._ws.on("drag", (relativeX, number) => this.dispatch({ type: "ws-drag", relativeX, number }));
 		this._ws.on("scroll", (visibleStartTime, visibleEndTime) => this.dispatch({ type: "ws-scroll", visibleStartTime, visibleEndTime }));
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
 	}
@@ -69,21 +70,27 @@ class File {
 			ws = this._ws;
 		// console.log(event);
 		switch (event.type) {
-			// native events
+			// custom events
 			case "ws-ready":
 				// temp
 				// ws.zoom(200);
 				// ws.skip(4.5);
+
+				// this._ws.addEventListener("mousedown", this.dispatch);
+				let cvs = this._el.find("> div").shadowRoot().find(".canvases canvas");
+				console.log( cvs );
+
+				cvs[0].addEventListener("mousedown", e => console.log(e));
+
+				// this._el.find("> div").shadowRoot()
+				// 	.find(".canvases canvas")
+				// 	.on("mousedown", e => console.log(e));
 
 				this._regions.addRegion({
 					id: "region-selected",
 					start: 2,
 					end: 4,
 				});
-
-				// this._regions.enableDragSelection({
-				// 	color: "rgba(255,255,255,.1)",
-				// });
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;

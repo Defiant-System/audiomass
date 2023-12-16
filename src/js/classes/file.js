@@ -52,8 +52,15 @@ class File {
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
 		this._regions.on("region-in", region => this._activeRegion = region);
 		this._regions.on("region-out", region => {
-			if (this._loop && this._activeRegion === region) region.play();
-			else this._activeRegion = null;
+			if (this._loop) {
+				if (this._activeRegion === region) region.play();
+				else this._activeRegion = null;
+			} else {
+				this._ws.stop();
+				if (this._activeRegion) {
+					this._ws.seekTo(this._activeRegion.start / this._activeRegion.totalDuration);
+				}
+			}
 		});
 
 		// wavesurfer events

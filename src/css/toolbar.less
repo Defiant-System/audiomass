@@ -3,7 +3,7 @@
 @text: #b7cbe0;
 
 .tools-left {
-	width: calc(50% - 140px);
+	width: calc(50% - 145px);
 	text-align: right;
 	
 	> div:last-child {
@@ -12,7 +12,7 @@
 }
 
 .display {
-	width: 240px;
+	width: 250px;
 	height: 31px;
 	padding-left: 11px;
 	padding-right: 11px;
@@ -45,32 +45,56 @@
 		.current-time {
 			position: absolute;
 			top: 8px;
-			left: 21px;
+			left: 17px;
 			font-size: 20px;
 		}
 
 		.total-time {
 			position: absolute;
-			top: 6px;
-			right: 17px;
+			top: 5px;
+			right: 13px;
 			font-size: 11px;
 			line-height: 1;
-			opacity: .5;
+			opacity: .6;
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: -1px;
+				left: -17px;
+				width: 13px;
+				height: 13px;
+				opacity: .8;
+				background: url(~/icons/icon-time-total.png) 50% 50%/contain no-repeat;
+				// filter: drop-shadow(0 1px 0 rgba(#002,.25));
+			}
 		}
 
 		.hover-time {
 			position: absolute;
-			top: 18px;
-			right: 17px;
+			top: 19px;
+			right: 13px;
 			font-size: 11px;
 			line-height: 1;
-			opacity: .5;
+			opacity: .6;
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: -1px;
+				left: -17px;
+				width: 13px;
+				height: 13px;
+				opacity: .8;
+				background: url(~/icons/icon-time-cursor.png) 50% 50%/contain no-repeat;
+				// filter: drop-shadow(0 1px 0 rgba(#002,.25));
+			}
 		}
 	}
 }
 
 .tools-right {
-	width: calc(50% - 220px);
+	width: calc(50% - 225px);
 
 	&:last-child {
 		text-align: left;

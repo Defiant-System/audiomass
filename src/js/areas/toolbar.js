@@ -20,15 +20,39 @@
 			cut: el.find(`.toolbar-tool_[data-click="cut-selection"]`),
 			silence: el.find(`.toolbar-tool_[data-click="silence-selection"]`),
 			settings: el.find(`.toolbar-tool_[data-menu="view-settings"]`),
+			// display
+			currentTime: el.find(`.display .current-time`),
+			totalTime: el.find(`.display .total-time`),
+			hoverTime: el.find(`.display .hover-time`),
 		};
+		// subscribe to events
+		window.on("timeupdate", this.dispatch);
+		window.on("clear-range", this.dispatch);
+		window.on("update-range", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,
 			Self = APP.toolbar,
+			value,
 			isOn,
 			el;
 		// console.log( event );
 		switch (event.type) {
+			// subscribed events
+			case "timeupdate":
+				value = Self.format(event.detail.ws.decodedData.duration);
+				Self.els.totalTime.html(value);
+				
+				value = Self.format(event.detail.currentTime);
+				Self.els.currentTime.html(value);
+				break;
+			case "clear-range":
+				["copy", "cut", "silence"].map(key => Self.els[key].addClass("tool-disabled_"));
+				break;
+			case "update-range":
+				["copy", "cut", "silence"].map(key => Self.els[key].removeClass("tool-disabled_"));
+				// console.log(event);
+				break;
 			// custom events
 			case "enable-tools":
 				Self.els.sidebar.removeClass("tool-disabled_");
@@ -38,13 +62,6 @@
 				break;
 			case "disable-tools":
 				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
-				break;
-			case "disable-range-edit":
-				["copy", "cut", "silence"].map(key => Self.els[key].addClass("tool-disabled_"));
-				break;
-			case "enable-range-edit":
-				["copy", "cut", "silence"].map(key => Self.els[key].removeClass("tool-disabled_"));
-				console.log(event);
 				break;
 			case "toggle-sidebar":
 				isOn = event.value || APP.els.content.hasClass("show-sidebar");
@@ -77,5 +94,23 @@
 				else window.emit("audio-pause");
 				break;
 		}
+	},
+	format(time=0) {
+		let ts = time >> 0,
+			ms = time - ts;
+		if (ts < 10) {
+			if (time === 0) return '00:00:000';
+			ts = `00:0${ts}`;
+		} else if (ts < 60) {
+			ts = `00:${ts}`;
+		} else {
+			let m = (ts / 60) >> 0,
+				s = (ts % 60);
+			ts = `${(m < 10) ? "0" : ""}${m}:${s < 10 ? `0${s}` : s}`;
+		}
+		if (ms < 0.1) {
+			return `${ts}:0${ms < 0.01 ? "0" : ""}${(ms * 1e3) >> 0}`;
+		}
+		return `${ts}:${(ms * 1e3) >> 0}`;
 	}
 }

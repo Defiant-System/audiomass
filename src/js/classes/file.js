@@ -7,7 +7,7 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
-		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#71a1ca" };
+		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
 		// let timeline = TimelinePlugin.create({
@@ -35,6 +35,7 @@ class File {
 			cursorColor: "#f90", // afdeff
 			hideScrollbar: true,
 			splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
+			// dragToSeek: true,
 			// autoCenter: true,
 			// autoScroll: false,
 			height: +el.parent().prop("offsetHeight") >> 1,
@@ -79,9 +80,12 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
+				// emit range related event
+				window.emit("timeupdate", { ws });
 				// clear regions on mousedown
 				this._el.find("> div").shadowRoot().find(".wrapper")
-					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset" }));
+					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset" }))
+					.on("pointermove", e => this.dispatch({ type: "pointermove", e }));
 				break;
 			case "ws-load": break;
 			case "ws-loading": break;
@@ -90,9 +94,12 @@ class File {
 				break;
 			case "ws-destroy": break;
 			case "ws-timeupdate":
-				// console.log(ws.media);
+				if (ws.decodedData) window.emit("timeupdate", { ws, currentTime: event.currentTime });
 				break;
-			case "ws-seeking": break;
+			case "ws-seeking":
+				// emit range related event
+				window.emit("cursor-seeking");
+				break;
 			case "ws-interaction": break;
 			case "ws-click": break;
 			case "ws-drag": break;
@@ -106,16 +113,24 @@ class File {
 				// sync gutter UI
 				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
 				break;
+			case "pointermove":
+				let time = 1,
+					relativeX = 1;
+				// console.log(time);
+				break;
 			// region events
 			case "ws-region-reset":
 				this._regions.clearRegions();
-				// update toolbar
-				APP.toolbar.dispatch({ type: "disable-range-edit" });
+				// emit range related event
+				window.emit("clear-range");
 				break;
 			case "ws-region-created":
 			case "ws-region-updated":
-				// update toolbar
-				APP.toolbar.dispatch({ type: "enable-range-edit", region: event.region });
+				// move cursor to begining of region
+				value = event.region.start / event.region.totalDuration;
+				ws.seekTo(value);
+				// emit range related event
+				window.emit("update-range", event.region);
 				break;
 			// external events
 			case "toggle-channel":

@@ -2,7 +2,7 @@
 let Test = {
 	init(APP) {
 
-		// return;
+		return;
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
 		setTimeout(() => APP.toolbar.els.loop.trigger("click"), 300);

@@ -18,9 +18,9 @@
 	</Group>
 	<Group class="display">
 		<Field class="blank-display">
-			<span class="current-time">00:00:000</span>
-			<span class="total-time">00:00:000</span>
-			<span class="hover-time">00:00:000</span>
+			<span class="current-time">00:00.000</span>
+			<span class="total-time">00:00.000</span>
+			<span class="hover-time">00:00.000</span>
 		</Field>
 		<Canvas/>
 	</Group>

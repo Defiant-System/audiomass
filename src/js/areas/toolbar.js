@@ -140,18 +140,18 @@
 		let ts = time >> 0,
 			ms = time - ts;
 		if (ts < 10) {
-			if (time === 0) return '00:00:000';
+			if (time === 0) return '00:00.000';
 			ts = `00:0${ts}`;
 		} else if (ts < 60) {
 			ts = `00:${ts}`;
 		} else {
 			let m = (ts / 60) >> 0,
 				s = (ts % 60);
-			ts = `${(m < 10) ? "0" : ""}${m}:${s < 10 ? `0${s}` : s}`;
+			ts = `${(m < 10) ? "0" : ""}${m}.${s < 10 ? `0${s}` : s}`;
 		}
 		if (ms < 0.1) {
-			return `${ts}:0${ms < 0.01 ? "0" : ""}${(ms * 1e3) >> 0}`;
+			return `${ts}.0${ms < 0.01 ? "0" : ""}${(ms * 1e3) >> 0}`;
 		}
-		return `${ts}:${(ms * 1e3) >> 0}`;
+		return `${ts}.${(ms * 1e3) >> 0}`;
 	}
 }

@@ -4,7 +4,10 @@
 		<Menu type="divider"/>
 		<Menu name="Settings" for="view-settings">
 			<Menu name="Show Sidebar" click="toggle-sidebar" is-checked="1"/>
-			<Menu name="Show Dock" click="toggle-dock"/>
+			<Menu name="Show Dock" click="toggle-dock" is-checked="1"/>
+			<Menu type="divider"/>
+			<Menu name="Silence Selected" disabled="1"/>
+			<Menu name="Silence Non-selected" disabled="1"/>
 		</Menu>
 		<Menu type="divider"/>
 		<Menu name="Quit ImAudio" shell="win -c"/>

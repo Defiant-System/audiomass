@@ -62,6 +62,7 @@ class File {
 		this._ws.on("decode", duration => this.dispatch({ type: "ws-decode", duration }));
 		this._ws.on("ready", duration => this.dispatch({ type: "ws-ready", duration }));
 		this._ws.on("redraw", () => this.dispatch({ type: "ws-redraw" }));
+		this._ws.on("finish", () => this.dispatch({ type: "ws-finish" }));
 		this._ws.on("play", () => this.dispatch({ type: "ws-play" }));
 		this._ws.on("pause", () => this.dispatch({ type: "ws-pause" }));
 		this._ws.on("destroy", () => this.dispatch({ type: "ws-destroy" }));
@@ -108,6 +109,12 @@ class File {
 			case "ws-interaction": break;
 			case "ws-click": break;
 			case "ws-drag": break;
+			case "ws-finish":
+				if (this._loop) {
+					ws.seekTo(0);
+					ws.play();
+				}
+				break;
 			case "ws-play": break;
 			case "ws-pause":
 				// sync gutter UI

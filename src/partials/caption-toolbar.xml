@@ -7,7 +7,7 @@
 		</Options>
 	</Group>
 	<Group class="tools-left">
-		<Options>
+		<Options type="grouped">
 			<Tool symbol="icon-rewind" click="rewind-audio" state="disabled"/>
 			<Tool symbol="icon-forward" click="forward-audio" state="disabled"/>
 			<Tool symbol="icon-stop" click="stop-audio" state="disabled"/>
@@ -17,7 +17,7 @@
 		</Options>
 	</Group>
 	<Group class="display">
-		<Field class="blank-display1">
+		<Field class="blank-display">
 			<span class="current-time">00:00:000</span>
 			<span class="total-time">00:00:000</span>
 			<span class="hover-time">00:00:000</span>

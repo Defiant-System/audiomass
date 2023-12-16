@@ -16,6 +16,7 @@ let Test = {
 			});
 
 			setTimeout(() => APP.toolbar.els.loop.trigger("click"), 100);
+			// setTimeout(() => APP.toolbar.els.play.trigger("click"), 200);
 
 		}, 300);
 

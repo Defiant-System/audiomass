@@ -21,6 +21,7 @@
 			silence: el.find(`.toolbar-tool_[data-click="silence-selection"]`),
 			settings: el.find(`.toolbar-tool_[data-menu="view-settings"]`),
 			// display
+			display: el.find(`.toolbar-field_`),
 			currentTime: el.find(`.display .current-time`),
 			totalTime: el.find(`.display .total-time`),
 			hoverTime: el.find(`.display .hover-time`),
@@ -68,9 +69,13 @@
 			case "enable-tools":
 				["sidebar", "rewind", "forward", "play", "stop", "loop", "settings"]
 					.map(key => Self.els[key].removeClass("tool-disabled_"));
+				// enable display
+				Self.els.display.removeClass("blank-display");
 				break;
 			case "disable-tools":
 				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
+				// disable display
+				Self.els.display.addClass("blank-display");
 				break;
 			// ui events
 			case "toggle-sidebar":

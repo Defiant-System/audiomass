@@ -52,8 +52,8 @@ class File {
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
 		this._regions.on("region-in", region => this._activeRegion = region);
 		this._regions.on("region-out", region => {
-			if (this._activeRegion === region) {
-				if (this._loop) region.play();
+			if (this._loop) {
+				if (this._activeRegion === region) region.play();
 				else this._activeRegion = null;
 			}
 		});

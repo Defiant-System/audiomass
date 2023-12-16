@@ -55,22 +55,23 @@
 				}
 				break;
 			case "clear-range":
-				["copy", "cut", "silence"].map(key => Self.els[key].addClass("tool-disabled_"));
+				["copy", "cut", "silence"]
+					.map(key => Self.els[key].addClass("tool-disabled_"));
 				break;
 			case "update-range":
-				["copy", "cut", "silence"].map(key => Self.els[key].removeClass("tool-disabled_"));
+				["copy", "cut", "silence"]
+					.map(key => Self.els[key].removeClass("tool-disabled_"));
 				// console.log(event);
 				break;
 			// custom events
 			case "enable-tools":
-				Self.els.sidebar.removeClass("tool-disabled_");
-				Self.els.rewind.removeClass("tool-disabled_");
-				Self.els.play.removeClass("tool-disabled_");
-				Self.els.settings.removeClass("tool-disabled_");
+				["sidebar", "rewind", "forward", "play", "stop", "loop", "settings"]
+					.map(key => Self.els[key].removeClass("tool-disabled_"));
 				break;
 			case "disable-tools":
 				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
 				break;
+			// ui events
 			case "toggle-sidebar":
 				isOn = event.value || APP.els.content.hasClass("show-sidebar");
 				APP.els.content.toggleClass("show-sidebar", isOn);
@@ -82,6 +83,15 @@
 
 			case "rewind-audio":
 				APP.data.tabs.active.file._ws.seekTo(0);
+				break;
+			case "forward-audio":
+				APP.data.tabs.active.file._ws.seekTo(1);
+				break;
+			case "loop-audio":
+				console.log(event);
+				return true;
+			case "record-audio":
+				// TODO
 				break;
 			case "reset-play-button":
 				Self.els.play.find(".icon-play")

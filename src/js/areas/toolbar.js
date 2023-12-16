@@ -18,7 +18,8 @@
 			copy: el.find(`.toolbar-tool_[data-click="copy-selection"]`),
 			paste: el.find(`.toolbar-tool_[data-click="paste-selection"]`),
 			cut: el.find(`.toolbar-tool_[data-click="cut-selection"]`),
-			silence: el.find(`.toolbar-tool_[data-click="silence-selection"]`),
+			silenceSel: el.find(`.toolbar-tool_[data-click="silence-selection"]`),
+			silenceRest: el.find(`.toolbar-tool_[data-click="silence-rest"]`),
 			settings: el.find(`.toolbar-tool_[data-menu="view-settings"]`),
 			// display
 			display: el.find(`.toolbar-field_`),
@@ -57,11 +58,11 @@
 				}
 				break;
 			case "clear-range":
-				["copy", "cut", "silence"]
+				["copy", "cut", "silenceSel"]
 					.map(key => Self.els[key].addClass("tool-disabled_"));
 				break;
 			case "update-range":
-				["copy", "cut", "silence"]
+				["copy", "cut", "silenceSel"]
 					.map(key => Self.els[key].removeClass("tool-disabled_"));
 				// console.log(event);
 				break;
@@ -96,7 +97,8 @@
 			case "loop-audio":
 				isOn = Self.els.loop.hasClass("tool-active_");
 				// store loop reference in file object
-				APP.data.tabs.active.file._loop = !isOn;
+				if (!isOn) APP.data.tabs.active.file._loop = true;
+				else delete APP.data.tabs.active.file._loop;
 				return !isOn;
 			case "record-audio":
 				// TODO
@@ -109,6 +111,7 @@
 				if (file._activeRegion) {
 					// seek to start of region
 					file._ws.seekTo(file._activeRegion.start / file._activeRegion.totalDuration);
+					delete file._activeRegion;
 				}
 				// emit event
 				window.emit("audio-stop");

@@ -29,7 +29,7 @@
 			<Tool symbol="icon-copy" click="copy-selection" state="disabled"/>
 			<Tool symbol="icon-paste" click="paste-selection" state="disabled"/>
 			<Tool symbol="icon-cut" click="cut-selection" state="disabled"/>
-			<Tool symbol="icon-silence" click="silence-selection" state="disabled"/>
+			<Tool symbol="icon-silence-selected" click="silence-selection" state="disabled"/>
 		</Options>
 		<Tool symbol="icon-cogs" menu="view-settings" state="disabled"/>
 	</Group>

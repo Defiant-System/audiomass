@@ -52,10 +52,8 @@ class File {
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
 		this._regions.on("region-in", region => this._activeRegion = region);
 		this._regions.on("region-out", region => {
-			if (this._loop) {
-				if (this._activeRegion === region) region.play();
-				else this._activeRegion = null;
-			}
+			if (this._loop && this._activeRegion === region) region.play();
+			else this._activeRegion = null;
 		});
 
 		// wavesurfer events

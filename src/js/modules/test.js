@@ -2,7 +2,7 @@
 let Test = {
 	init(APP) {
 
-		return;
+		// return;
 		setTimeout(() => {
 			let file = APP.data.tabs.active.file;
 			

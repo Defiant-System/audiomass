@@ -52,8 +52,10 @@ class File {
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
 		this._regions.on("region-in", region => this._activeRegion = region);
 		this._regions.on("region-out", region => {
-			if (this._activeRegion = region) region.play();
-			else this._activeRegion = null;
+			if (this._activeRegion === region) {
+				if (this._loop) region.play();
+				else this._activeRegion = null;
+			}
 		});
 
 		// wavesurfer events
@@ -130,6 +132,7 @@ class File {
 				break;
 			// region events
 			case "ws-region-reset":
+				this._activeRegion = null;
 				this._regions.clearRegions();
 				// emit range related event
 				window.emit("clear-range");

@@ -34,6 +34,7 @@
 	dispatch(event) {
 		let APP = imaudio,
 			Self = APP.toolbar,
+			file,
 			value,
 			isOn,
 			el;
@@ -96,8 +97,14 @@
 				// TODO
 				break;
 			case "stop-audio":
+				file = APP.data.tabs.active.file;
 				// call appropriate method
-				APP.data.tabs.active.file._ws.stop();
+				file._ws.stop();
+				// auto seek to start of region, if any
+				if (file._activeRegion) {
+					// seek to start of region
+					file._ws.seekTo(file._activeRegion.start / file._activeRegion.totalDuration);
+				}
 				// emit event
 				window.emit("audio-stop");
 				break;

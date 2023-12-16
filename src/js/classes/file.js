@@ -94,7 +94,7 @@ class File {
 				break;
 			case "ws-destroy": break;
 			case "ws-timeupdate":
-				if (ws.decodedData) window.emit("timeupdate", { ws, currentTime: event.currentTime });
+				if (ws.decodedData) window.emit("timeupdate", { currentTime: event.currentTime });
 				break;
 			case "ws-seeking":
 				// emit range related event
@@ -114,9 +114,14 @@ class File {
 				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
 				break;
 			case "pointermove":
-				let time = 1,
-					relativeX = 1;
-				// console.log(time);
+				// Position
+			    let bbox = ws.getWrapper().getBoundingClientRect(),
+			    	relativeX = Math.min(1, Math.max(0, (event.e.clientX - bbox.left) / bbox.width)),
+			    	// Timestamp
+			    	duration = ws.getDuration() || 0,
+			    	hoverTime = duration * relativeX;
+				// emit related event
+				window.emit("timeupdate", { relativeX, hoverTime });
 				break;
 			// region events
 			case "ws-region-reset":

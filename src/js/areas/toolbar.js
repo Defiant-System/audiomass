@@ -27,6 +27,7 @@
 		};
 		// subscribe to events
 		window.on("timeupdate", this.dispatch);
+		window.on("waveform-hover", this.dispatch);
 		window.on("clear-range", this.dispatch);
 		window.on("update-range", this.dispatch);
 	},
@@ -40,11 +41,18 @@
 		switch (event.type) {
 			// subscribed events
 			case "timeupdate":
-				value = Self.format(event.detail.ws.decodedData.duration);
-				Self.els.totalTime.html(value);
-				
-				value = Self.format(event.detail.currentTime);
-				Self.els.currentTime.html(value);
+				if (event.detail.ws) {
+					value = Self.format(event.detail.ws.decodedData.duration);
+					Self.els.totalTime.html(value);
+				}
+				if (event.detail.currentTime) {
+					value = Self.format(event.detail.currentTime);
+					Self.els.currentTime.html(value);
+				}
+				if (event.detail.hoverTime) {
+					value = Self.format(event.detail.hoverTime);
+					Self.els.hoverTime.html(value);
+				}
 				break;
 			case "clear-range":
 				["copy", "cut", "silence"].map(key => Self.els[key].addClass("tool-disabled_"));

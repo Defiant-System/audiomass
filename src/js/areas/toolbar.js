@@ -31,7 +31,7 @@
 		// subscribe to events
 		window.on("timeupdate", this.dispatch);
 		window.on("clear-range", this.dispatch);
-		window.on("create-range", this.dispatch);
+		window.on("update-range", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -61,7 +61,7 @@
 				["copy", "cut", "silenceSel"]
 					.map(key => Self.els[key].addClass("tool-disabled_"));
 				break;
-			case "create-range":
+			case "update-range":
 				["copy", "cut", "silenceSel"]
 					.map(key => Self.els[key].removeClass("tool-disabled_"));
 				break;

@@ -1,7 +1,7 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55">
 	<style type="text/css">
-		.st0{fill:url(#defapp_1_);stroke:url(#defapp_2_);stroke-width:2;stroke-miterlimit:10;}
+		.st0{fill:url(#defapp_1_);stroke:url(#defapp_2_);stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10;}
 		.st1{fill:#bbb;filter:url(#defapp-inset-shadow-2);}
 	</style>
 	<linearGradient id="defapp_1_" gradientUnits="userSpaceOnUse" x1="25" y1="24" x2="25" y2="55">
@@ -16,8 +16,8 @@
 		<feComponentTransfer in="SourceAlpha">
 			<feFuncA type="table" tableValues="1 0"/>
 		</feComponentTransfer>
-		<feGaussianBlur stdDeviation=".5"/>
-		<feOffset dx="0" dy="1.5" result="offsetblur"/>
+		<feGaussianBlur stdDeviation="1"/>
+		<feOffset dx="0" dy="2" result="offsetblur"/>
 		<feFlood flood-color="#fff" result="color"/>
 		<feComposite in2="offsetblur" operator="in"/>
 		<feComposite in2="SourceAlpha" operator="in"/>
@@ -36,7 +36,8 @@
 		</feMerge>
 	</filter>
 	<g filter="url(#defapp-filter-1)">
-		<path class="st0" d="M51.9,47c0,2.7-2.2,4.9-4.9,4.9H8c-2.7,0-4.9-2.2-4.9-4.9V8c0-2.7,2.2-4.9,4.9-4.9H47c2.7,0,4.9,2.2,4.9,4.9V47 z"/>
+		<path class="st0" d="M39,5.2H16.4c-0.9,0-1.7,0.5-2.2,1.2L2.8,26c-0.4,0.6-0.4,1.4,0,2l11.4,19.7c0.4,0.7,1.2,1.2,2.2,1.2H39
+		c0.9,0,1.7-0.5,2.2-1.2L52.6,28c0.4-0.6,0.4-1.4,0-2L41.2,6.3C40.8,5.6,39.9,5.2,39,5.2z"/>
 	</g>
 	<path class="st1" d="M47.5,29.9h-5.7c-0.4,0-0.8-0.2-1-0.4L39.1,28l-1.8,2.9c-0.6,1-2.2,0.8-2.5-0.3l-1-2.9l-1.5,6.7
 		c-0.3,1.5-2.5,1.5-2.8,0l-2.9-11.9l-2.1,18.2c-0.2,1.6-2.5,1.7-2.8,0.1L19,29l-1.6,5.1c-0.4,1.2-2,1.3-2.6,0.2l-2.2-4.1

@@ -7,22 +7,45 @@
 		this.els = {
 			doc: $(document),
 			content: window.find("content"),
+			txtSelection: window.find(".sidebar .txt-selection"),
+			txtSelStart: window.find(".sidebar .txt-sel-start"),
+			txtSelEnd: window.find(".sidebar .txt-sel-end"),
+			txtSelDuration: window.find(".sidebar .txt-sel-duration"),
 			vWrapper: window.find(".volume-wrapper"),
 			volume: window.find(".volume-knob"),
 		};
 		// default volume knob angle
 		this.els.volume.css({ "--angle": "-35deg" });
 		this.els.vWrapper.find(".txt-volume h2").html(47);
+
+		// subscribe to events
+		window.on("clear-range", this.dispatch);
+		window.on("update-range", this.dispatch);
+
 		// bind event handlers
 		this.els.volume.on("mousedown", this.volumeMove);
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.speaker,
+			Self = APP.sidebar,
+			value,
 			el;
+		// console.log(event);
 		switch (event.type) {
-			// custom events
-			case "some-event":
+			// subscribed events
+			case "clear-range":
+				// hide text fields
+				Self.els.txtSelection.removeClass("show-text");
+				break;
+			case "update-range":
+				value = APP.toolbar.format(event.detail.region.start);
+				Self.els.txtSelStart.html(value);
+				value = APP.toolbar.format(event.detail.region.end);
+				Self.els.txtSelEnd.html(value);
+				value = APP.toolbar.format(event.detail.region.end - event.detail.region.start);
+				Self.els.txtSelDuration.html(value);
+				// show text fields
+				Self.els.txtSelection.addClass("show-text");
 				break;
 		}
 	},

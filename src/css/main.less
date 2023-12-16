@@ -139,6 +139,14 @@ content {
 			left: 13px;
 			right: 13px;
 			text-shadow: 0 1px 0 rgba(#002,.25);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 120ms ease-in-out;
+
+			&.show-text {
+				opacity: 1;
+				visibility: visible;
+			}
 
 			div {
 				position: relative;
@@ -159,10 +167,10 @@ content {
 				// &:nth-child(4) span:nth-child(1):after { content: " Δ"; }
 
 				span {
+					font-size: 15px;
 					line-height: 20px;
 
 					&:nth-child(1) {
-						font-size: 15px;
 						font-weight: 100;
 						width: 73px;
 						opacity: .6;
@@ -172,7 +180,6 @@ content {
 
 					&:nth-child(2) {
 						flex: 1;
-						font-size: 17px;
 						text-align: right;
 						opacity: .75;
 					}

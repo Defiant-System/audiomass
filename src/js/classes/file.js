@@ -148,7 +148,7 @@ class File {
 				value = event.region.start / event.region.totalDuration;
 				ws.seekTo(value);
 				// emit range related event
-				window.emit("update-range", event.region);
+				window.emit("update-range", { region: event.region });
 				break;
 			// external events
 			case "toggle-channel":

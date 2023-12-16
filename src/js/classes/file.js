@@ -50,6 +50,11 @@ class File {
 		// regions events
 		this._regions.on("region-created", region => this.dispatch({ type: "ws-region-created", region }));
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
+		this._regions.on("region-in", region => this._activeRegion = region);
+		this._regions.on("region-out", region => {
+			if (this._activeRegion = region) region.play();
+			else this._activeRegion = null;
+		});
 
 		// wavesurfer events
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));

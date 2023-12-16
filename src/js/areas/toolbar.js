@@ -88,10 +88,18 @@
 				APP.data.tabs.active.file._ws.seekTo(1);
 				break;
 			case "loop-audio":
-				console.log(event);
-				return true;
+				isOn = Self.els.loop.hasClass("tool-active_");
+				// store loop reference in file object
+				APP.data.tabs.active.file._loop = !isOn;
+				return !isOn;
 			case "record-audio":
 				// TODO
+				break;
+			case "stop-audio":
+				// call appropriate method
+				APP.data.tabs.active.file._ws.stop();
+				// emit event
+				window.emit("audio-stop");
 				break;
 			case "reset-play-button":
 				Self.els.play.find(".icon-play")

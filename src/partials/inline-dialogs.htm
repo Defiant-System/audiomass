@@ -47,7 +47,27 @@
 	</div>
 </div>
 
-<div class="dialog-box showing" data-dlg="dlg-graphicEq">
+<div class="dialog-box showing" data-dlg="dlg-paragraphicEq">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Paragraphic Equalizer
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="peq-cvs"></div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlg-graphicEq">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -116,6 +136,138 @@
 				<span class="value"><input type="text" name="hz16K" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
 				<div class="slider"><span class="handle"></span></div>
 				<span class="label">16 KHz</span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlg-graphicEq20">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Graphic Equalizer - 20 Bands
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">&lt; 31 Hz</span>
+			</div>
+			
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">44 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">63 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">88 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">125 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">180 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">250 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">335 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">500 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">710 Hz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">1 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">4 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">2 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">8 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">4 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">6 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">8 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">3 KHz</span>
+			</div>
+
+			<div class="field-range">
+				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
+				<div class="slider"><span class="handle"></span></div>
+				<span class="label">22 KHz</span>
 			</div>
 		</div>
 		<div class="buttons">

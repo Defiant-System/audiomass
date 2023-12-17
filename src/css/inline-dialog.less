@@ -38,14 +38,74 @@
 	}
 
 	&[data-dlg="dlg-compressor"] {
-		top: 270px;
+		top: 250px;
 		left: 40px;
 	}
 
 	&[data-dlg="dlg-graphicEq"] {
-		top: 250px;
+		top: 230px;
 		left: 460px;
 	}
+
+	&[data-dlg="dlg-graphicEq20"] {
+		top: 460px;
+		left: 40px;
+	}
+
+	&[data-dlg="dlg-paragraphicEq"] {
+		top: 230px;
+		left: 460px;
+
+		.dlg-content {
+			.dlg-body {
+				padding-top: 0;
+
+				&:before {
+					display: none;
+				}
+			}
+		}
+	}
+
+		.peq-cvs {
+			position: relative;
+			margin-top: -1px;
+			margin-left: 17px;
+			width: 390px;
+			height: 204px;
+			background: 
+				linear-gradient(180deg,
+					transparent 0, transparent 100px,
+					rgba(#cdf,.2) 100px, rgba(#cdf,.2) 101px,
+					transparent 101px, transparent 200px,
+				),
+				repeating-linear-gradient(180deg,
+					transparent 0, transparent 5px, rgba(#cdf,.1) 5px, rgba(#cdf,.1) 6px, transparent 6px, transparent 19px
+				),
+				repeating-linear-gradient(90deg,
+					transparent 0,
+					transparent 44px, rgba(#cdf,.1) 44px, rgba(#cdf,.1) 45px, transparent 45px,
+					transparent 64px, rgba(#cdf,.1) 64px, rgba(#cdf,.1) 65px, transparent 65px,
+					transparent 81px, rgba(#cdf,.1) 81px, rgba(#cdf,.1) 82px, transparent 82px,
+					transparent 94px, rgba(#cdf,.1) 94px, rgba(#cdf,.1) 95px, transparent 95px,
+					transparent 103px, rgba(#cdf,.1) 103px, rgba(#cdf,.1) 104px, transparent 104px,
+					transparent 109px, rgba(#cdf,.1) 109px, rgba(#cdf,.1) 110px, transparent 110px,
+					transparent 113px, rgba(#cdf,.1) 113px, rgba(#cdf,.1) 114px, transparent 114px,
+					transparent 125px
+				);
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 3px;
+				right: -1px;
+				bottom: 3px;
+				background: rgba(#002,.05);
+				box-shadow: inset 0 0 3px rgba(#002,.125);
+				border-radius: 4px;
+			}
+		}
 
 	.dlg-content {
 		background: linear-gradient(180deg, #3c5b87 0%, #2f466e 100%);
@@ -72,7 +132,7 @@
 				right: -3px;
 				bottom: 0;
 				background: rgba(#002,.05);
-				box-shadow: inset 0 0 7px rgba(#002,.1);
+				box-shadow: inset 0 0 3px rgba(#002,.125);
 				border-radius: 4px;
 			}
 
@@ -84,7 +144,9 @@
 		input[type="text"] {
 			background: rgba(#113,.075);
 			border: 0;
+			border-radius: 4px;
 			padding: 0 1px 0px;
+			font-size: 11px;
 			height: 21px;
 			color: inherit;
 			font-size: 12px;
@@ -201,7 +263,8 @@
 			}
 
 			.value {
-				
+				display: block;
+				padding: 0 5px;
 			}
 		}
 

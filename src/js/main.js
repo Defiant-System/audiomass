@@ -1,6 +1,7 @@
 
 @import "./classes/file.js"
 @import "./classes/file-tabs.js"
+@import "./modules/ui.js"
 @import "./modules/test.js"
 
 
@@ -34,6 +35,9 @@ const imaudio = {
 			.filter(i => typeof this[i].init === "function")
 			.map(i => this[i].init(this));
 
+		// init objects
+		UI.init();
+		
 		// DEV-ONLY-START
 		Test.init(this);
 		// DEV-ONLY-END

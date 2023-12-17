@@ -4,12 +4,12 @@ const UI = {
 		// fast references
 		this.doc = $(document);
 		this.content = window.find("content");
-		
+
 		// bind event handlers
 		this.content.on("mousedown mouseup", "[data-ui], [data-dlg]", this.dispatch);
 	},
 	dispatch(event) {
-		let APP = keane,
+		let APP = imaudio,
 			Self = UI,
 			data,
 			value,
@@ -408,7 +408,7 @@ const UI = {
 		}
 	},
 	doKnob(event) {
-		let APP = keane,
+		let APP = imaudio,
 			Self = UI,
 			Drag = Self.drag,
 			_round = Math.round,

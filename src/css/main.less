@@ -5,6 +5,7 @@
 
 
 // background: transparent;
+overflow: visible;
 
 
 content {
@@ -27,6 +28,33 @@ content {
 
 	&.hideMouse:before {
 		cursor: none;
+	}
+
+	&.dialog-showing {
+		background: #1b2642;
+		border-radius: inherit;
+
+		&:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+			border-radius: inherit;
+			background: rgba(#002,.2);
+		}
+
+		.workspace {
+			transform: scale(.995);
+			filter: blur(2px);
+			z-index: 1;
+		}
+
+		.dialog-box {
+			z-index: 3;
+		}
 	}
 
 	&.show-blank-view {
@@ -752,7 +780,7 @@ content {
 
 
 	.button {
-		background: rgba(#fff, .225);
+		background: rgba(#bbe, .25);
 		display: inline-block;
 		vertical-align: middle;
 		padding: 3px 11px 0;
@@ -826,7 +854,7 @@ content {
 		}
 
 		span {
-			background: #576e91;
+			background: #49608d;
 			position: relative;
 			width: 69px;
 			z-index: 2;

@@ -1,17 +1,16 @@
 
 .dialog-box {
-	background: rgba(0,0,0,.35);
+	background: rgba(#000,.35);
 	position: absolute;
 	z-index: 99;padding: 1px;
 	z-index: 101;
 	border-radius: 7px;
-	filter: drop-shadow(0 1px 3px rgba(0,0,0,.5));
+	filter: drop-shadow(0 1px 3px rgba(#000,.5));
 	transform-origin: 50% 0;
 	visibility: hidden;
 	// default position
-	top: 50%;
-	left: 50%;
-	margin: -120px 0 0 -170px;
+	top: 250px;
+	left: 300px;
 
 	&:before {
 		content: "";
@@ -39,7 +38,9 @@
 	}
 
 	&[data-dlg="dlg-compressor"] {
-
+		.dlg-body {
+			font-size: 0;
+		}
 	}
 
 	.dlg-content {
@@ -53,14 +54,23 @@
 		text-align: left;
 		border-radius: inherit;
 
+		.dlg-body {
+			padding: 9px 0 11px;
+			white-space: nowrap;
+
+			> * {
+				white-space: initial;
+			}
+		}
+
 		input[type="text"] {
-			background: rgba(#002,.15);
+			background: rgba(#113,.05);
 			border: 0;
-			padding: 2px 1px 0px;
+			padding: 1px 1px 0px;
 			height: 19px;
 			color: inherit;
 			font-size: 12px;
-			// box-shadow: 0 0 0;
+			box-shadow: inset 0 0 0 1px rgba(#002,.1);
 		}
 
 		hr {
@@ -73,8 +83,8 @@
 			top: -3px;
 			padding-top: 2px;
 			padding-left: 19px;
-			color: rgba(255,255,255,0.5);
-			text-shadow: 0 1px 0 rgba(0,0,0,.25);
+			color: rgba(#cdf,0.5);
+			text-shadow: 0 1px 0 rgba(#002,.25);
 			font-size: 11px;
 			font-weight: 400;
 			text-transform: uppercase;
@@ -82,7 +92,7 @@
 
 			&:after {
 				content: "";
-				background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.25) 15%, transparent 100%);
+				background: linear-gradient(90deg, transparent 0%, rgba(#000,.15) 15%, transparent 100%);
 				position: absolute;
 				left: -7px;
 				right: 0;
@@ -104,7 +114,7 @@
 				cursor: pointer;
 				border-radius: 50%;
 				background: rgba(255,255,255,.25);
-				box-shadow: 0 0 0 1px rgba(0,0,0,.25);
+				box-shadow: 0 0 0 1px rgba(#000,.25);
 
 				&:before {
 					content: "";
@@ -130,6 +140,38 @@
 					background-position: 50% 50%;
 					background-image: url(~/icons/icon-dialog-close.png);
 					filter: opacity(0%);
+				}
+			}
+		}
+
+		.field-box {
+			display: inline-block;
+			width: 67px;
+			// height: 83px;
+			margin: 0 7px 0 0;
+			padding: 5px;
+			border-radius: 4px;
+			box-shadow: 0 0 0 1px rgba(#113,.2);
+			text-align: center;
+
+			&:last-child {
+				margin-right: 0;
+			}
+
+			.label {
+				color: #abd;
+				font-size: 10px;
+				text-transform: uppercase;
+				text-shadow: 0 1px 0 rgba(#000,.25);
+			}
+
+			.knob {
+				margin: 7px 3px 5px;
+			}
+
+			.value {
+				input {
+					text-align: center;
 				}
 			}
 		}
@@ -181,7 +223,7 @@
 
 		.buttons {
 			position: relative;
-			padding-top: 11px;
+			padding-top: 5px;
 			text-align: right;
 			font-size: 0;
 

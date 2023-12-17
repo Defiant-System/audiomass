@@ -6,16 +6,50 @@
 				<i class="icon-dlg-close" data-click="dlg-close"></i>
 				Compressor
 			</h2>
-			<div class="field-row has-knob">
-				<div class="option input">
-					<span class="label">Threshold</span>
-					<span class="value"><input type="text" name="threshold" value="-24.0" data-min="-100.0" data-max="0.0" data-default="-24.0"></span>
+			<div class="dlg-body">
+				<div class="field-box">
+					<div class="option input">
+						<span class="label">Threshold</span>
+						<span class="value"><input type="text" name="threshold" value="-24.0" data-min="-100.0" data-max="0.0" data-step="0.1" data-default="-24.0"></span>
+					</div>
+					<div class="knob" data-change="set-threshold" data-value="-24.0"></div>
 				</div>
-				<div class="knob" data-change="set-threshold"></div>
+				
+				<div class="field-box">
+					<div class="option input">
+						<span class="label">Knee</span>
+						<span class="value"><input type="text" name="knee" value="-24.0" data-min="0.0" data-max="40.0" data-step="0.1" data-default="30.0"></span>
+					</div>
+					<div class="knob" data-change="set-knee" data-value="30.0"></div>
+				</div>
+				
+				<div class="field-box">
+					<div class="option input">
+						<span class="label">Ratio</span>
+						<span class="value"><input type="text" name="ratio" value="12.0" data-min="1.0" data-max="20.0" data-step="0.1" data-default="12.0"></span>
+					</div>
+					<div class="knob" data-change="set-ratio" data-value="12.0"></div>
+				</div>
+				
+				<div class="field-box">
+					<div class="option input">
+						<span class="label">Attack</span>
+						<span class="value"><input type="text" name="attack" value="0.003" data-min="0.0" data-max="1.0" data-step="0.001" data-default="0.003"></span>
+					</div>
+					<div class="knob" data-change="set-attack" data-value="0.003"></div>
+				</div>
+				
+				<div class="field-box">
+					<div class="option input">
+						<span class="label">Release</span>
+						<span class="value"><input type="text" name="release" value="0.25" data-min="0.0" data-max="1.0" data-step="0.001" data-default="0.25"></span>
+					</div>
+					<div class="knob" data-change="set-release" data-value="0.25"></div>
+				</div>
 			</div>
 		</div>
 		<div class="buttons">
-			<div class="button" data-click="dlg-ok">OK</div>
+			<div class="button" data-click="dlg-ok">Apply</div>
 			<div class="button" data-click="dlg-reset">Reset</div>
 			<div class="toggler" data-value="on" data-click="dlg-preview">
 				<span>Preview</span>

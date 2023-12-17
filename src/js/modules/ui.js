@@ -332,7 +332,7 @@ const UI = {
 					dEl = pEl.parents(".dialog-box"),
 					dlg = {
 						dEl,
-						func: Dialogs[dEl.data("dlg")],
+						// func: Dialogs[dEl.data("dlg")],
 						type: el.data("change"),
 					},
 					src = pEl.find(".value input"),
@@ -359,7 +359,7 @@ const UI = {
 					_round: Math.round,
 				};
 				// pre-knob twist event
-				dlg.func({ ...dlg, type: `before:${dlg.type}`, value: +el.data("value") });
+				// dlg.func({ ...dlg, type: `before:${dlg.type}`, value: +el.data("value") });
 				// bind event handlers
 				Self.content.addClass("no-dlg-cursor");
 				Self.doc.on("mousemove mouseup", Self.doDialogKnob);
@@ -374,13 +374,13 @@ const UI = {
 					val = +((Drag.val.max * (value / 100)) + Drag.val.min).toFixed(i ? i.length : 0);
 				Drag.src.val(val + Drag.suffix);
 				// forward event
-				Drag.dlg.func({ ...Drag.dlg, value: val });
+				// Drag.dlg.func({ ...Drag.dlg, value: val });
 				// save value
 				Drag.newValue = val;
 				break;
 			case "mouseup":
 				// post-knob twist event
-				Drag.dlg.func({ ...Drag.dlg, type: `after:${Drag.dlg.type}`, value: Drag.newValue });
+				// Drag.dlg.func({ ...Drag.dlg, type: `after:${Drag.dlg.type}`, value: Drag.newValue });
 				// reset parent element
 				Drag.el.parent().removeClass("hover");
 				// unbind event handlers

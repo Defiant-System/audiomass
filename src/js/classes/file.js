@@ -47,9 +47,13 @@ class File {
 		this._regions = regions;
 		this._regions.enableDragSelection({ id: "region-selected" });
 
-		// regions events
-		this._regions.on("region-created", region => this.dispatch({ type: "ws-region-created", region }));
+		// regions mouse events
+		this._regions.on("region-created", region => {
+			region.on("update", () => this.dispatch({ type: "ws-region-timeupdate", region }));
+			this.dispatch({ type: "ws-region-created", region });
+		});
 		this._regions.on("region-updated", region => this.dispatch({ type: "ws-region-updated", region }));
+		// regions events during  play
 		this._regions.on("region-in", region => this._activeRegion = region);
 		this._regions.on("region-out", region => {
 			if (this._loop) {
@@ -156,6 +160,10 @@ class File {
 				ws.seekTo(value);
 				// emit range related event
 				window.emit("update-range", { region: event.region });
+				break;
+			case "ws-region-timeupdate":
+				// emit range related event
+				window.emit("time-update-range", { region: event.region });
 				break;
 			// external events
 			case "toggle-channel":

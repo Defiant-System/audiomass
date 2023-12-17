@@ -21,6 +21,7 @@
 		// subscribe to events
 		window.on("clear-range", this.dispatch);
 		window.on("update-range", this.dispatch);
+		window.on("time-update-range", this.dispatch);
 
 		// bind event handlers
 		this.els.volume.on("mousedown", this.volumeMove);
@@ -38,14 +39,16 @@
 				Self.els.txtSelection.removeClass("show-text");
 				break;
 			case "update-range":
+				// show text fields
+				Self.els.txtSelection.addClass("show-text");
+				break;
+			case "time-update-range":
 				value = APP.toolbar.format(event.detail.region.start);
 				Self.els.txtSelStart.html(value);
 				value = APP.toolbar.format(event.detail.region.end);
 				Self.els.txtSelEnd.html(value);
 				value = APP.toolbar.format(event.detail.region.end - event.detail.region.start);
 				Self.els.txtSelDuration.html(value);
-				// show text fields
-				Self.els.txtSelection.addClass("show-text");
 				break;
 		}
 	},

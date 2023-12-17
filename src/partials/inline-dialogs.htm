@@ -47,6 +47,30 @@
 	</div>
 </div>
 
+<div class="dialog-box showing" data-dlg="dlg-gain">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Apply Gain
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Gain</span>
+				<div class="pan-knob" data-change="set-gain" data-value="0"></div>
+				<span class="value"><input type="text" name="gain" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
+		</div>
+	</div>
+</div>
+
 <div class="dialog-box showing" data-dlg="dlg-paragraphicEq">
 	<div class="dlg-content">
 		<h2>
@@ -58,7 +82,18 @@
 			</div>
 		</h2>
 		<div class="dlg-body">
-			<div class="peq-cvs"></div>
+			<div class="peq-cvs">
+				<div class="vert"><ul><li>28</li><li>14</li><li>0</li><li>-14</li><li>-28</li></ul></div>
+				<div class="hori"><ul>
+					<li>20 Hz</li>
+					<li>100 Hz</li>
+					<li>200 Hz</li>
+					<li>1 KHz</li>
+					<li>2 KHz</li>
+					<li>10 KHz</li>
+				</ul></div>
+				<canvas></canvas>
+			</div>
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
@@ -67,7 +102,7 @@
 	</div>
 </div>
 
-<div class="dialog-box" data-dlg="dlg-graphicEq">
+<div class="dialog-box showing" data-dlg="dlg-graphicEq">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -145,7 +180,7 @@
 	</div>
 </div>
 
-<div class="dialog-box" data-dlg="dlg-graphicEq20">
+<div class="dialog-box showing" data-dlg="dlg-graphicEq20">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>

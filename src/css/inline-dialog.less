@@ -38,16 +38,19 @@
 	}
 
 	&[data-dlg="dlg-compressor"] {
-		.dlg-body {
-			font-size: 0;
-		}
+		top: 50px;
+		left: 100px;
+	}
+
+	&[data-dlg="dlg-graphicEq"] {
+		top: 260px;
+		left: 60px;
 	}
 
 	.dlg-content {
 		background: linear-gradient(180deg, #3c5b87 0%, #2f466e 100%);
 		position: relative;
 		min-width: 340px;
-		min-height: 100px;
 		padding: 9px;
 		display: flex;
 		flex-direction: column;
@@ -55,8 +58,23 @@
 		border-radius: inherit;
 
 		.dlg-body {
-			padding: 9px 0 11px;
+			position: relative;
+			font-size: 0;
+			padding: 9px 0 7px;
 			white-space: nowrap;
+			min-height: 90px;
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: -2px;
+				left: -3px;
+				right: -3px;
+				bottom: 0;
+				background: rgba(#002,.05);
+				box-shadow: inset 0 0 7px rgba(#002,.1);
+				border-radius: 4px;
+			}
 
 			> * {
 				white-space: initial;
@@ -64,18 +82,22 @@
 		}
 
 		input[type="text"] {
-			background: rgba(#113,.05);
+			background: rgba(#113,.1);
 			border: 0;
 			padding: 1px 1px 0px;
 			height: 19px;
 			color: inherit;
 			font-size: 12px;
 			box-shadow: inset 0 0 0 1px rgba(#002,.1);
+			text-align: inherit;
+
+			// background: transparent;
+			box-shadow: none;
 		}
 
 		hr {
 			background: linear-gradient(90deg, transparent 0%, #788 50%, transparent 100%);
-			margin: 9px 0 10px;
+			margin: 9px 0;
 		}
 
 		h2 {
@@ -89,16 +111,6 @@
 			font-weight: 400;
 			text-transform: uppercase;
 			margin-bottom: 7px;
-
-			&:after {
-				content: "";
-				background: linear-gradient(90deg, transparent 0%, rgba(#000,.15) 15%, transparent 100%);
-				position: absolute;
-				left: -7px;
-				right: 0;
-				bottom: -7px;
-				height: 1px;
-			}
 
 			&:hover .icon-dlg-close:after {
 				filter: invert(2) brightness(1.15) drop-shadow(0 1px 0 #00000030);
@@ -142,27 +154,38 @@
 					filter: opacity(0%);
 				}
 			}
+
+			.toggler {
+				position: absolute;
+				right: 0;
+				top: -1px;
+				margin-right: 0;
+				font-size: 11px;
+			}
+		}
+
+		.label {
+			color: #abd;
+			font-size: 10px;
+			text-shadow: 0 1px 0 rgba(#000,.25);
 		}
 
 		.field-box {
 			display: inline-block;
 			width: 67px;
-			// height: 83px;
 			margin: 0 7px 0 0;
 			padding: 5px;
 			border-radius: 4px;
-			box-shadow: 0 0 0 1px rgba(#113,.2);
+			// box-shadow: 0 0 0 1px rgba(#cdf,.2);
 			text-align: center;
+			// box-shadow: none;
 
 			&:last-child {
 				margin-right: 0;
 			}
 
 			.label {
-				color: #abd;
-				font-size: 10px;
 				text-transform: uppercase;
-				text-shadow: 0 1px 0 rgba(#000,.25);
 			}
 
 			.knob {
@@ -170,9 +193,81 @@
 			}
 
 			.value {
-				input {
-					text-align: center;
+				
+			}
+		}
+
+		.field-range {
+			display: inline-block;
+			width: 37px;
+			margin: 0 9px 0 0;
+			text-align: center;
+
+			&:last-child {
+				// margin-right: 0;
+			}
+
+			.value {
+				display: block;
+				height: 19px;
+				margin-bottom: 9px;
+				display: none;
+			}
+
+			.slider {
+				position: relative;
+				left: 14px;
+				height: 101px;
+				width: 13px;
+				margin: 0 0 11px;
+				border-radius: 13px;
+				display: block;
+
+				&:before {
+					content: "";
+					background: rgba(#002,.1);
+					position: absolute;
+					top: 0;
+					left: 5px;
+					right: 5px;
+					bottom: 0;
+					border-radius: inherit;
 				}
+
+				&:after {
+					content: "";
+					position: absolute;
+					top: 2px;
+					bottom: 2px;
+					right: -9px;
+					width: 6px;
+					pointer-events: none;
+					background: repeating-linear-gradient(180deg,
+						rgba(#000,.25) 0px, rgba(#000,.25) 1px, transparent 1px, transparent 12px
+					);
+				}
+
+				&:hover .handle {
+					box-shadow: 0 0 17px #71a1ca,
+								0 0 7px #71a1ca,
+								0 0 3px #71a1ca;
+				}
+
+				.handle {
+					position: absolute;
+					top: 49px;
+					left: 2px;
+					width: 9px;
+					height: 3px;
+					border-radius: 7px;
+					background: #9fcef6;
+					pointer-events: none;
+				}
+			}
+
+			.label {
+				display: block;
+				height: 19px;
 			}
 		}
 
@@ -223,7 +318,7 @@
 
 		.buttons {
 			position: relative;
-			padding-top: 5px;
+			padding-top: 7px;
 			text-align: right;
 			font-size: 0;
 
@@ -250,13 +345,6 @@
 				&.hidden {
 					display: none;
 				}
-			}
-
-			.toggler {
-				position: absolute;
-				left: 0;
-				bottom: 0;
-				margin-right: 0;
 			}
 		}
 

@@ -168,7 +168,7 @@
 			<feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#7af" flood-opacity="1" />
 		</filter>
 		<style type="text/css">
-			.st0{fill:none;stroke:#7af;stroke-width:2.5;stroke-linecap:round;filter:url(#DS_1);}
+			.st0{fill:none;stroke:#9fcef6;stroke-width:2.5;stroke-linecap:round;filter:url(#DS_1);}
 			.st1{fill:none;stroke:#2e446c;stroke-width:2.5;stroke-linecap:round;}
 		</style>
 		<path class="st0" d="M7.1,60.9c0.4,0.4,0.7,0.7,1.1,1"/>

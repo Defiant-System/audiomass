@@ -80,7 +80,7 @@
 					let pEl = event.el.parents(`div[data-area]`);
 					if (pEl.length) {
 						let name = pEl.data("area");
-						Self[name].dispatch(event);
+						return Self[name].dispatch(event);
 					}
 				}
 		}

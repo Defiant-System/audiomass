@@ -42,7 +42,7 @@
 			case "update-range":
 				// show text fields
 				Spawn.el.find(Self.els.txtSelection).addClass("show-text");
-				break;
+				if (!event.detail.region) break;
 			case "time-update-range":
 				value = APP.spawn.toolbar.format(event.detail.region.start);
 				Spawn.el.find(Self.els.txtSelStart).html(value);

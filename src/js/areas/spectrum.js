@@ -10,17 +10,6 @@
 	mass: ["#000", "#4b009f", "#6800fb", "#8300ff", "#9b129d", "#af2500", "#bf3b00", "#ce5800", "#df8400", "#f0bc00", "#fffc00"],
 	prism: ["#000", "#a35", "#c66", "#e94", "#ed0", "#9d5", "#4d8", "#2cb", "#0bc", "#09c", "#36b"],
 	init(Spawn) {
-		// fast references
-		this.els = {
-			el: Spawn.find(`.dock .box[data-area="spectrum"] .body`),
-		};
-		// main canvas
-		this.cvs = this.els.el.append("<canvas></canvas>")[0];
-		this.ctx = this.cvs.getContext("2d");
-		// swap canvas
-		this.swapCvs = document.createElement("canvas");
-		this.swapCtx = this.swapCvs.getContext("2d");
-
 		// translate palette hex to rgba array
 		this.palette = {};
 		this.mass.map((color, i) => {
@@ -38,6 +27,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
+			Spawn = event.spawn,
 			Self = APP.spawn.spectrum,
 			isOn,
 			el;
@@ -45,31 +35,42 @@
 			// subscribed events
 			case "audio-play":
 				// turn on flag
-				Self._playing = true;
-				Self.draw();
+				Spawn.data._playing = true;
+				Self.draw(Spawn);
 				break;
 			case "audio-pause":
 			case "audio-stop":
 				// reset flag
-				delete Self._playing;
-				cancelAnimationFrame(Self._rafId);
+				delete Spawn.data._playing;
+				cancelAnimationFrame(Spawn.data._rafId);
 				break;
 			// custom events
 			case "connect-file-output":
-				// make sure canvas fits its parent element
-				let pEl = Self.cvs.parentNode;
-				Self.cvs.width  = Self.swapCvs.width  = +pEl.offsetWidth;
-				Self.cvs.height = Self.swapCvs.height = +pEl.offsetHeight;
+				if (!Spawn.data.cvs) {
+					// find box body
+					let el = Spawn.find(`.dock .box[data-area="spectrum"] .body`);
+					// main canvas
+					Spawn.data.cvs = el.append("<canvas></canvas>")[0];
+					Spawn.data.ctx = Spawn.data.cvs.getContext("2d");
+					// swap canvas
+					Spawn.data.swapCvs = document.createElement("canvas");
+					Spawn.data.swapCtx = Spawn.data.swapCvs.getContext("2d");
 
-				let freqAnalyser = APP.spawn.frequency.analyzer,
+					// make sure canvas fits its parent element
+					let pEl = Spawn.data.cvs.parentNode;
+					Spawn.data.cvs.width  = Spawn.data.swapCvs.width  = +pEl.offsetWidth;
+					Spawn.data.cvs.height = Spawn.data.swapCvs.height = +pEl.offsetHeight;
+				}
+
+				let freqAnalyser = Spawn.data.analyzer,
 					specAnalyser = freqAnalyser.audioCtx.createAnalyser();
 				specAnalyser.fftSize = 2048;
 				// specAnalyser.maxDecibels = -25;
 				// specAnalyser.minDecibels = -60;
 				// specAnalyser.smoothingTimeConstant = 0.5;
 
-				Self.frequencyData = new Uint8Array(specAnalyser.frequencyBinCount);
-				Self.specAnalyser = specAnalyser;
+				Spawn.data.frequencyData = new Uint8Array(specAnalyser.frequencyBinCount);
+				Spawn.data.specAnalyser = specAnalyser;
 				// connect to output of frequency analyzer
 				freqAnalyser.connectOutput(specAnalyser);
 				break;
@@ -79,22 +80,22 @@
 				break;
 		}
 	},
-	draw() {
-		if (!this._playing) return;
-		this._rafId = requestAnimationFrame(() => this.draw());
+	draw(Spawn) {
+		if (!Spawn.data._playing) return;
+		Spawn.data._rafId = requestAnimationFrame(() => this.draw(Spawn));
 
-		this.specAnalyser.getByteFrequencyData(this.frequencyData);
+		Spawn.data.specAnalyser.getByteFrequencyData(Spawn.data.frequencyData);
 		
-		let ctx = this.ctx,
-			width = this.cvs.width,
-			height = this.cvs.height,
-			data = this.frequencyData,
+		let ctx = Spawn.data.ctx,
+			width = Spawn.data.cvs.width,
+			height = Spawn.data.cvs.height,
+			data = Spawn.data.frequencyData,
 			i = 0,
 			il = data.length,
 			speed = 3;
 
-		this.swapCtx.drawImage(this.cvs, 0, 0, width, height);
-		this.cvs.width = width;
+		Spawn.data.swapCtx.drawImage(Spawn.data.cvs, 0, 0, width, height);
+		Spawn.data.cvs.width = width;
 
 		for (; i<il; i++) {
 			let y = Math.round (i/il * height);
@@ -103,10 +104,10 @@
 			ctx.fillRect(width - speed, height - y, speed, speed);
 		}
 		ctx.translate(-speed, 0);
-		ctx.drawImage(this.swapCvs, 0, 0, width, height, 0, 0, width, height);
+		ctx.drawImage(Spawn.data.swapCvs, 0, 0, width, height, 0, 0, width, height);
 		ctx.setTransform (1, 0, 0, 1, 0, 0);
 
-		this.value_changed = false;
+		// this.value_changed = false;
 	},
 	getFullColor(value) {
 		let palette = this.palette,

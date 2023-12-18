@@ -126,12 +126,12 @@ class File {
 			case "ws-play": break;
 			case "ws-pause":
 				// sync gutter UI
-				Spawn.toolbar.dispatch({ type: "reset-play-button", ws });
+				Spawn.toolbar.dispatch({ type: "reset-play-button", spawn: this._parent._spawn, ws });
 				break;
 			case "ws-scroll":
 			case "ws-zoom":
 				// sync gutter UI
-				Spawn.waves.dispatch({ type: "ui-sync-gutter", ws });
+				Spawn.waves.dispatch({ type: "ui-sync-gutter", spawn: this._parent._spawn, ws });
 				break;
 			case "pointermove":
 				// Position

@@ -76,7 +76,11 @@ class FileTabs {
 			this.dispatch({ type: "hide-blank-view" });
 			// connect frequency analyzer to file
 			["frequency", "spectrum"].map(name =>
-				this._parent[name].dispatch({ type: "connect-file-output", file: this._active.file }));
+				this._parent[name].dispatch({
+					type: "connect-file-output",
+					spawn: this._spawn,
+					file: this._active.file,
+				}));
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {

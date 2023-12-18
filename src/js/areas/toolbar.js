@@ -6,7 +6,7 @@
 		let el = Spawn.find(`> div[data-area="toolbar"]`);
 		// fast references
 		this.els = {
-			content: Spawn.find("content"),
+			content: `content`,
 			sidebar: `.toolbar-tool_[data-click="toggle-sidebar"]`,
 			undo: `.toolbar-tool_[data-click="file-undo"]`,
 			redo: `.toolbar-tool_[data-click="file-redo"]`,
@@ -81,12 +81,14 @@
 				break;
 			// ui events
 			case "toggle-sidebar":
-				isOn = event.value || Self.els.content.hasClass("show-sidebar");
-				Self.els.content.toggleClass("show-sidebar", isOn);
+				el = Spawn.el.find(Self.els.content);
+				isOn = event.value || el.hasClass("show-sidebar");
+				el.toggleClass("show-sidebar", isOn);
 				return isOn;
 			case "toggle-dock":
-				isOn = event.value || Self.els.content.hasClass("show-dock");
-				Self.els.content.toggleClass("show-dock", isOn);
+				el = Spawn.el.find(Self.els.content);
+				isOn = event.value || el.hasClass("show-dock");
+				el.toggleClass("show-dock", isOn);
 				return isOn;
 
 			case "rewind-audio":
@@ -100,7 +102,7 @@
 				file._ws.seekTo(1);
 				break;
 			case "loop-audio":
-				isOn = Self.els.loop.hasClass("tool-active_");
+				isOn = Spawn.el.find(Self.els.loop).hasClass("tool-active_");
 				// store loop reference in file object
 				if (!isOn) Spawn.data.tabs.active.file._loop = true;
 				else delete Spawn.data.tabs.active.file._loop;
@@ -122,7 +124,7 @@
 				Spawn.emit("audio-stop");
 				break;
 			case "reset-play-button":
-				Self.els.play.find(".icon-play")
+				Spawn.el.find(Self.els.play).find(".icon-play")
 					.removeClass("icon-pause")
 					.css({ "background-image": `url("~/icons/icon-play.png")` });
 				// emit event

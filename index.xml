@@ -4,26 +4,16 @@
 	</Build>
 	<Head>
 		<meta name="id" value="imaudio"/>
-		<meta name="title" value="ImAudio" version="1.01"/>
+		<meta name="title" value="ImAudio" version="1.1"/>
 		<meta name="author" value="Hakan Bilgin" namespace="ant"/>
 		<meta name="license" value="AGPL-3.0"/>
 		<meta name="repository" value="https://github.com/Defiant-System/imaudio"/>
-		<meta name="width" value="980" min="820"/>
-		<meta name="height" value="720" min="540"/>
-		<meta name="top" value="175"/>
-		<meta name="left" value="120"/>
-		<meta name="minimize"/>
-		<meta name="maximize"/>
-		<meta name="resize"/>
 		<meta name="icons" value="src/svg/icons.svg"/>
 		<meta name="script" value="src/js/main.js"/>
-		<meta name="style" value="src/css/main.less"/>
-		<meta name="toolbar-style" value="src/css/toolbar.less"/>
-		<meta name="content" value="src/partials/content.htm"/>
+		<meta name="spawn" value="src/partials/spawn.xml"/>
 		<meta name="xsl" value="src/partials/templates.xsl"/>
 
 		@import "src/partials/menubar.xml"
-		@import "src/partials/caption-toolbar.xml"
 	</Head>
 
 	@import "src/partials/data.xml"

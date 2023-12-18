@@ -32,9 +32,9 @@
 		});
 		
 		// subscribe to events
-		window.on("audio-play", this.dispatch);
-		window.on("audio-pause", this.dispatch);
-		window.on("audio-stop", this.dispatch);
+		Spawn.on("audio-play", this.dispatch);
+		Spawn.on("audio-pause", this.dispatch);
+		Spawn.on("audio-stop", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,

@@ -35,13 +35,9 @@ class File {
 			container: el[0],
 			cursorColor: "#f90", // afdeff
 			hideScrollbar: true,
-			// splitChannels: [{ ...this.channelOn }],
-			// height: 200,
-			// splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
 			// dragToSeek: true,
 			// autoCenter: true,
 			// autoScroll: false,
-			// height: +el.parent().prop("offsetHeight") >> 1,
 			minPxPerSec: 100,
   			// plugins: [timeline, zoom, regions],
   			plugins: [zoom, regions],
@@ -112,7 +108,7 @@ class File {
 				}
 
 				// emit range related event
-				window.emit("timeupdate", { ws });
+				this._parent._spawn.emit("timeupdate", { ws });
 				// clear regions on mousedown
 				this._el.find("> div").shadowRoot().find(".wrapper")
 					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset" }))
@@ -125,11 +121,11 @@ class File {
 				break;
 			case "ws-destroy": break;
 			case "ws-timeupdate":
-				if (ws.decodedData) window.emit("timeupdate", { currentTime: event.currentTime });
+				if (ws.decodedData) this._parent._spawn.emit("timeupdate", { currentTime: event.currentTime });
 				break;
 			case "ws-seeking":
 				// emit range related event
-				window.emit("cursor-seeking");
+				this._parent._spawn.emit("cursor-seeking");
 				break;
 			case "ws-interaction": break;
 			case "ws-click": break;
@@ -158,14 +154,14 @@ class File {
 			    	duration = ws.getDuration() || 0,
 			    	hoverTime = duration * relativeX;
 				// emit related event
-				window.emit("timeupdate", { relativeX, hoverTime });
+				this._parent._spawn.emit("timeupdate", { relativeX, hoverTime });
 				break;
 			// region events
 			case "ws-region-reset":
 				this._activeRegion = null;
 				this._regions.clearRegions();
 				// emit range related event
-				window.emit("clear-range");
+				this._parent._spawn.emit("clear-range");
 				break;
 			case "ws-region-created":
 			case "ws-region-updated":
@@ -173,11 +169,11 @@ class File {
 				value = event.region.start / event.region.totalDuration;
 				ws.seekTo(value);
 				// emit range related event
-				window.emit("update-range", { region: event.region });
+				this._parent._spawn.emit("update-range", { region: event.region });
 				break;
 			case "ws-region-timeupdate":
 				// emit range related event
-				window.emit("time-update-range", { region: event.region });
+				this._parent._spawn.emit("time-update-range", { region: event.region });
 				break;
 			// external events
 			case "toggle-channel":

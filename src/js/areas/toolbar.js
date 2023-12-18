@@ -30,9 +30,9 @@
 		};
 		
 		// subscribe to events
-		window.on("timeupdate", this.dispatch);
-		window.on("clear-range", this.dispatch);
-		window.on("update-range", this.dispatch);
+		Spawn.on("timeupdate", this.dispatch);
+		Spawn.on("clear-range", this.dispatch);
+		Spawn.on("update-range", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -119,14 +119,14 @@
 					delete file._activeRegion;
 				}
 				// emit event
-				window.emit("audio-stop");
+				Spawn.emit("audio-stop");
 				break;
 			case "reset-play-button":
 				Self.els.play.find(".icon-play")
 					.removeClass("icon-pause")
 					.css({ "background-image": `url("~/icons/icon-play.png")` });
 				// emit event
-				window.emit("audio-stop");
+				Spawn.emit("audio-stop");
 				break;
 			case "play-audio":
 				el = event.el.find(".icon-play");
@@ -136,8 +136,8 @@
 				// call appropriate method
 				Spawn.data.tabs.active.file._ws[isOn ? "pause" : "play"]();
 				// emit event
-				if (!isOn) window.emit("audio-play");
-				else window.emit("audio-pause");
+				if (!isOn) Spawn.emit("audio-play");
+				else Spawn.emit("audio-pause");
 				break;
 		}
 	},

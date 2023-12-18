@@ -19,9 +19,9 @@
 		this.els.vWrapper.find(".txt-volume h2").html(47);
 
 		// subscribe to events
-		window.on("clear-range", this.dispatch);
-		window.on("update-range", this.dispatch);
-		window.on("time-update-range", this.dispatch);
+		Spawn.on("clear-range", this.dispatch);
+		Spawn.on("update-range", this.dispatch);
+		Spawn.on("time-update-range", this.dispatch);
 
 		// bind event handlers
 		this.els.volume.on("mousedown", this.volumeMove);

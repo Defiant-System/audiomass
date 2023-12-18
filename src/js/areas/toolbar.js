@@ -7,26 +7,26 @@
 		// fast references
 		this.els = {
 			content: Spawn.find("content"),
-			sidebar: el.find(`.toolbar-tool_[data-click="toggle-sidebar"]`),
-			undo: el.find(`.toolbar-tool_[data-click="file-undo"]`),
-			redo: el.find(`.toolbar-tool_[data-click="file-redo"]`),
-			rewind: el.find(`.toolbar-tool_[data-click="rewind-audio"]`),
-			forward: el.find(`.toolbar-tool_[data-click="forward-audio"]`),
-			stop: el.find(`.toolbar-tool_[data-click="stop-audio"]`),
-			play: el.find(`.toolbar-tool_[data-click="play-audio"]`),
-			record: el.find(`.toolbar-tool_[data-click="record-audio"]`),
-			loop: el.find(`.toolbar-tool_[data-click="loop-audio"]`),
-			copy: el.find(`.toolbar-tool_[data-click="copy-selection"]`),
-			paste: el.find(`.toolbar-tool_[data-click="paste-selection"]`),
-			cut: el.find(`.toolbar-tool_[data-click="cut-selection"]`),
-			silenceSel: el.find(`.toolbar-tool_[data-click="silence-selection"]`),
-			silenceRest: el.find(`.toolbar-tool_[data-click="silence-rest"]`),
-			settings: el.find(`.toolbar-tool_[data-menu="view-settings"]`),
+			sidebar: `.toolbar-tool_[data-click="toggle-sidebar"]`,
+			undo: `.toolbar-tool_[data-click="file-undo"]`,
+			redo: `.toolbar-tool_[data-click="file-redo"]`,
+			rewind: `.toolbar-tool_[data-click="rewind-audio"]`,
+			forward: `.toolbar-tool_[data-click="forward-audio"]`,
+			stop: `.toolbar-tool_[data-click="stop-audio"]`,
+			play: `.toolbar-tool_[data-click="play-audio"]`,
+			record: `.toolbar-tool_[data-click="record-audio"]`,
+			loop: `.toolbar-tool_[data-click="loop-audio"]`,
+			copy: `.toolbar-tool_[data-click="copy-selection"]`,
+			paste: `.toolbar-tool_[data-click="paste-selection"]`,
+			cut: `.toolbar-tool_[data-click="cut-selection"]`,
+			silenceSel: `.toolbar-tool_[data-click="silence-selection"]`,
+			silenceRest: `.toolbar-tool_[data-click="silence-rest"]`,
+			settings: `.toolbar-tool_[data-menu="view-settings"]`,
 			// display
-			display: el.find(`.toolbar-field_`),
-			currentTime: el.find(`.display .current-time`),
-			totalTime: el.find(`.display .total-time`),
-			hoverTime: el.find(`.display .hover-time`),
+			display: `.toolbar-field_`,
+			currentTime: `.display .current-time`,
+			totalTime: `.display .total-time`,
+			hoverTime: `.display .hover-time`,
 		};
 		
 		// subscribe to events
@@ -48,36 +48,36 @@
 			case "timeupdate":
 				if (event.detail.ws) {
 					value = Self.format(event.detail.ws.decodedData.duration);
-					Self.els.totalTime.html(value);
+					Spawn.el.find(Self.els.totalTime).html(value);
 				}
 				if (event.detail.currentTime !== undefined) {
 					value = Self.format(event.detail.currentTime);
-					Self.els.currentTime.html(value);
+					Spawn.el.find(Self.els.currentTime).html(value);
 				}
 				if (event.detail.hoverTime) {
 					value = Self.format(event.detail.hoverTime);
-					Self.els.hoverTime.html(value);
+					Spawn.el.find(Self.els.hoverTime).html(value);
 				}
 				break;
 			case "clear-range":
 				["copy", "cut", "silenceSel"]
-					.map(key => Self.els[key].addClass("tool-disabled_"));
+					.map(key => Spawn.el.find(Self.els[key]).addClass("tool-disabled_"));
 				break;
 			case "update-range":
 				["copy", "cut", "silenceSel"]
-					.map(key => Self.els[key].removeClass("tool-disabled_"));
+					.map(key => Spawn.el.find(Self.els[key]).removeClass("tool-disabled_"));
 				break;
 			// custom events
 			case "enable-tools":
 				["sidebar", "rewind", "forward", "play", "stop", "loop", "settings"]
-					.map(key => Self.els[key].removeClass("tool-disabled_"));
+					.map(key => Spawn.el.find(Self.els[key]).removeClass("tool-disabled_"));
 				// enable display
-				Self.els.display.removeClass("blank-display");
+				Spawn.el.find(Self.els.display).removeClass("blank-display");
 				break;
 			case "disable-tools":
 				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
 				// disable display
-				Self.els.display.addClass("blank-display");
+				Spawn.el.find(Self.els.display).addClass("blank-display");
 				break;
 			// ui events
 			case "toggle-sidebar":

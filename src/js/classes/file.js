@@ -7,22 +7,10 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
-		this.id = "f"+ Date.now();
+		// this.id = fsFile.id;
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
-		// let timeline = TimelinePlugin.create({
-		// 		height: 8,
-		// 		insertPosition: "beforebegin",
-		// 		timeInterval: 0.05,
-		// 		primaryLabelInterval: 1,
-		// 		secondaryLabelInterval: 1,
-		// 		formatTimeCallback: seconds => seconds.toFixed(2),
-		// 		style: {
-		// 			fontSize: "9px",
-		// 			color: "#71a1ca77",
-		// 		},
-		// 	});
 		let zoom = ZoomPlugin.create({ scale: 0.2 });
 		let regions = RegionsPlugin.create();
 
@@ -39,7 +27,6 @@ class File {
 			// autoCenter: true,
 			// autoScroll: false,
 			minPxPerSec: 100,
-  			// plugins: [timeline, zoom, regions],
   			plugins: [zoom, regions],
 		});
 		// reference to regions

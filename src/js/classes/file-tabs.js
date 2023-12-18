@@ -78,12 +78,12 @@ class FileTabs {
 			["frequency", "spectrum"].map(name =>
 				this._parent[name].dispatch({ type: "connect-file-output", file: this._active.file }));
 			// enable toolbar tools
-			this._parent.toolbar.dispatch({ type: "enable-tools" });
+			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {
 			// reset view / show blank view
 			this.dispatch({ type: "show-blank-view" });
 			// disable toolbar tools
-			this._parent.toolbar.dispatch({ type: "disable-tools" });
+			this._parent.toolbar.dispatch({ type: "disable-tools", spawn: this._spawn });
 		}
 	}
 

@@ -2,7 +2,7 @@
 	<Head>
 		<meta name="title" value="New File"/>
 		<meta name="width" value="980" min="820"/>
-		<meta name="height" value="720" min="540"/>
+		<meta name="height" value="700" min="540"/>
 		<meta name="top" value="175"/>
 		<meta name="left" value="120"/>
 		<meta name="minimize"/>

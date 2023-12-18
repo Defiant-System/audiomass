@@ -47,6 +47,18 @@
 				// DEV-ONLY-END
 				break;
 
+			// tab related events
+			case "tab.new":
+				if (event.file) Tabs.add(event.file);
+				else Tabs.add({ new: "Blank" });
+				break;
+			case "tab.clicked":
+				Tabs.focus(event.el.data("id"));
+				break;
+			case "tab.close":
+				Tabs.remove(event.el.data("id"));
+				break;
+
 			case "load-samples":
 				// opening image file from application package
 				event.samples.map(async name => {

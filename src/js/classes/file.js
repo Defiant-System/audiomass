@@ -7,6 +7,7 @@ class File {
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
 
+		this.id = "f"+ Date.now();
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 

@@ -36,20 +36,38 @@ class FileTabs {
 
 	add(fsFile) {
 		if (fsFile.new) {
-
+			let tId = "f"+ Date.now(),
+				fileEl = this._els.content,
+				// add tab to tab row
+				tabEl = this._spawn.tabs.add(fsFile.new, tId);
+			// reference to tab element
+			this._stack[tId] = { tabEl, fileEl };
+			// reset view / show blank view
+			this.dispatch({ type: "show-blank-view", spawn: this._spawn });
+			// reference to active tab
+			this._active = this._stack[tId];
+			// focus on file
+			this.focus(tId);
 		} else {
 			let fileEl = this._els.filesWrapper.append(this._template.clone(true)),
 				file = new File(this, fsFile, fileEl),
+				tabEl = this._spawn.tabs.add(fsFile.base, file.id),
 				history = new window.History;
 
-			this._stack[file.id] = { history, file };
-			
+			// add element to DOM + append file contents
+			fileEl.data({ id: file.id });
+			// save reference to tab
+			this._stack[file.id] = { tabEl, history, file };
 			// focus on file
 			this.focus(file.id);
 		}
 	}
 
 	focus(tId) {
+		if (this._active) {
+			// file blur event
+		}
+
 		// reference to active tab
 		this._active = this._stack[tId];
 

@@ -6,6 +6,7 @@
 		let el = Spawn.find(`> div[data-area="toolbar"]`);
 		// fast references
 		this.els = {
+			content: Spawn.find("content"),
 			sidebar: el.find(`.toolbar-tool_[data-click="toggle-sidebar"]`),
 			undo: el.find(`.toolbar-tool_[data-click="file-undo"]`),
 			redo: el.find(`.toolbar-tool_[data-click="file-redo"]`),
@@ -80,13 +81,13 @@
 				break;
 			// ui events
 			case "toggle-sidebar":
-				isOn = event.value || Spawn.els.content.hasClass("show-sidebar");
-				Spawn.els.content.toggleClass("show-sidebar", isOn);
-				return !isOn;
+				isOn = event.value || Self.els.content.hasClass("show-sidebar");
+				Self.els.content.toggleClass("show-sidebar", isOn);
+				return isOn;
 			case "toggle-dock":
-				isOn = event.value || Spawn.els.content.hasClass("show-dock");
-				Spawn.els.content.toggleClass("show-dock", isOn);
-				return !isOn;
+				isOn = event.value || Self.els.content.hasClass("show-dock");
+				Self.els.content.toggleClass("show-dock", isOn);
+				return isOn;
 
 			case "rewind-audio":
 				file = Spawn.data.tabs.active.file;

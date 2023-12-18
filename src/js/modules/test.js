@@ -1,11 +1,12 @@
 
 let Test = {
-	init(APP) {
+	init(APP, spawn) {
 
+		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
+		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		return;
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
-		// setTimeout(() => APP.toolbar.els.loop.trigger("click"), 300);
 		
 		setTimeout(() => {
 			let file = APP.data.tabs.active.file;

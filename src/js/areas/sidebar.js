@@ -6,17 +6,17 @@
 		// fast references
 		this.els = {
 			doc: $(document),
-			content: Spawn.find("content"),
-			txtSelection: Spawn.find(".sidebar .txt-selection"),
-			txtSelStart: Spawn.find(".sidebar .txt-sel-start"),
-			txtSelEnd: Spawn.find(".sidebar .txt-sel-end"),
-			txtSelDuration: Spawn.find(".sidebar .txt-sel-duration"),
-			vWrapper: Spawn.find(".volume-wrapper"),
-			volume: Spawn.find(".volume-knob"),
+			content: "content",
+			txtSelection: ".sidebar .txt-selection",
+			txtSelStart: ".sidebar .txt-sel-start",
+			txtSelEnd: ".sidebar .txt-sel-end",
+			txtSelDuration: ".sidebar .txt-sel-duration",
+			vWrapper: ".volume-wrapper",
+			volume: ".volume-knob",
 		};
 		// default volume knob angle
-		this.els.volume.css({ "--angle": "-35deg" });
-		this.els.vWrapper.find(".txt-volume h2").html(47);
+		Spawn.el.find(this.els.volume).css({ "--angle": "-35deg" });
+		Spawn.el.find(this.els.vWrapper).find(".txt-volume h2").html(47);
 
 		// subscribe to events
 		Spawn.on("clear-range", this.dispatch);
@@ -24,7 +24,7 @@
 		Spawn.on("time-update-range", this.dispatch);
 
 		// bind event handlers
-		this.els.volume.on("mousedown", this.volumeMove);
+		Spawn.el.find(this.els.volume).on("mousedown", this.volumeMove);
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -37,24 +37,25 @@
 			// subscribed events
 			case "clear-range":
 				// hide text fields
-				Self.els.txtSelection.removeClass("show-text");
+				Spawn.el.find(Self.els.txtSelection).removeClass("show-text");
 				break;
 			case "update-range":
 				// show text fields
-				Self.els.txtSelection.addClass("show-text");
+				Spawn.el.find(Self.els.txtSelection).addClass("show-text");
 				break;
 			case "time-update-range":
-				value = Spawn.toolbar.format(event.detail.region.start);
-				Self.els.txtSelStart.html(value);
-				value = Spawn.toolbar.format(event.detail.region.end);
-				Self.els.txtSelEnd.html(value);
-				value = Spawn.toolbar.format(event.detail.region.end - event.detail.region.start);
-				Self.els.txtSelDuration.html(value);
+				value = APP.spawn.toolbar.format(event.detail.region.start);
+				Spawn.el.find(Self.els.txtSelStart).html(value);
+				value = APP.spawn.toolbar.format(event.detail.region.end);
+				Spawn.el.find(Self.els.txtSelEnd).html(value);
+				value = APP.spawn.toolbar.format(event.detail.region.end - event.detail.region.start);
+				Spawn.el.find(Self.els.txtSelDuration).html(value);
 				break;
 		}
 	},
 	volumeMove(event) {
 		let APP = imaudio,
+			Spawn = event.spawn,
 			Self = APP.spawn.sidebar,
 			Drag = Self.drag;
 		switch (event.type) {
@@ -62,8 +63,8 @@
 				// prevent default behaviour
 				event.preventDefault();
 				// cover content
-				Self.els.content.addClass("cover hideMouse");
-				Self.els.vWrapper.addClass("show-text");
+				Spawn.el.find(Self.els.content).addClass("cover hideMouse");
+				Spawn.el.find(Self.els.vWrapper).addClass("show-text");
 				// prepare drag info
 				let el = $(event.target),
 					txt = el.parent().find(".txt-volume h2"),
@@ -97,8 +98,8 @@
 				break;
 			case "mouseup":
 				// cover content
-				Self.els.content.removeClass("cover hideMouse");
-				Self.els.vWrapper.removeClass("show-text");
+				Spawn.el.find(Self.els.content).removeClass("cover hideMouse");
+				Spawn.el.find(Self.els.vWrapper).removeClass("show-text");
 				// unbind event
 				Self.els.doc.off("mousemove mouseup", Self.volumeMove);
 				break;

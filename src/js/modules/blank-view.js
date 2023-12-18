@@ -47,7 +47,17 @@
 				APP.spawn.dispatch({ ...event, type: "open-file" });
 				break;
 			case "from-clipboard":
-				// TODO
+				console.log("TODO");
+				break;
+			case "select-sample":
+				el = $(event.target);
+				if (!el.hasClass("sample")) return;
+
+				// close "current tab"
+				APP.spawn.dispatch({ type: "close-tab", spawn: Spawn, delayed: true });
+				
+				// send event to APP for proxy down to spawn
+				APP.dispatch({ ...event, type: "load-samples", samples: [el.find("h4").text()] });
 				break;
 		}
 	}

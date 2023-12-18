@@ -9,7 +9,7 @@
 			Open&#8230;
 		</div>
 
-		<div class="btn disabled_" data-click="from-clipboard">
+		<div class="btn" data-click="from-clipboard">
 			<i class="icon-clipboard"></i>
 			From clipboard
 		</div>
@@ -36,7 +36,9 @@
 				<xsl:attribute name="class"><xsl:value-of select="@icon"/></xsl:attribute>
 			</i>
 			<h4><xsl:value-of select="@name"/></h4>
-			<h5><xsl:value-of select="@sizeB"/>, <xsl:value-of select="@duration"/>s</h5>
+			<h5><xsl:call-template name="sys:file-size">
+					<xsl:with-param name="bytes" select="@sizeB" />
+				</xsl:call-template> — <xsl:value-of select="@duration"/>s</h5>
 		</div>
 	</xsl:for-each>
 </xsl:template>
@@ -50,7 +52,9 @@
 				<xsl:attribute name="class"><xsl:value-of select="@icon"/></xsl:attribute>
 			</i>
 			<h4><xsl:value-of select="@name"/></h4>
-			<h5><xsl:value-of select="@sizeB"/>, <xsl:value-of select="@duration"/>s</h5>
+			<h5><xsl:call-template name="sys:file-size">
+					<xsl:with-param name="bytes" select="@sizeB" />
+				</xsl:call-template> — <xsl:value-of select="@duration"/>s</h5>
 		</div>
 	</xsl:for-each>
 </xsl:template>

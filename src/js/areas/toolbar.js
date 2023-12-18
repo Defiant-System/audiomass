@@ -75,7 +75,7 @@
 				Spawn.el.find(Self.els.display).removeClass("blank-display");
 				break;
 			case "disable-tools":
-				Object.keys(Self.els).map(key => Self.els[key].addClass("tool-disabled_"));
+				Object.keys(Self.els).map(key => Spawn.el.find(Self.els[key]).addClass("tool-disabled_"));
 				// disable display
 				Spawn.el.find(Self.els.display).addClass("blank-display");
 				break;

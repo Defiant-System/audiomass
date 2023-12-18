@@ -1,4 +1,24 @@
 
+@import "./classes/file.js"
+@import "./classes/file-tabs.js"
+@import "./modules/ui.js"
+@import "./modules/test.js"
+
+
+let {
+	AudioContext,
+	AudioMotionAnalyzer,
+	WaveSurfer,
+	RegionsPlugin,
+	TimelinePlugin,
+	Minimap,
+	EnvelopePlugin,
+	Spectrogram,
+	RecordPlugin,
+	ZoomPlugin,
+} = await window.fetch("~/js/bundle.js");
+
+
 const imaudio = {
 	init() {
 		

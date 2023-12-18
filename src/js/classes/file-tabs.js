@@ -1,14 +1,19 @@
 
 class FileTabs {
-	constructor(APP) {
-		this._APP = APP;
+	constructor(parent, spawn) {
+		this._parent = parent;
+		this._spawn = spawn;
 		this._stack = {};
 		this._active = null;
 
-		this._filesWrapper = APP.els.content.find(".files-wrapper");
+		// fast references
+		this._els = {
+			content: spawn.find("content"),
+			filesWrapper: spawn.find(".files-wrapper"),
+		};
 
 		// canvas / file wrapper
-		let template = this._filesWrapper.find("> .file");
+		let template = this._els.filesWrapper.find("> .file");
 		this._template = template.clone(true);
 		template.remove();
 	}
@@ -33,7 +38,7 @@ class FileTabs {
 		if (fsFile.new) {
 
 		} else {
-			let fileEl = this._filesWrapper.append(this._template.clone(true)),
+			let fileEl = this._els.filesWrapper.append(this._template.clone(true)),
 				file = new File(this, fsFile, fileEl),
 				history = new window.History;
 
@@ -53,36 +58,35 @@ class FileTabs {
 			this.dispatch({ type: "hide-blank-view" });
 			// connect frequency analyzer to file
 			["frequency", "spectrum"].map(name =>
-				this._APP[name].dispatch({ type: "connect-file-output", file: this._active.file }));
+				this._spawn[name].dispatch({ type: "connect-file-output", file: this._active.file }));
 			// enable toolbar tools
-			this._APP.toolbar.dispatch({ type: "enable-tools" });
+			this._spawn.toolbar.dispatch({ type: "enable-tools" });
 		} else {
 			// reset view / show blank view
 			this.dispatch({ type: "show-blank-view" });
 			// disable toolbar tools
-			this._APP.toolbar.dispatch({ type: "disable-tools" });
+			this._spawn.toolbar.dispatch({ type: "disable-tools" });
 		}
 	}
 
 	dispatch(event) {
-		let APP = imaudio,
-			name,
+		let name,
 			value;
+		// console.log(event);
 		switch (event.type) {
 			case "show-blank-view":
 				// show blank view
-				APP.els.content.addClass("show-blank-view");
+				this._els.content.addClass("show-blank-view");
 				break;
 			case "hide-blank-view":
 				// hide blank view
-				APP.els.content.removeClass("show-blank-view");
+				this._els.content.removeClass("show-blank-view");
 				break;
 		}
 	}
 
 	openLocal(url) {
-		let APP = imaudio,
-			parts = url.slice(url.lastIndexOf("/") + 1),
+		let parts = url.slice(url.lastIndexOf("/") + 1),
 			[ name, kind ] = parts.split("."),
 			file = new karaqu.File({ name, kind });
 		// return promise

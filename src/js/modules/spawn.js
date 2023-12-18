@@ -3,7 +3,11 @@
 
 {
 	init() {
-
+		// fast references
+		this.els = {
+			doc: $(document),
+			content: window.find("content"),
+		};
 	},
 	dispose(event) {
 		let Spawn = event.spawn;
@@ -28,7 +32,21 @@
 		switch (event.type) {
 			// system events
 			case "spawn.open":
+				Spawn.data.tabs = new FileTabs(Self, Spawn);
+				
+				// init all sub-objects
+				Object.keys(Self)
+					.filter(i => typeof Self[i].init === "function")
+					.map(i => Self[i].init(Spawn));
+
+				// auto show "blank view"
+				Spawn.data.tabs.dispatch({ ...event, type: "show-blank-view" });
+
+				// DEV-ONLY-START
+				Test.init(APP, Spawn);
+				// DEV-ONLY-END
 				break;
 		}
-	}
+	},
+	blankView: @import "./blank-view.js",
 }

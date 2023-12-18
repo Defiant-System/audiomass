@@ -35,11 +35,12 @@ class File {
 			container: el[0],
 			cursorColor: "#f90", // afdeff
 			hideScrollbar: true,
-			splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
+			splitChannels: [{ ...this.channelOn }],
+			// splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
 			// dragToSeek: true,
 			// autoCenter: true,
 			// autoScroll: false,
-			height: +el.parent().prop("offsetHeight") >> 1,
+			// height: +el.parent().prop("offsetHeight") >> 1,
 			minPxPerSec: 100,
   			// plugins: [timeline, zoom, regions],
   			plugins: [zoom, regions],
@@ -98,6 +99,9 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
+				// is mono or stereo
+				this._el.parents(".box.waves").addClass("mono-channel");
+
 				// emit range related event
 				window.emit("timeupdate", { ws });
 				// clear regions on mousedown

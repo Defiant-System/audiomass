@@ -1,5 +1,5 @@
 
-// imaudio.toolbar
+// imaudio.spawn.toolbar
 
 {
 	init(Spawn) {
@@ -35,7 +35,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.toolbar,
+			Self = APP.spawn.toolbar,
 			file,
 			value,
 			isOn,

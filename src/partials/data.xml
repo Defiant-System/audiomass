@@ -1,7 +1,7 @@
 <Data>
 	<Samples>
 		<i icon="file-mp3" name="llama.mp3" sizeB="38789" duration="5.33"/>
-		<i icon="file-mp3" name="i-have-a-dream.ogg" sizeB="28003" duration="1.75"/>
+		<i icon="file-mp3" name="i-have-a-dream.mp3" sizeB="28003" duration="1.75"/>
 		<i icon="file-wav" name="i-have-a-dream.wav" sizeB="150546" duration="1.75"/>
 	</Samples>
 	<Recents>

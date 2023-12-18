@@ -1,5 +1,5 @@
 
-// imaudio.spectrum
+// imaudio.spawn.spectrum
 
 // https://colorkit.co/palette/-5437df-8748bd-ba4698-e83872-e97e69-e2b358-d1e434-afe961-86e983-4ae89e/
 // https://colorkit.co/color-palette-generator/-4256bc-6153bc-7b4dbc-9245bc-a83abc-b14ab3-ad6ca0-a6878b-9e9e70-93b44a/
@@ -38,7 +38,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.spectrum,
+			Self = APP.spawn.spectrum,
 			isOn,
 			el;
 		switch (event.type) {
@@ -61,7 +61,7 @@
 				Self.cvs.width  = Self.swapCvs.width  = +pEl.offsetWidth;
 				Self.cvs.height = Self.swapCvs.height = +pEl.offsetHeight;
 
-				let freqAnalyser = APP.frequency.analyzer,
+				let freqAnalyser = APP.spawn.frequency.analyzer,
 					specAnalyser = freqAnalyser.audioCtx.createAnalyser();
 				specAnalyser.fftSize = 2048;
 				// specAnalyser.maxDecibels = -25;

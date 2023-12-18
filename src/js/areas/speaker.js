@@ -1,5 +1,5 @@
 
-// imaudio.speaker
+// imaudio.spawn.speaker
 
 {
 	init(Spawn) {
@@ -7,7 +7,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.speaker,
+			Self = APP.spawn.speaker,
 			el;
 		switch (event.type) {
 			// custom events

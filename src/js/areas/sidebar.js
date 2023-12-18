@@ -28,7 +28,8 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.sidebar,
+			Spawn = event.spawn,
+			Self = APP.spawn.sidebar,
 			value,
 			el;
 		// console.log(event);
@@ -43,18 +44,18 @@
 				Self.els.txtSelection.addClass("show-text");
 				break;
 			case "time-update-range":
-				value = APP.toolbar.format(event.detail.region.start);
+				value = Spawn.toolbar.format(event.detail.region.start);
 				Self.els.txtSelStart.html(value);
-				value = APP.toolbar.format(event.detail.region.end);
+				value = Spawn.toolbar.format(event.detail.region.end);
 				Self.els.txtSelEnd.html(value);
-				value = APP.toolbar.format(event.detail.region.end - event.detail.region.start);
+				value = Spawn.toolbar.format(event.detail.region.end - event.detail.region.start);
 				Self.els.txtSelDuration.html(value);
 				break;
 		}
 	},
 	volumeMove(event) {
 		let APP = imaudio,
-			Self = APP.sidebar,
+			Self = APP.spawn.sidebar,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":

@@ -1,5 +1,5 @@
 
-// imaudio.blankView
+// imaudio.spawn.blankView
 
 {
 	init(Spawn) {
@@ -39,7 +39,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.blankView,
+			Self = APP.spawn.blankView,
 			file,
 			name,
 			value,

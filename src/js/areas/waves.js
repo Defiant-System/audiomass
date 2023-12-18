@@ -1,5 +1,5 @@
 
-// imaudio.waves
+// imaudio.spawn.waves
 
 {
 	init(Spawn) {
@@ -19,7 +19,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.waves,
+			Self = APP.spawn.waves,
 			value,
 			file,
 			isOn,
@@ -55,7 +55,7 @@
 	},
 	doZoomV(event) {
 		let APP = imaudio,
-			Self = APP.waves,
+			Self = APP.spawn.waves,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":
@@ -99,7 +99,7 @@
 	},
 	doZoomH(event) {
 		let APP = imaudio,
-			Self = APP.waves,
+			Self = APP.spawn.waves,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":
@@ -148,7 +148,7 @@
 	},
 	doScrollbar(event) {
 		let APP = imaudio,
-			Self = APP.waves,
+			Self = APP.spawn.waves,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":

@@ -1,5 +1,5 @@
 
-// imaudio.frequency
+// imaudio.spawn.frequency
 
 {
 	options: {
@@ -31,7 +31,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
-			Self = APP.frequency,
+			Self = APP.spawn.frequency,
 			isOn,
 			el;
 		switch (event.type) {

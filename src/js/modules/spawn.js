@@ -47,6 +47,25 @@
 				// DEV-ONLY-END
 				break;
 
+			case "load-samples":
+				// opening image file from application package
+				event.samples.map(async name => {
+					// forward event to app
+					let file = await Tabs.openLocal(`~/samples/${name}`);
+					Self.dispatch({ ...event, type: "prepare-file", isSample: true, file });
+				});
+				break;
+			case "prepare-file":
+				if (!event.isSample) {
+					// add file to "recent" list
+					Self.blankView.dispatch({ ...event, type: "add-recent-file" });
+				}
+				// hide blank view
+				Tabs.dispatch({ ...event, type: "hide-blank-view" });
+				// open file with Files
+				Tabs.add(event.file);
+				break;
+
 			// from menubar
 			case "open-file":
 				Spawn.dialog.open({

@@ -2,17 +2,17 @@
 // imaudio.sidebar
 
 {
-	init() {
+	init(Spawn) {
 		// fast references
 		this.els = {
 			doc: $(document),
-			content: window.find("content"),
-			txtSelection: window.find(".sidebar .txt-selection"),
-			txtSelStart: window.find(".sidebar .txt-sel-start"),
-			txtSelEnd: window.find(".sidebar .txt-sel-end"),
-			txtSelDuration: window.find(".sidebar .txt-sel-duration"),
-			vWrapper: window.find(".volume-wrapper"),
-			volume: window.find(".volume-knob"),
+			content: Spawn.find("content"),
+			txtSelection: Spawn.find(".sidebar .txt-selection"),
+			txtSelStart: Spawn.find(".sidebar .txt-sel-start"),
+			txtSelEnd: Spawn.find(".sidebar .txt-sel-end"),
+			txtSelDuration: Spawn.find(".sidebar .txt-sel-duration"),
+			vWrapper: Spawn.find(".volume-wrapper"),
+			volume: Spawn.find(".volume-knob"),
 		};
 		// default volume knob angle
 		this.els.volume.css({ "--angle": "-35deg" });

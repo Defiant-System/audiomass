@@ -15,10 +15,10 @@
 		// showBgColor: true,
 		// trueLeds: false,
 	},
-	init() {
+	init(Spawn) {
 		// fast references
 		this.els = {
-			el: window.find(`.box[data-area="frequency"] .body`),
+			el: Spawn.find(`.box[data-area="frequency"] .body`),
 		};
 
 		// insert motion analyzer

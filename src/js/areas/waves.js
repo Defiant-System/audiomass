@@ -2,15 +2,15 @@
 // imaudio.waves
 
 {
-	init() {
+	init(Spawn) {
 		// fast references
 		this.els = {
 			doc: $(document),
-			filesWrapper: window.find(".files-wrapper"),
-			zoomH: window.find(".zoom-h"),
-			zoomV: window.find(".zoom-v"),
-			scrollTrack: window.find(".gutter-h .scrollbar"),
-			scrollHandle: window.find(".gutter-h .scrollbar .handle"),
+			filesWrapper: Spawn.find(".files-wrapper"),
+			zoomH: Spawn.find(".zoom-h"),
+			zoomV: Spawn.find(".zoom-v"),
+			scrollTrack: Spawn.find(".gutter-h .scrollbar"),
+			scrollHandle: Spawn.find(".gutter-h .scrollbar .handle"),
 		};
 		// bind event handlers
 		this.els.zoomV.on("mousedown", this.doZoomV);

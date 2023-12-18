@@ -46,7 +46,31 @@
 				Test.init(APP, Spawn);
 				// DEV-ONLY-END
 				break;
+
+			// from menubar
+			case "open-file":
+				Spawn.dialog.open({
+					ogg: fsItem => Self.dispatch(fsItem),
+					wav: fsItem => Self.dispatch(fsItem),
+					mp3: fsItem => Self.dispatch(fsItem),
+				});
+				break;
+			
+			default:
+				if (event.el) {
+					let pEl = event.el.parents(`div[data-area]`);
+					if (pEl.length) {
+						let name = pEl.data("area");
+						Self[name].dispatch(event);
+					}
+				}
 		}
 	},
 	blankView: @import "./blank-view.js",
+	toolbar: @import "../areas/toolbar.js",
+	sidebar: @import "../areas/sidebar.js",
+	waves: @import "../areas/waves.js",
+	speaker: @import "../areas/speaker.js",
+	frequency: @import "../areas/frequency.js",
+	spectrum: @import "../areas/spectrum.js",
 }

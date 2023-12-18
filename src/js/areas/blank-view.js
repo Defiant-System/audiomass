@@ -2,11 +2,11 @@
 // imaudio.blankView
 
 {
-	init() {
+	init(Spawn) {
 		// fast references
 		this.els = {
-			content: window.find("content"),
-			el: window.find(".blank-view"),
+			content: Spawn.find("content"),
+			el: Spawn.find(".blank-view"),
 		};
 		// window.settings.clear();
 		

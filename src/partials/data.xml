@@ -1,11 +1,11 @@
 <Data>
 	<Samples>
-		<i icon="file-ogg" name="the-underworld.ogg" sizeB="1540107" duration="59.6"/>
-		<i icon="file-mp3" name="llama.mp3" sizeB="38789" duration="13.2"/>
-		<i icon="file-wav" name="dwight-schrute.wav" sizeB="87389" duration="9.5"/>
+		<i icon="file-mp3" name="llama.mp3" sizeB="38789" duration="5.33"/>
+		<i icon="file-mp3" name="i-have-a-dream.ogg" sizeB="28003" duration="1.75"/>
+		<i icon="file-wav" name="i-have-a-dream.wav" sizeB="150546" duration="1.75"/>
 	</Samples>
-	<!-- <Recents>
-		<i name="basketball.png" filepath="/fs/Desktop/images/basketball.png"/>
-		<i name="coast.jpg" filepath="/fs/Desktop/coast.jpg"/>
-	</Recents> -->
+	<Recents>
+		<!-- <i icon="file-mp3" name="Ayben - Rap Benim.mp3" filepath="/fs/Desktop/mp3/Ayben - Rap Benim.mp3" sizeB="150546" duration="3.18"/>
+		<i icon="file-mp3" name="Ceza - Feyzal.mp3" filepath="/fs/Desktop/mp3/Ceza - Feyzal.mp3" sizeB="38789" duration="3.31"/> -->
+	</Recents>
 </Data>

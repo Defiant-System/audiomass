@@ -9,10 +9,10 @@
 	t2: ["#000", "#4256bc", "#6153bc", "#7b4dbc", "#9245bc", "#a83abc", "#b14ab3", "#ad6ca0", "#a6878b", "#9e9e70", "#93b44a"],
 	mass: ["#000", "#4b009f", "#6800fb", "#8300ff", "#9b129d", "#af2500", "#bf3b00", "#ce5800", "#df8400", "#f0bc00", "#fffc00"],
 	prism: ["#000", "#a35", "#c66", "#e94", "#ed0", "#9d5", "#4d8", "#2cb", "#0bc", "#09c", "#36b"],
-	init() {
+	init(Spawn) {
 		// fast references
 		this.els = {
-			el: window.find(`.dock .box[data-area="spectrum"] .body`),
+			el: Spawn.find(`.dock .box[data-area="spectrum"] .body`),
 		};
 		// main canvas
 		this.cvs = this.els.el.append("<canvas></canvas>")[0];

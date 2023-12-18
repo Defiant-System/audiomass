@@ -46,10 +46,11 @@
 	<xsl:for-each select="./Recents/*">
 		<div class="recent-file">
 			<xsl:attribute name="data-file"><xsl:value-of select="@filepath"/></xsl:attribute>
-			<span class="thumbnail">
-				<xsl:attribute name="style">background-image: url(<xsl:value-of select="@filepath"/>);</xsl:attribute>
-			</span>
-			<span class="name"><xsl:value-of select="@name"/></span>
+			<i>
+				<xsl:attribute name="class"><xsl:value-of select="@icon"/></xsl:attribute>
+			</i>
+			<h4><xsl:value-of select="@name"/></h4>
+			<h5><xsl:value-of select="@sizeB"/>, <xsl:value-of select="@duration"/>s</h5>
 		</div>
 	</xsl:for-each>
 </xsl:template>

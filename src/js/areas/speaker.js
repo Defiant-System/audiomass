@@ -2,7 +2,7 @@
 // imaudio.speaker
 
 {
-	init() {
+	init(Spawn) {
 
 	},
 	dispatch(event) {

@@ -2,8 +2,8 @@
 // imaudio.toolbar
 
 {
-	init() {
-		let el = window.find(`> div[data-area="toolbar"]`);
+	init(Spawn) {
+		let el = Spawn.find(`> div[data-area="toolbar"]`);
 		// fast references
 		this.els = {
 			sidebar: el.find(`.toolbar-tool_[data-click="toggle-sidebar"]`),

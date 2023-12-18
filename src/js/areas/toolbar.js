@@ -49,7 +49,7 @@
 					value = Self.format(event.detail.ws.decodedData.duration);
 					Self.els.totalTime.html(value);
 				}
-				if (event.detail.currentTime) {
+				if (event.detail.currentTime !== undefined) {
 					value = Self.format(event.detail.currentTime);
 					Self.els.currentTime.html(value);
 				}
@@ -89,10 +89,14 @@
 				return !isOn;
 
 			case "rewind-audio":
-				Spawn.data.tabs.active.file._ws.seekTo(0);
+				file = Spawn.data.tabs.active.file;
+				Self.dispatch({ type: "timeupdate", detail: { ws: file._ws } });
+				file._ws.seekTo(0);
 				break;
 			case "forward-audio":
-				Spawn.data.tabs.active.file._ws.seekTo(1);
+				file = Spawn.data.tabs.active.file;
+				Self.dispatch({ type: "timeupdate", detail: { ws: file._ws } });
+				file._ws.seekTo(1);
 				break;
 			case "loop-audio":
 				isOn = Self.els.loop.hasClass("tool-active_");

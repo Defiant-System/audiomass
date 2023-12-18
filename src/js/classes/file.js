@@ -35,7 +35,8 @@ class File {
 			container: el[0],
 			cursorColor: "#f90", // afdeff
 			hideScrollbar: true,
-			splitChannels: [{ ...this.channelOn }],
+			// splitChannels: [{ ...this.channelOn }],
+			// height: 200,
 			// splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
 			// dragToSeek: true,
 			// autoCenter: true,
@@ -99,8 +100,16 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
-				// is mono or stereo
-				this._el.parents(".box.waves").addClass("mono-channel");
+				if (ws.exportPeaks().length === 1) {
+					// is mono or stereo
+					this._el.parents(".box.waves").addClass("mono-channel");
+					ws.setOptions({ splitChannels: [{ ...this.channelOn }] });
+					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") });
+				} else {
+					// UI is stereo by default
+					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
+					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
+				}
 
 				// emit range related event
 				window.emit("timeupdate", { ws });

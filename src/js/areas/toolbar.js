@@ -35,6 +35,7 @@
 	},
 	dispatch(event) {
 		let APP = imaudio,
+			Spawn = event.spawn,
 			Self = APP.spawn.toolbar,
 			file,
 			value,
@@ -79,31 +80,31 @@
 				break;
 			// ui events
 			case "toggle-sidebar":
-				isOn = event.value || APP.els.content.hasClass("show-sidebar");
-				APP.els.content.toggleClass("show-sidebar", isOn);
+				isOn = event.value || Spawn.els.content.hasClass("show-sidebar");
+				Spawn.els.content.toggleClass("show-sidebar", isOn);
 				return !isOn;
 			case "toggle-dock":
-				isOn = event.value || APP.els.content.hasClass("show-dock");
-				APP.els.content.toggleClass("show-dock", isOn);
+				isOn = event.value || Spawn.els.content.hasClass("show-dock");
+				Spawn.els.content.toggleClass("show-dock", isOn);
 				return !isOn;
 
 			case "rewind-audio":
-				APP.data.tabs.active.file._ws.seekTo(0);
+				Spawn.data.tabs.active.file._ws.seekTo(0);
 				break;
 			case "forward-audio":
-				APP.data.tabs.active.file._ws.seekTo(1);
+				Spawn.data.tabs.active.file._ws.seekTo(1);
 				break;
 			case "loop-audio":
 				isOn = Self.els.loop.hasClass("tool-active_");
 				// store loop reference in file object
-				if (!isOn) APP.data.tabs.active.file._loop = true;
-				else delete APP.data.tabs.active.file._loop;
+				if (!isOn) Spawn.data.tabs.active.file._loop = true;
+				else delete Spawn.data.tabs.active.file._loop;
 				return !isOn;
 			case "record-audio":
 				// TODO
 				break;
 			case "stop-audio":
-				file = APP.data.tabs.active.file;
+				file = Spawn.data.tabs.active.file;
 				// call appropriate method
 				file._ws.stop();
 				// auto seek to start of region, if any
@@ -128,7 +129,7 @@
 				el.toggleClass("icon-pause", isOn);
 				el.css({ "background-image": `url("~/icons/icon-${!isOn ? "pause" : "play"}.png")` });
 				// call appropriate method
-				APP.data.tabs.active.file._ws[isOn ? "pause" : "play"]();
+				Spawn.data.tabs.active.file._ws[isOn ? "pause" : "play"]();
 				// emit event
 				if (!isOn) window.emit("audio-play");
 				else window.emit("audio-pause");

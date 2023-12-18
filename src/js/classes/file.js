@@ -90,7 +90,7 @@ class File {
 	}
 
 	dispatch(event) {
-		let APP = this._parent._APP,
+		let Spawn = this._parent._parent,
 			ws = this._ws,
 			value;
 		// console.log(event);
@@ -129,12 +129,12 @@ class File {
 			case "ws-play": break;
 			case "ws-pause":
 				// sync gutter UI
-				APP.toolbar.dispatch({ type: "reset-play-button", ws });
+				Spawn.toolbar.dispatch({ type: "reset-play-button", ws });
 				break;
 			case "ws-scroll":
 			case "ws-zoom":
 				// sync gutter UI
-				APP.waves.dispatch({ type: "ui-sync-gutter", ws });
+				Spawn.waves.dispatch({ type: "ui-sync-gutter", ws });
 				break;
 			case "pointermove":
 				// Position

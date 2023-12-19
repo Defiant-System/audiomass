@@ -86,6 +86,38 @@
 					mp3: fsItem => Self.dispatch(fsItem),
 				});
 				break;
+			case "save-file":
+				break;
+			case "save-file-as":
+				break;
+			case "new-spawn":
+				APP.dispatch({ type: "new-spawn" });
+				break;
+			case "merge-all-windows":
+				Spawn.siblings.map(oSpawn => {
+					for (let key in oTabs._stack) {
+						let ref = oTabs._stack[key];
+						Tabs.merge(ref);
+					}
+					// close sibling spawn
+					oSpawn.close();
+				});
+				break;
+			case "close-tab":
+				value = Tabs.length;
+				if (event.delayed) {
+					Tabs.removeDelayed();
+				} else if (value > 1) {
+					Tabs.active.tabEl.find(`[sys-click]`).trigger("click");
+				} else if (value === 1) {
+					Self.dispatch({ ...event, type: "close-spawn" });
+				}
+				break;
+			case "close-spawn":
+				// system close window / spawn
+				karaqu.shell("win -c");
+				break;
+
 			
 			default:
 				if (event.el) {

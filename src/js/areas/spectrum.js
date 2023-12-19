@@ -45,6 +45,8 @@
 				cancelAnimationFrame(Spawn.data._rafId);
 				break;
 			// custom events
+			case "disconnect-file-output":
+				break;
 			case "connect-file-output":
 				if (!Spawn.data.cvs) {
 					// find box body

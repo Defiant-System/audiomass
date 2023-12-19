@@ -10,6 +10,7 @@ class FileTabs {
 		this._els = {
 			content: spawn.find("content"),
 			filesWrapper: spawn.find(".files-wrapper"),
+			boxWaves: spawn.find(".box.waves"),
 		};
 
 		// canvas / file wrapper
@@ -57,15 +58,52 @@ class FileTabs {
 			// add element to DOM + append file contents
 			fileEl.data({ id: file.id });
 			// save reference to tab
-			this._stack[file.id] = { tabEl, history, file };
+			this._stack[file.id] = { tabEl, history, file, fileEl };
 			// focus on file
 			this.focus(file.id);
 		}
 	}
 
+	merge(ref) {
+		
+	}
+
+	removeDelayed() {
+		if (!this._active) return;
+		let el = this._active.tabEl;
+		this._spawn.tabs.wait(el);
+	}
+
+	remove(tId) {
+		let item = this._stack[tId],
+			nextTab = item.tabEl.parent().find(`.tabbar-tab_:not([data-id="${tId}"])`);
+		
+		if (item.fileEl[0] !== this._els.content[0]) {
+			// remove element from DOM tree
+			item.fileEl.remove();
+			// delete references
+			this._stack[tId] = false;
+			delete this._stack[tId];
+		}
+		
+		if (nextTab.length) {
+			this.focus(nextTab.data("id"));
+		}
+	}
+
 	focus(tId) {
 		if (this._active) {
-			// file blur event
+			// adjust active file
+			this._active.fileEl.removeClass("active");
+			this._els.boxWaves.removeClass("mono-channel");
+
+			// disconnect frequency analyzer to file
+			// ["frequency", "spectrum"].map(name =>
+			// 	this._parent[name].dispatch({
+			// 		type: "disconnect-file-output",
+			// 		spawn: this._spawn,
+			// 		file: this._active.file,
+			// 	}));
 		}
 
 		// reference to active tab
@@ -74,13 +112,20 @@ class FileTabs {
 		if (this._active.file) {
 			// reset view / show blank view
 			this.dispatch({ type: "hide-blank-view" });
+			// adjust active file
+			this._active.fileEl.addClass("active");
+			// is it mono or stereo file?
+			if (this._active.file._ready && this._active.file._ws.exportPeaks().length === 1) {
+				this._els.boxWaves.addClass("mono-channel");
+			}
+
 			// connect frequency analyzer to file
-			["frequency", "spectrum"].map(name =>
-				this._parent[name].dispatch({
-					type: "connect-file-output",
-					spawn: this._spawn,
-					file: this._active.file,
-				}));
+			// ["frequency", "spectrum"].map(name =>
+			// 	this._parent[name].dispatch({
+			// 		type: "connect-file-output",
+			// 		spawn: this._spawn,
+			// 		file: this._active.file,
+			// 	}));
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {

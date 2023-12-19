@@ -2,6 +2,12 @@
 let Test = {
 	init(APP, spawn) {
 
+		// return setTimeout(() => {
+		// 	spawn.find(".sample:nth(1)").trigger("click");
+
+		// 	// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
+		// }, 500);
+
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		return;

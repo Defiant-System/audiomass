@@ -1,8 +1,9 @@
 <Data>
 	<Samples>
 		<i icon="file-mp3" name="llama.mp3" sizeB="38789" duration="5.33"/>
-		<i icon="file-mp3" name="i-have-a-dream.mp3" sizeB="28003" duration="1.75"/>
-		<i icon="file-wav" name="i-have-a-dream.wav" sizeB="150546" duration="1.75"/>
+		<i icon="file-mp3" name="dream.mp3" sizeB="28003" duration="1.75"/>
+		<i icon="file-mp3" name="piano.mp3" sizeB="12065" duration="2.88"/>
+		<i icon="file-mp3" name="drum.mp3" sizeB="10089" duration="2.40"/>
 	</Samples>
 	<Recents>
 		<!-- <i icon="file-mp3" name="Ayben - Rap Benim.mp3" filepath="/fs/Desktop/mp3/Ayben - Rap Benim.mp3" sizeB="150546" duration="3.18"/>

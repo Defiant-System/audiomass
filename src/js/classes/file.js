@@ -6,8 +6,10 @@ class File {
 		this._el = el;
 		// save reference to original FS file
 		this._file = fsFile || new karaqu.File({ kind: "wav" });
+		// file is not ready until it is decoded
+		this._ready = false;
 
-		// this.id = fsFile.id;
+		this.id = fsFile.id;
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
@@ -93,7 +95,8 @@ class File {
 					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
 					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
 				}
-
+				// update ready flag
+				this._ready = true;
 				// emit range related event
 				this._parent._spawn.emit("timeupdate", { ws });
 				// clear regions on mousedown

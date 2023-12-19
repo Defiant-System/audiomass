@@ -6,19 +6,20 @@
 		// fast references
 		this.els = {
 			doc: $(document),
-			filesWrapper: Spawn.find(".files-wrapper"),
-			zoomH: Spawn.find(".zoom-h"),
-			zoomV: Spawn.find(".zoom-v"),
-			scrollTrack: Spawn.find(".gutter-h .scrollbar"),
-			scrollHandle: Spawn.find(".gutter-h .scrollbar .handle"),
+			filesWrapper: ".files-wrapper",
+			zoomH: ".zoom-h",
+			zoomV: ".zoom-v",
+			scrollTrack: ".gutter-h .scrollbar",
+			scrollHandle: ".gutter-h .scrollbar .handle",
 		};
 		// bind event handlers
-		this.els.zoomV.on("mousedown", this.doZoomV);
-		this.els.zoomH.on("mousedown", this.doZoomH);
-		this.els.scrollTrack.on("mousedown", this.doScrollbar);
+		Spawn.find(this.els.zoomV).on("mousedown", e => this.doZoomV(e, Spawn));
+		Spawn.find(this.els.zoomH).on("mousedown", e => this.doZoomH(e, Spawn));
+		Spawn.find(this.els.scrollTrack).on("mousedown", e => this.doScrollbar(e, Spawn));
 	},
 	dispatch(event) {
 		let APP = imaudio,
+			Spawn = event.spawn,
 			Self = APP.spawn.waves,
 			value,
 			file,
@@ -40,20 +41,20 @@
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD
 				if (!Self.drag || Self.drag.type !== "scroll") {
-					let stWidth = +Self.els.scrollTrack.prop("offsetWidth"),
-						vWidth = +Self.els.filesWrapper.prop("offsetWidth"),
+					let stWidth = +Spawn.find(Self.els.scrollTrack).prop("offsetWidth"),
+						vWidth = +Spawn.find(Self.els.filesWrapper).prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
 						width = parseInt(stWidth * (vWidth / cWidth), 10),
 						scroll = event.ws.getScroll(),
 						available = cWidth - vWidth + 2,
 						left = parseInt((scroll / available) * (stWidth - width), 10) + 1;
 					// sync scrollbar
-					Self.els.scrollHandle.css({ width, left });
+					Spawn.find(Self.els.scrollHandle).css({ width, left });
 				}
 				break;
 		}
 	},
-	doZoomV(event) {
+	doZoomV(event, Spawn) {
 		let APP = imaudio,
 			Self = APP.spawn.waves,
 			Drag = Self.drag;
@@ -97,24 +98,23 @@
 				break;
 		}
 	},
-	doZoomH(event) {
-		let APP = imaudio,
-			Self = APP.spawn.waves,
+	doZoomH(event, Spawn) {
+		let Self = imaudio.spawn.waves,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-				// cover content
-				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
 				let track = $(event.target).addClass("active"),
+					content = track.parents("content"),
 					el = track.find(".handle"),
-					ws = APP.data.tabs.active.file._ws;
+					ws = Spawn.data.tabs.active.file._ws;
 				// create drag object
 				Self.drag = {
 					el,
 					ws,
+					content,
 					type: "zoomH",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
@@ -124,6 +124,8 @@
 					min_: Math.min,
 					max_: Math.max,
 				};
+				// cover content
+				Self.drag.content.addClass("cover hideMouse");
 				// bind event
 				Self.els.doc.on("mousemove mouseup", Self.doZoomH);
 				break;
@@ -140,13 +142,13 @@
 				// reset element
 				Drag.el.parent().removeClass("active");
 				// cover content
-				APP.els.content.removeClass("cover hideMouse");
+				Drag.content.removeClass("cover hideMouse");
 				// unbind event
 				Self.els.doc.off("mousemove mouseup", Self.doZoomH);
 				break;
 		}
 	},
-	doScrollbar(event) {
+	doScrollbar(event, Spawn) {
 		let APP = imaudio,
 			Self = APP.spawn.waves,
 			Drag = Self.drag;

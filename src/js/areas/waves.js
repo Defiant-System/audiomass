@@ -34,7 +34,7 @@
 				isOn = event.el.hasClass("on");
 				event.el.toggleClass("on", isOn);
 				// signal file
-				file = APP.data.tabs.active.file;
+				file = Spawn.data.tabs.active.file;
 				value = [event.el.hasClass("left") ? 0 : 1, !isOn ? 1 : 0];
 				file.dispatch({ type: "toggle-channel", value });
 				break;
@@ -62,14 +62,14 @@
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-				// cover content
-				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
 				let track = $(event.target).addClass("active"),
+					content = track.parents("content"),
 					el = track.find(".handle");
 				// create drag object
 				Self.drag = {
 					el,
+					content,
 					type: "zoomV",
 					clickY: event.clientY - +el.prop("offsetTop"),
 					limit: {
@@ -79,6 +79,8 @@
 					min_: Math.min,
 					max_: Math.max,
 				};
+				// cover content
+				content.addClass("cover hideMouse");
 				// bind event
 				Self.els.doc.on("mousemove mouseup", Self.doZoomV);
 				break;
@@ -92,7 +94,7 @@
 				// reset element
 				Drag.el.parent().removeClass("active");
 				// cover content
-				APP.els.content.removeClass("cover hideMouse");
+				Drag.content.removeClass("cover hideMouse");
 				// unbind event
 				Self.els.doc.off("mousemove mouseup", Self.doZoomV);
 				break;
@@ -156,13 +158,12 @@
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-				// cover content
-				APP.els.content.addClass("cover hideMouse");
 				// prepare drag info
 				let track = $(event.target),
+					content = track.parents("content"),
 					el = track.find(".handle"),
-					ws = APP.data.tabs.active.file._ws,
-					vWidth = +Self.els.filesWrapper.prop("offsetWidth"),
+					ws = Spawn.data.tabs.active.file._ws,
+					vWidth = +Spawn.find(Self.els.filesWrapper).prop("offsetWidth"),
 					cWidth = ws.getWrapper().clientWidth - vWidth;
 
 				// create drag object
@@ -170,6 +171,7 @@
 					el,
 					ws,
 					cWidth,
+					content,
 					type: "scroll",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
@@ -179,6 +181,8 @@
 					min_: Math.min,
 					max_: Math.max,
 				};
+				// cover content
+				content.addClass("cover hideMouse");
 				// bind event
 				Self.els.doc.on("mousemove mouseup", Self.doScrollbar);
 				break;
@@ -193,7 +197,7 @@
 				// reset drag object
 				delete Self.drag;
 				// cover content
-				APP.els.content.removeClass("cover hideMouse");
+				Drag.content.removeClass("cover hideMouse");
 				// unbind event
 				Self.els.doc.off("mousemove mouseup", Self.doScrollbar);
 				break;

@@ -92,6 +92,7 @@ class File {
 					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") });
 				} else {
 					// UI is stereo by default
+					this._el.parents(".box.waves").removeClass("mono-channel");
 					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
 					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
 				}

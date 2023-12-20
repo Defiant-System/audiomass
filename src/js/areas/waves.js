@@ -66,12 +66,10 @@
 				event.preventDefault();
 				// prepare drag info
 				let track = $(event.target).addClass("active"),
-					content = track.parents("content"),
 					el = track.find(".handle");
 				// create drag object
 				Self.drag = {
 					el,
-					content,
 					type: "zoomV",
 					clickY: event.clientY - +el.prop("offsetTop"),
 					limit: {
@@ -80,11 +78,13 @@
 					},
 					min_: Math.min,
 					max_: Math.max,
+					content: track.parents("content"),
+					doc: Spawn.data.waves.els.doc,
 				};
 				// cover content
-				content.addClass("cover hideMouse");
+				Self.drag.content.addClass("cover hideMouse");
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.doZoomV);
+				Self.drag.doc.on("mousemove mouseup", Self.doZoomV);
 				break;
 			case "mousemove":
 				let top = Drag.min_(Drag.max_(event.clientY - Drag.clickY, Drag.limit.min), Drag.limit.max);
@@ -98,7 +98,7 @@
 				// cover content
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.doZoomV);
+				Drag.doc.off("mousemove mouseup", Self.doZoomV);
 				break;
 		}
 	},
@@ -111,14 +111,12 @@
 				event.preventDefault();
 				// prepare drag info
 				let track = $(event.target).addClass("active"),
-					content = track.parents("content"),
 					el = track.find(".handle"),
 					ws = Spawn.data.tabs.active.file._ws;
 				// create drag object
 				Self.drag = {
 					el,
 					ws,
-					content,
 					type: "zoomH",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
@@ -127,11 +125,13 @@
 					},
 					min_: Math.min,
 					max_: Math.max,
+					content: track.parents("content"),
+					doc: Spawn.data.waves.els.doc,
 				};
 				// cover content
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.doZoomH);
+				Self.drag.doc.on("mousemove mouseup", Self.doZoomH);
 				break;
 			case "mousemove":
 				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max),
@@ -148,7 +148,7 @@
 				// cover content
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.doZoomH);
+				Drag.doc.off("mousemove mouseup", Self.doZoomH);
 				break;
 		}
 	},
@@ -162,7 +162,6 @@
 				event.preventDefault();
 				// prepare drag info
 				let track = $(event.target),
-					content = track.parents("content"),
 					el = track.find(".handle"),
 					ws = Spawn.data.tabs.active.file._ws,
 					vWidth = +Spawn.data.waves.els.filesWrapper.prop("offsetWidth"),
@@ -173,7 +172,6 @@
 					el,
 					ws,
 					cWidth,
-					content,
 					type: "scroll",
 					clickX: event.clientX - +el.prop("offsetLeft"),
 					limit: {
@@ -182,11 +180,13 @@
 					},
 					min_: Math.min,
 					max_: Math.max,
+					content: track.parents("content"),
+					doc: Spawn.data.waves.els.doc,
 				};
 				// cover content
-				content.addClass("cover hideMouse");
+				Self.drag.content.addClass("cover hideMouse");
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.doScrollbar);
+				Self.drag.doc.on("mousemove mouseup", Self.doScrollbar);
 				break;
 			case "mousemove":
 				let left = Drag.min_(Drag.max_(event.clientX - Drag.clickX, Drag.limit.min), Drag.limit.max),
@@ -201,7 +201,7 @@
 				// cover content
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.doScrollbar);
+				Drag.doc.off("mousemove mouseup", Self.doScrollbar);
 				break;
 		}
 	}

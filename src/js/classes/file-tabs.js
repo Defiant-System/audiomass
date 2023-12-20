@@ -65,7 +65,14 @@ class FileTabs {
 	}
 
 	merge(ref) {
-		
+		let tId = ref.tId,
+			file = ref.file,
+			tabEl = this._spawn.tabs.add(file.base, tId, true),
+			fileEl = ref.fileEl.clone(true),
+			history = ref.history;
+
+		// save reference to tab
+		this._stack[tId] = { tabEl, history, file, fileEl };
 	}
 
 	removeDelayed() {
@@ -114,12 +121,13 @@ class FileTabs {
 			}
 
 			// connect frequency analyzer to file
-			["frequency", "spectrum"].map(name =>
-				this._parent[name].dispatch({
+			let opt = {
 					type: "connect-file-output",
 					spawn: this._spawn,
 					file: this._active.file,
-				}));
+				};
+			this._parent.frequency.dispatch(opt);
+			this._parent.spectrum.dispatch(opt);
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {
@@ -131,10 +139,11 @@ class FileTabs {
 	}
 
 	dispatch(event) {
-		let name,
-			value;
 		// console.log(event);
 		switch (event.type) {
+			case "spawn.resize":
+				Object.keys(this._stack).map(key => this._stack[key].file.dispatch(event));
+				break;
 			case "show-blank-view":
 				// show blank view
 				this._els.content.addClass("show-blank-view");

@@ -42,7 +42,7 @@
 			// custom events
 			case "connect-file-output":
 				if (Data.analyzer) {
-					Data.analyzer.disconnectInput(Data.node, true);
+					Data.analyzer.disconnectInput(event.file.node, true);
 				}
 				if (!Data.analyzer) {
 					// insert motion analyzer
@@ -55,7 +55,6 @@
 					height = +Data.el.prop("offsetHeight") - 2;
 				Data.analyzer.setCanvasSize(width, height);
 				// connect file output
-				Data.node =
 				event.file.node = Data.analyzer.connectInput(event.file.node || event.file._ws.media);
 				break;
 			case "toggle-analyser":

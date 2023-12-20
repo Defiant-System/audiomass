@@ -85,17 +85,7 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
-				if (ws.exportPeaks().length === 1) {
-					// is mono or stereo
-					this._el.parents(".box.waves").addClass("mono-channel");
-					ws.setOptions({ splitChannels: [{ ...this.channelOn }] });
-					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") });
-				} else {
-					// UI is stereo by default
-					this._el.parents(".box.waves").removeClass("mono-channel");
-					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
-					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
-				}
+				this.dispatch({ ...event, type: "resize-view" });
 				// update ready flag
 				this._ready = true;
 				// emit range related event
@@ -167,6 +157,20 @@ class File {
 				this._parent._spawn.emit("time-update-range", { region: event.region });
 				break;
 			// external events
+			case "spawn.resize":
+			case "resize-view":
+				if (ws.exportPeaks().length === 1) {
+					// is mono or stereo
+					this._el.parents(".box.waves").addClass("mono-channel");
+					ws.setOptions({ splitChannels: [{ ...this.channelOn }] });
+					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") });
+				} else {
+					// UI is stereo by default
+					this._el.parents(".box.waves").removeClass("mono-channel");
+					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
+					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
+				}
+				break;
 			case "toggle-channel":
 				value = [...ws.options.splitChannels];
 				value[event.value[0]] = event.value[1] ? { ...this.channelOn } : { ...this.channelOff };

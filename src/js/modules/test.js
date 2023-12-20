@@ -5,7 +5,9 @@ let Test = {
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 400);
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
 
-		// return;
+		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
+		
+		return;
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
@@ -14,10 +16,17 @@ let Test = {
 		// }, 500);
 
 		return setTimeout(() => {
-			if (Object.keys(spawn.data.tabs._stack).length) {
-				APP.spawn.dispatch({ type: "merge-all-windows", spawn });
+			let focusedId = $(`.antwin-focused_`).data("sId");
+			if (spawn._sId === focusedId) {
+				if (Object.keys(spawn.data.tabs._stack).length) {
+					APP.spawn.dispatch({ type: "merge-all-windows", spawn });
+
+					// console.log( "master", spawn._sId );
+
+					setTimeout(() => spawn.find(".tabbar-next-active_").trigger("click"), 1000);
+				}
 			}
-		}, 1000);
+		}, 800);
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);

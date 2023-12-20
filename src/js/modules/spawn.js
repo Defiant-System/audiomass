@@ -46,6 +46,9 @@
 				Test.init(APP, Spawn);
 				// DEV-ONLY-END
 				break;
+			case "spawn.resize":
+				Spawn.data.tabs.dispatch(event);
+				break;
 
 			// tab related events
 			case "tab.new":
@@ -103,8 +106,14 @@
 				break;
 			case "merge-all-windows":
 				Spawn.siblings.map(oSpawn => {
+					let freq = oSpawn.data.frequency;
+					if (freq && freq.analyzer) {
+						freq.analyzer.destroy();
+					}
+
 					for (let key in oSpawn.data.tabs._stack) {
 						let ref = oSpawn.data.tabs._stack[key];
+
 						Spawn.data.tabs.merge(ref);
 					}
 					// close sibling spawn

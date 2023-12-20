@@ -47,6 +47,7 @@
 				// DEV-ONLY-END
 				break;
 			case "spawn.resize":
+				// proxy event spawn -> tabs -> file
 				Spawn.data.tabs.dispatch(event);
 				break;
 

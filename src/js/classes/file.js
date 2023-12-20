@@ -157,7 +157,6 @@ class File {
 				this._parent._spawn.emit("time-update-range", { region: event.region });
 				break;
 			// external events
-			case "spawn.resize":
 			case "resize-view":
 				if (ws.exportPeaks().length === 1) {
 					// is mono or stereo

@@ -142,7 +142,8 @@ class FileTabs {
 		// console.log(event);
 		switch (event.type) {
 			case "spawn.resize":
-				Object.keys(this._stack).map(key => this._stack[key].file.dispatch(event));
+				// proxy event spawn -> tabs -> file
+				Object.keys(this._stack).map(key => this._stack[key].file.dispatch({ ...event, type: "resize-view" }));
 				break;
 			case "show-blank-view":
 				// show blank view

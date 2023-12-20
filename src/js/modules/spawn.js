@@ -103,9 +103,9 @@
 				break;
 			case "merge-all-windows":
 				Spawn.siblings.map(oSpawn => {
-					for (let key in oTabs._stack) {
-						let ref = oTabs._stack[key];
-						Tabs.merge(ref);
+					for (let key in oSpawn.data.tabs._stack) {
+						let ref = oSpawn.data.tabs._stack[key];
+						Spawn.data.tabs.merge(ref);
 					}
 					// close sibling spawn
 					oSpawn.close();

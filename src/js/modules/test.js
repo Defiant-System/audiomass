@@ -5,8 +5,8 @@ let Test = {
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 400);
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
 
-		return;
-		return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
+		// return;
+		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
 
@@ -17,7 +17,7 @@ let Test = {
 			if (Object.keys(spawn.data.tabs._stack).length) {
 				APP.spawn.dispatch({ type: "merge-all-windows", spawn });
 			}
-		}, 500);
+		}, 1000);
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);

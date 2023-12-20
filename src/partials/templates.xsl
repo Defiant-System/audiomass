@@ -38,7 +38,7 @@
 			<h4><xsl:value-of select="@name"/></h4>
 			<h5><xsl:call-template name="sys:file-size">
 					<xsl:with-param name="bytes" select="@sizeB" />
-				</xsl:call-template> — <xsl:value-of select="@duration"/>s</h5>
+				</xsl:call-template> — <xsl:value-of select="@duration"/></h5>
 		</div>
 	</xsl:for-each>
 </xsl:template>
@@ -54,7 +54,7 @@
 			<h4><xsl:value-of select="@name"/></h4>
 			<h5><xsl:call-template name="sys:file-size">
 					<xsl:with-param name="bytes" select="@sizeB" />
-				</xsl:call-template> — <xsl:value-of select="@duration"/>s</h5>
+				</xsl:call-template> — <xsl:value-of select="@duration"/></h5>
 		</div>
 	</xsl:for-each>
 </xsl:template>

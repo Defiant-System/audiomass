@@ -77,7 +77,8 @@
 				Spawn.data.toolbar.els.display.removeClass("blank-display");
 				break;
 			case "disable-tools":
-				Object.keys(Self.els).map(key => Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
+				Object.keys(Spawn.data.toolbar.els).map(key =>
+					Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
 				// disable display
 				Spawn.data.toolbar.els.display.addClass("blank-display");
 				break;

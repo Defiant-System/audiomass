@@ -16,6 +16,8 @@
 		// trueLeds: false,
 	},
 	init(Spawn) {
+		// reserve persistent reference for this object
+		Spawn.data.frequency = {};
 		// subscribe to events
 		Spawn.on("audio-play", this.dispatch);
 		Spawn.on("audio-pause", this.dispatch);
@@ -25,36 +27,36 @@
 		let APP = imaudio,
 			Spawn = event.spawn,
 			Self = APP.spawn.frequency,
+			Data = Spawn.data.frequency,
 			isOn,
 			el;
 		switch (event.type) {
 			// subscribed events
 			case "audio-play":
-				Spawn.data.analyzer.start();
+				Spawn.data.frequency.analyzer.start();
 				break;
 			case "audio-pause":
 			case "audio-stop":
-				Spawn.data.analyzer.stop();
+				Spawn.data.frequency.analyzer.stop();
 				break;
 			// custom events
-			case "disconnect-file-output":
-				if (event.file) {
-					Spawn.data.analyzer.disconnectInput(event.file._ws.media, true);
-				}
-				break;
 			case "connect-file-output":
-				if (!Spawn.data.analyzer) {
+				if (Data.analyzer) {
+					Data.analyzer.disconnectInput(Data.node, true);
+				}
+				if (!Data.analyzer) {
 					// insert motion analyzer
-					Spawn.data.el = Spawn.el.find(`.box[data-area="frequency"] .body`);
-					Spawn.data.analyzer = new AudioMotionAnalyzer(Spawn.data.el[0], Self.options);
+					Data.el = Spawn.find(`.box[data-area="frequency"] .body`);
+					Data.analyzer = new AudioMotionAnalyzer(Data.el[0], Self.options);
 				}
 
 				// update element dimensions
-				let width = +Spawn.data.el.prop("offsetWidth"),
-					height = +Spawn.data.el.prop("offsetHeight") - 2;
-				Spawn.data.analyzer.setCanvasSize(width, height);
+				let width = +Data.el.prop("offsetWidth"),
+					height = +Data.el.prop("offsetHeight") - 2;
+				Data.analyzer.setCanvasSize(width, height);
 				// connect file output
-				Spawn.data.analyzer.connectInput(event.file._ws.media);
+				Data.node =
+				event.file.node = Data.analyzer.connectInput(event.file.node || event.file._ws.media);
 				break;
 			case "toggle-analyser":
 				isOn = event.el.parent().hasClass("on");

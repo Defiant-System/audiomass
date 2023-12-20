@@ -97,14 +97,6 @@ class FileTabs {
 			this._active.fileEl.removeClass("active");
 			this._els.boxWaves.removeClass("mono-channel");
 			
-			// disconnect frequency analyzer to file
-			["frequency", "spectrum"].map(name =>
-				this._parent[name].dispatch({
-					type: "disconnect-file-output",
-					spawn: this._spawn,
-					file: this._active.file,
-				}));
-
 			// return;
 		}
 

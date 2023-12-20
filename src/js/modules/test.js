@@ -2,7 +2,10 @@
 let Test = {
 	init(APP, spawn) {
 
-		// return;
+		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 400);
+		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
+
+		return;
 		return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
@@ -33,15 +36,6 @@ let Test = {
 
 			// setTimeout(() => APP.toolbar.els.play.trigger("click"), 200);
 		}, 300);
-
-		// setTimeout(() => window.find(`.channel-btn[data-click="toggle-channel"]`).trigger("click"), 500);
-
-		return;
-		setTimeout(() => {
-			APP.data.tabs.active.file._ws.skip(3.5);
-			APP.toolbar.els.play.trigger("click");
-		}, 200);
-		// setTimeout(() => APP.toolbar.els.play.trigger("click"), 1500);
 
 	}
 };

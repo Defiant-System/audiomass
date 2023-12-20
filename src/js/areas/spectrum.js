@@ -20,6 +20,8 @@
 			this.palette[(i * 10).toString()] = [+v[1], +v[2], +v[3], a];
 		});
 		
+		// reserve persistent reference for this object
+		Spawn.data.spectrum = {};
 		// subscribe to events
 		Spawn.on("audio-play", this.dispatch);
 		Spawn.on("audio-pause", this.dispatch);
@@ -29,8 +31,10 @@
 		let APP = imaudio,
 			Spawn = event.spawn,
 			Self = APP.spawn.spectrum,
+			Data = Spawn.data.spectrum,
 			isOn,
 			el;
+		// console.log(event);
 		switch (event.type) {
 			// subscribed events
 			case "audio-play":
@@ -45,34 +49,32 @@
 				cancelAnimationFrame(Spawn.data._rafId);
 				break;
 			// custom events
-			case "disconnect-file-output":
-				break;
 			case "connect-file-output":
-				if (!Spawn.data.cvs) {
+				if (!Data.cvs) {
 					// find box body
 					let el = Spawn.find(`.dock .box[data-area="spectrum"] .body`);
 					// main canvas
-					Spawn.data.cvs = el.append("<canvas></canvas>")[0];
-					Spawn.data.ctx = Spawn.data.cvs.getContext("2d");
+					Data.cvs = el.append("<canvas></canvas>")[0];
+					Data.ctx = Data.cvs.getContext("2d");
 					// swap canvas
-					Spawn.data.swapCvs = document.createElement("canvas");
-					Spawn.data.swapCtx = Spawn.data.swapCvs.getContext("2d");
+					Data.swapCvs = document.createElement("canvas");
+					Data.swapCtx = Data.swapCvs.getContext("2d");
 
 					// make sure canvas fits its parent element
-					let pEl = Spawn.data.cvs.parentNode;
-					Spawn.data.cvs.width  = Spawn.data.swapCvs.width  = +pEl.offsetWidth;
-					Spawn.data.cvs.height = Spawn.data.swapCvs.height = +pEl.offsetHeight;
+					let pEl = Data.cvs.parentNode;
+					Data.cvs.width  = Data.swapCvs.width  = +pEl.offsetWidth;
+					Data.cvs.height = Data.swapCvs.height = +pEl.offsetHeight;
 				}
 
-				let freqAnalyser = Spawn.data.analyzer,
+				let freqAnalyser = Spawn.data.frequency.analyzer,
 					specAnalyser = freqAnalyser.audioCtx.createAnalyser();
 				specAnalyser.fftSize = 2048;
 				// specAnalyser.maxDecibels = -25;
 				// specAnalyser.minDecibels = -60;
 				// specAnalyser.smoothingTimeConstant = 0.5;
 
-				Spawn.data.frequencyData = new Uint8Array(specAnalyser.frequencyBinCount);
-				Spawn.data.specAnalyser = specAnalyser;
+				Data.frequencyData = new Uint8Array(specAnalyser.frequencyBinCount);
+				Data.specAnalyser = specAnalyser;
 				// connect to output of frequency analyzer
 				freqAnalyser.connectOutput(specAnalyser);
 				break;
@@ -86,18 +88,19 @@
 		if (!Spawn.data._playing) return;
 		Spawn.data._rafId = requestAnimationFrame(() => this.draw(Spawn));
 
-		Spawn.data.specAnalyser.getByteFrequencyData(Spawn.data.frequencyData);
+		let Data = Spawn.data.spectrum;
+		Data.specAnalyser.getByteFrequencyData(Data.frequencyData);
 		
-		let ctx = Spawn.data.ctx,
-			width = Spawn.data.cvs.width,
-			height = Spawn.data.cvs.height,
-			data = Spawn.data.frequencyData,
+		let ctx = Data.ctx,
+			width = Data.cvs.width,
+			height = Data.cvs.height,
+			data = Data.frequencyData,
 			i = 0,
 			il = data.length,
 			speed = 3;
 
-		Spawn.data.swapCtx.drawImage(Spawn.data.cvs, 0, 0, width, height);
-		Spawn.data.cvs.width = width;
+		Data.swapCtx.drawImage(Data.cvs, 0, 0, width, height);
+		Data.cvs.width = width;
 
 		for (; i<il; i++) {
 			let y = Math.round (i/il * height);
@@ -106,10 +109,8 @@
 			ctx.fillRect(width - speed, height - y, speed, speed);
 		}
 		ctx.translate(-speed, 0);
-		ctx.drawImage(Spawn.data.swapCvs, 0, 0, width, height, 0, 0, width, height);
+		ctx.drawImage(Data.swapCvs, 0, 0, width, height, 0, 0, width, height);
 		ctx.setTransform (1, 0, 0, 1, 0, 0);
-
-		// this.value_changed = false;
 	},
 	getFullColor(value) {
 		let palette = this.palette,

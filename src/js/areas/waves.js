@@ -3,19 +3,21 @@
 
 {
 	init(Spawn) {
-		// fast references
-		this.els = {
-			doc: $(document),
-			filesWrapper: ".files-wrapper",
-			zoomH: ".zoom-h",
-			zoomV: ".zoom-v",
-			scrollTrack: ".gutter-h .scrollbar",
-			scrollHandle: ".gutter-h .scrollbar .handle",
+		// fast references for this spawn
+		Spawn.data.waves = {
+			els: {
+				doc: $(document),
+				filesWrapper: Spawn.find(".files-wrapper"),
+				zoomH: Spawn.find(".zoom-h"),
+				zoomV: Spawn.find(".zoom-v"),
+				scrollTrack: Spawn.find(".gutter-h .scrollbar"),
+				scrollHandle: Spawn.find(".gutter-h .scrollbar .handle"),
+			}
 		};
 		// bind event handlers
-		Spawn.find(this.els.zoomV).on("mousedown", e => this.doZoomV(e, Spawn));
-		Spawn.find(this.els.zoomH).on("mousedown", e => this.doZoomH(e, Spawn));
-		Spawn.find(this.els.scrollTrack).on("mousedown", e => this.doScrollbar(e, Spawn));
+		Spawn.data.waves.els.zoomV.on("mousedown", e => this.doZoomV(e, Spawn));
+		Spawn.data.waves.els.zoomH.on("mousedown", e => this.doZoomH(e, Spawn));
+		Spawn.data.waves.els.scrollTrack.on("mousedown", e => this.doScrollbar(e, Spawn));
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -41,15 +43,15 @@
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD
 				if (!Self.drag || Self.drag.type !== "scroll") {
-					let stWidth = +Spawn.find(Self.els.scrollTrack).prop("offsetWidth"),
-						vWidth = +Spawn.find(Self.els.filesWrapper).prop("offsetWidth"),
+					let stWidth = +Spawn.data.waves.els.scrollTrack.prop("offsetWidth"),
+						vWidth = +Spawn.data.waves.els.filesWrapper.prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
 						width = parseInt(stWidth * (vWidth / cWidth), 10),
 						scroll = event.ws.getScroll(),
 						available = cWidth - vWidth + 2,
 						left = parseInt((scroll / available) * (stWidth - width), 10) + 1;
 					// sync scrollbar
-					Spawn.find(Self.els.scrollHandle).css({ width, left });
+					Spawn.data.waves.els.scrollHandle.css({ width, left });
 				}
 				break;
 		}
@@ -163,7 +165,7 @@
 					content = track.parents("content"),
 					el = track.find(".handle"),
 					ws = Spawn.data.tabs.active.file._ws,
-					vWidth = +Spawn.find(Self.els.filesWrapper).prop("offsetWidth"),
+					vWidth = +Spawn.data.waves.els.filesWrapper.prop("offsetWidth"),
 					cWidth = ws.getWrapper().clientWidth - vWidth;
 
 				// create drag object

@@ -3,20 +3,22 @@
 
 {
 	init(Spawn) {
-		// fast references
-		this.els = {
-			doc: $(document),
-			content: "content",
-			txtSelection: ".sidebar .txt-selection",
-			txtSelStart: ".sidebar .txt-sel-start",
-			txtSelEnd: ".sidebar .txt-sel-end",
-			txtSelDuration: ".sidebar .txt-sel-duration",
-			vWrapper: ".volume-wrapper",
-			volume: ".volume-knob",
+		// fast references for this spawn
+		Spawn.data.sidebar = {
+			els: {
+				doc: $(document),
+				content: Spawn.find("content"),
+				txtSelection: Spawn.find(".sidebar .txt-selection"),
+				txtSelStart: Spawn.find(".sidebar .txt-sel-start"),
+				txtSelEnd: Spawn.find(".sidebar .txt-sel-end"),
+				txtSelDuration: Spawn.find(".sidebar .txt-sel-duration"),
+				vWrapper: Spawn.find(".volume-wrapper"),
+				volume: Spawn.find(".volume-knob"),
+			}
 		};
 		// default volume knob angle
-		Spawn.el.find(this.els.volume).css({ "--angle": "-35deg" });
-		Spawn.el.find(this.els.vWrapper).find(".txt-volume h2").html(47);
+		Spawn.data.sidebar.els.volume.css({ "--angle": "-35deg" });
+		Spawn.data.sidebar.els.vWrapper.find(".txt-volume h2").html(47);
 
 		// subscribe to events
 		Spawn.on("clear-range", this.dispatch);
@@ -24,7 +26,7 @@
 		Spawn.on("time-update-range", this.dispatch);
 
 		// bind event handlers
-		Spawn.el.find(this.els.volume).on("mousedown", this.volumeMove);
+		Spawn.data.sidebar.els.volume.on("mousedown", this.volumeMove);
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -37,19 +39,19 @@
 			// subscribed events
 			case "clear-range":
 				// hide text fields
-				Spawn.el.find(Self.els.txtSelection).removeClass("show-text");
+				Spawn.data.sidebar.els.txtSelection.removeClass("show-text");
 				break;
 			case "update-range":
 				// show text fields
-				Spawn.el.find(Self.els.txtSelection).addClass("show-text");
+				Spawn.data.sidebar.els.txtSelection.addClass("show-text");
 				if (!event.detail.region) break;
 			case "time-update-range":
 				value = APP.spawn.toolbar.format(event.detail.region.start);
-				Spawn.el.find(Self.els.txtSelStart).html(value);
+				Spawn.data.sidebar.els.txtSelStart.html(value);
 				value = APP.spawn.toolbar.format(event.detail.region.end);
-				Spawn.el.find(Self.els.txtSelEnd).html(value);
+				Spawn.data.sidebar.els.txtSelEnd.html(value);
 				value = APP.spawn.toolbar.format(event.detail.region.end - event.detail.region.start);
-				Spawn.el.find(Self.els.txtSelDuration).html(value);
+				Spawn.data.sidebar.els.txtSelDuration.html(value);
 				break;
 		}
 	},

@@ -4,29 +4,31 @@
 {
 	init(Spawn) {
 		let el = Spawn.find(`> div[data-area="toolbar"]`);
-		// fast references
-		this.els = {
-			content: `content`,
-			sidebar: `.toolbar-tool_[data-click="toggle-sidebar"]`,
-			undo: `.toolbar-tool_[data-click="file-undo"]`,
-			redo: `.toolbar-tool_[data-click="file-redo"]`,
-			rewind: `.toolbar-tool_[data-click="rewind-audio"]`,
-			forward: `.toolbar-tool_[data-click="forward-audio"]`,
-			stop: `.toolbar-tool_[data-click="stop-audio"]`,
-			play: `.toolbar-tool_[data-click="play-audio"]`,
-			record: `.toolbar-tool_[data-click="record-audio"]`,
-			loop: `.toolbar-tool_[data-click="loop-audio"]`,
-			copy: `.toolbar-tool_[data-click="copy-selection"]`,
-			paste: `.toolbar-tool_[data-click="paste-selection"]`,
-			cut: `.toolbar-tool_[data-click="cut-selection"]`,
-			silenceSel: `.toolbar-tool_[data-click="silence-selection"]`,
-			silenceRest: `.toolbar-tool_[data-click="silence-rest"]`,
-			settings: `.toolbar-tool_[data-menu="view-settings"]`,
-			// display
-			display: `.toolbar-field_`,
-			currentTime: `.display .current-time`,
-			totalTime: `.display .total-time`,
-			hoverTime: `.display .hover-time`,
+		// fast references for this spawn
+		Spawn.data.toolbar = {
+			els: {
+				content: Spawn.find(`content`),
+				sidebar: Spawn.find(`.toolbar-tool_[data-click="toggle-sidebar"]`),
+				undo: Spawn.find(`.toolbar-tool_[data-click="file-undo"]`),
+				redo: Spawn.find(`.toolbar-tool_[data-click="file-redo"]`),
+				rewind: Spawn.find(`.toolbar-tool_[data-click="rewind-audio"]`),
+				forward: Spawn.find(`.toolbar-tool_[data-click="forward-audio"]`),
+				stop: Spawn.find(`.toolbar-tool_[data-click="stop-audio"]`),
+				play: Spawn.find(`.toolbar-tool_[data-click="play-audio"]`),
+				record: Spawn.find(`.toolbar-tool_[data-click="record-audio"]`),
+				loop: Spawn.find(`.toolbar-tool_[data-click="loop-audio"]`),
+				copy: Spawn.find(`.toolbar-tool_[data-click="copy-selection"]`),
+				paste: Spawn.find(`.toolbar-tool_[data-click="paste-selection"]`),
+				cut: Spawn.find(`.toolbar-tool_[data-click="cut-selection"]`),
+				silenceSel: Spawn.find(`.toolbar-tool_[data-click="silence-selection"]`),
+				silenceRest: Spawn.find(`.toolbar-tool_[data-click="silence-rest"]`),
+				settings: Spawn.find(`.toolbar-tool_[data-menu="view-settings"]`),
+				// display
+				display: Spawn.find(`.toolbar-field_`),
+				currentTime: Spawn.find(`.display .current-time`),
+				totalTime: Spawn.find(`.display .total-time`),
+				hoverTime: Spawn.find(`.display .hover-time`),
+			}
 		};
 		
 		// subscribe to events
@@ -48,45 +50,45 @@
 			case "timeupdate":
 				if (event.detail.ws) {
 					value = Self.format(event.detail.ws.decodedData.duration);
-					Spawn.el.find(Self.els.totalTime).html(value);
+					Spawn.data.toolbar.els.totalTime.html(value);
 				}
 				if (event.detail.currentTime !== undefined) {
 					value = Self.format(event.detail.currentTime);
-					Spawn.el.find(Self.els.currentTime).html(value);
+					Spawn.data.toolbar.els.currentTime.html(value);
 				}
 				if (event.detail.hoverTime) {
 					value = Self.format(event.detail.hoverTime);
-					Spawn.el.find(Self.els.hoverTime).html(value);
+					Spawn.data.toolbar.els.hoverTime.html(value);
 				}
 				break;
 			case "clear-range":
 				["copy", "cut", "silenceSel"]
-					.map(key => Spawn.el.find(Self.els[key]).addClass("tool-disabled_"));
+					.map(key => Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
 				break;
 			case "update-range":
 				["copy", "cut", "silenceSel"]
-					.map(key => Spawn.el.find(Self.els[key]).removeClass("tool-disabled_"));
+					.map(key => Spawn.data.toolbar.els[key].removeClass("tool-disabled_"));
 				break;
 			// custom events
 			case "enable-tools":
 				["sidebar", "rewind", "forward", "play", "stop", "loop", "settings"]
-					.map(key => Spawn.el.find(Self.els[key]).removeClass("tool-disabled_"));
+					.map(key => Spawn.data.toolbar.els[key].removeClass("tool-disabled_"));
 				// enable display
-				Spawn.el.find(Self.els.display).removeClass("blank-display");
+				Spawn.data.toolbar.els.display.removeClass("blank-display");
 				break;
 			case "disable-tools":
-				Object.keys(Self.els).map(key => Spawn.el.find(Self.els[key]).addClass("tool-disabled_"));
+				Object.keys(Self.els).map(key => Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
 				// disable display
-				Spawn.el.find(Self.els.display).addClass("blank-display");
+				Spawn.data.toolbar.els.display.addClass("blank-display");
 				break;
 			// ui events
 			case "toggle-sidebar":
-				el = Spawn.el.find(Self.els.content);
+				el = Spawn.data.toolbar.els.content;
 				isOn = event.value || el.hasClass("show-sidebar");
 				el.toggleClass("show-sidebar", isOn);
 				return isOn;
 			case "toggle-dock":
-				el = Spawn.el.find(Self.els.content);
+				el = Spawn.data.toolbar.els.content;
 				isOn = event.value || el.hasClass("show-dock");
 				el.toggleClass("show-dock", isOn);
 				return isOn;
@@ -102,7 +104,7 @@
 				file._ws.seekTo(1);
 				break;
 			case "loop-audio":
-				isOn = Spawn.el.find(Self.els.loop).hasClass("tool-active_");
+				isOn = Spawn.data.toolbar.els.loop.hasClass("tool-active_");
 				// store loop reference in file object
 				if (!isOn) Spawn.data.tabs.active.file._loop = true;
 				else delete Spawn.data.tabs.active.file._loop;
@@ -124,7 +126,7 @@
 				Spawn.emit("audio-stop");
 				break;
 			case "reset-play-button":
-				Spawn.el.find(Self.els.play).find(".icon-play")
+				Spawn.data.toolbar.els.play.find(".icon-play")
 					.removeClass("icon-pause")
 					.css({ "background-image": `url("~/icons/icon-play.png")` });
 				// emit event

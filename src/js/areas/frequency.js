@@ -38,7 +38,9 @@
 				break;
 			// custom events
 			case "disconnect-file-output":
-				Spawn.data.analyzer.disconnectInput(event.file._ws.media, true);
+				if (event.file) {
+					Spawn.data.analyzer.disconnectInput(event.file._ws.media, true);
+				}
 				break;
 			case "connect-file-output":
 				if (!Spawn.data.analyzer) {

@@ -2,11 +2,13 @@
 // imaudio.blankView
 
 {
-	init(spawn) {
+	init(Spawn) {
 		// fast references
-		this.els = {
-			content: spawn.find("content"),
-			el: spawn.find(".blank-view"),
+		Spawn.data.blankView = {
+			els: {
+				content: Spawn.find("content"),
+				el: Spawn.find(".blank-view"),
+			}
 		};
 		
 		// get settings, if any
@@ -29,7 +31,7 @@
 				window.render({
 					template: "blank-view",
 					match: `//Data`,
-					target: this.els.el
+					target: Spawn.data.blankView.els.el
 				});
 			});
 	},

@@ -96,14 +96,16 @@ class FileTabs {
 			// adjust active file
 			this._active.fileEl.removeClass("active");
 			this._els.boxWaves.removeClass("mono-channel");
-
+			
 			// disconnect frequency analyzer to file
-			// ["frequency", "spectrum"].map(name =>
-			// 	this._parent[name].dispatch({
-			// 		type: "disconnect-file-output",
-			// 		spawn: this._spawn,
-			// 		file: this._active.file,
-			// 	}));
+			["frequency", "spectrum"].map(name =>
+				this._parent[name].dispatch({
+					type: "disconnect-file-output",
+					spawn: this._spawn,
+					file: this._active.file,
+				}));
+
+			// return;
 		}
 
 		// reference to active tab
@@ -120,12 +122,12 @@ class FileTabs {
 			}
 
 			// connect frequency analyzer to file
-			// ["frequency", "spectrum"].map(name =>
-			// 	this._parent[name].dispatch({
-			// 		type: "connect-file-output",
-			// 		spawn: this._spawn,
-			// 		file: this._active.file,
-			// 	}));
+			["frequency", "spectrum"].map(name =>
+				this._parent[name].dispatch({
+					type: "connect-file-output",
+					spawn: this._spawn,
+					file: this._active.file,
+				}));
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {

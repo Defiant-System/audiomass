@@ -2,15 +2,20 @@
 let Test = {
 	init(APP, spawn) {
 
+		// return;
+		return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
 
 		// 	// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// }, 500);
 
-		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
+		return setTimeout(() => {
+			if (Object.keys(spawn.data.tabs._stack).length) {
+				APP.spawn.dispatch({ type: "merge-all-windows", spawn });
+			}
+		}, 500);
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
-		return;
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
 		

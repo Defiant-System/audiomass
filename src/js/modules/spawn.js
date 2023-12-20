@@ -59,6 +59,14 @@
 				Tabs.remove(event.el.data("id"));
 				break;
 
+			case "open-url":
+				// opening image file from application package
+				event.url.map(async path => {
+					// forward event to app
+					let file = await Tabs.openCdn(path);
+					Self.dispatch({ ...event, type: "prepare-file", isSample: true, file });
+				});
+				break;
 			case "load-samples":
 				// opening image file from application package
 				event.samples.map(async name => {

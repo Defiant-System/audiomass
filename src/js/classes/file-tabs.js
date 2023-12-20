@@ -146,6 +146,10 @@ class FileTabs {
 		}
 	}
 
+	openCdn(url) {
+		return this.openLocal(url);
+	}
+
 	openLocal(url) {
 		let parts = url.slice(url.lastIndexOf("/") + 1),
 			[ name, kind ] = parts.split("."),

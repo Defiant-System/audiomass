@@ -33,11 +33,22 @@
 	</Menu>
 	<Menu name="Effects">
 		<Menu name="Gain"/>
-		<Menu name="Fade In"/>
-		<Menu name="Fade Out"/>
+		<Menu name="Fade In" disabled="1"/>
+		<Menu name="Fade Out" disabled="1"/>
+		<Menu name="Paragraphic EQ"/>
 		<Menu name="Compressor"/>
-		<Menu name="Distortion"/>
-		<Menu name="Reverb"/>
+		<Menu name="Normalize" disabled="1"/>
+		<Menu name="Graphic EQ"/>
+		<Menu name="Graphic EQ - 20 Bands"/>
+		<Menu name="Hard Limiter" disabled="1"/>
+		<Menu name="Delay" disabled="1"/>
+		<Menu name="Distortion" disabled="1"/>
+		<Menu name="Reverb" disabled="1"/>
+		<Menu name="Speed Up / Down" disabled="1"/>
+		<Menu type="divider"/>
+		<Menu name="Reverse" disabled="1"/>
+		<Menu name="Invert" disabled="1"/>
+		<Menu name="Remove Silence" disabled="1"/>
 	</Menu>
 	<Menu name="View">
 		<Menu name="Follow Cursor" is-checked="1"/>

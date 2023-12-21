@@ -29,7 +29,6 @@ const Dialogs = {
 	},
 	dlgCompressor(event) {
 		/*
-		 * Brightness -  Min: -150   Max: 150
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
@@ -45,9 +44,51 @@ const Dialogs = {
 		}
 	},
 	dlgParagraphicEq(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				break;
+		}
 	},
 	dlgGraphicEq(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				break;
+		}
 	},
 	dlgGraphicEq20(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				break;
+		}
 	},
 };

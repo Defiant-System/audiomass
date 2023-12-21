@@ -88,7 +88,7 @@ const UI = {
 				event.el.parents(".dialog-box")
 					.cssSequence("closing", "animationend", el => {
 						// prevent mouse from triggering mouseover
-						Self.content.removeClass("dialog-showing");
+						Spawn.find("content").removeClass("dialog-showing");
 						// reset element
 						el.removeClass("showing closing");
 					});
@@ -101,6 +101,8 @@ const UI = {
 				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;
 			case "dlg-cancel-common":
+				// close dialog
+				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;
 			case "dlg-preview-common":
 				Dialogs.preview = event.el.data("value") === "on";

@@ -37,7 +37,8 @@
 				event.el.toggleClass("on", isOn);
 				// signal file
 				file = Spawn.data.tabs.active.file;
-				value = [event.el.hasClass("left") ? 0 : 1, !isOn ? 1 : 0];
+				value = [event.el.hasClass("right") ? 1 : 0, !isOn ? 1 : 0];
+				// if (event.el.parent().hasClass("mono")) value[0] = 0;
 				file.dispatch({ type: "toggle-channel", value });
 				break;
 			case "ui-sync-gutter":

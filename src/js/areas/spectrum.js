@@ -40,7 +40,7 @@
 			case "audio-play":
 				// turn on flag
 				Spawn.data._playing = true;
-				Self.draw(Spawn);
+				if (Data.specAnalyser) Self.draw(Spawn);
 				break;
 			case "audio-pause":
 			case "audio-stop":

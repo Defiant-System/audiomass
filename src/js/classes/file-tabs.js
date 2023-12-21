@@ -66,9 +66,10 @@ class FileTabs {
 
 	merge(ref) {
 		let tId = ref.tId,
-			file = ref.file,
+			fileEl = this._els.filesWrapper.append(this._template.clone(true)),
+			file = new File(this, ref.file._file, fileEl),
 			tabEl = this._spawn.tabs.add(file.base, tId, true),
-			fileEl = ref.fileEl.clone(true),
+			// fileEl = ref.fileEl.clone(true),
 			history = ref.history;
 
 		// save reference to tab
@@ -127,7 +128,7 @@ class FileTabs {
 					file: this._active.file,
 				};
 			this._parent.frequency.dispatch(opt);
-			this._parent.spectrum.dispatch(opt);
+			// this._parent.spectrum.dispatch(opt);
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {

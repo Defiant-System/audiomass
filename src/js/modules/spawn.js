@@ -107,16 +107,13 @@
 				break;
 			case "merge-all-windows":
 				Spawn.siblings.map(oSpawn => {
-					let freq = oSpawn.data.frequency;
-					if (freq && freq.analyzer) {
-						freq.analyzer.destroy();
-					}
-
 					for (let key in oSpawn.data.tabs._stack) {
 						let ref = oSpawn.data.tabs._stack[key];
-
 						Spawn.data.tabs.merge(ref);
 					}
+					
+					oSpawn.data.frequency.analyzer.destroy();
+
 					// close sibling spawn
 					oSpawn.close();
 				});

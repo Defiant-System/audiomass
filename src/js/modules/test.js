@@ -7,7 +7,7 @@ let Test = {
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
 		
-		return;
+		// return;
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
@@ -23,10 +23,10 @@ let Test = {
 
 					// console.log( "master", spawn._sId );
 
-					setTimeout(() => spawn.find(".tabbar-next-active_").trigger("click"), 1000);
+					// setTimeout(() => spawn.find(".tabbar-next-active_").trigger("click"), 1000);
 				}
 			}
-		}, 800);
+		}, 1000);
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);

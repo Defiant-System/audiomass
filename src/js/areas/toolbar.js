@@ -88,11 +88,6 @@
 				isOn = event.value || el.hasClass("show-sidebar");
 				el.toggleClass("show-sidebar", isOn);
 				return isOn;
-			case "toggle-dock":
-				el = Spawn.data.toolbar.els.content;
-				isOn = event.value || el.hasClass("show-dock");
-				el.toggleClass("show-dock", isOn);
-				return isOn;
 
 			case "rewind-audio":
 				file = Spawn.data.tabs.active.file;

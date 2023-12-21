@@ -3,11 +3,7 @@
 
 {
 	init() {
-		// fast references
-		this.els = {
-			doc: $(document),
-			content: window.find("content"),
-		};
+
 	},
 	dispose(event) {
 		let Spawn = event.spawn;
@@ -34,6 +30,11 @@
 			case "spawn.open":
 				Spawn.data.tabs = new FileTabs(Self, Spawn);
 				
+				// fast references
+				Spawn.data.els = {
+					content: Spawn.find("content"),
+				};
+
 				// init all sub-objects
 				Object.keys(Self)
 					.filter(i => typeof Self[i].init === "function")
@@ -142,7 +143,14 @@
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });
 				break;
-			
+			case "toggle-dock":
+				el = Spawn.data.els.content;
+				value = el.hasClass("show-dock");
+				el.toggleClass("show-dock", value);
+				// menu update
+				if (value) event.xMenu.removeAttribute("is-checked");
+				else event.xMenu.setAttribute("is-checked", "1");
+				break;
 			default:
 				if (event.el) {
 					let pEl = event.el.parents(`div[data-area]`);

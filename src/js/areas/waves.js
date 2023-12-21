@@ -7,6 +7,7 @@
 		Spawn.data.waves = {
 			els: {
 				doc: $(document),
+				content: Spawn.find("content"),
 				filesWrapper: Spawn.find(".files-wrapper"),
 				zoomH: Spawn.find(".zoom-h"),
 				zoomV: Spawn.find(".zoom-v"),

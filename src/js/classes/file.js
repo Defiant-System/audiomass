@@ -148,9 +148,9 @@ class File {
 			case "ws-region-reset":
 				if (event.e.button === 2) {
 					let target = event.e.target,
-						isRegion = target.nodeName === "DIV" && target.getAttribute("part").startsWith("region ");
-
-					console.log( isRegion );
+						context = target.nodeName === "DIV" && target.getAttribute("part").startsWith("region ")
+								? "selection" : "waveform";
+					this._parent._els.filesWrapper.data({ context });
 					return;
 				}
 				this._activeRegion = null;

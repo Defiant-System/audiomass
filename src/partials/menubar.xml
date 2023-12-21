@@ -29,9 +29,9 @@
 		<Menu name="Play" hotkey="Space"/>
 		<Menu name="Stop"/>
 		<Menu name="Select All" hotkey="shift+a"/>
-		<Menu name="Deselect All"/>
+		<Menu name="Deselect"/>
 	</Menu>
-	<Menu name="Effects">
+	<Menu name="Effects" for="effects">
 		<Menu name="Gain"/>
 		<Menu name="Fade In" disabled="1"/>
 		<Menu name="Fade Out" disabled="1"/>
@@ -78,5 +78,16 @@
 		<Menu name="ImAudio Help" click="open-help"/>
 		<Menu type="divider"/>
 		<Menu name="License"/>
+	</Menu>
+
+	<Menu for="selection">
+		<Menu name="Effects" invoke="effects"/>
+		<Menu type="divider"/>
+		<Menu name="Copy"/>
+		<Menu name="Cut"/>
+		<Menu name="Paste" disabled="1"/>
+		<Menu name="Deselect"/>
+		<Menu type="divider"/>
+		<Menu name="File from Selection"/>
 	</Menu>
 </MenuBar>

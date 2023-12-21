@@ -1,6 +1,7 @@
 
 @import "./classes/file.js"
 @import "./classes/file-tabs.js"
+@import "./modules/dialogs.js"
 @import "./modules/ui.js"
 @import "./modules/test.js"
 

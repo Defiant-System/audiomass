@@ -1,5 +1,29 @@
 
-<div class="dialog-box showing1" data-dlg="dlg-compressor">
+<div class="dialog-box" data-dlg="dlgCain">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Apply Gain
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Gain</span>
+				<div class="pan-knob" data-change="set-gain" data-value="0"></div>
+				<span class="value"><input type="text" name="gain" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgCompressor">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -42,36 +66,12 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
 		</div>
 	</div>
 </div>
 
-<div class="dialog-box showing1" data-dlg="dlg-gain">
-	<div class="dlg-content">
-		<h2>
-			<i class="icon-dlg-close" data-click="dlg-close"></i>
-			Apply Gain
-
-			<div class="toggler" data-value="on" data-click="dlg-preview">
-				<span>Preview</span>
-			</div>
-		</h2>
-		<div class="dlg-body">
-			<div class="field-box">
-				<span class="label">Gain</span>
-				<div class="pan-knob" data-change="set-gain" data-value="0"></div>
-				<span class="value"><input type="text" name="gain" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
-			</div>
-		</div>
-		<div class="buttons">
-			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
-		</div>
-	</div>
-</div>
-
-<div class="dialog-box showing1" data-dlg="dlg-paragraphicEq">
+<div class="dialog-box" data-dlg="dlgParagraphicEq">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -97,12 +97,12 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
 		</div>
 	</div>
 </div>
 
-<div class="dialog-box showing1" data-dlg="dlg-graphicEq">
+<div class="dialog-box" data-dlg="dlgGraphicEq">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -175,12 +175,12 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
 		</div>
 	</div>
 </div>
 
-<div class="dialog-box showing1" data-dlg="dlg-graphicEq20">
+<div class="dialog-box" data-dlg="dlgGraphicEq20">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -307,7 +307,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
 		</div>
 	</div>
 </div>

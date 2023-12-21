@@ -39,6 +39,9 @@
 					.filter(i => typeof Self[i].init === "function")
 					.map(i => Self[i].init(Spawn));
 
+				// init global UI handler
+				UI.init(Spawn);
+
 				// auto show "blank view"
 				Spawn.data.tabs.dispatch({ ...event, type: "show-blank-view" });
 
@@ -131,7 +134,10 @@
 				// system close window / spawn
 				karaqu.shell("win -c");
 				break;
-
+			case "open-dialog":
+				// forward event
+				UI.doDialog({ type: "dlg-open", name: event.arg, spawn: Spawn });
+				break;
 			
 			default:
 				if (event.el) {
@@ -139,6 +145,11 @@
 					if (pEl.length) {
 						let name = pEl.data("area");
 						return Self[name].dispatch(event);
+					}
+					pEl = event.el.parents(".dialog-box");
+					if (pEl.length) {
+						let name = pEl.data("dlg");
+						return Dialogs[name](event);
 					}
 				}
 		}

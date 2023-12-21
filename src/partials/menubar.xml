@@ -32,14 +32,15 @@
 		<Menu name="Deselect"/>
 	</Menu>
 	<Menu name="Effects" for="effects">
-		<Menu name="Gain"/>
+		<Menu name="Gain" click="open-dialog" arg="dlgCain"/>
 		<Menu name="Fade In" disabled="1"/>
 		<Menu name="Fade Out" disabled="1"/>
-		<Menu name="Paragraphic EQ"/>
-		<Menu name="Compressor"/>
 		<Menu name="Normalize" disabled="1"/>
-		<Menu name="Graphic EQ"/>
-		<Menu name="Graphic EQ - 20 Bands"/>
+		<Menu type="divider"/>
+		<Menu name="Compressor" click="open-dialog" arg="dlgCompressor"/>
+		<Menu name="Paragraphic EQ" click="open-dialog" arg="dlgParagraphicEq"/>
+		<Menu name="Graphic EQ" click="open-dialog" arg="dlgGraphicEq"/>
+		<Menu name="Graphic EQ - 20 Bands" click="open-dialog" arg="dlgGraphicEq20"/>
 		<Menu name="Hard Limiter" disabled="1"/>
 		<Menu name="Delay" disabled="1"/>
 		<Menu name="Distortion" disabled="1"/>

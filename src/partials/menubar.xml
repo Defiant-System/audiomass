@@ -87,7 +87,7 @@
 		<Menu name="Copy"/>
 		<Menu name="Cut"/>
 		<Menu name="Paste" disabled="1"/>
-		<Menu name="Deselect"/>
+		<Menu name="Deselect" click="deselect-region"/>
 		<Menu type="divider"/>
 		<Menu name="File from Selection"/>
 	</Menu>

@@ -146,7 +146,7 @@ class File {
 				break;
 			// region events
 			case "ws-region-reset":
-				if (event.e.button === 2) {
+				if (event.e && event.e.button === 2) {
 					let target = event.e.target,
 						context = target.nodeName === "DIV" && target.getAttribute("part").startsWith("region ")
 								? "selection" : "waveform";

@@ -146,7 +146,15 @@
 			case "toggle-dock":
 				el = Spawn.data.els.content;
 				value = el.hasClass("show-dock");
-				el.toggleClass("show-dock", value);
+
+				name = "show-dock";
+				if (value) name = "!"+ name;
+				el.cssSequence(name, "transitionend", el => {
+					if (el.nodeName() !== "content") return;
+					// proxy event spawn -> tabs -> file
+					Spawn.data.tabs.dispatch({ type: "spawn.resize" });
+				});
+
 				// menu update
 				if (value) event.xMenu.removeAttribute("is-checked");
 				else event.xMenu.setAttribute("is-checked", "1");

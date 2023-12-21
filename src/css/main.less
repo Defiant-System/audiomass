@@ -16,6 +16,8 @@ content {
 	bottom: 0;
 	color: #efeeff;
 	border-radius: inherit;
+	min-height: 0;
+	transition: min-height 250ms;
 
 	&.cover:before {
 		content: "";
@@ -68,6 +70,8 @@ content {
 	}
 
 	&.show-dock {
+		min-height: 1px;
+
 		.area {
 			.workarea {
 				.waves:before,

@@ -85,6 +85,13 @@ class File {
 		switch (event.type) {
 			// custom events
 			case "ws-ready":
+				// UI is mono / stereo
+				if (ws.exportPeaks().length === 1) {
+					this._el.parents(".box.waves").addClass("mono-channel");
+				} else {
+					this._el.parents(".box.waves").removeClass("mono-channel");
+				}
+				// fix into view
 				this.dispatch({ ...event, type: "resize-view" });
 				// update ready flag
 				this._ready = true;
@@ -159,15 +166,15 @@ class File {
 			// external events
 			case "resize-view":
 				if (ws.exportPeaks().length === 1) {
-					// is mono or stereo
-					this._el.parents(".box.waves").addClass("mono-channel");
-					ws.setOptions({ splitChannels: [{ ...this.channelOn }] });
-					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") });
+					ws.setOptions({
+						splitChannels: [{ ...this.channelOn }],
+						height: +this._el.parent().prop("offsetHeight"),
+					});
 				} else {
-					// UI is stereo by default
-					this._el.parents(".box.waves").removeClass("mono-channel");
-					ws.setOptions({ splitChannels: [{ ...this.channelOn }, { ...this.channelOn }] });
-					ws.setOptions({ height: +this._el.parent().prop("offsetHeight") >> 1 });
+					ws.setOptions({
+						splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
+						height: +this._el.parent().prop("offsetHeight") >> 1,
+					});
 				}
 				break;
 			case "toggle-channel":

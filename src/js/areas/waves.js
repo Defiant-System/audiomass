@@ -30,7 +30,8 @@
 		switch (event.type) {
 			// custom events
 			case "reset-zoom":
-				console.log(event);
+				// signal file
+				Spawn.data.tabs.active.file._ws.zoom(100);
 				break;
 			case "toggle-channel":
 				isOn = event.el.hasClass("on");
@@ -47,10 +48,10 @@
 					let stWidth = +Spawn.data.waves.els.scrollTrack.prop("offsetWidth"),
 						vWidth = +Spawn.data.waves.els.filesWrapper.prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
-						width = parseInt(stWidth * (vWidth / cWidth), 10),
+						width = parseInt(stWidth * (vWidth / cWidth), 10) - 2,
 						scroll = event.ws.getScroll(),
-						available = cWidth - vWidth + 2,
-						left = parseInt((scroll / available) * (stWidth - width), 10) + 1;
+						available = cWidth - vWidth,
+						left = parseInt((scroll / available) * (stWidth - width + 2), 10) + 1;
 					// sync scrollbar
 					Spawn.data.waves.els.scrollHandle.css({ width, left });
 				}

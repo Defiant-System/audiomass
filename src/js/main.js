@@ -1,6 +1,8 @@
 
 @import "./classes/file.js"
 @import "./classes/file-tabs.js"
+@import "./classes/ima-timeline-plugin.js"
+
 @import "./modules/dialogs.js"
 @import "./modules/ui.js"
 @import "./modules/test.js"

@@ -13,6 +13,20 @@ class File {
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
+		// let timeline = TimelinePlugin.create({
+		// 		height: 8,
+		// 		insertPosition: "beforebegin",
+		// 		timeInterval: 0.05,
+		// 		primaryLabelInterval: 1,
+		// 		secondaryLabelInterval: 1,
+		// 		formatTimeCallback: seconds => seconds.toFixed(2),
+		// 		style: {
+		// 			fontSize: "9px",
+		// 			color: "#71a1ca77",
+		// 		},
+		// 	});
+
+		let timeline = ImaTimeline.create();
 		let zoom = ZoomPlugin.create({ scale: 0.2 });
 		let regions = RegionsPlugin.create();
 
@@ -29,7 +43,7 @@ class File {
 			// autoCenter: true,
 			// autoScroll: false,
 			minPxPerSec: 100,
-  			plugins: [zoom, regions],
+  			plugins: [timeline, zoom, regions],
 		});
 		// reference to regions
 		this._regions = regions;
@@ -175,7 +189,7 @@ class File {
 				if (ws.exportPeaks().length === 1) {
 					ws.setOptions({
 						splitChannels: [{ ...this.channelOn }],
-						height: +this._el.parent().prop("offsetHeight"),
+						height: +this._el.parent().prop("offsetHeight") - 1,
 					});
 				} else {
 					ws.setOptions({

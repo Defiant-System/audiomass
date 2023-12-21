@@ -8,6 +8,22 @@ let Test = {
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
 		
 		// return;
+
+		return setTimeout(() => {
+			let file = spawn.data.tabs.active.file;
+			// file._ws.skip(5);
+			// file._ws.zoom(200);
+			// file._ws.setVolume(.1);
+
+			file._regions.addRegion({
+				id: "region-selected",
+				start: 1.15,
+				end: 2.5,
+			});
+
+			// setTimeout(() => APP.toolbar.els.play.trigger("click"), 200);
+		}, 500);
+
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
@@ -30,21 +46,5 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
-		
-		setTimeout(() => {
-			let file = APP.data.tabs.active.file;
-			// file._ws.skip(5);
-			// file._ws.zoom(200);
-			// file._ws.setVolume(.1);
-
-			file._regions.addRegion({
-				id: "region-selected",
-				start: 1.5,
-				end: 2,
-			});
-
-			// setTimeout(() => APP.toolbar.els.play.trigger("click"), 200);
-		}, 300);
-
 	}
 };

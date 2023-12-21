@@ -99,7 +99,7 @@ class File {
 				this._parent._spawn.emit("timeupdate", { ws });
 				// clear regions on mousedown
 				this._el.find("> div").shadowRoot().find(".wrapper")
-					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset" }))
+					.on("pointerdown", e => this.dispatch({ type: "ws-region-reset", e }))
 					.on("pointermove", e => this.dispatch({ type: "pointermove", e }));
 				break;
 			case "ws-load": break;
@@ -146,6 +146,13 @@ class File {
 				break;
 			// region events
 			case "ws-region-reset":
+				if (event.e.button === 2) {
+					let target = event.e.target,
+						isRegion = target.nodeName === "DIV" && target.getAttribute("part").startsWith("region ");
+
+					console.log( isRegion );
+					return;
+				}
 				this._activeRegion = null;
 				this._regions.clearRegions();
 				// emit range related event

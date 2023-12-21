@@ -111,9 +111,8 @@
 						let ref = oSpawn.data.tabs._stack[key];
 						Spawn.data.tabs.merge(ref);
 					}
-					
+					// destroy old analyzer
 					oSpawn.data.frequency.analyzer.destroy();
-
 					// close sibling spawn
 					oSpawn.close();
 				});

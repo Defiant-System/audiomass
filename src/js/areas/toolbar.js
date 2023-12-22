@@ -44,7 +44,6 @@
 			value,
 			isOn,
 			el;
-		// console.log( event );
 		switch (event.type) {
 			// subscribed events
 			case "timeupdate":
@@ -91,12 +90,12 @@
 
 			case "rewind-audio":
 				file = Spawn.data.tabs.active.file;
-				Self.dispatch({ type: "timeupdate", detail: { ws: file._ws } });
+				Self.dispatch({ type: "timeupdate", spawn: Spawn, detail: { ws: file._ws } });
 				file._ws.seekTo(0);
 				break;
 			case "forward-audio":
 				file = Spawn.data.tabs.active.file;
-				Self.dispatch({ type: "timeupdate", detail: { ws: file._ws } });
+				Self.dispatch({ type: "timeupdate", spawn: Spawn, detail: { ws: file._ws } });
 				file._ws.seekTo(1);
 				break;
 			case "loop-audio":

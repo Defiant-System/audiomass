@@ -22,7 +22,7 @@ class ImaTimeline {
 		this.wsContainer = $(this.wavesurfer.getWrapper());
 		this.timelineWrapper = this.wsContainer.before(`<div part="timeline"></div>`);
 		
-		let sW = +this.wsContainer.prop("scrollWidth");
+		let sW = +this.wsContainer.prop("offsetWidth");
 		let duration = this.wavesurfer.getDuration() ?? 0;
 		let pxPerSec = Math.round(sW / duration);
 		let timeInterval = this.defaultTimeInterval(pxPerSec);
@@ -65,10 +65,11 @@ class ImaTimeline {
 
 	initTimeline() {
 		if (this.rendered) {
-			let sW = +this.wsContainer.prop("scrollWidth");
+			let sW = +this.wsContainer.prop("offsetWidth");
 			let duration = this.wavesurfer.getDuration();
 			let pxPerSec = Math.round(sW / duration);
 			this.timelineUL.css({
+				"width": `${duration * pxPerSec}px`,
 				"--liw": `${pxPerSec}px`,
 				"--nw": `${(pxPerSec * .1).toFixed(1)}px`,
 			});

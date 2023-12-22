@@ -131,6 +131,10 @@
 					Self.dispatch({ ...event, type: "close-spawn" });
 				}
 				break;
+			case "close-file":
+				Tabs.removeDelayed();
+				Tabs.add({ new: "Blank" });
+				break;
 			case "close-spawn":
 				// system close window / spawn
 				karaqu.shell("win -c");

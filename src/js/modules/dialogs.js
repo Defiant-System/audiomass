@@ -27,6 +27,22 @@ const Dialogs = {
 				break;
 		}
 	},
+	dlgNormalize(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgNormalize" });
+				break;
+		}
+	},
 	dlgCompressor(event) {
 		/*
 		 */
@@ -55,7 +71,7 @@ const Dialogs = {
 			case "dlg-cancel":
 			case "dlg-preview":
 			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
 				break;
 		}
 	},
@@ -71,7 +87,7 @@ const Dialogs = {
 			case "dlg-cancel":
 			case "dlg-preview":
 			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq" });
 				break;
 		}
 	},
@@ -87,7 +103,87 @@ const Dialogs = {
 			case "dlg-cancel":
 			case "dlg-preview":
 			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq20" });
+				break;
+		}
+	},
+	dlgHardLimiter(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgHardLimiter" });
+				break;
+		}
+	},
+	dlgDelay(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDelay" });
+				break;
+		}
+	},
+	dlgDistortion(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDistortion" });
+				break;
+		}
+	},
+	dlgReverb(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });
+				break;
+		}
+	},
+	dlgSpeed(event) {
+		/*
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-cancel":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });
 				break;
 		}
 	},

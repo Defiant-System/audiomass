@@ -44,7 +44,6 @@ class ImaTimeline {
 	initTimelineWrapper() {
 		const div = document.createElement("div");
 		div.setAttribute("part", "timeline");
-		// div.setAttribute("style", "pointer-events: none;");
 		return div;
 	}
 

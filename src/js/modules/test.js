@@ -16,8 +16,7 @@ let Test = {
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			// file._ws.skip(5);
-			// return 
-			file._ws.zoom(200);
+			// return file._ws.zoom(200);
 			// file._ws.setVolume(.1);
 
 			file._regions.addRegion({
@@ -26,7 +25,7 @@ let Test = {
 				end: 2.5,
 			});
 
-			// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgParagraphicEq", spawn }), 200);
+			// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgSpeed", spawn }), 200);
 		}, 500);
 
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);

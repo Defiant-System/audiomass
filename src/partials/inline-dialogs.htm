@@ -23,6 +23,22 @@
 	</div>
 </div>
 
+<div class="dialog-box" data-dlg="dlgNormalize">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Normalize
+		</h2>
+		<div class="dlg-body">
+			
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
 <div class="dialog-box" data-dlg="dlgCompressor">
 	<div class="dlg-content">
 		<h2>
@@ -303,6 +319,158 @@
 				<span class="value"><input type="text" name="hz32" value="0 dB" data-min="-24" data-max="24" data-suffix="dB" data-default="0"></span>
 				<div class="slider"><span class="handle"></span></div>
 				<span class="label">22 KHz</span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgHardLimiter">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Hard Limiter
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Limit to</span>
+				<div class="knob" data-change="set-limit-to" data-value="99"></div>
+				<span class="value"><input type="text" name="limit-to" value="99" data-min="10" data-max="100" data-suffix="%" data-default="99"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label" title="Between lows & highs">Ratio</span>
+				<div class="knob" data-change="set-ratio" data-value="0"></div>
+				<span class="value"><input type="text" name="ratio" value="0" data-min="0" data-max="100" data-suffix="%" data-default="0"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label">Look Ahead</span>
+				<div class="knob" data-change="set-look-ahead" data-value="7"></div>
+				<span class="value"><input type="text" name="look-ahead" value="30" data-min="1" data-max="500" data-suffix="ms" data-default="30"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgDelay">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Delay
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Time</span>
+				<div class="knob" data-change="set-threshold" data-value="20"></div>
+				<span class="value"><input type="text" name="threshold" value="1.0" data-min="0" data-max="5" data-step=".1" data-default="1.0"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label">Feedback</span>
+				<div class="knob" data-change="set-ratio" data-value="50"></div>
+				<span class="value"><input type="text" name="ratio" value="0.5" data-min="0" data-max="1" data-step=".01" data-default="0.5"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label">Wet</span>
+				<div class="knob" data-change="set-wet" data-value="40"></div>
+				<span class="value"><input type="text" name="wet" value="0.4" data-min="0" data-max="1" data-step=".01" data-default="0.4"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgDistortion">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Distortion
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Gain</span>
+				<div class="knob" data-change="set-gain" data-value="25"></div>
+				<span class="value"><input type="text" name="gain" value="25%" data-min="0" data-max="200" data-suffix="%" data-default="25"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgReverb">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Delay
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Time</span>
+				<div class="knob" data-change="set-threshold" data-value="20"></div>
+				<span class="value"><input type="text" name="threshold" value="1.0" data-min="0" data-max="5" data-step=".1" data-default="1.0"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label">Feedback</span>
+				<div class="knob" data-change="set-ratio" data-value="50"></div>
+				<span class="value"><input type="text" name="ratio" value="0.5" data-min="0" data-max="1" data-step=".01" data-default="0.5"></span>
+			</div>
+			
+			<div class="field-box">
+				<span class="label">Wet</span>
+				<div class="knob" data-change="set-wet" data-value="40"></div>
+				<span class="value"><input type="text" name="wet" value="0.4" data-min="0" data-max="1" data-step=".01" data-default="0.4"></span>
+			</div>
+		</div>
+		<div class="buttons">
+			<div class="button" data-click="dlg-ok">Apply</div>
+			<div class="button" data-click="dlg-cancel">Cancel</div>
+		</div>
+	</div>
+</div>
+
+<div class="dialog-box" data-dlg="dlgSpeed">
+	<div class="dlg-content">
+		<h2>
+			<i class="icon-dlg-close" data-click="dlg-close"></i>
+			Apply Gain
+
+			<div class="toggler" data-value="on" data-click="dlg-preview">
+				<span>Preview</span>
+			</div>
+		</h2>
+		<div class="dlg-body">
+			<div class="field-box">
+				<span class="label">Gain</span>
+				<div class="pan-knob" data-change="set-gain" data-value="0"></div>
+				<span class="value"><input type="text" name="gain" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
 			</div>
 		</div>
 		<div class="buttons">

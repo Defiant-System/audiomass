@@ -32,20 +32,20 @@
 		<Menu name="Deselect"/>
 	</Menu>
 	<Menu name="Effects" for="effects">
-		<Menu name="Gain" click="open-dialog" arg="dlgCain"/>
 		<Menu name="Fade In" disabled="1"/>
 		<Menu name="Fade Out" disabled="1"/>
-		<Menu name="Normalize" disabled="1"/>
 		<Menu type="divider"/>
+		<Menu name="Gain" click="open-dialog" arg="dlgCain"/>
+		<Menu name="Normalize" click="open-dialog" arg="dlgNormalize"/>
 		<Menu name="Compressor" click="open-dialog" arg="dlgCompressor"/>
 		<Menu name="Paragraphic EQ" click="open-dialog" arg="dlgParagraphicEq"/>
 		<Menu name="Graphic EQ" click="open-dialog" arg="dlgGraphicEq"/>
 		<Menu name="Graphic EQ - 20 Bands" click="open-dialog" arg="dlgGraphicEq20"/>
-		<Menu name="Hard Limiter" disabled="1"/>
-		<Menu name="Delay" disabled="1"/>
-		<Menu name="Distortion" disabled="1"/>
-		<Menu name="Reverb" disabled="1"/>
-		<Menu name="Speed Up / Down" disabled="1"/>
+		<Menu name="Hard Limiter" click="open-dialog" arg="dlgHardLimiter"/>
+		<Menu name="Delay" click="open-dialog" arg="dlgDelay"/>
+		<Menu name="Distortion" click="open-dialog" arg="dlgDistortion"/>
+		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
+		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
 		<Menu type="divider"/>
 		<Menu name="Reverse" disabled="1"/>
 		<Menu name="Invert" disabled="1"/>

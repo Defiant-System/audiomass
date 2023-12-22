@@ -409,7 +409,7 @@ content {
 						top: 1px;
 						left: 0;
 						right: 0;
-						height: 13px;
+						height: 12px;
 						box-shadow: 0 1px 0 rgba(#002,.1);
 						border-top: 1px solid rgba(#fff,.04);
 						border-bottom: 1px solid rgba(#000,.075);
@@ -428,7 +428,7 @@ content {
 						&:before {
 							content: "";
 							position: absolute;
-							top: 13px;
+							top: 12px;
 							left: 0;
 							right: 0;
 							bottom: 0;
@@ -457,45 +457,65 @@ content {
 						::part(timeline) {
 							position: relative;
 							height: 13px;
+							// pointer-events: none;
+						}
 
-							&:before {
-								content: "";
-								position: absolute;
-								bottom: -1px;
-								left: 0;
-								right: 0;
-								height: 5px;
-								background: repeating-linear-gradient(90deg,
-									rgba(#000,.15) 10px, rgba(#000,.15) 11px, transparent 11px, transparent 20px,
-									rgba(#000,.15) 20px, rgba(#000,.15) 21px, transparent 21px, transparent 30px,
-									rgba(#000,.15) 30px, rgba(#000,.15) 31px, transparent 31px, transparent 40px,
-									rgba(#000,.15) 40px, rgba(#000,.15) 41px, transparent 41px, transparent 60px
-								);
-							}
+						::part(timeline-notch-ul) {
+							list-style: none;
+							margin: 0;
+							padding: 2px 0 0;
+							white-space: nowrap;
+							font-size: 0;
+							color: #71a1ca;
+						}
+
+						::part(timeline-notch-li) {
+							position: relative;
+							display: inline-block;
+							font-size: 10px;
+							text-indent: 2px;
+							// width: 121px;
 
 							&:after {
 								content: "";
 								position: absolute;
-								bottom: -1px;
-								left: 0;
+								bottom: 0;
+								left: -1px;
 								right: 0;
 								height: 7px;
 								background: repeating-linear-gradient(90deg,
-									rgba(#000,.15) 0px, rgba(#000,.15) 1px, transparent 1px, transparent 50px
+									rgba(#000,.2) 0px, rgba(#000,.2) 1px, transparent 1px, transparent 100%
+								);
+							}
+
+							&:before {
+								content: "";
+								position: absolute;
+								bottom: 0;
+								left: -1px;
+								right: 0;
+								height: 5px;
+								background: repeating-linear-gradient(90deg,
+									rgba(#000,.15) calc( var( --nw ) * 1 ), rgba(#000,.15) calc( calc( var( --nw ) * 1 ) + 1px ), transparent calc( calc( var( --nw ) * 1 ) + 1px ), transparent calc( var( --nw ) * 2 ),
+									rgba(#000,.15) calc( var( --nw ) * 2 ), rgba(#000,.15) calc( calc( var( --nw ) * 2 ) + 1px ), transparent calc( calc( var( --nw ) * 2 ) + 1px ), transparent calc( var( --nw ) * 3 ),
+									rgba(#000,.15) calc( var( --nw ) * 3 ), rgba(#000,.15) calc( calc( var( --nw ) * 3 ) + 1px ), transparent calc( calc( var( --nw ) * 3 ) + 1px ), transparent calc( var( --nw ) * 4 ),
+									rgba(#000,.15) calc( var( --nw ) * 4 ), rgba(#000,.15) calc( calc( var( --nw ) * 4 ) + 1px ), transparent calc( calc( var( --nw ) * 4 ) + 1px ), transparent calc( var( --nw ) * 5 ),
+									rgba(#000,.15) calc( var( --nw ) * 5 ), rgba(#000,.15) calc( calc( var( --nw ) * 5 ) + 1px ), transparent calc( calc( var( --nw ) * 5 ) + 1px ), transparent calc( var( --nw ) * 6 ),
+									rgba(#000,.15) calc( var( --nw ) * 6 ), rgba(#000,.15) calc( calc( var( --nw ) * 6 ) + 1px ), transparent calc( calc( var( --nw ) * 6 ) + 1px ), transparent calc( var( --nw ) * 7 ),
+									rgba(#000,.15) calc( var( --nw ) * 7 ), rgba(#000,.15) calc( calc( var( --nw ) * 7 ) + 1px ), transparent calc( calc( var( --nw ) * 7 ) + 1px ), transparent calc( var( --nw ) * 8 ),
+									rgba(#000,.15) calc( var( --nw ) * 8 ), rgba(#000,.15) calc( calc( var( --nw ) * 8 ) + 1px ), transparent calc( calc( var( --nw ) * 8 ) + 1px ), transparent calc( var( --nw ) * 9 ),
+									rgba(#000,.15) calc( var( --nw ) * 9 ), rgba(#000,.15) calc( calc( var( --nw ) * 9 ) + 1px ), transparent calc( calc( var( --nw ) * 9 ) + 1px ), transparent calc( var( --nw ) * 10 ),
+									transparent calc( var( --nw ) * 11 )
 								);
 							}
 						}
 
-						// ::part(timeline-notch-primary) {
-						// 	top: -3px;
-						// 	padding-top: 3px;
-						// }
 
 						::part(cursor) {
 							box-shadow: 0 1px 0 rgba(#002,.1);
 							border-top: 1px solid rgba(#fff,.04);
 							border-bottom: 1px solid rgba(#000,.075);
-							height: calc(100% - 13px);
+							height: calc(100% - 15px);
 
 							&:before {
 								content: "";
@@ -510,7 +530,7 @@ content {
 						}
 
 						::part(wrapper) {
-							height: calc(100% - 13px);
+							height: calc(100% - 12px);
 						}
 
 						::part(region-selected) {

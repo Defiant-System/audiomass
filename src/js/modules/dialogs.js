@@ -1,6 +1,6 @@
 
 const Dialogs = {
-	dlgCain(event) {
+	dlgGain(event) {
 		/*
 		 * Brightness -  Min: -150   Max: 150
 		 * Contrast -    Min: -100   Max: 100
@@ -23,7 +23,7 @@ const Dialogs = {
 			case "dlg-cancel":
 			case "dlg-preview":
 			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCain" });
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGain" });
 				break;
 		}
 	},

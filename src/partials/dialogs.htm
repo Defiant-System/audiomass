@@ -1,5 +1,5 @@
 
-<div class="dialog-box" data-dlg="dlgCain">
+<div class="dialog-box" data-dlg="dlgGain">
 	<div class="dlg-content">
 		<h2>
 			<i class="icon-dlg-close" data-click="dlg-close"></i>
@@ -10,9 +10,9 @@
 			</div>
 		</h2>
 		<div class="dlg-body">
-			<div class="field-box">
+			<div class="field-range-h">
 				<span class="label">Gain</span>
-				<div class="pan-knob" data-change="set-gain" data-value="0"></div>
+				<div class="slider"><span class="handle"></span></div>
 				<span class="value"><input type="text" name="gain" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
 			</div>
 		</div>
@@ -30,7 +30,11 @@
 			Normalize
 		</h2>
 		<div class="dlg-body">
-			
+			<div class="field-range-h">
+				<span class="label">Normalize to</span>
+				<div class="slider"><span class="handle" style="left: 50%;"></span></div>
+				<span class="value"><input type="text" name="normalize" value="100%" data-min="0" data-max="200" data-suffix="%" data-default="100"></span>
+			</div>
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
@@ -99,8 +103,14 @@
 		</h2>
 		<div class="dlg-body">
 			<div class="peq-cvs">
-				<div class="vert"><ul><li>28</li><li>14</li><li>0</li><li>-14</li><li>-28</li></ul></div>
-				<div class="hori"><ul>
+				<div class="gutter-vert"><ul>
+					<li>28</li>
+					<li>14</li>
+					<li>0</li>
+					<li>-14</li>
+					<li>-28</li>
+				</ul></div>
+				<div class="gutter-hori"><ul>
 					<li>20 Hz</li>
 					<li>100 Hz</li>
 					<li>200 Hz</li>
@@ -109,6 +119,31 @@
 					<li>10 KHz</li>
 				</ul></div>
 				<canvas></canvas>
+				<div class="peq-dots">
+					<div class="dot"></div>
+					<div class="dot active"></div>
+					<div class="dot"></div>
+				</div>
+			</div>
+			<div class="peq-list">
+				<div class="list-row head">
+					<div></div>
+					<div>Type</div>
+					<div>Gain</div>
+					<div>Freq</div>
+					<div>Q</div>
+					<div></div>
+				</div>
+				<div class="list-body">
+					<div class="list-row">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="buttons">
@@ -407,9 +442,9 @@
 			Distortion
 		</h2>
 		<div class="dlg-body">
-			<div class="field-box">
+			<div class="field-range-h">
 				<span class="label">Gain</span>
-				<div class="knob" data-change="set-gain" data-value="25"></div>
+				<div class="slider"><span class="handle"></span></div>
 				<span class="value"><input type="text" name="gain" value="25%" data-min="0" data-max="200" data-suffix="%" data-default="25"></span>
 			</div>
 		</div>

@@ -102,7 +102,6 @@ class FileTabs {
 	focus(tId) {
 		if (this._active) {
 			// adjust active file
-			console.log( this._active.fileEl );
 			this._active.fileEl.removeClass("active");
 			this._els.boxWaves.removeClass("mono-channel");
 			

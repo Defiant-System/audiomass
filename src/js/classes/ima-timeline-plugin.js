@@ -19,22 +19,23 @@ class ImaTimeline {
 	once() {
 		if (!this.wavesurfer.getDuration()) return;
 
-		let container = $(this.wavesurfer.getWrapper());
-		this.timelineWrapper = container.prepend(`<div part="timeline"></div>`);
-
+		this.wsContainer = $(this.wavesurfer.getWrapper());
+		this.timelineWrapper = this.wsContainer.before(`<div part="timeline"></div>`);
+		
+		let sW = +this.wsContainer.prop("scrollWidth");
 		let duration = this.wavesurfer.getDuration() ?? 0;
-		let pxPerSec = Math.round(+this.timelineWrapper.prop("scrollWidth") / duration);
+		let pxPerSec = Math.round(sW / duration);
 		let timeInterval = this.defaultTimeInterval(pxPerSec);
+		let lis = [`<ul part="timeline-notch-ul" style="width: ${duration * pxPerSec}px; --liw: ${pxPerSec}px; --nw: ${(pxPerSec * .1).toFixed(1)}px;">`];
 
-		let lis = [`<ul part="timeline-notch-ul" style="width: ${duration * pxPerSec}px; --liw: ${pxPerSec}px; --nw: ${pxPerSec * .1}px;">`];
 		for (let i=0; i<duration; i+=timeInterval) {
 			lis.push(`<li part="timeline-notch-li">${i.toFixed(2)}</li>`);
 		}
+
 		lis.push(`</ul>`);
 
-		this.timelineWrapper.prepend(lis.join(""));
+		this.timelineWrapper.html(lis.join(""));
 		this.timelineUL = this.timelineWrapper.find("ul");
-		console.log(this.timelineUL);
 		this.rendered = true;
 	}
 
@@ -63,6 +64,14 @@ class ImaTimeline {
 	}
 
 	initTimeline() {
-		if (!this.rendered) this.once();
+		if (this.rendered) {
+			let sW = +this.wsContainer.prop("scrollWidth");
+			let duration = this.wavesurfer.getDuration();
+			let pxPerSec = Math.round(sW / duration);
+			this.timelineUL.css({
+				"--liw": `${pxPerSec}px`,
+				"--nw": `${(pxPerSec * .1).toFixed(1)}px`,
+			});
+		} else this.once();
 	}
 }

@@ -14,6 +14,6 @@
 		<meta name="toolbar-style" value="../css/toolbar.less"/>
 		<meta name="content" value="content.htm"/>
 
-		@import "caption-toolbar.xml"
+		@import "toolbar.xml"
 	</Head>
 </Spawn>

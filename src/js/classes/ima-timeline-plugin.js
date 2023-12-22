@@ -41,26 +41,26 @@ class ImaTimeline {
 
 	// Return how many seconds should be between each notch
 	defaultTimeInterval(pxPerSec) {
-		if (pxPerSec >= 25) return 1
-		else if (pxPerSec * 5 >= 25) return 5
-		else if (pxPerSec * 15 >= 25) return 15
-		return Math.ceil(0.5 / pxPerSec) * 60
+		if (pxPerSec >= 25) return 1;
+		else if (pxPerSec * 5 >= 25) return 5;
+		else if (pxPerSec * 15 >= 25) return 15;
+		return Math.ceil(0.5 / pxPerSec) * 60;
 	}
 
 	// Return the cadence of notches that get labels in the primary color.
 	defaultPrimaryLabelInterval(pxPerSec) {
-		if (pxPerSec >= 25) return 10
-		else if (pxPerSec * 5 >= 25) return 6
-		else if (pxPerSec * 15 >= 25) return 4
-		return 4
+		if (pxPerSec >= 25) return 10;
+		else if (pxPerSec * 5 >= 25) return 6;
+		else if (pxPerSec * 15 >= 25) return 4;
+		return 4;
 	}
 
 	// Return the cadence of notches that get labels in the secondary color.
 	defaultSecondaryLabelInterval(pxPerSec) {
-		if (pxPerSec >= 25) return 5
-		else if (pxPerSec * 5 >= 25) return 2
-		else if (pxPerSec * 15 >= 25) return 2
-		return 2
+		if (pxPerSec >= 25) return 5;
+		else if (pxPerSec * 5 >= 25) return 2;
+		else if (pxPerSec * 15 >= 25) return 2;
+		return 2;
 	}
 
 	initTimeline() {
@@ -69,7 +69,7 @@ class ImaTimeline {
 			let duration = this.wavesurfer.getDuration();
 			let pxPerSec = Math.round(sW / duration);
 			this.timelineUL.css({
-				"width": `${duration * pxPerSec}px`,
+				"width": `${Math.floor(duration * pxPerSec)}px`,
 				"--liw": `${pxPerSec}px`,
 				"--nw": `${(pxPerSec * .1).toFixed(1)}px`,
 			});

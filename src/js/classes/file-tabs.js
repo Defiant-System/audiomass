@@ -143,8 +143,10 @@ class FileTabs {
 		// console.log(event);
 		switch (event.type) {
 			case "spawn.resize":
+				// exit if "blank-view" for instance
+				if (!this._active.file) return;
 				// proxy event spawn -> tabs -> file
-				Object.keys(this._stack).map(key => this._stack[key].file.dispatch({ ...event, type: "resize-view" }));
+				Object.keys(this._stack).map(key => this._active.file.dispatch({ ...event, type: "resize-view" }));
 				break;
 			case "show-blank-view":
 				// show blank view

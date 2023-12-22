@@ -7,7 +7,10 @@ let Test = {
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
 		
-		// return;
+		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
+		setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
+		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
+		return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
@@ -28,7 +31,6 @@ let Test = {
 		// return setTimeout(() => {
 		// 	spawn.find(".sample:nth(1)").trigger("click");
 
-		// 	// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// }, 500);
 
 		return setTimeout(() => {
@@ -43,7 +45,6 @@ let Test = {
 				}
 			}
 		}, 1000);
-		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		
 		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
 	}

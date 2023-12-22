@@ -121,6 +121,15 @@
 					oSpawn.close();
 				});
 				break;
+			case "close-file":
+				if (Tabs.length > 1) {
+					// close tab
+					Tabs.remove();
+				} else {
+					Tabs.removeDelayed();
+					Tabs.add({ new: "Blank" });
+				}
+				break;
 			case "close-tab":
 				value = Tabs.length;
 				if (event.delayed) {
@@ -130,10 +139,6 @@
 				} else if (value === 1) {
 					Self.dispatch({ ...event, type: "close-spawn" });
 				}
-				break;
-			case "close-file":
-				Tabs.removeDelayed();
-				Tabs.add({ new: "Blank" });
 				break;
 			case "close-spawn":
 				// system close window / spawn

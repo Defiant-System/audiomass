@@ -45,8 +45,6 @@ class FileTabs {
 			this._stack[tId] = { tabEl, fileEl };
 			// reset view / show blank view
 			this.dispatch({ type: "show-blank-view", spawn: this._spawn });
-			// reference to active tab
-			this._active = this._stack[tId];
 			// focus on file
 			this.focus(tId);
 		} else {
@@ -82,15 +80,18 @@ class FileTabs {
 	}
 
 	remove(tId) {
-		let item = this._stack[tId],
-			nextTab = item.tabEl.parent().find(`.tabbar-tab_:not([data-id="${tId}"])`);
+		let id = tId || this._active.tabEl.data("id"),
+			item = this._stack[id],
+			nextTab = item.tabEl.parent().find(`.tabbar-tab_:not([data-id="${id}"])`);
 		
 		if (item.fileEl[0] !== this._els.content[0]) {
 			// remove element from DOM tree
 			item.fileEl.remove();
+			// remove tab element from DOM tree
+			if (!tId) this._spawn.tabs.remove(item.tabEl);
 			// delete references
-			this._stack[tId] = false;
-			delete this._stack[tId];
+			this._stack[id] = false;
+			delete this._stack[id];
 		}
 		
 		if (nextTab.length) {
@@ -101,6 +102,7 @@ class FileTabs {
 	focus(tId) {
 		if (this._active) {
 			// adjust active file
+			console.log( this._active.fileEl );
 			this._active.fileEl.removeClass("active");
 			this._els.boxWaves.removeClass("mono-channel");
 			

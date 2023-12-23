@@ -99,6 +99,8 @@ const UI = {
 				break;
 			// common events for all dialogs
 			case "dlg-open-common":
+				// fast references for knob twist event
+				Dialogs.data = {};
 				break;
 			case "dlg-ok-common":
 				// close dialog
@@ -130,27 +132,60 @@ const UI = {
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-
-				let el = $(event.target),
-					dlg = el.parents(".dialog-box"),
-					content = dlg.parents("ant-window_"),
+				// prepare info about drag
+				let el = $(event.target).addClass("active"),
+					dEl = el.parents(".dialog-box"),
+					iEl = el.parents(".field-range-h:first").find("input"),
+					handle = el.find(".handle"),
+					content = el.parents("content"),
+					dlg = {
+						dEl,
+						func: Dialogs[dEl.data("dlg")],
+						type: iEl.data("change"),
+					},
+					val = {
+						min: +iEl.data("min"),
+						max: +iEl.data("max") - +iEl.data("min"),
+						step: +iEl.data("step") || 1,
+						value: +iEl.val(),
+					},
 					offset = {
-						y: +dlg.prop("offsetTop") - event.clientY,
-						x: +dlg.prop("offsetLeft") - event.clientX,
-					};
-				Self.drag = { el, dlg, content, offset };
-
+						y: +handle.prop("offsetTop") - event.clientY,
+						x: +handle.prop("offsetLeft") - event.clientX,
+					},
+					minX = 2,
+					limit = {
+						minX,
+						maxX: +el.prop("offsetWidth") - (minX * 2),
+						minaX: +el.prop("offsetWidth") - minX,
+					},
+					_lerp = Math.lerp,
+					_min = Math.min,
+					_max = Math.max;
+				// pre-knob twist event
+				dlg.func({ ...dlg, type: `before:${dlg.type}`, value: +el.data("value") });
+				// save details
+				Self.drag = { el, dEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
+				// hide mouse
+				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
-				Self.drag.content.addClass("no-cursor");
 				Self.doc.on("mousemove mouseup", Self.doSliderH);
 				break;
 			case "mousemove":
-				let left = event.clientX + Drag.offset.x;
-				Drag.el.css({ left });
+				let left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX),
+					perc = (left - Drag.limit.minX) / (Drag.limit.maxX - Drag.limit.minX),
+					value = Drag._lerp(Drag.val.min, Drag.val.max, perc);
+				Drag.handle.css({ left });
+
+				// forward event
+				Drag.dlg.func({ ...Drag.dlg, value });
 				break;
 			case "mouseup":
+				// reset slider element
+				Drag.el.removeClass("active");
+				// unhide mouse
+				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers
-				Self.drag.content.removeClass("no-cursor");
 				Self.doc.off("mousemove mouseup", Self.doSliderH);
 				break;
 		}

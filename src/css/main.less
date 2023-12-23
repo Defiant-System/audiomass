@@ -19,18 +19,20 @@ content {
 	min-height: 0;
 	transition: min-height 250ms;
 
-	&.cover:before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 109;
-	}
+	&.cover {
+		&:after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 109;
+		}
 
-	&.hideMouse:before {
-		cursor: none;
+		&.hideMouse:after {
+			cursor: none;
+		}
 	}
 
 	&.dialog-showing {

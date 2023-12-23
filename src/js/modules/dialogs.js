@@ -9,11 +9,11 @@ const Dialogs = {
 			Self = Dialogs;
 		switch (event.type) {
 			// "fast events"
-			case "set-contrast":
+			case "set-gain":
 				break;
 			
 			// slow/once events
-			case "before:set-contrast":
+			case "before:set-gain":
 				Self.data.filter = event.type.split("-")[1];
 				break;
 

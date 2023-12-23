@@ -145,8 +145,10 @@ const UI = {
 					},
 					val = {
 						min: +iEl.data("min"),
-						max: +iEl.data("max") - +iEl.data("min"),
+						max: +iEl.data("max"),
+						suffix: iEl.data("suffix") || "",
 						step: +iEl.data("step") || 1,
+						decimals: iEl.data("decimals") || 0,
 						value: +iEl.val(),
 					},
 					offset = {
@@ -162,10 +164,11 @@ const UI = {
 					_lerp = Math.lerp,
 					_min = Math.min,
 					_max = Math.max;
+
 				// pre-knob twist event
 				dlg.func({ ...dlg, type: `before:${dlg.type}`, value: +el.data("value") });
 				// save details
-				Self.drag = { el, dEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
+				Self.drag = { el, dEl, iEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -174,9 +177,10 @@ const UI = {
 			case "mousemove":
 				let left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX),
 					perc = (left - Drag.limit.minX) / (Drag.limit.maxX - Drag.limit.minX),
-					value = Drag._lerp(Drag.val.min, Drag.val.max, perc);
+					value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 				Drag.handle.css({ left });
-
+				// input field value
+				Drag.iEl.val(value + Drag.val.suffix);
 				// forward event
 				Drag.dlg.func({ ...Drag.dlg, value });
 				break;

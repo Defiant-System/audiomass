@@ -88,6 +88,23 @@ content {
 		}
 	}
 
+	[class*="icon-"],
+	[class^="icon-"] {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		width: 17px;
+		height: 17px;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		filter: drop-shadow(0 1px 0 rgba(#002,.075));
+		
+		&.icon-audio-on     { background-image: url(~/icons/icon-audio-on.png); }
+		&.icon-audio-off    { background-image: url(~/icons/icon-audio-off.png); }
+		&.icon-trashcan     { background-image: url(~/icons/icon-trashcan.png); }
+	}
+
 	.workspace {
 		background: #1b2642;
 		position: absolute;

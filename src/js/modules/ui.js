@@ -44,6 +44,10 @@ const UI = {
 						return el.data("value") === "on"
 								? el.data({ value: "off" })
 								: el.data({ value: "on" });
+					case el.hasClass("slider"):
+						return el.parent().hasClass("field-range-h")
+								? Self.doSliderH(event)
+								: Self.doSliderV(event);
 				}
 
 				// prevent default behaviour
@@ -113,6 +117,58 @@ const UI = {
 					Self.doDialog({ type: "dlg-undo-filter" });
 				}
 				Self.doDialog({ ...event, type: "dlg-close" });
+				break;
+		}
+	},
+	doSliderH(event) {
+		let Self = UI,
+			Spawn = event.spawn,
+			Drag = Self.drag;
+		// console.log(event);
+		switch (event.type) {
+			// native events
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+
+				let el = $(event.target),
+					dlg = el.parents(".dialog-box"),
+					content = dlg.parents("ant-window_"),
+					offset = {
+						y: +dlg.prop("offsetTop") - event.clientY,
+						x: +dlg.prop("offsetLeft") - event.clientX,
+					};
+				Self.drag = { el, dlg, content, offset };
+
+				// bind event handlers
+				Self.drag.content.addClass("no-cursor");
+				Self.doc.on("mousemove mouseup", Self.doSliderH);
+				break;
+			case "mousemove":
+				let left = event.clientX + Drag.offset.x;
+				Drag.el.css({ left });
+				break;
+			case "mouseup":
+				// unbind event handlers
+				Self.drag.content.removeClass("no-cursor");
+				Self.doc.off("mousemove mouseup", Self.doSliderH);
+				break;
+		}
+	},
+	doSliderV(event) {
+		let Self = UI,
+			Spawn = event.spawn,
+			Drag = Self.drag;
+		// console.log(event);
+		switch (event.type) {
+			// native events
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+				break;
+			case "mousemove":
+				break;
+			case "mouseup":
 				break;
 		}
 	},

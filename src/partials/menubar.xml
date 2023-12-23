@@ -35,7 +35,7 @@
 		<Menu name="Fade In" disabled="1"/>
 		<Menu name="Fade Out" disabled="1"/>
 		<Menu type="divider"/>
-		<Menu name="Gain" click="open-dialog" arg="dlgCain"/>
+		<Menu name="Gain" click="open-dialog" arg="dlgGain"/>
 		<Menu name="Normalize" click="open-dialog" arg="dlgNormalize"/>
 		<Menu name="Compressor" click="open-dialog" arg="dlgCompressor"/>
 		<Menu name="Paragraphic EQ" click="open-dialog" arg="dlgParagraphicEq"/>

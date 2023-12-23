@@ -9,6 +9,11 @@
 	transform-origin: 50% 0;
 	animation: imaudio-popup-bubble 120ms linear forwards;
 
+	&.hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	&.pop-hide {
 		animation: imaudio-popup-hide 120ms linear forwards;
 	}

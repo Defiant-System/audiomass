@@ -52,8 +52,8 @@ const UI = {
 				let dlg = el.parents(".dialog-box"),
 					content = dlg.parents("ant-window_"),
 					offset = {
-						y: +dlg.prop("offsetTop") - event.clientY,
-						x: +dlg.prop("offsetLeft") - event.clientX,
+						y: +dlg.prop("offsetTop") - parseInt(dlg.css("margin-top"), 10) - event.clientY,
+						x: +dlg.prop("offsetLeft") - parseInt(dlg.css("margin-left"), 10) - event.clientX,
 					};
 				Self.drag = { dlg, content, offset };
 

@@ -634,7 +634,6 @@
 
 	.peq-list {
 		position: relative;
-		min-height: 110px;
 		margin: 23px 0 0 19px;
 		padding: 1px;
 		box-shadow: inset 0 0 0 1px rgba(#002,.1);
@@ -645,22 +644,33 @@
 
 		.list-body {
 			flex: 1;
-			overflow: auto;
+			// min-height: 73px;
+			padding-bottom: 13px;
 			border-radius: inherit;
 			border-top-left-radius: 0;
 			border-top-right-radius: 0;
-			box-shadow: inset 0 0 7px rgba(#002,.1);
+			box-shadow: inset 0 0 3px rgba(#002,.1);
 			background: rgba(#002,.05);
 			color: rgba(#cdf,.35);
 
 			.list-row {
 				height: 21px;
-				box-shadow: 0 1px 0 rgba(#779,.1);
 
 				&:hover {
+					// box-shadow: 0 1px 0 rgba(#779,.1);
 					color: rgba(#cdf,.75);
 
 					> div {
+						&:nth-child(2) span,
+						&:nth-child(3) span,
+						&:nth-child(4) span {
+							background: rgba(#002,.15);
+						}
+						
+						.type-options {
+							opacity: 1;
+						}
+
 						.icon-audio-on,
 						.icon-audio-off,
 						.icon-trashcan {
@@ -688,19 +698,30 @@
 			}
 
 			> div {
-				padding: 5px 5px 3px;
+				padding: 3px 5px 3px;
+				text-align: center;
 
 				&:nth-child(1) { flex: 1; }
-				&:nth-child(2) { width: 89px; }
-				&:nth-child(3) { width: 89px; }
+				&:nth-child(2) { width: 97px; }
+				&:nth-child(3) { width: 97px; }
 				&:nth-child(4) { width: 97px; }
-				&:nth-child(5) { width: 53px; }
+				&:nth-child(5) { width: 61px; text-align: left; }
+
+				&:nth-child(2) span,
+				&:nth-child(3) span,
+				&:nth-child(4) span {
+					display: inline-block;
+					border-radius: 19px;
+					padding: 2px 0;
+					width: 73px;
+					cursor: pointer;
+				}
 
 				.icon-audio-on,
 				.icon-audio-off,
 				.icon-trashcan {
 					opacity: 0;
-					top: -3px;
+					top: -1px;
 					margin-right: 2px;
 					cursor: pointer;
 				}
@@ -709,14 +730,15 @@
 
 		.type-options {
 			position: relative;
-			top: -5px;
+			top: -2px;
 			font-size: 0;
 			display: inline-block;
 			text-shadow: 0 0 0;
+			opacity: .5;
 
 			i {
 				position: relative;
-				border: 1px solid #415a82;
+				border: 1px solid #4e6a96;
 				display: inline-block;
 				width: 21px;
 				height: 17px;
@@ -743,7 +765,7 @@
 				}
 
 				&.active {
-					background-color: #415a82;
+					background-color: #4e6a96;
 					cursor: default;
 
 					&:after { opacity: .6; }

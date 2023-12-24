@@ -151,17 +151,18 @@ const UI = {
 							uEl.css({ top: Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc) });
 							break;
 						case el.hasClass("field-box"):
-							// input field value
-							iEl.val(val.value + val.suffix);
-							// ui element update
-							uEl = el.find(`.knob`);
-
 							val.ui = {
 								min: 0,
 								max: 100,
+								decimals: val.step.toString().split(".")[1] || 0,
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
 
+							// input field value
+							iEl.val(val.value.toFixed(val.ui.decimals) + val.suffix);
+							// ui element update
+							uEl = el.find(`.knob`);
+							
 							uEl.data({ value: Math.lerp(val.ui.min, val.ui.max, val.ui.perc) });
 							break;
 					}

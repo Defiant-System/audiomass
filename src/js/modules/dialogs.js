@@ -59,7 +59,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
@@ -75,7 +75,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
@@ -125,7 +125,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq20" });
@@ -141,7 +141,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgHardLimiter" });
@@ -157,7 +157,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDelay" });
@@ -166,14 +166,23 @@ const Dialogs = {
 	},
 	dlgDistortion(event) {
 		/*
+		 * gain -  Min: 0   Max: 2
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			// "fast events"
+			case "set-gain":
+				break;
+			
+			// slow/once events
+			case "before:set-gain":
+				break;
+
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDistortion" });
@@ -189,7 +198,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });
@@ -198,17 +207,26 @@ const Dialogs = {
 	},
 	dlgSpeed(event) {
 		/*
+		 * gain -  Min: 0.2   Max: 2
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			// "fast events"
+			case "set-rate":
+				break;
+			
+			// slow/once events
+			case "before:set-rate":
+				break;
+
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSpeed" });
 				break;
 		}
 	},

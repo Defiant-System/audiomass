@@ -86,7 +86,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -193,7 +193,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -270,6 +270,20 @@
 			</div>
 		</div>
 		<div class="buttons">
+			<div class="presets">
+				<span>Presets</span>
+				<div>
+					<ul>
+						<li>1</li>
+						<li>2</li>
+						<li>3</li>
+						<li>4</li>
+						<li>5</li>
+						<li><i class="icon-padlock"></i></li>
+					</ul>
+				</div>
+			</div>
+
 			<div class="button" data-click="dlg-ok">Apply</div>
 			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
@@ -403,7 +417,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -439,7 +453,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -475,7 +489,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -490,12 +504,12 @@
 			<div class="field-range-h">
 				<span class="label">Gain</span>
 				<div class="slider"><span class="handle"></span></div>
-				<span class="value"><input type="text" name="gain" value="25%" data-min="0" data-max="200" data-suffix="%" data-default="25"></span>
+				<span class="value"><input type="text" name="gain" data-min="0" data-max="2" data-step="0.1" data-default="0.5" data-change="set-gain"></span>
 			</div>
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -531,7 +545,7 @@
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>
@@ -550,12 +564,12 @@
 			<div class="field-range-h">
 				<span class="label">Playback Rate</span>
 				<div class="slider"><span class="handle"></span></div>
-				<span class="value"><input type="text" name="speed" value="1" data-min="0.2" data-max="2" data-default="1"></span>
+				<span class="value"><input type="text" name="rate" data-min="0" data-max="2" data-step="0.1" data-default="0.5" data-change="set-rate"></span>
 			</div>
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-ok">Apply</div>
-			<div class="button" data-click="dlg-cancel">Cancel</div>
+			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
 	</div>
 </div>

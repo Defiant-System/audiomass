@@ -52,10 +52,22 @@ const Dialogs = {
 	},
 	dlgCompressor(event) {
 		/*
+		 * threshold   Min: -100.0    Max: 0.0
+		 * knee        Min: 0.0       Max: 40.0
+		 * ratio       Min: 1.0       Max: 20.0
+		 * attack      Min: 0.0       Max: 1.0
+		 * release     Min: 0.0       Max: 1.0
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "set-threshold":
+			case "set-knee":
+			case "set-ratio":
+			case "set-attack":
+			case "set-release":
+				break;
+
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":

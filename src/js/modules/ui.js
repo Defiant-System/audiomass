@@ -113,7 +113,7 @@ const UI = {
 			case "dlg-reset-common":
 				dEl = event.dEl || $(`.dialog-box[data-dlg="${event.name}"]`);
 				
-				dEl.find(`.field-range-h, .field-range`).map(elem => {
+				dEl.find(`.field-range-h, .field-range, .field-box`).map(elem => {
 					let el = $(elem),
 						iEl = el.find("input"),
 						val = {
@@ -149,6 +149,20 @@ const UI = {
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
 							uEl.css({ top: Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc) });
+							break;
+						case el.hasClass("field-box"):
+							// input field value
+							iEl.val(val.value + val.suffix);
+							// ui element update
+							uEl = el.find(`.knob`);
+
+							val.ui = {
+								min: 0,
+								max: 100,
+								perc: (val.value - val.min) / (val.max - val.min),
+							};
+
+							uEl.data({ value: Math.lerp(val.ui.min, val.ui.max, val.ui.perc) });
 							break;
 					}
 				});
@@ -318,7 +332,18 @@ const UI = {
 				event.preventDefault();
 				// prepare drag event object
 				let el = $(event.target),
-					content = el.parents("content");
+					iEl = el.parents(".field-box:first").find("input"),
+					content = el.parents("content"),
+					step = +iEl.data("step") || 1,
+					val = {
+						name: iEl.attr("name"),
+						min: +iEl.data("min"),
+						max: +iEl.data("max"),
+						suffix: iEl.data("suffix") || "",
+						decimals: step.toString().split(".")[1] || 0,
+						value: +parseInt(iEl.val(), 10),
+						step,
+					};
 				
 				// references needed for drag'n drop
 				Self.drag = {

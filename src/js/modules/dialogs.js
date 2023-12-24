@@ -27,14 +27,23 @@ const Dialogs = {
 	},
 	dlgNormalize(event) {
 		/*
+		 * normalize -  Min: 0%   Max: 200%
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			// "fast events"
+			case "set-normalize":
+				break;
+			
+			// slow/once events
+			case "before:set-normalize":
+				break;
+
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgNormalize" });

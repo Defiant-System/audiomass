@@ -48,6 +48,8 @@ const UI = {
 						return el.parent().hasClass("field-range-h")
 								? Self.doSliderH(event)
 								: Self.doSliderV(event);
+					case el.hasClass("knob"):
+						return Self.doDialogKnob(event);
 				}
 
 				// prevent default behaviour
@@ -304,13 +306,46 @@ const UI = {
 				Self.doc.off("mousemove mouseup", Self.doSliderV);
 		}
 	},
-	doDialogKnobValue(event) {
-		
-	},
 	doDialogKnob(event) {
-		
-	},
-	doKnob(event) {
-		
+		let Self = UI,
+			Spawn = event.spawn,
+			Drag = Self.drag;
+		// console.log(event);
+		switch (event.type) {
+			// native events
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+				// prepare drag event object
+				let el = $(event.target),
+					content = el.parents("content");
+				
+				// references needed for drag'n drop
+				Self.drag = {
+					el,
+					content,
+					value: +el.data("value"),
+					clientY: event.clientY,
+					_min: Math.min,
+					_max: Math.max,
+					_lerp: Math.lerp,
+					_round: Math.round,
+				};
+
+				// hide mouse
+				Self.drag.content.addClass("cover hideMouse");
+				// bind event handlers
+				Self.doc.on("mousemove mouseup", Self.doDialogKnob);
+				break;
+			case "mousemove":
+				let value = Drag._min(Drag._max((Drag.clientY - event.clientY) + Drag.value, 0), 100);
+				Drag.el.data({ value });
+				break;
+			case "mouseup":
+				// unhide mouse
+				Drag.content.removeClass("cover hideMouse");
+				// unbind event handlers
+				Self.doc.off("mousemove mouseup", Self.doDialogKnob);
+		}
 	}
 };

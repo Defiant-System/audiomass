@@ -25,7 +25,7 @@ let Test = {
 				end: 2.5,
 			});
 
-			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGain", spawn }), 200);
+			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGraphicEq", spawn }), 200);
 		}, 500);
 
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);

@@ -2,8 +2,7 @@
 const Dialogs = {
 	dlgGain(event) {
 		/*
-		 * Brightness -  Min: -150   Max: 150
-		 * Contrast -    Min: -100   Max: 100
+		 * gain -  Min: 10%   Max: 200%
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
@@ -14,13 +13,12 @@ const Dialogs = {
 			
 			// slow/once events
 			case "before:set-gain":
-				Self.data.filter = event.type.split("-")[1];
 				break;
 
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGain" });
@@ -77,14 +75,32 @@ const Dialogs = {
 	},
 	dlgGraphicEq(event) {
 		/*
+		 * 32Hz     Min: -25 dB     Max: 25 dB
+		 * 64 Hz    Min: -25 dB     Max: 25 dB
+		 * 125 Hz   Min: -25 dB     Max: 25 dB
+		 * 250 Hz   Min: -25 dB     Max: 25 dB
+		 * 500 Hz   Min: -25 dB     Max: 25 dB
+		 * 1 KHz    Min: -25 dB     Max: 25 dB
+		 * 2 KHz    Min: -25 dB     Max: 25 dB
+		 * 4 KHz    Min: -25 dB     Max: 25 dB
+		 * 8 KHz    Min: -25 dB     Max: 25 dB
+		 * 16 KHz   Min: -25 dB     Max: 25 dB
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			// "fast events"
+			case "set-peak":
+				break;
+			
+			// slow/once events
+			case "before:set-peak":
+				break;
+
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
-			case "dlg-cancel":
+			case "dlg-reset":
 			case "dlg-preview":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq" });

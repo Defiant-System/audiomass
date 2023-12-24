@@ -79,6 +79,8 @@ const UI = {
 			// custom events
 			case "dlg-open":
 				dEl = $(`.dialog-box[data-dlg="${event.name}"]`);
+				// auto reset dialog before show
+				Dialogs[event.name]({ ...event, dEl, type: "dlg-reset" });
 				// auto forward open event
 				Dialogs[event.name]({ ...event, dEl });
 				// prevent mouse from triggering mouseover
@@ -106,9 +108,48 @@ const UI = {
 				// close dialog
 				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;
-			case "dlg-cancel-common":
-				// close dialog
-				Dialogs[event.name]({ ...event, type: "dlg-close" });
+			case "dlg-reset-common":
+				dEl = event.dEl || $(`.dialog-box[data-dlg="${event.name}"]`);
+				
+				dEl.find(`.field-range-h, .field-range`).map(elem => {
+					let el = $(elem),
+						iEl = el.find("input"),
+						val = {
+							min: +iEl.data("min"),
+							max: +iEl.data("max"),
+							suffix: iEl.data("suffix") || "",
+							step: +iEl.data("step") || 1,
+							decimals: iEl.data("decimals") || 0,
+							value: +iEl.data("default"),
+						},
+						uEl;
+					switch (true) {
+						case el.hasClass("field-range-h"):
+							// input field value
+							iEl.val(val.value + val.suffix);
+							// ui element update
+							uEl = el.find(`.slider .handle`);
+							val.ui = {
+								minX: 2,
+								maxX: +uEl.parent().prop("offsetWidth") - 3,
+								perc: (val.value - val.min) / (val.max - val.min),
+							};
+							uEl.css({ left: Math.lerp(val.ui.minX, val.ui.maxX, val.ui.perc) });
+							break;
+						case el.hasClass("field-range"):
+							// input field value
+							iEl.val(val.value + val.suffix);
+							// ui element update
+							uEl = el.find(`.slider .handle`);
+							val.ui = {
+								minY: 2,
+								maxY: +uEl.parent().prop("offsetHeight") - 3,
+								perc: (val.value - val.min) / (val.max - val.min),
+							};
+							uEl.css({ top: Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc) });
+							break;
+					}
+				});
 				break;
 			case "dlg-preview-common":
 				Dialogs.preview = event.el.data("value") === "on";
@@ -138,35 +179,34 @@ const UI = {
 					iEl = el.parents(".field-range-h:first").find("input"),
 					handle = el.find(".handle"),
 					content = el.parents("content"),
+					step = +iEl.data("step") || 1,
+					val = {
+						name: iEl.attr("name"),
+						min: +iEl.data("min"),
+						max: +iEl.data("max"),
+						suffix: iEl.data("suffix") || "",
+						decimals: step.toString().split(".")[1] || 0,
+						value: +parseInt(iEl.val(), 10),
+						step,
+					},
 					dlg = {
 						dEl,
 						func: Dialogs[dEl.data("dlg")],
 						type: iEl.data("change"),
 					},
-					val = {
-						min: +iEl.data("min"),
-						max: +iEl.data("max"),
-						suffix: iEl.data("suffix") || "",
-						step: +iEl.data("step") || 1,
-						decimals: iEl.data("decimals") || 0,
-						value: +iEl.val(),
-					},
 					offset = {
-						y: +handle.prop("offsetTop") - event.clientY,
 						x: +handle.prop("offsetLeft") - event.clientX,
 					},
-					minX = 2,
 					limit = {
-						minX,
-						maxX: +el.prop("offsetWidth") - (minX * 2),
-						minaX: +el.prop("offsetWidth") - minX,
+						minX: 2,
+						maxX: +el.prop("offsetWidth") - 3,
 					},
 					_lerp = Math.lerp,
 					_min = Math.min,
 					_max = Math.max;
 
 				// pre-knob twist event
-				dlg.func({ ...dlg, type: `before:${dlg.type}`, value: +el.data("value") });
+				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: +el.data("value") });
 				// save details
 				Self.drag = { el, dEl, iEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
 				// hide mouse
@@ -182,7 +222,7 @@ const UI = {
 				// input field value
 				Drag.iEl.val(value + Drag.val.suffix);
 				// forward event
-				Drag.dlg.func({ ...Drag.dlg, value });
+				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// reset slider element
@@ -204,11 +244,64 @@ const UI = {
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
+				// prepare info about drag
+				let el = $(event.target).addClass("active"),
+					dEl = el.parents(".dialog-box"),
+					iEl = el.parents(".field-range:first").find("input"),
+					handle = el.find(".handle"),
+					content = el.parents("content"),
+					step = +iEl.data("step") || 1,
+					val = {
+						name: iEl.attr("name"),
+						min: +iEl.data("min"),
+						max: +iEl.data("max"),
+						suffix: iEl.data("suffix") || "",
+						decimals: step.toString().split(".")[1] || 0,
+						value: +parseInt(iEl.val(), 10),
+						step,
+					},
+					dlg = {
+						dEl,
+						func: Dialogs[dEl.data("dlg")],
+						type: iEl.data("change"),
+					},
+					offset = {
+						y: +handle.prop("offsetTop") - event.clientY,
+					},
+					limit = {
+						minY: 2,
+						maxY: +el.prop("offsetHeight") - 3,
+					},
+					_lerp = Math.lerp,
+					_min = Math.min,
+					_max = Math.max;
+
+				// pre-knob twist event
+				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: +el.data("value") });
+				// save details
+				Self.drag = { el, dEl, iEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
+				// hide mouse
+				Self.drag.content.addClass("cover hideMouse");
+				// bind event handlers
+				Self.doc.on("mousemove mouseup", Self.doSliderV);
 				break;
 			case "mousemove":
+				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
+					perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY),
+					value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
+				Drag.handle.css({ top });
+				// input field value
+				Drag.iEl.val(value + Drag.val.suffix);
+				// forward event
+				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
-				break;
+				// reset slider element
+				Drag.el.removeClass("active");
+				// unhide mouse
+				Drag.content.removeClass("cover hideMouse");
+				// unbind event handlers
+				Self.doc.off("mousemove mouseup", Self.doSliderV);
 		}
 	},
 	doDialogKnobValue(event) {

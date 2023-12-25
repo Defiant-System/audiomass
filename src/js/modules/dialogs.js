@@ -84,6 +84,10 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "set-gain":
+			case "set-freq":
+			case "set-q":
+				break;
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":

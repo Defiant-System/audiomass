@@ -413,30 +413,70 @@ const UI = {
 				event.preventDefault();
 				// prepare info about drag
 				let el = $(event.target).addClass("active"),
+					isPan = el.data("name") === "gain",
+					row = el.parents(".list-row"),
 					dEl = el.parents(".dialog-box"),
 					content = dEl.parents("content"),
 					fieldOffset = el.offset(".peq-list"),
+					step = +el.data("step") || 1,
+					val = {
+						name: el.data("name"),
+						min: +el.data("min"),
+						max: +el.data("max"),
+						suffix: el.data("suffix") || "",
+						decimals: (step.toString().split(".")[1] || "").length,
+						value: +parseInt(el.text(), 10),
+						step,
+					},
+					dlg = {
+						dEl,
+						func: Dialogs[dEl.data("dlg")],
+						type: el.data("change"),
+					},
+					limit = { min: 0, max: 100 },
 					top = fieldOffset.top - 60,
-					left = fieldOffset.left + (fieldOffset.width >> 1) - 25;
+					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
+					_lerp = Math.lerp,
+					_min = Math.min,
+					_max = Math.max,
+					knob = dEl.find(".bubble-knob .knob");
+
+				val.knob = Math.invLerp(val.min, val.max, val.value) * 100 | 1;
+				val.knobOffset = val.knob + event.clientY;
+
+				if (isPan) {
+					knob.addClass("pan-knob");
+					limit = { min: -50, max: 50 };
+					val.knobOffset -= 50;
+					val.knob -= 50;
+				}
+				knob.data({ value: val.knob });
+
+				// pre-knob twist event
+				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: val.value });
 				// "freeze" list row ui
-				el.parents(".list-row").addClass("active");
+				row.addClass("active");
 				// show field knob bubble
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { el, dEl, content };
+				Self.drag = { el, row, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
 				Self.doc.on("mousemove mouseup", Self.doBubbleKnob);
 				break;
 			case "mousemove":
+				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min);
+				Drag.knob.data({ value });
 				break;
 			case "mouseup":
 				// reset dot element
 				Drag.el.removeClass("active");
-				Drag.el.parents(".list-row").addClass("active");
+				Drag.row.removeClass("active");
+				// reset bubble
 				Drag.dEl.find(".bubble-knob").addClass("hidden");
+				Drag.knob.removeClass("pan-knob").addClass("knob");
 				// unhide mouse
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers

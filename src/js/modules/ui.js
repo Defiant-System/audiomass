@@ -31,6 +31,7 @@ const UI = {
 		let Self = UI,
 			Spawn = event.spawn,
 			Drag = Self.drag,
+			value,
 			dEl,
 			el;
 		// console.log(event);
@@ -121,7 +122,6 @@ const UI = {
 							max: +iEl.data("max"),
 							suffix: iEl.data("suffix") || "",
 							step: +iEl.data("step") || 1,
-							decimals: iEl.data("decimals") || 0,
 							value: +iEl.data("default"),
 						},
 						uEl;
@@ -136,7 +136,8 @@ const UI = {
 								maxX: +uEl.parent().prop("offsetWidth") - 3,
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
-							uEl.css({ left: Math.lerp(val.ui.minX, val.ui.maxX, val.ui.perc) });
+							value = Math.lerp(val.ui.minX, val.ui.maxX, val.ui.perc);
+							uEl.css({ left });
 							break;
 						case el.hasClass("field-range"):
 							// input field value
@@ -148,22 +149,23 @@ const UI = {
 								maxY: +uEl.parent().prop("offsetHeight") - 3,
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
-							uEl.css({ top: Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc) });
+							value = Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc);
+							uEl.css({ top });
 							break;
 						case el.hasClass("field-box"):
 							val.ui = {
 								min: 0,
 								max: 100,
-								decimals: val.step.toString().split(".")[1] || 0,
+								decimals: (val.step.toString().split(".")[1] || "").length,
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
-
 							// input field value
 							iEl.val(val.value.toFixed(val.ui.decimals) + val.suffix);
 							// ui element update
 							uEl = el.find(`.knob`);
-							
-							uEl.data({ value: Math.lerp(val.ui.min, val.ui.max, val.ui.perc) });
+
+							value = Math.round(Math.lerp(val.ui.min, val.ui.max, val.ui.perc));
+							uEl.data({ value });
 							break;
 					}
 				});
@@ -202,7 +204,7 @@ const UI = {
 						min: +iEl.data("min"),
 						max: +iEl.data("max"),
 						suffix: iEl.data("suffix") || "",
-						decimals: step.toString().split(".")[1] || 0,
+						decimals: (step.toString().split(".")[1] || "").length,
 						value: +parseInt(iEl.val(), 10),
 						step,
 					},
@@ -273,7 +275,7 @@ const UI = {
 						min: +iEl.data("min"),
 						max: +iEl.data("max"),
 						suffix: iEl.data("suffix") || "",
-						decimals: step.toString().split(".")[1] || 0,
+						decimals: (step.toString().split(".")[1] || "").length,
 						value: +parseInt(iEl.val(), 10),
 						step,
 					},
@@ -341,7 +343,7 @@ const UI = {
 						min: +iEl.data("min"),
 						max: +iEl.data("max"),
 						suffix: iEl.data("suffix") || "",
-						decimals: step.toString().split(".")[1] || 0,
+						decimals: (step.toString().split(".")[1] || "").length,
 						value: +parseInt(iEl.val(), 10),
 						step,
 					};
@@ -354,8 +356,7 @@ const UI = {
 					clientY: event.clientY,
 					_min: Math.min,
 					_max: Math.max,
-					_lerp: Math.lerp,
-					_round: Math.round,
+					_lerp: i => Math.round(Math.lerp(i)),
 				};
 
 				// hide mouse

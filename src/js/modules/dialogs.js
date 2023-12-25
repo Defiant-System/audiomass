@@ -66,7 +66,6 @@ const Dialogs = {
 			case "set-ratio":
 			case "set-attack":
 			case "set-release":
-				console.log( event.type, event.value );
 				break;
 
 			// standard dialog events
@@ -112,13 +111,17 @@ const Dialogs = {
 			Self = Dialogs;
 		switch (event.type) {
 			// "fast events"
-			case "set-peak":
+			case "set-hz32":
+			case "set-hz64":
+			case "set-hz125":
+			case "set-hz250":
+			case "set-hz500":
+			case "set-hz1K":
+			case "set-hz2K":
+			case "set-hz4K":
+			case "set-hz8K":
+			case "set-hz16K":
 				break;
-			
-			// slow/once events
-			case "before:set-peak":
-				break;
-
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
@@ -131,10 +134,51 @@ const Dialogs = {
 	},
 	dlgGraphicEq20(event) {
 		/*
+		
+		 * 32 Hz     Min: -25 dB     Max: 25 dB
+		 * 44 Hz     Min: -25 dB     Max: 25 dB
+		 * 63 Hz     Min: -25 dB     Max: 25 dB
+		 * 88 Hz     Min: -25 dB     Max: 25 dB
+		 * 125 Hz    Min: -25 dB     Max: 25 dB
+		 * 180 Hz    Min: -25 dB     Max: 25 dB
+		 * 250 Hz    Min: -25 dB     Max: 25 dB
+		 * 335 Hz    Min: -25 dB     Max: 25 dB
+		 * 500 Hz    Min: -25 dB     Max: 25 dB
+		 * 710 Hz    Min: -25 dB     Max: 25 dB
+		 * 1 KHz     Min: -25 dB     Max: 25 dB
+		 * 4 KHz     Min: -25 dB     Max: 25 dB
+		 * 2 KHz     Min: -25 dB     Max: 25 dB
+		 * 8 KHz     Min: -25 dB     Max: 25 dB
+		 * 4 KHz     Min: -25 dB     Max: 25 dB
+		 * 6 KHz     Min: -25 dB     Max: 25 dB
+		 * 8 KHz     Min: -25 dB     Max: 25 dB
+		 * 3 KHz     Min: -25 dB     Max: 25 dB
+		 * 22 KHz    Min: -25 dB     Max: 25 dB
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "hz32":
+			case "hz44":
+			case "hz63":
+			case "hz88":
+			case "hz125":
+			case "hz180":
+			case "hz250":
+			case "hz335":
+			case "hz500":
+			case "hz710":
+			case "hz1K":
+			case "hz4K":
+			case "hz2K":
+			case "hz8K":
+			case "hz4K":
+			case "hz6K":
+			case "hz8K":
+			case "hz3K":
+			case "hz22K":
+				console.log( event.type, event.value );
+				break;
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
@@ -147,10 +191,17 @@ const Dialogs = {
 	},
 	dlgHardLimiter(event) {
 		/*
+		 * limit-to      min: 10    max: 100
+		 * ratio         min: 0     max: 100
+		 * look-ahead    min: 1     max: 500
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "set-limit-to":
+			case "set-ratio":
+			case "set-look-ahead":
+				break;
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":

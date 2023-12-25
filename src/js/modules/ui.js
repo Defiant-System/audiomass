@@ -137,7 +137,7 @@ const UI = {
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
 							value = Math.lerp(val.ui.minX, val.ui.maxX, val.ui.perc);
-							uEl.css({ left });
+							uEl.css({ left: value });
 							break;
 						case el.hasClass("field-range"):
 							// input field value
@@ -150,7 +150,7 @@ const UI = {
 								perc: (val.value - val.min) / (val.max - val.min),
 							};
 							value = Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc);
-							uEl.css({ top });
+							uEl.css({ top: value });
 							break;
 						case el.hasClass("field-box"):
 							val.ui = {

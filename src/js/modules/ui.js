@@ -53,11 +53,11 @@ const UI = {
 						return el.parent().hasClass("field-range-h")
 								? Self.doSliderH(event)
 								: Self.doSliderV(event);
-					case el.hasClass("knob"):
+					case el.hasClass("bubble-knob"):
+						return Self.doBubbleKnob(event);
+					case el.hasClass("peq-dot-wrapper"):
 						return Self.doDialogKnob(event);
 					case el.hasClass("peq-dot-wrapper"):
-						// TODO: first add dot, then fall through
-						break;
 					case el.hasClass("peq-dot"):
 						return Self.doPeqDot(event);
 				}
@@ -401,7 +401,7 @@ const UI = {
 				Self.doc.off("mousemove mouseup", Self.doDialogKnob);
 		}
 	},
-	doPeqDot(event) {
+	doBubbleKnob(event) {
 		let Self = UI,
 			Spawn = event.spawn,
 			Drag = Self.drag;
@@ -413,30 +413,82 @@ const UI = {
 				event.preventDefault();
 				// prepare info about drag
 				let el = $(event.target).addClass("active"),
+					dEl = el.parents(".dialog-box"),
+					content = dEl.parents("content"),
+					fieldOffset = el.offset(".peq-list"),
+					top = fieldOffset.top - 60,
+					left = fieldOffset.left + (fieldOffset.width >> 1) - 25;
+				// "freeze" list row ui
+				el.parents(".list-row").addClass("active");
+				// show field knob buggle
+				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
+
+				// save details
+				Self.drag = { el, dEl, content };
+				// hide mouse
+				Self.drag.content.addClass("cover hideMouse");
+				// bind event handlers
+				Self.doc.on("mousemove mouseup", Self.doBubbleKnob);
+				break;
+			case "mousemove":
+				break;
+			case "mouseup":
+				// reset dot element
+				Drag.el.removeClass("active");
+				Drag.el.parents(".list-row").addClass("active");
+				Drag.dEl.find(".bubble-knob").addClass("hidden");
+				// unhide mouse
+				Drag.content.removeClass("cover hideMouse");
+				// unbind event handlers
+				Self.doc.off("mousemove mouseup", Self.doBubbleKnob);
+		}
+	},
+	doPeqDot(event) {
+		let Self = UI,
+			Spawn = event.spawn,
+			Drag = Self.drag;
+		// console.log(event);
+		switch (event.type) {
+			// native events
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+				
+				// TODO: first add dot, then fall through
+
+				// prepare info about drag
+				let el = $(event.target).addClass("active"),
 					content = el.parents("content"),
 					offset = {
-						y: +el.prop("offsetTop") - event.clientY,
-						x: +el.prop("offsetLeft") - event.clientX,
+						y: +el.prop("offsetTop") - event.clientY + 6,
+						x: +el.prop("offsetLeft") - event.clientX + 6,
 					},
 					limit = {
 						minY: 2,
-						maxY: +el.parent().prop("offsetHeight"),
 						minX: 2,
-						maxX: +el.parent().prop("offsetWidth"),
+						maxY: +el.parent().prop("offsetHeight") - 2,
+						maxX: +el.parent().prop("offsetWidth") - 2,
 					},
 					_min = Math.min,
-					_max = Math.max;
+					_max = Math.max,
+					_lerp = Math.lerp,
+					_round = Math.round;
 
 				// save details
-				Self.drag = { el, content, offset, limit, _min, _max };
+				Self.drag = { el, content, offset, limit, _min, _max, _lerp, _round };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
 				Self.doc.on("mousemove mouseup", Self.doPeqDot);
 				break;
 			case "mousemove":
+				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
+					left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX);
+				Drag.el.css({ top, left });
 				break;
 			case "mouseup":
+				// reset dot element
+				Drag.el.removeClass("active");
 				// unhide mouse
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers

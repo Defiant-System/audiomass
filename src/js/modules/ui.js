@@ -41,6 +41,10 @@ const UI = {
 				el = $(event.target);
 
 				switch (true) {
+					case el.parent().hasClass("type-options"):
+						el.parent().find(".active").removeClass("active");
+						el.addClass("active");
+						break;
 					case el.hasClass("toggler"):
 						return el.data("value") === "on"
 								? el.data({ value: "off" })
@@ -51,6 +55,11 @@ const UI = {
 								: Self.doSliderV(event);
 					case el.hasClass("knob"):
 						return Self.doDialogKnob(event);
+					case el.hasClass("peq-dot-wrapper"):
+						// TODO: first add dot, then fall through
+						break;
+					case el.hasClass("peq-dot"):
+						return Self.doPeqDot(event);
 				}
 
 				// prevent default behaviour
@@ -390,6 +399,48 @@ const UI = {
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers
 				Self.doc.off("mousemove mouseup", Self.doDialogKnob);
+		}
+	},
+	doPeqDot(event) {
+		let Self = UI,
+			Spawn = event.spawn,
+			Drag = Self.drag;
+		// console.log(event);
+		switch (event.type) {
+			// native events
+			case "mousedown":
+				// prevent default behaviour
+				event.preventDefault();
+				// prepare info about drag
+				let el = $(event.target).addClass("active"),
+					content = el.parents("content"),
+					offset = {
+						y: +el.prop("offsetTop") - event.clientY,
+						x: +el.prop("offsetLeft") - event.clientX,
+					},
+					limit = {
+						minY: 2,
+						maxY: +el.parent().prop("offsetHeight"),
+						minX: 2,
+						maxX: +el.parent().prop("offsetWidth"),
+					},
+					_min = Math.min,
+					_max = Math.max;
+
+				// save details
+				Self.drag = { el, content, offset, limit, _min, _max };
+				// hide mouse
+				Self.drag.content.addClass("cover hideMouse");
+				// bind event handlers
+				Self.doc.on("mousemove mouseup", Self.doPeqDot);
+				break;
+			case "mousemove":
+				break;
+			case "mouseup":
+				// unhide mouse
+				Drag.content.removeClass("cover hideMouse");
+				// unbind event handlers
+				Self.doc.off("mousemove mouseup", Self.doPeqDot);
 		}
 	}
 };

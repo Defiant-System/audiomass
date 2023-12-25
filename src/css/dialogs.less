@@ -601,8 +601,8 @@
 			),
 			repeating-linear-gradient(90deg,
 				transparent 0,
-				transparent 140px, rgba(#cdf,.2) 140px, rgba(#cdf,.2) 141px, transparent 141px,
-				transparent 152px
+				transparent 125px, rgba(#cdf,.2) 125px, rgba(#cdf,.2) 126px, transparent 126px,
+				transparent 134px
 			);
 
 		&:before {
@@ -630,14 +630,14 @@
 			pointer-events: none;
 			background: repeating-linear-gradient(90deg,
 				transparent 0,
-				transparent 40px, rgba(#cdf,.1) 40px, rgba(#cdf,.1) 41px, transparent 41px,
+				transparent 30px, rgba(#cdf,.1) 30px, rgba(#cdf,.1) 31px, transparent 31px,
+				transparent 55px, rgba(#cdf,.1) 55px, rgba(#cdf,.1) 56px, transparent 56px,
 				transparent 70px, rgba(#cdf,.1) 70px, rgba(#cdf,.1) 71px, transparent 71px,
-				transparent 86px, rgba(#cdf,.1) 86px, rgba(#cdf,.1) 87px, transparent 87px,
-				transparent 98px, rgba(#cdf,.1) 98px, rgba(#cdf,.1) 99px, transparent 99px,
+				transparent 85px, rgba(#cdf,.1) 85px, rgba(#cdf,.1) 86px, transparent 86px,
+				transparent 101px, rgba(#cdf,.1) 101px, rgba(#cdf,.1) 102px, transparent 102px,
 				transparent 114px, rgba(#cdf,.1) 114px, rgba(#cdf,.1) 115px, transparent 115px,
-				transparent 127px, rgba(#cdf,.1) 127px, rgba(#cdf,.1) 128px, transparent 128px,
-				transparent 135px, rgba(#cdf,.1) 135px, rgba(#cdf,.1) 136px, transparent 136px,
-				transparent 152px
+				transparent 121px, rgba(#cdf,.1) 121px, rgba(#cdf,.1) 122px, transparent 122px,
+				transparent 134px
 			);
 		}
 
@@ -678,13 +678,13 @@
 				// background: rgba(#000,.1);
 				font-size: 0;
 				list-style: none;
-				padding: 0 0 0 5px;
+				padding: 0;
 				display: flex;
 
 				li {
 					white-space: nowrap;
 					font-size: 10px;
-					width: 74px;
+					width: 65px;
 
 					&:nth-child(2n + 1) {
 						padding-left: 29px;
@@ -692,13 +692,17 @@
 
 					&:nth-child(2n) {
 						text-align: right;
+						position: relative;
+						left: 7px;
 					}
 
 					&:first-child {
-						padding-left: 3px;
+						padding-left: 0;
 					}
 
 					&:last-child {
+						position: relative;
+						left: 2px;
 						width: auto;
 						flex: 1;
 					}

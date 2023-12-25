@@ -420,7 +420,7 @@ const UI = {
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25;
 				// "freeze" list row ui
 				el.parents(".list-row").addClass("active");
-				// show field knob buggle
+				// show field knob bubble
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details

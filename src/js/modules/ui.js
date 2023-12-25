@@ -336,6 +336,7 @@ const UI = {
 				// prepare drag event object
 				let el = $(event.target),
 					iEl = el.parents(".field-box:first").find("input"),
+					dEl = el.parents(".dialog-box"),
 					content = el.parents("content"),
 					step = +iEl.data("step") || 1,
 					val = {
@@ -346,19 +347,30 @@ const UI = {
 						decimals: (step.toString().split(".")[1] || "").length,
 						value: +parseInt(iEl.val(), 10),
 						step,
+					},
+					dlg = {
+						dEl,
+						func: Dialogs[dEl.data("dlg")],
+						type: iEl.data("change"),
 					};
 				
 				// references needed for drag'n drop
 				Self.drag = {
 					el,
+					iEl,
+					val,
+					dlg,
 					content,
 					value: +el.data("value"),
 					clientY: event.clientY,
 					_min: Math.min,
 					_max: Math.max,
-					_lerp: i => Math.round(Math.lerp(i)),
+					_lerp: Math.lerp,
+					_round: Math.round,
 				};
 
+				// pre-knob twist event
+				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: +el.data("value") });
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -367,6 +379,11 @@ const UI = {
 			case "mousemove":
 				let value = Drag._min(Drag._max((Drag.clientY - event.clientY) + Drag.value, 0), 100);
 				Drag.el.data({ value });
+				// input field value
+				value = Drag._lerp(Drag.val.min, Drag.val.max, value / 100).toFixed(Drag.val.decimals);
+				Drag.iEl.val(value + Drag.val.suffix);
+				// forward event
+				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// unhide mouse

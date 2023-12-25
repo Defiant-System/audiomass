@@ -66,6 +66,7 @@ const Dialogs = {
 			case "set-ratio":
 			case "set-attack":
 			case "set-release":
+				console.log( event.type, event.value );
 				break;
 
 			// standard dialog events

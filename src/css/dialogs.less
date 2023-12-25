@@ -602,7 +602,7 @@
 			repeating-linear-gradient(90deg,
 				transparent 0,
 				transparent 125px, rgba(#cdf,.2) 125px, rgba(#cdf,.2) 126px, transparent 126px,
-				transparent 134px
+				transparent 136px
 			);
 
 		&:before {
@@ -637,7 +637,7 @@
 				transparent 101px, rgba(#cdf,.1) 101px, rgba(#cdf,.1) 102px, transparent 102px,
 				transparent 114px, rgba(#cdf,.1) 114px, rgba(#cdf,.1) 115px, transparent 115px,
 				transparent 121px, rgba(#cdf,.1) 121px, rgba(#cdf,.1) 122px, transparent 122px,
-				transparent 134px
+				transparent 136px
 			);
 		}
 
@@ -682,17 +682,17 @@
 				display: flex;
 
 				li {
+					position: relative;
 					white-space: nowrap;
 					font-size: 10px;
 					width: 65px;
 
 					&:nth-child(2n + 1) {
-						padding-left: 29px;
+						padding-left: 31px;
 					}
 
 					&:nth-child(2n) {
 						text-align: right;
-						position: relative;
 						left: 7px;
 					}
 
@@ -701,11 +701,13 @@
 					}
 
 					&:last-child {
-						position: relative;
 						left: 2px;
 						width: auto;
 						flex: 1;
 					}
+
+					&:nth-child(3) { padding-left: 25px; }
+					&:nth-child(6) { left: 20px; }
 				}
 			}
 		}

@@ -6,11 +6,13 @@ const UI = {
 
 		// bind event handlers
 		Spawn.el.on("mousedown mouseup", "[data-ui], [data-dlg]", this.dispatch);
+		Spawn.el.on("mouseover mouseout", "[data-hover]", this.dispatch);
 	},
 	dispatch(event) {
 		let APP = imaudio,
 			Self = UI,
 			data,
+			pEl,
 			el;
 		// console.log(event);
 		switch (event.type) {
@@ -22,6 +24,19 @@ const UI = {
 				}
 				break;
 			case "mouseup":
+				break;
+			case "mouseover":
+				el = $(event.target).parents("?[data-hover]");
+				pEl = el.parents(".dialog-box");
+				if (el.data("hover") === "peq-dot") {
+					pEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("hover");
+				} else if (el.data("hover") === "peq-row") {
+					pEl.find(`.peq-dot[data-id="${el.data("id")}"]`).addClass("hover");
+				}
+				break;
+			case "mouseout":
+				pEl = $(event.target).parents(".dialog-box");
+				pEl.find(".hover").removeClass("hover");
 				break;
 			default:
 				console.log("Unhandled event: ", event);

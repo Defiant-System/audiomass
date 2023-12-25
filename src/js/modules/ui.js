@@ -31,6 +31,7 @@ const UI = {
 		let Self = UI,
 			Spawn = event.spawn,
 			Drag = Self.drag,
+			data,
 			value,
 			dEl,
 			el;
@@ -41,10 +42,33 @@ const UI = {
 				el = $(event.target);
 
 				switch (true) {
+					case el.hasClass("icon-audio-on"):
+						el.removeClass("icon-audio-on").addClass("icon-audio-off");
+						break;
+					case el.hasClass("icon-audio-off"):
+						el.removeClass("icon-audio-off").addClass("icon-audio-on");
+						break;
+					case el.hasClass("icon-trashcan"):
+						el.parents(".list-row").remove();
+						break;
 					case el.parent().hasClass("type-options"):
+						// prevent bubbling
+						event.stopPropagation();
+						// ui update
 						el.parent().find(".active").removeClass("active");
 						el.addClass("active");
-						break;
+						// collect info
+						dEl = el.parents(".dialog-box"),
+						data = {
+							dEl,
+							row: el.parents(".list-row"),
+							func: Dialogs[dEl.data("dlg")],
+							type: el.parent().data("change"),
+							value: el.data("arg"),
+						};
+						// proxy values
+						data.func(data);
+						return;
 					case el.hasClass("toggler"):
 						return el.data("value") === "on"
 								? el.data({ value: "off" })
@@ -412,26 +436,26 @@ const UI = {
 				// prevent default behaviour
 				event.preventDefault();
 				// prepare info about drag
-				let el = $(event.target).addClass("active"),
-					isPan = el.data("name") === "gain",
-					row = el.parents(".list-row"),
-					dEl = el.parents(".dialog-box"),
+				let srcEl = $(event.target).addClass("active"),
+					isPan = srcEl.data("name") === "gain",
+					row = srcEl.parents(".list-row"),
+					dEl = srcEl.parents(".dialog-box"),
 					content = dEl.parents("content"),
-					fieldOffset = el.offset(".peq-list"),
-					step = +el.data("step") || 1,
+					fieldOffset = srcEl.offset(".peq-list"),
+					step = +srcEl.data("step") || 1,
 					val = {
-						name: el.data("name"),
-						min: +el.data("min"),
-						max: +el.data("max"),
-						suffix: el.data("suffix") || "",
+						name: srcEl.data("name"),
+						min: +srcEl.data("min"),
+						max: +srcEl.data("max"),
+						suffix: srcEl.data("suffix") || "",
 						decimals: (step.toString().split(".")[1] || "").length,
-						value: +parseInt(el.text(), 10),
+						value: +parseInt(srcEl.text(), 10),
 						step,
 					},
 					dlg = {
 						dEl,
 						func: Dialogs[dEl.data("dlg")],
-						type: el.data("change"),
+						type: srcEl.data("change"),
 					},
 					limit = { min: 0, max: 100 },
 					top = fieldOffset.top - 60,
@@ -460,19 +484,25 @@ const UI = {
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { el, row, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
+				Self.drag = { srcEl, row, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
 				Self.doc.on("mousemove mouseup", Self.doBubbleKnob);
 				break;
 			case "mousemove":
-				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min);
+				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min),
+					perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
 				Drag.knob.data({ value });
+				// knob UI update
+				value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
+				Drag.srcEl.html(value + Drag.val.suffix);
+				// forward event
+				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// reset dot element
-				Drag.el.removeClass("active");
+				Drag.srcEl.removeClass("active");
 				Drag.row.removeClass("active");
 				// reset bubble
 				Drag.dEl.find(".bubble-knob").addClass("hidden");

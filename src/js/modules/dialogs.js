@@ -134,7 +134,6 @@ const Dialogs = {
 	},
 	dlgGraphicEq20(event) {
 		/*
-		
 		 * 32 Hz     Min: -25 dB     Max: 25 dB
 		 * 44 Hz     Min: -25 dB     Max: 25 dB
 		 * 63 Hz     Min: -25 dB     Max: 25 dB
@@ -214,10 +213,17 @@ const Dialogs = {
 	},
 	dlgDelay(event) {
 		/*
+		 * threshold   min: 0    max: 5
+		 * ratio       min: 0    max: 1
+		 * wet         min: 0    max: 1
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "set-threshold":
+			case "set-ratio":
+			case "set-wet":
+				break;
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
@@ -238,11 +244,6 @@ const Dialogs = {
 			// "fast events"
 			case "set-gain":
 				break;
-			
-			// slow/once events
-			case "before:set-gain":
-				break;
-
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
@@ -255,10 +256,17 @@ const Dialogs = {
 	},
 	dlgReverb(event) {
 		/*
+		 * threshold   min: 0    max: 5
+		 * ratio       min: 0    max: 1
+		 * wet         min: 0    max: 1
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "threshold":
+			case "ratio":
+			case "wet":
+				break;
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":
@@ -279,11 +287,6 @@ const Dialogs = {
 			// "fast events"
 			case "set-rate":
 				break;
-			
-			// slow/once events
-			case "before:set-rate":
-				break;
-
 			// standard dialog events
 			case "dlg-ok":
 			case "dlg-open":

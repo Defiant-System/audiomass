@@ -44,12 +44,45 @@ const UI = {
 				switch (true) {
 					case el.hasClass("icon-audio-on"):
 						el.removeClass("icon-audio-on").addClass("icon-audio-off");
+						// collect info
+						dEl = el.parents(".dialog-box"),
+						data = {
+							dEl,
+							type: "toggle-row",
+							row: el.parents(".list-row"),
+							func: Dialogs[dEl.data("dlg")],
+							value: false,
+						};
+						// proxy values
+						data.func(data);
 						break;
 					case el.hasClass("icon-audio-off"):
 						el.removeClass("icon-audio-off").addClass("icon-audio-on");
+						// collect info
+						dEl = el.parents(".dialog-box"),
+						data = {
+							dEl,
+							type: "toggle-row",
+							row: el.parents(".list-row"),
+							func: Dialogs[dEl.data("dlg")],
+							value: true,
+						};
+						// proxy values
+						data.func(data);
 						break;
 					case el.hasClass("icon-trashcan"):
-						el.parents(".list-row").remove();
+						// collect info
+						dEl = el.parents(".dialog-box"),
+						data = {
+							dEl,
+							type: "toggle-row",
+							row: el.parents(".list-row"),
+							func: Dialogs[dEl.data("dlg")],
+						};
+						// proxy values
+						data.func(data);
+						// remove el from DOM
+						data.row.remove();
 						break;
 					case el.parent().hasClass("type-options"):
 						// prevent bubbling

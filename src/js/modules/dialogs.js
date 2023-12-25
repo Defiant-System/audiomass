@@ -84,6 +84,8 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
+			case "remove-row":
+			case "toggle-row":
 			case "set-type":
 			case "set-gain":
 			case "set-freq":

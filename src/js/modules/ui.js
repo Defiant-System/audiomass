@@ -151,9 +151,9 @@ const UI = {
 								: Self.doSliderV(event);
 					case el.hasClass("bubble-knob"):
 						return Self.doBubbleKnob(event);
-					case el.hasClass("peq-dot-wrapper"):
+					case el.hasClass("knob"):
 						return Self.doDialogKnob(event);
-					case el.hasClass("peq-dot-wrapper"):
+					// case el.hasClass("peq-dot-wrapper"):
 					case el.hasClass("peq-dot"):
 						return Self.doPeqDot(event);
 				}
@@ -192,19 +192,23 @@ const UI = {
 				// auto forward open event
 				Dialogs[event.name]({ ...event, dEl });
 				// prevent mouse from triggering mouseover
-				Spawn.find("content").addClass("dialog-showing");
+				Spawn.find("content").addClass("dialog-showing").data({ click: "close-dialog" });
 				// open dialog
 				dEl.cssSequence("opening", "animationend", el =>
 					el.addClass("showing").removeClass("opening"));
+				// save reference to axctive dialog
+				Dialogs._active = dEl;
 				break;
 			case "dlg-close":
+				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
 				// close dialog
-				event.el.parents(".dialog-box")
-					.cssSequence("closing", "animationend", el => {
+				dEl.cssSequence("closing", "animationend", el => {
 						// prevent mouse from triggering mouseover
-						Spawn.find("content").removeClass("dialog-showing");
+						Spawn.find("content").removeClass("dialog-showing").removeAttr("data-click");
 						// reset element
 						el.removeClass("showing closing");
+						// reset reference
+						delete Dialogs._active;
 					});
 				break;
 			// common events for all dialogs
@@ -553,9 +557,7 @@ const UI = {
 					_max = Math.max,
 					knob = dEl.find(".bubble-knob .knob");
 
-				
 				limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);
-
 
 				val.knob = Math.invLerp(val.min, val.max, val.value) * 100 | 1;
 				val.knobOffset = val.knob + event.clientY;

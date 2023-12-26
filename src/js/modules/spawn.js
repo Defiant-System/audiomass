@@ -148,6 +148,13 @@
 				// forward event
 				UI.doDialog({ type: "dlg-open", name: event.arg, spawn: Spawn });
 				break;
+			case "close-dialog":
+				if (event.target === event.el[0]) {
+					console.log( event );
+					// forward event
+					// UI.doDialog({ type: "dlg-close", spawn: Spawn });
+				}
+				break;
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });

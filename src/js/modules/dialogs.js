@@ -1,5 +1,6 @@
 
 const Dialogs = {
+	_active: false,
 	dlgGain(event) {
 		/*
 		 * gain -  Min: 10%   Max: 200%

@@ -949,8 +949,8 @@
 					width: 22px;
 				}
 
-				&:hover:after {
-					opacity: .35;
+				&:not(.active):hover:after {
+					opacity: .75;
 				}
 
 				&.active {
@@ -958,8 +958,6 @@
 					box-shadow: inset -1px 0 0 rgba(#002,.1),
 								inset 1px 0 0 rgba(#002,.15);
 					cursor: default;
-
-					&:after { opacity: .6; }
 				}
 
 				&:after {
@@ -969,12 +967,12 @@
 					left: 4px;
 					width: 13px;
 					height: 13px;
-					opacity: .125;
+					opacity: .35;
 					background-image: inherit;
 					background-size: cover;
 					background-repeat: no-repeat;
 					background-position: 50% 50%;
-					filter: invert() drop-shadow(0 1px 0 rgba(#002, .25));
+					filter: invert() drop-shadow(0 1px 0 rgba(#002, .5));
 				}
 
 				&.icon-curve-peak:after  { background-image: url(~/icons/icon-curve-peak.png); top: 2px; }

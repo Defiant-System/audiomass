@@ -525,16 +525,28 @@ const UI = {
 						min: 0,
 						max: 100,
 						dot: {
-							min: 2,
-							max: +dEl.find(".peq-dot-wrapper").prop("offsetHeight") - 2,
+							minY: 2,
+							minX: 2,
+							maxY: +dEl.find(".peq-dot-wrapper").prop("offsetHeight") - 2,
+							maxX: +dEl.find(".peq-dot-wrapper").prop("offsetWidth") - 2,
 						},
+						log: {
+							min: Math.log(20),
+							max: Math.log(20000),
+						}
 					},
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
 					_lerp = Math.lerp,
+					_exp = Math.exp,
+					_round = Math.round,
 					_min = Math.min,
 					_max = Math.max,
 					knob = dEl.find(".bubble-knob .knob");
+
+				
+				limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);
+
 
 				val.knob = Math.invLerp(val.min, val.max, val.value) * 100 | 1;
 				val.knobOffset = val.knob + event.clientY;
@@ -556,7 +568,7 @@ const UI = {
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { srcEl, row, dot, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
+				Self.drag = { srcEl, row, dot, dEl, knob, content, dlg, val, limit, _lerp, _exp, _round, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -567,14 +579,31 @@ const UI = {
 					perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min),
 					data = {};
 				Drag.knob.data({ value });
-				// knob UI update
-				value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
-				Drag.srcEl.html(value + Drag.val.suffix);
 				
 				// dot UI update
-				data.top = Drag._lerp(Drag.limit.dot.min, Drag.limit.dot.max, perc);
-				Drag.dot.css(data);
-				
+				switch (Drag.val.name) {
+					case "gain":
+						data.top = Drag._lerp(Drag.limit.dot.minY, Drag.limit.dot.maxY, perc);
+						Drag.dot.css(data);
+						// knob UI update
+						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
+						Drag.srcEl.html((value * -1) + Drag.val.suffix);
+						break;
+					case "freq":
+						data.left = Drag._lerp(Drag.limit.dot.minX, Drag.limit.dot.maxX, perc);
+						Drag.dot.css(data);
+
+						let v = Drag._exp(Drag.limit.log.min + Drag.limit.log.scale * (data.left - Drag.limit.dot.minX));
+						Drag.srcEl.html(Drag._round(v) + Drag.val.suffix);
+						break;
+					case "q":
+						// this affects dot curvature
+
+						// knob UI update
+						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
+						Drag.srcEl.html(value + Drag.val.suffix);
+						break;
+				}
 				// forward event
 				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;

@@ -49,6 +49,7 @@ const UI = {
 			data,
 			value,
 			dEl,
+			row,
 			el;
 		// console.log(event);
 		switch (event.type) {
@@ -59,12 +60,17 @@ const UI = {
 				switch (true) {
 					case el.hasClass("icon-audio-on"):
 						el.removeClass("icon-audio-on").addClass("icon-audio-off");
+						// get list row
+						row = el.parents(".list-row");
 						// collect info
-						dEl = el.parents(".dialog-box"),
+						dEl = el.parents(".dialog-box");
+						// update dot in UI
+						dEl.find(`.peq-dot[data-id="${row.data("id")}"]`).addClass("off");
+						// data object
 						data = {
 							dEl,
+							row,
 							type: "toggle-row",
-							row: el.parents(".list-row"),
 							func: Dialogs[dEl.data("dlg")],
 							value: false,
 						};
@@ -73,12 +79,17 @@ const UI = {
 						break;
 					case el.hasClass("icon-audio-off"):
 						el.removeClass("icon-audio-off").addClass("icon-audio-on");
+						// get list row
+						row = el.parents(".list-row");
 						// collect info
-						dEl = el.parents(".dialog-box"),
+						dEl = el.parents(".dialog-box");
+						// update dot in UI
+						dEl.find(`.peq-dot[data-id="${row.data("id")}"]`).removeClass("off");
+						// data object
 						data = {
 							dEl,
+							row,
 							type: "toggle-row",
-							row: el.parents(".list-row"),
 							func: Dialogs[dEl.data("dlg")],
 							value: true,
 						};
@@ -86,16 +97,20 @@ const UI = {
 						data.func(data);
 						break;
 					case el.hasClass("icon-trashcan"):
+						// get list row
+						row = el.parents(".list-row");
 						// collect info
 						dEl = el.parents(".dialog-box"),
 						data = {
 							dEl,
+							row,
 							type: "toggle-row",
-							row: el.parents(".list-row"),
 							func: Dialogs[dEl.data("dlg")],
 						};
 						// proxy values
 						data.func(data);
+						// remove dot from DOM
+						dEl.find(`.peq-dot[data-id="${row.data("id")}"]`).remove();
 						// remove el from DOM
 						data.row.remove();
 						break;

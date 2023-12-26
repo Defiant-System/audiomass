@@ -58,6 +58,15 @@ const UI = {
 				el = $(event.target);
 
 				switch (true) {
+					case el.hasClass("toggle-presets"):
+						if (el.hasClass("icon-padlock")) {
+							el.parents(".presets").addClass("unlocked");
+							el.removeClass("icon-padlock").addClass("icon-padlock-unlocked");
+						} else {
+							el.parents(".presets").removeClass("unlocked");
+							el.removeClass("icon-padlock-unlocked").addClass("icon-padlock");
+						}
+						break;
 					case el.hasClass("icon-audio-on"):
 						el.removeClass("icon-audio-on").addClass("icon-audio-off");
 						// get list row

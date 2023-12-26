@@ -506,7 +506,14 @@ const UI = {
 						func: Dialogs[dEl.data("dlg")],
 						type: srcEl.data("change"),
 					},
-					limit = { min: 0, max: 100 },
+					limit = {
+						min: 0,
+						max: 100,
+						dot: {
+							min: 2,
+							max: +dEl.find(".peq-dot-wrapper").prop("offsetHeight") - 2,
+						},
+					},
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
 					_lerp = Math.lerp,
@@ -519,7 +526,8 @@ const UI = {
 
 				if (isPan) {
 					knob.addClass("pan-knob");
-					limit = { min: -50, max: 50 };
+					limit.min = -50
+					limit.max = 50;
 					val.knobOffset -= 50;
 					val.knob -= 50;
 				}
@@ -541,11 +549,17 @@ const UI = {
 				break;
 			case "mousemove":
 				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min),
-					perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
+					perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min),
+					data = {};
 				Drag.knob.data({ value });
 				// knob UI update
 				value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 				Drag.srcEl.html(value + Drag.val.suffix);
+				
+				// dot UI update
+				data.top = Drag._lerp(Drag.limit.dot.min, Drag.limit.dot.max, perc);
+				Drag.dot.css(data);
+				
 				// forward event
 				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
 				break;

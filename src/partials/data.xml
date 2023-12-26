@@ -10,4 +10,13 @@
 		<!-- <i icon="file-mp3" name="Ayben - Rap Benim.mp3" filepath="/fs/Desktop/mp3/Ayben - Rap Benim.mp3" sizeB="150546" duration="3.18"/>
 		<i icon="file-mp3" name="Ceza - Feyzal.mp3" filepath="/fs/Desktop/mp3/Ceza - Feyzal.mp3" sizeB="38789" duration="3.31"/> -->
 	</Recents>
+
+	<Presets>
+		<Dialog name="dlgParagraphicEq">
+			<Slot nr="1">
+				<i type="high" gain="0" freq="5800" q="5.8"/>
+				<i type="low" gain="0" freq="7060" q="5"/>
+			</Slot>
+		</Dialog>
+	</Presets>
 </Data>

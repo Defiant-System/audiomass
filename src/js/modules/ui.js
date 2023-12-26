@@ -36,7 +36,7 @@ const UI = {
 				break;
 			case "mouseout":
 				pEl = $(event.target).parents(".dialog-box");
-				pEl.find(".hover").removeClass("hover");
+				pEl.find(".peq-cvs .hover, .peq-list .hover").removeClass("hover");
 				break;
 			default:
 				console.log("Unhandled event: ", event);

@@ -553,6 +553,7 @@
 
 			div {
 				width: 131px;
+				opacity: 1;
 			}
 		}
 
@@ -563,9 +564,11 @@
 			position: relative;
 			top: -1px;
 			width: 0;
-			height: 18px;
+			opacity: 0;
+			height: 19px;
 			overflow: hidden;
-			transition: width 140ms ease-in-out;
+			transition: width 140ms ease-in-out,
+						opacity 300ms ease-in-out;
 		}
 
 		ul {
@@ -583,6 +586,7 @@
 				position: relative;
 				padding: 1px 7px 0;
 				display: inline-block;
+				cursor: pointer;
 				// border-right: 1px solid rgba(#cdf,.2);
 
 				&:before {
@@ -590,7 +594,7 @@
 					position: absolute;
 					left: -1px;
 					top: 1px;
-					bottom: 1px;
+					bottom: 0;
 					width: 0;
 					border-left: 1px solid rgba(#002,.1);
 					border-right: 1px solid rgba(#cdf,.2);
@@ -609,7 +613,7 @@
 			i.icon-padlock,
 			i.icon-padlock-unlocked {
 				cursor: pointer;
-				filter: invert(1) drop-shadow(0 1px 0 rgba(#000, .5));
+				filter: invert(1) brightness(1.15) drop-shadow(0 1px 0 rgba(#000, .5));
 			}
 		}
 	}

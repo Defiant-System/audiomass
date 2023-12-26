@@ -488,6 +488,7 @@ const UI = {
 					isPan = srcEl.data("name") === "gain",
 					row = srcEl.parents(".list-row"),
 					dEl = srcEl.parents(".dialog-box"),
+					dot = dEl.find(`.peq-dot[data-id="${row.data("id")}"]`).addClass("active"),
 					content = dEl.parents("content"),
 					fieldOffset = srcEl.offset(".peq-list"),
 					step = +srcEl.data("step") || 1,
@@ -532,7 +533,7 @@ const UI = {
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { srcEl, row, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
+				Self.drag = { srcEl, row, dot, dEl, knob, content, dlg, val, limit, _lerp, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -552,6 +553,7 @@ const UI = {
 				// reset dot element
 				Drag.srcEl.removeClass("active");
 				Drag.row.removeClass("active");
+				Drag.dot.removeClass("active");
 				// reset bubble
 				Drag.dEl.find(".bubble-knob").addClass("hidden");
 				Drag.knob.removeClass("pan-knob").addClass("knob");
@@ -576,6 +578,8 @@ const UI = {
 
 				// prepare info about drag
 				let el = $(event.target).addClass("active"),
+					dEl = el.parents(".dialog-box"),
+					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
 					content = el.parents("content"),
 					offset = {
 						y: +el.prop("offsetTop") - event.clientY + 6,
@@ -593,7 +597,7 @@ const UI = {
 					_round = Math.round;
 
 				// save details
-				Self.drag = { el, content, offset, limit, _min, _max, _lerp, _round };
+				Self.drag = { el, row, content, offset, limit, _min, _max, _lerp, _round };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -607,6 +611,8 @@ const UI = {
 			case "mouseup":
 				// reset dot element
 				Drag.el.removeClass("active");
+				// reset list row
+				Drag.row.removeClass("active");
 				// unhide mouse
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers

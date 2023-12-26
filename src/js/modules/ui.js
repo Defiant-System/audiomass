@@ -149,11 +149,10 @@ const UI = {
 						return el.parent().hasClass("field-range-h")
 								? Self.doSliderH(event)
 								: Self.doSliderV(event);
-					case el.hasClass("bubble-knob"):
+					case el.hasClass("show-knob-bubble"):
 						return Self.doBubbleKnob(event);
 					case el.hasClass("knob"):
 						return Self.doDialogKnob(event);
-					// case el.hasClass("peq-dot-wrapper"):
 					case el.hasClass("peq-dot"):
 						return Self.doPeqDot(event);
 				}
@@ -192,7 +191,7 @@ const UI = {
 				// auto forward open event
 				Dialogs[event.name]({ ...event, dEl });
 				// prevent mouse from triggering mouseover
-				Spawn.find("content").addClass("dialog-showing").data({ click: "close-dialog" });
+				Spawn.find("content").addClass("dialog-showing");
 				// open dialog
 				dEl.cssSequence("opening", "animationend", el =>
 					el.addClass("showing").removeClass("opening"));
@@ -204,7 +203,7 @@ const UI = {
 				// close dialog
 				dEl.cssSequence("closing", "animationend", el => {
 						// prevent mouse from triggering mouseover
-						Spawn.find("content").removeClass("dialog-showing").removeAttr("data-click");
+						Spawn.find("content").removeClass("dialog-showing");
 						// reset element
 						el.removeClass("showing closing");
 						// reset reference
@@ -598,7 +597,7 @@ const UI = {
 						Drag.dot.css(data);
 						// knob UI update
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
-						Drag.srcEl.html((value * -1) + Drag.val.suffix);
+						Drag.srcEl.html(value + Drag.val.suffix);
 						break;
 					case "freq":
 						data.left = Drag._lerp(Drag.limit.dot.minX, Drag.limit.dot.maxX, perc);
@@ -648,8 +647,20 @@ const UI = {
 				// prepare info about drag
 				let el = $(event.target).addClass("active"),
 					dEl = el.parents(".dialog-box"),
+					content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
-					content = el.parents("content"),
+					yiEl = row.find(`span[data-name="gain"]`),
+					xiEl = row.find(`span[data-name="freq"]`),
+					val = {
+						yiEl,
+						xiEl,
+						yMin: +yiEl.data("min"),
+						yMax: +yiEl.data("max"),
+						ySuffix: yiEl.data("suffix"),
+						xMin: +xiEl.data("min"),
+						xMax: +xiEl.data("max"),
+						xSuffix: xiEl.data("suffix"),
+					},
 					offset = {
 						y: +el.prop("offsetTop") - event.clientY + 6,
 						x: +el.prop("offsetLeft") - event.clientX + 6,
@@ -666,7 +677,7 @@ const UI = {
 					_round = Math.round;
 
 				// save details
-				Self.drag = { el, row, content, offset, limit, _min, _max, _lerp, _round };
+				Self.drag = { el, row, val, content, offset, limit, _min, _max, _lerp, _round };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -676,6 +687,14 @@ const UI = {
 				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
 					left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX);
 				Drag.el.css({ top, left });
+
+				let perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY),
+					value = Drag._round(Drag._lerp(Drag.val.yMin, Drag.val.yMax, perc));
+				Drag.val.yiEl.html(value + Drag.val.ySuffix);
+
+				perc = (left - Drag.limit.minX) / (Drag.limit.maxX - Drag.limit.minX);
+				value = Drag._round(Drag._lerp(Drag.val.xMin, Drag.val.xMax, perc));
+				Drag.val.xiEl.html(value + Drag.val.xSuffix);
 				break;
 			case "mouseup":
 				// reset dot element

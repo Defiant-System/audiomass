@@ -26,7 +26,7 @@ let Test = {
 			});
 
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgParagraphicEq", spawn }), 200);
-		}, 500);
+		}, 550);
 
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// return setTimeout(() => {

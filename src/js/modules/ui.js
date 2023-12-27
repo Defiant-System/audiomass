@@ -512,7 +512,6 @@ const UI = {
 				event.preventDefault();
 				// prepare info about drag
 				let srcEl = $(event.target).addClass("active"),
-					isPan = srcEl.data("name") === "gain",
 					row = srcEl.parents(".list-row"),
 					dEl = srcEl.parents(".dialog-box"),
 					dot = dEl.find(`.peq-dot[data-id="${row.data("id")}"]`).addClass("active"),
@@ -556,19 +555,26 @@ const UI = {
 					_max = Math.max,
 					knob = dEl.find(".bubble-knob .knob");
 
-				limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);
-
-				val.dotX = (Math.log(val.value)-limit.log.min) / limit.log.scale + limit.dot.minX;
-				val.knob = Math.invLerp(limit.dot.minX, limit.dot.maxX, val.dotX) * 100 | 1;
-				val.knobOffset = val.knob + event.clientY;
-
-				if (isPan) {
-					knob.addClass("pan-knob");
-					limit.min = -50
-					limit.max = 50;
-					val.knobOffset -= 50;
-					val.knob -= 50;
+				switch (val.name) {
+					case "gain":
+						knob.addClass("pan-knob");
+						limit.min = -50
+						limit.max = 50;
+						val.knobOffset -= 50;
+						val.knob -= 50;
+						break;
+					case "freq":
+						limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);
+						val.dotX = (Math.log(val.value)-limit.log.min) / limit.log.scale + limit.dot.minX;
+						val.knob = Math.invLerp(limit.dot.minX, limit.dot.maxX, val.dotX) * 100 | 1;
+						val.knobOffset = val.knob + event.clientY;
+						break;
+					case "q":
+						val.knob = Math.invLerp(val.min, val.max, val.value) * 100 | 1;
+						val.knobOffset = val.knob + event.clientY;
+						break;
 				}
+				// twist before showing knob
 				knob.data({ value: val.knob });
 
 				// pre-knob twist event

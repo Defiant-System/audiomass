@@ -59,4 +59,32 @@
 	</xsl:for-each>
 </xsl:template>
 
+
+<xsl:template name="peq-list">
+	<xsl:for-each select="./*">
+		<xsl:call-template name="peq-list-row" />
+	</xsl:for-each>
+</xsl:template>
+
+
+<xsl:template name="peq-list-row">
+	<div class="list-row" data-hover="peq-row">
+		<xsl:attribute name="data-id"><xsl:value-of select="@id"/></xsl:attribute>
+		<div>
+			<div class="type-options" data-change="set-type">
+				<i data-arg="peak" class="icon-curve-peak"></i>
+				<i data-arg="high" class="icon-curve-high active"></i>
+				<i data-arg="low" class="icon-curve-low"></i>
+			</div>
+		</div>
+		<div><span class="show-knob-bubble" data-change="set-gain" data-name="gain" data-min="-35" data-max="35" data-suffix=" dB"><xsl:value-of select="@gain"/> dB</span></div>
+		<div><span class="show-knob-bubble" data-change="set-freq" data-name="freq" data-min="22" data-max="20000" data-suffix=" Hz"><xsl:value-of select="@freq"/> Hz</span></div>
+		<div><span class="show-knob-bubble" data-change="set-q" data-name="q" data-min="1" data-max="50" data-step="0.1"><xsl:value-of select="@q"/></span></div>
+		<div>
+			<i class="icon-audio-on"></i>
+			<i class="icon-trashcan"></i>
+		</div>
+	</div>
+</xsl:template>
+
 </xsl:stylesheet>

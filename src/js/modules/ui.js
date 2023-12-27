@@ -1,11 +1,15 @@
 
 const UI = {
+	logScale: {
+		min: Math.log(20),
+		max: Math.log(20000)
+	},
 	init(Spawn) {
 		// fast references
 		this.doc = $(document);
 
 		// bind event handlers
-		Spawn.el.on("mousedown mouseup", "[data-ui], [data-dlg]", this.dispatch);
+		Spawn.el.on("mousedown", "[data-dlg]", this.dispatch);
 		Spawn.el.on("mouseover mouseout", "[data-hover]", this.dispatch);
 	},
 	dispatch(event) {
@@ -22,8 +26,6 @@ const UI = {
 				if (el.parents("[data-dlg]").length) {
 					return Self.doDialog(event);
 				}
-				break;
-			case "mouseup":
 				break;
 			case "mouseover":
 				el = $(event.target).parents("?[data-hover]");
@@ -197,6 +199,9 @@ const UI = {
 					el.addClass("showing").removeClass("opening"));
 				// save reference to axctive dialog
 				Dialogs._active = dEl;
+
+				// temp
+				if (event.name === "dlgParagraphicEq") Self.renderPreset({ ...event, dEl, nr: "1" });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -287,6 +292,41 @@ const UI = {
 					Self.doDialog({ type: "dlg-undo-filter" });
 				}
 				Self.doDialog({ ...event, type: "dlg-close" });
+				break;
+		}
+	},
+	renderPreset(event) {
+		let Self = UI,
+			data = {},
+			str = [],
+			xPath,
+			xNode;
+		switch (event.name) {
+			case "dlgParagraphicEq":
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@nr="${event.nr}"]`;
+				xNode = window.bluePrint.selectSingleNode(xPath);
+				// peq rectangle area
+				data.minY = 2;
+				data.minX = 2;
+				data.maxY = 199;
+				data.maxX = 445;
+				data.scale = (Self.logScale.max - Self.logScale.min) / (data.maxX - data.minX),
+				// iterate dots
+				xNode.selectNodes("./*").map(x => {
+					let id = x.getAttribute("id"),
+						gain = +x.getAttribute("gain"),
+						freq = +x.getAttribute("freq"),
+						top = Math.lerp(data.minY, data.maxY, (gain + 50) / 100),
+						left = (Math.log(freq) - Self.logScale.min) / data.scale + data.minX;
+					str.push(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+				});
+				event.dEl.find(`.peq-dot-wrapper`).html(str.join(""));
+
+				window.render({
+					template: "peq-list",
+					match: xPath,
+					target: event.dEl.find(`.peq-list .list-body`),
+				});
 				break;
 		}
 	},
@@ -541,10 +581,7 @@ const UI = {
 							maxY: +dEl.find(".peq-dot-wrapper").prop("offsetHeight") - 2,
 							maxX: +dEl.find(".peq-dot-wrapper").prop("offsetWidth") - 2,
 						},
-						log: {
-							min: Math.log(20),
-							max: Math.log(20000),
-						}
+						log: Self.logScale
 					},
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
@@ -671,10 +708,7 @@ const UI = {
 						xMax: +xiEl.data("max"),
 						xSuffix: xiEl.data("suffix"),
 					},
-					log = {
-						min: Math.log(20),
-						max: Math.log(20000),
-					},
+					log = Self.logScale,
 					offset = {
 						y: +el.prop("offsetTop") - event.clientY + 6,
 						x: +el.prop("offsetLeft") - event.clientX + 6,

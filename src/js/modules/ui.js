@@ -553,15 +553,14 @@ const UI = {
 					_round = Math.round,
 					_min = Math.min,
 					_max = Math.max,
-					knob = dEl.find(".bubble-knob .knob");
+					knobEl = dEl.find(".bubble-knob .knob");
 
 				switch (val.name) {
 					case "gain":
-						knob.addClass("pan-knob");
+						knobEl.addClass("pan-knob");
 						limit.min = -50
 						limit.max = 50;
-
-						val.knob = val.value;
+						val.knob = Math.round(Math.invLerp(limit.min, limit.max, val.value) * 100) - 50;
 						val.knobOffset = val.knob + event.clientY;
 						break;
 					case "freq":
@@ -576,7 +575,7 @@ const UI = {
 						break;
 				}
 				// twist before showing knob
-				knob.data({ value: val.knob });
+				knobEl.data({ value: val.knob });
 
 				// pre-knob twist event
 				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: val.value });
@@ -586,7 +585,7 @@ const UI = {
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { srcEl, row, dot, dEl, knob, content, dlg, val, limit, _lerp, _exp, _round, _min, _max };
+				Self.drag = { srcEl, row, dot, dEl, knobEl, content, dlg, val, limit, _lerp, _exp, _round, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -597,7 +596,7 @@ const UI = {
 					data = {},
 					perc;
 				// knob UI update
-				Drag.knob.data({ value });
+				Drag.knobEl.data({ value });
 				
 				// dot UI update
 				switch (Drag.val.name) {
@@ -635,7 +634,7 @@ const UI = {
 				Drag.dot.removeClass("active");
 				// reset bubble
 				Drag.dEl.find(".bubble-knob").addClass("hidden");
-				Drag.knob.removeClass("pan-knob").addClass("knob");
+				Drag.knobEl.removeClass("pan-knob").addClass("knob");
 				// unhide mouse
 				Drag.content.removeClass("cover hideMouse");
 				// unbind event handlers

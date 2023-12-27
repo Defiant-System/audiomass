@@ -17,6 +17,9 @@
 				<i id="1" type="high" gain="0" freq="5800" q="5.8" state="on"/>
 				<i id="2" type="low" gain="0" freq="7060" q="5" state="off"/>
 			</Slot>
+			<Slot nr="2">
+				<i id="1" type="high" gain="0" freq="1800" q="5.8" state="on"/>
+			</Slot>
 		</Dialog>
 	</Presets>
 </Data>

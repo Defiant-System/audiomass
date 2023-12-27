@@ -560,8 +560,9 @@ const UI = {
 						knob.addClass("pan-knob");
 						limit.min = -50
 						limit.max = 50;
-						val.knobOffset -= 50;
-						val.knob -= 50;
+
+						val.knob = val.value;
+						val.knobOffset = val.knob + event.clientY;
 						break;
 					case "freq":
 						limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);

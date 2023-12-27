@@ -558,7 +558,8 @@ const UI = {
 
 				limit.log.scale = (limit.log.max-limit.log.min) / (limit.dot.maxX-limit.dot.minX);
 
-				val.knob = Math.invLerp(val.min, val.max, val.value) * 100 | 1;
+				val.dotX = (Math.log(val.value)-limit.log.min) / limit.log.scale + limit.dot.minX;
+				val.knob = Math.invLerp(limit.dot.minX, limit.dot.maxX, val.dotX) * 100 | 1;
 				val.knobOffset = val.knob + event.clientY;
 
 				if (isPan) {
@@ -586,13 +587,14 @@ const UI = {
 				break;
 			case "mousemove":
 				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min),
-					perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min),
-					data = {};
+					data = {},
+					perc;
 				Drag.knob.data({ value });
 				
 				// dot UI update
 				switch (Drag.val.name) {
 					case "gain":
+						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
 						data.top = Drag._lerp(Drag.limit.dot.minY, Drag.limit.dot.maxY, perc);
 						Drag.dot.css(data);
 						// knob UI update
@@ -600,6 +602,7 @@ const UI = {
 						Drag.srcEl.html(value + Drag.val.suffix);
 						break;
 					case "freq":
+						perc = value / 100;
 						data.left = Drag._lerp(Drag.limit.dot.minX, Drag.limit.dot.maxX, perc);
 						Drag.dot.css(data);
 
@@ -607,6 +610,7 @@ const UI = {
 						Drag.srcEl.html(Drag._round(v) + Drag.val.suffix);
 						break;
 					case "q":
+						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min)
 						// this affects dot curvature
 
 						// knob UI update

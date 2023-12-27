@@ -661,6 +661,10 @@ const UI = {
 						xMax: +xiEl.data("max"),
 						xSuffix: xiEl.data("suffix"),
 					},
+					log = {
+						min: Math.log(20),
+						max: Math.log(20000),
+					},
 					offset = {
 						y: +el.prop("offsetTop") - event.clientY + 6,
 						x: +el.prop("offsetLeft") - event.clientX + 6,
@@ -671,13 +675,16 @@ const UI = {
 						maxY: +el.parent().prop("offsetHeight") - 2,
 						maxX: +el.parent().prop("offsetWidth") - 2,
 					},
+					_exp = Math.exp,
 					_min = Math.min,
 					_max = Math.max,
 					_lerp = Math.lerp,
 					_round = Math.round;
 
+				val.scale = (log.max-log.min) / (limit.maxX-limit.minX);
+
 				// save details
-				Self.drag = { el, row, val, content, offset, limit, _min, _max, _lerp, _round };
+				Self.drag = { el, row, val, log, content, offset, limit, _min, _max, _lerp, _round, _exp };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -685,15 +692,15 @@ const UI = {
 				break;
 			case "mousemove":
 				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
-					left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX);
+					left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX),
+					perc, value;
 				Drag.el.css({ top, left });
-
-				let perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY),
-					value = Drag._round(Drag._lerp(Drag.val.yMin, Drag.val.yMax, perc));
+				// calculate gain
+				perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY);
+				value = Drag._round(Drag._lerp(Drag.val.yMin, Drag.val.yMax, perc));
 				Drag.val.yiEl.html(value + Drag.val.ySuffix);
-
-				perc = (left - Drag.limit.minX) / (Drag.limit.maxX - Drag.limit.minX);
-				value = Drag._round(Drag._lerp(Drag.val.xMin, Drag.val.xMax, perc));
+				// calculate frequency
+				value = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
 				Drag.val.xiEl.html(value + Drag.val.xSuffix);
 				break;
 			case "mouseup":

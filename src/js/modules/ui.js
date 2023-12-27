@@ -596,15 +596,16 @@ const UI = {
 				let value = Drag._max(Drag._min(Drag.val.knobOffset - event.clientY, Drag.limit.max), Drag.limit.min),
 					data = {},
 					perc;
+				// knob UI update
 				Drag.knob.data({ value });
 				
 				// dot UI update
 				switch (Drag.val.name) {
 					case "gain":
 						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min);
-						data.top = Drag._lerp(Drag.limit.dot.minY, Drag.limit.dot.maxY, perc);
+						data.top = Drag._lerp(Drag.limit.dot.maxY, Drag.limit.dot.minY, perc);
 						Drag.dot.css(data);
-						// knob UI update
+						// table cell update
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 						Drag.srcEl.html(value + Drag.val.suffix);
 						break;
@@ -612,15 +613,14 @@ const UI = {
 						perc = value / 100;
 						data.left = Drag._lerp(Drag.limit.dot.minX, Drag.limit.dot.maxX, perc);
 						Drag.dot.css(data);
-
-						let v = Drag._exp(Drag.limit.log.min + Drag.limit.log.scale * (data.left - Drag.limit.dot.minX));
-						Drag.srcEl.html(Drag._round(v) + Drag.val.suffix);
+						// table cell update
+						data.val = Drag._exp(Drag.limit.log.min + Drag.limit.log.scale * (data.left - Drag.limit.dot.minX));
+						Drag.srcEl.html(Drag._round(data.val) + Drag.val.suffix);
 						break;
 					case "q":
 						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min)
 						// this affects dot curvature
-
-						// knob UI update
+						// table cell update
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 						Drag.srcEl.html(value + Drag.val.suffix);
 						break;
@@ -708,7 +708,7 @@ const UI = {
 				Drag.el.css({ top, left });
 				// calculate gain
 				perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY);
-				value = Drag._round(Drag._lerp(Drag.val.yMin, Drag.val.yMax, perc));
+				value = Drag._round(Drag._lerp(Drag.val.yMax, Drag.val.yMin, perc));
 				Drag.val.yiEl.html(value + Drag.val.ySuffix);
 				// calculate frequency
 				value = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));

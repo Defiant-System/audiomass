@@ -560,7 +560,7 @@ const UI = {
 						knobEl.addClass("pan-knob");
 						limit.min = -50
 						limit.max = 50;
-						val.knob = Math.round(Math.invLerp(limit.min, limit.max, val.value) * 100) - 50;
+						val.knob = Math.round(Math.invLerp(val.min, val.max, val.value) * 100) - 50;
 						val.knobOffset = val.knob + event.clientY;
 						break;
 					case "freq":

@@ -26,7 +26,7 @@
 		Spawn.on("time-update-range", this.dispatch);
 
 		// bind event handlers
-		Spawn.data.sidebar.els.volume.on("mousedown", this.volumeMove);
+		Spawn.data.sidebar.els.volume.on("mousedown", e => this.volumeMove(e, Spawn));
 	},
 	dispatch(event) {
 		let APP = imaudio,
@@ -55,22 +55,18 @@
 				break;
 		}
 	},
-	volumeMove(event) {
+	volumeMove(event, Spawn) {
 		let APP = imaudio,
-			Spawn = event.spawn,
 			Self = APP.spawn.sidebar,
 			Drag = Self.drag;
 		switch (event.type) {
 			case "mousedown":
 				// prevent default behaviour
 				event.preventDefault();
-				// cover content
-				Spawn.el.find(Self.els.content).addClass("cover hideMouse");
-				Spawn.el.find(Self.els.vWrapper).addClass("show-text");
 				// prepare drag info
 				let el = $(event.target),
 					txt = el.parent().find(".txt-volume h2"),
-					ws = APP.data.tabs.active.file._ws,
+					ws = Spawn.data.tabs.active.file._ws,
 					limit = {
 						min: -135,
 						max: 135,
@@ -85,9 +81,15 @@
 					clickY: parseInt(el.cssProp("--angle"), 10) + event.clientY,
 					min_: Math.min,
 					max_: Math.max,
+					doc: Spawn.data.waves.els.doc,
+					content: Spawn.data.sidebar.els.content,
+					vWrapper: Spawn.data.sidebar.els.vWrapper,
 				};
+				// cover content
+				Self.drag.content.addClass("cover hideMouse");
+				Self.drag.vWrapper.addClass("show-text");
 				// bind event
-				Self.els.doc.on("mousemove mouseup", Self.volumeMove);
+				Self.drag.doc.on("mousemove mouseup", Self.volumeMove);
 				break;
 			case "mousemove":
 				let angle = Drag.min_(Drag.max_(Drag.clickY - event.clientY, Drag.limit.min), Drag.limit.max),
@@ -100,10 +102,10 @@
 				break;
 			case "mouseup":
 				// cover content
-				Spawn.el.find(Self.els.content).removeClass("cover hideMouse");
-				Spawn.el.find(Self.els.vWrapper).removeClass("show-text");
+				Drag.content.removeClass("cover hideMouse");
+				Drag.vWrapper.removeClass("show-text");
 				// unbind event
-				Self.els.doc.off("mousemove mouseup", Self.volumeMove);
+				Drag.doc.off("mousemove mouseup", Self.volumeMove);
 				break;
 		}
 	}

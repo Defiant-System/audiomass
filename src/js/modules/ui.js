@@ -314,17 +314,18 @@ const UI = {
 				// iterate dots
 				xNode.selectNodes("./*").map(x => {
 					let id = x.getAttribute("id"),
+						isOff = x.getAttribute("state") === "off" ? "off" : "",
 						gain = +x.getAttribute("gain"),
 						freq = +x.getAttribute("freq"),
 						top = Math.lerp(data.minY, data.maxY, (gain + 50) / 100),
 						left = (Math.log(freq) - Self.logScale.min) / data.scale + data.minX;
-					str.push(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+					str.push(`<div class="peq-dot ${isOff}" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
 				});
 				event.dEl.find(`.peq-dot-wrapper`).html(str.join(""));
-
+				// render table list
 				window.render({
-					template: "peq-list",
 					match: xPath,
+					template: "peq-list",
 					target: event.dEl.find(`.peq-list .list-body`),
 				});
 				break;

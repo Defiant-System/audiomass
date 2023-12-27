@@ -72,16 +72,24 @@
 		<xsl:attribute name="data-id"><xsl:value-of select="@id"/></xsl:attribute>
 		<div>
 			<div class="type-options" data-change="set-type">
-				<i data-arg="peak" class="icon-curve-peak"></i>
-				<i data-arg="high" class="icon-curve-high active"></i>
-				<i data-arg="low" class="icon-curve-low"></i>
+				<i data-arg="peak" class="icon-curve-peak" title="Peaking">
+					<xsl:if test="@type = 'peak'"><xsl:attribute name="class">icon-curve-peak active</xsl:attribute></xsl:if>
+				</i>
+				<i data-arg="high" class="icon-curve-high" title="Highpass">
+					<xsl:if test="@type = 'high'"><xsl:attribute name="class">icon-curve-high active</xsl:attribute></xsl:if>
+				</i>
+				<i data-arg="low" class="icon-curve-low" title="Lowpass">
+					<xsl:if test="@type = 'low'"><xsl:attribute name="class">icon-curve-low active</xsl:attribute></xsl:if>
+				</i>
 			</div>
 		</div>
 		<div><span class="show-knob-bubble" data-change="set-gain" data-name="gain" data-min="-35" data-max="35" data-suffix=" dB"><xsl:value-of select="@gain"/> dB</span></div>
 		<div><span class="show-knob-bubble" data-change="set-freq" data-name="freq" data-min="22" data-max="20000" data-suffix=" Hz"><xsl:value-of select="@freq"/> Hz</span></div>
 		<div><span class="show-knob-bubble" data-change="set-q" data-name="q" data-min="1" data-max="50" data-step="0.1"><xsl:value-of select="@q"/></span></div>
 		<div>
-			<i class="icon-audio-on"></i>
+			<i class="icon-audio-on">
+				<xsl:if test="@state = 'off'"><xsl:attribute name="class">icon-audio-off</xsl:attribute></xsl:if>
+			</i>
 			<i class="icon-trashcan"></i>
 		</div>
 	</div>

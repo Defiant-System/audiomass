@@ -44,6 +44,7 @@
 			value,
 			isOn,
 			el;
+		// console.log(event);
 		switch (event.type) {
 			// subscribed events
 			case "timeupdate":
@@ -138,6 +139,13 @@
 				if (!isOn) Spawn.emit("audio-play");
 				else Spawn.emit("audio-pause");
 				break;
+
+			case "copy-selection":
+				console.log(event);
+				break;
+			case "paste-selection": break;
+			case "cut-selection": break;
+			case "silence-selection": break;
 		}
 	},
 	format(time=0) {

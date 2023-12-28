@@ -21,9 +21,11 @@ let Test = {
 
 			file._regions.addRegion({
 				id: "region-selected",
-				start: 1.15,
-				end: 2.5,
+				start: 1.475,
+				end: 1.825,
 			});
+
+			return;
 
 			let name = "dlgParagraphicEq";
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);

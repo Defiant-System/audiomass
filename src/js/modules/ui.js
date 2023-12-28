@@ -215,6 +215,16 @@ const UI = {
 				Dialogs[event.name]({ ...event, dEl });
 				// prevent mouse from triggering mouseover
 				Spawn.find("content").addClass("dialog-showing");
+
+				// closes dialog if clicked outside dialog box
+				let func = e => {
+					if (e.target === Spawn.find("content")[0]) {
+						UI.doDialog({ type: "dlg-close", spawn: Spawn });
+						Spawn.find("content").off("mousedown", func);
+					}
+				};
+				Spawn.find("content").on("mousedown", func);
+
 				// open dialog
 				dEl.cssSequence("opening", "animationend", el =>
 					el.addClass("showing").removeClass("opening"));

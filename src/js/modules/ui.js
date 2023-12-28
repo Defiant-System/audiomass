@@ -198,9 +198,12 @@ const UI = {
 				if (dEl.find(`.buttons .presets`).length && !dEl.find(`.buttons .presets ul li`).length) {
 					let xPath = `//Presets/Dialog[@name="${event.name}"]/Slot`,
 						li = [];
-					window.bluePrint.selectNodes(xPath).map(x =>
-						li.push(`<li class="preset" data-id="${x.getAttribute("id")}">${x.getAttribute("id")}</li>`));
-
+					window.bluePrint.selectNodes(xPath).map(x => {
+						let attr = [`data-id="${x.getAttribute("id")}"`];
+						if (x.getAttribute("title")) attr.push(`title="${x.getAttribute("title")}"`);
+						li.push(`<li class="preset" ${attr.join(" ")}>${x.getAttribute("id")}</li>`);
+					});
+					// add to presets list
 					dEl.find(`.buttons .presets ul`).html(li.join(""));
 				}
 				// auto reset dialog before show

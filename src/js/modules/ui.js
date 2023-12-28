@@ -163,6 +163,7 @@ const UI = {
 						return Self.doBubbleKnob(event);
 					case el.hasClass("knob"):
 						return Self.doDialogKnob(event);
+					case el.hasClass("peq-dot-wrapper"):
 					case el.hasClass("peq-dot"):
 						return Self.doPeqDot(event);
 				}
@@ -802,11 +803,19 @@ const UI = {
 				// prevent default behaviour
 				event.preventDefault();
 				
-				// TODO: first add dot, then fall through
+				let el = $(event.target);
+				if (el.hasClass("peq-dot-wrapper")) {
+					let id = 1,
+						top = 100,
+						left = 100;
+					el = el.append(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+				}
+
+				// make dot active
+				el.addClass("active");
 
 				// prepare info about drag
-				let el = $(event.target).addClass("active"),
-					dEl = el.parents(".dialog-box"),
+				let dEl = el.parents(".dialog-box"),
 					content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
 					yiEl = row.find(`span[data-name="gain"]`),

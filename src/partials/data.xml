@@ -33,9 +33,6 @@
 			<Slot id="2">
 				<i id="1" type="high" gain="0" freq="1800" q="5.8" state="on"/>
 			</Slot>
-			<!-- <Slot id="3" class="user-defined"/>
-			<Slot id="4" class="user-defined"/>
-			<Slot id="5" class="user-defined"/> -->
 		</Dialog>
 		<Dialog name="dlgGraphicEq">
 			<Slot id="1" hz32="-25" hz64="-22" hz125="-20" hz250="-18" hz500="-9" hz1K="0" hz2K="8" hz4K="10" hz8K="-8" hz16K="-25" title="Old Radio"/>

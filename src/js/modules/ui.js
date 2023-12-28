@@ -201,7 +201,7 @@ const UI = {
 				Dialogs._active = dEl;
 
 				// temp
-				if (event.name === "dlgParagraphicEq") Self.renderPreset({ ...event, dEl, nr: 2 });
+				if (event.name === "dlgParagraphicEq") Self.renderPreset({ ...event, dEl, nr: 1 });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;

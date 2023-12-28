@@ -20,14 +20,12 @@
 	&.switch-trans {
 		min-height: 1px;
 
-		.slider {
-			// background: red;
-
-			.handle {
-				transition: top 200ms ease-in-out,
-							left 200ms ease-in-out;
-			}
+		.slider .handle {
+			transition: top 200ms ease-in-out,
+						left 200ms ease-in-out;
 		}
+
+		.field-box .knob { transition: background-position 200ms steps(var( --aStep ), jump-end); }
 	}
 
 	&:before {

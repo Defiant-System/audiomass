@@ -62,19 +62,19 @@
 			<div class="field-box">
 				<span class="label">Threshold</span>
 				<div class="knob"></div>
-				<span class="value"><input type="text" name="threshold" data-min="-100" data-max="0" data-step="0.1" data-default="-24" data-change="set-threshold"></span>
+				<span class="value"><input type="text" name="threshold" data-min="-100" data-max="0" data-step="0.1" data-default="-24.0" data-change="set-threshold"></span>
 			</div>
 			
 			<div class="field-box">
 				<span class="label">Knee</span>
 				<div class="knob"></div>
-				<span class="value"><input type="text" name="knee" data-min="0" data-max="40" data-step="0.1" data-default="30" data-change="set-knee"></span>
+				<span class="value"><input type="text" name="knee" data-min="0" data-max="40" data-step="0.1" data-default="30.0" data-change="set-knee"></span>
 			</div>
 			
 			<div class="field-box">
 				<span class="label">Ratio</span>
 				<div class="knob"></div>
-				<span class="value"><input type="text" name="ratio" data-min="1" data-max="20" data-step="0.1" data-default="12" data-change="set-ratio"></span>
+				<span class="value"><input type="text" name="ratio" data-min="1" data-max="20" data-step="0.1" data-default="12.0" data-change="set-ratio"></span>
 			</div>
 			
 			<div class="field-box">
@@ -154,16 +154,7 @@
 		<div class="buttons">
 			<div class="presets">
 				<span title="Presets"><i class="icon-presets"></i></span>
-				<div>
-					<ul>
-						<li>1</li>
-						<li>2</li>
-						<li class="empty"></li>
-						<li class="empty"></li>
-						<li class="empty"></li>
-						<li><i class="icon-padlock toggle-presets"></i></li>
-					</ul>
-				</div>
+				<div><ul><!-- here goes preset entries --></ul></div>
 			</div>
 
 			<div class="button" data-click="dlg-ok">Apply</div>

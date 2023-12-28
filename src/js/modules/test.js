@@ -25,12 +25,12 @@ let Test = {
 				end: 2.5,
 			});
 
-			let name = "dlgGraphicEq";
+			let name = "dlgParagraphicEq";
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);
-			setTimeout(() => {
-				let dEl = spawn.find(`.dialog-box[data-dlg="${name}"]`);
-				UI.renderPreset({ name, dEl, id: 1 });
-			}, 800);
+			// setTimeout(() => {
+			// 	let dEl = spawn.find(`.dialog-box[data-dlg="${name}"]`);
+			// 	UI.renderPreset({ name, dEl, id: 5 });
+			// }, 800);
 		}, 550);
 
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);

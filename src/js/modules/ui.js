@@ -219,8 +219,8 @@ const UI = {
 				Dialogs._active = dEl;
 
 				// auto render default preset
-				let tmpArr = ["dlgParagraphicEq", "dlgCompressor"];
-				if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, id: 1 });
+				// let tmpArr = ["dlgParagraphicEq", "dlgCompressor"];
+				// if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, id: 1 });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -321,7 +321,7 @@ const UI = {
 			xPath,
 			xNode;
 		// set dialog in "transition" state
-		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans"));
+		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans").css({ "--aStep": "" }));
 		// console.log(event);
 		switch (event.name) {
 			case "dlgSpeed":
@@ -384,6 +384,8 @@ const UI = {
 			case "dlgCompressor":
 				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);
+				// translates to animation index
+				let knobIndex = i => (i % 2 === 1 ? i-1 : i) >> 1;
 				// iterate attributes
 				[...xNode.attributes]
 					.filter(a => event.dEl.find(`.value input[name="${a.name}"]`).length)
@@ -397,11 +399,13 @@ const UI = {
 								suffix: iEl.data("suffix") || "",
 								decimals: (step.toString().split(".")[1] || "").length,
 							},
-							value = Math.invLerp(val.min, val.max, a.value) * 100 | 1;
+							value = Math.round(Math.invLerp(val.min, val.max, a.value) * 100),
+							aStep = Math.abs(knobIndex(+knobEl.data("value")) - knobIndex(value));
+
 						// input field
-						iEl.val(a.value + val.suffix);
+						iEl.val((+a.value).toFixed(val.decimals) + val.suffix);
 						// knob value
-						knobEl.data({ value });
+						knobEl.data({ value }).css({ "--aStep": aStep });
 					});
 				break;
 			case "dlgParagraphicEq":

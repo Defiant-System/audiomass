@@ -48,6 +48,8 @@ const UI = {
 		let Self = UI,
 			Spawn = event.spawn,
 			Drag = Self.drag,
+			xNode,
+			xAttr,
 			data,
 			name,
 			value,
@@ -207,7 +209,7 @@ const UI = {
 					dEl.find(`.buttons .presets ul`).html(li.join(""));
 				}
 				// auto reset dialog before show
-				Dialogs[event.name]({ ...event, dEl, type: "dlg-reset" });
+				Self.doDialog({ ...event, dEl, type: "dlg-init-fields" });
 				// auto forward open event
 				Dialogs[event.name]({ ...event, dEl });
 				// prevent mouse from triggering mouseover
@@ -217,10 +219,6 @@ const UI = {
 					el.addClass("showing").removeClass("opening"));
 				// save reference to axctive dialog
 				Dialogs._active = dEl;
-
-				// auto render default preset
-				// let tmpArr = ["dlgParagraphicEq", "dlgCompressor"];
-				// if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, id: 1 });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -239,13 +237,10 @@ const UI = {
 				// fast references for knob twist event
 				Dialogs.data = {};
 				break;
-			case "dlg-ok-common":
-				// close dialog
-				Dialogs[event.name]({ ...event, type: "dlg-close" });
-				break;
-			case "dlg-reset-common":
+			case "dlg-init-fields":
+				// init values
 				dEl = event.dEl || $(`.dialog-box[data-dlg="${event.name}"]`);
-				
+				// iterate fields
 				dEl.find(`.field-range-h, .field-range, .field-box`).map(elem => {
 					let el = $(elem),
 						iEl = el.find("input"),
@@ -302,6 +297,21 @@ const UI = {
 					}
 				});
 				break;
+			case "dlg-ok-common":
+				// close dialog
+				Dialogs[event.name]({ ...event, type: "dlg-close" });
+				break;
+			case "dlg-reset-common":
+				dEl = event.dEl || $(`.dialog-box[data-dlg="${event.name}"]`);
+				// loop all input fields
+				xAttr = dEl.find(`.field-range-h, .field-range, .field-box`).map(elem => {
+					let iEl = $(elem).find("input");
+					return `${iEl.attr("name")}="${iEl.data("default")}"`;
+				});
+				xNode = $.nodeFromString(`<i ${xAttr.join(" ")}/>`);
+				
+				Self.renderPreset({ ...event, dEl, xNode });
+				break;
 			case "dlg-preview-common":
 				Dialogs.preview = event.el.data("value") === "on";
 				break;
@@ -318,16 +328,16 @@ const UI = {
 		let Self = UI,
 			data = {},
 			str = [],
-			xPath,
-			xNode;
+			xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`,
+			xNode = event.xNode || window.bluePrint.selectSingleNode(xPath);
 		// set dialog in "transition" state
 		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans").css({ "--aStep": "" }));
 		// console.log(event);
 		switch (event.name) {
+			case "dlgDistortion":
+			case "dlgNormalize":
 			case "dlgSpeed":
 			case "dlgGain":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
-				xNode = window.bluePrint.selectSingleNode(xPath);
 				// slider dimensions
 				data.min = 2;
 				data.max = +event.dEl.find(".field-range-h .slider").prop("offsetWidth") - 3;
@@ -353,8 +363,7 @@ const UI = {
 					});
 				break;
 			case "dlgGraphicEq":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
-				xNode = window.bluePrint.selectSingleNode(xPath);
+			case "dlgGraphicEq20":
 				// slider dimensions
 				data.min = 2;
 				data.max = +event.dEl.find(".field-range .slider").prop("offsetHeight") - 3;
@@ -379,11 +388,10 @@ const UI = {
 						handle.css({ top });
 					});
 				break;
+			case "dlgHardLimiter":
 			case "dlgDelay":
 			case "dlgReverb":
 			case "dlgCompressor":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
-				xNode = window.bluePrint.selectSingleNode(xPath);
 				// translates to animation index
 				let knobIndex = i => (i % 2 === 1 ? i-1 : i) >> 1;
 				// iterate attributes
@@ -409,8 +417,6 @@ const UI = {
 					});
 				break;
 			case "dlgParagraphicEq":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
-				xNode = window.bluePrint.selectSingleNode(xPath);
 				// peq rectangle area
 				data.minY = 2;
 				data.minX = 2;

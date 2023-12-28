@@ -13,27 +13,27 @@
 
 	<Presets>
 		<Dialog name="dlgGain">
-			<Slot nr="1" gain="0"/>
+			<Slot id="1" gain="0"/>
 			<Slot id="2" gain="50"/>
 			<Slot id="3" gain="100"/>
 			<Slot id="4" gain="150"/>
 			<Slot id="5" gain="200"/>
 		</Dialog>
 		<Dialog name="dlgCompressor">
-			<Slot nr="1" threshold="-40" knee="5" ratio="7" attack="0.002" release="0.1" title="Classic"/>
-			<Slot nr="2" threshold="-6" knee="2" ratio="2.5" attack="0.002" release="0.05" title="Light"/>
-			<Slot nr="3" threshold="-45" knee="26" ratio="2.05" attack="0.233" release="0" title="Dashed Distorion"/>
-			<Slot nr="4" threshold="-60" knee="14" ratio="11.07" attack="0.036" release="0" title="Chaotic Distorion"/>
+			<Slot id="1" threshold="-40" knee="5" ratio="7" attack="0.002" release="0.1" title="Classic"/>
+			<Slot id="2" threshold="-6" knee="2" ratio="2.5" attack="0.002" release="0.05" title="Light"/>
+			<Slot id="3" threshold="-45" knee="26" ratio="2.05" attack="0.233" release="0" title="Dashed Distorion"/>
+			<Slot id="4" threshold="-60" knee="14" ratio="11.07" attack="0.036" release="0" title="Chaotic Distorion"/>
 		</Dialog>
 		<Dialog name="dlgGraphicEq">
 			
 		</Dialog>
 		<Dialog name="dlgParagraphicEq">
-			<Slot nr="1">
+			<Slot id="1">
 				<i id="1" type="high" gain="0" freq="5800" q="5.8" state="on"/>
 				<i id="2" type="low" gain="0" freq="7060" q="5" state="off"/>
 			</Slot>
-			<Slot nr="2">
+			<Slot id="2">
 				<i id="1" type="high" gain="0" freq="1800" q="5.8" state="on"/>
 			</Slot>
 		</Dialog>

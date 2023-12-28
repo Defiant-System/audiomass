@@ -148,7 +148,7 @@ const UI = {
 						// collect info
 						dEl = el.parents(".dialog-box");
 						name = dEl.data("dlg");
-						return Self.renderPreset({ dEl, name, nr: el.data("id") });
+						return Self.renderPreset({ dEl, name, id: el.data("id") });
 					case el.hasClass("toggler"):
 						return el.data("value") === "on"
 								? el.data({ value: "off" })
@@ -194,6 +194,15 @@ const UI = {
 			// custom events
 			case "dlg-open":
 				dEl = $(`.dialog-box[data-dlg="${event.name}"]`);
+				// add preset buttons, if any
+				if (dEl.find(`.buttons .presets`).length && !dEl.find(`.buttons .presets ul li`).length) {
+					let xPath = `//Presets/Dialog[@name="${event.name}"]/Slot`,
+						li = [];
+					window.bluePrint.selectNodes(xPath).map(x =>
+						li.push(`<li class="preset" data-id="${x.getAttribute("id")}">${x.getAttribute("id")}</li>`));
+
+					dEl.find(`.buttons .presets ul`).html(li.join(""));
+				}
 				// auto reset dialog before show
 				Dialogs[event.name]({ ...event, dEl, type: "dlg-reset" });
 				// auto forward open event
@@ -208,7 +217,7 @@ const UI = {
 
 				// auto render default preset
 				let tmpArr = ["dlgParagraphicEq", "dlgCompressor1"];
-				if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, nr: 1 });
+				if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, id: 1 });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -310,10 +319,37 @@ const UI = {
 			xNode;
 		// console.log(event);
 		switch (event.name) {
-			case "dlgCompressor":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@nr="${event.nr}"]`;
+			case "dlgGain":
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);
-
+				// slider dimensions
+				data.min = 2;
+				data.max = +event.dEl.find(".field-range-h .slider").prop("offsetWidth") - 3;
+				// iterate attributes
+				[...xNode.attributes]
+					.filter(a => event.dEl.find(`.value input[name="${a.name}"]`).length)
+					.map(a => {
+						let iEl = event.dEl.find(`.value input[name="${a.name}"]`),
+							handle = iEl.parents(".field-range-h").find(".slider .handle"),
+							step = +iEl.data("step") || 1,
+							val = {
+								min: +iEl.data("min"),
+								max: +iEl.data("max"),
+								suffix: iEl.data("suffix") || "",
+								decimals: (step.toString().split(".")[1] || "").length,
+							},
+							value = Math.invLerp(val.min, val.max, a.value),
+							left = Math.lerp(data.min, data.max, value);
+						// input field
+						iEl.val(a.value + val.suffix);
+						// handle element
+						handle.css({ left });
+					});
+				break;
+			case "dlgCompressor":
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
+				xNode = window.bluePrint.selectSingleNode(xPath);
+				// iterate attributes
 				[...xNode.attributes]
 					.filter(a => event.dEl.find(`.value input[name="${a.name}"]`).length)
 					.map(a => {
@@ -328,13 +364,13 @@ const UI = {
 							},
 							value = Math.invLerp(val.min, val.max, a.value) * 100 | 1;
 						// input field
-						iEl.val(a.value);
+						iEl.val(a.value + val.suffix);
 						// knob value
 						knobEl.data({ value });
 					});
 				break;
 			case "dlgParagraphicEq":
-				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@nr="${event.nr}"]`;
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);
 				// peq rectangle area
 				data.minY = 2;

@@ -1,4 +1,17 @@
 
+[data-ui="karaqu-light"] {
+	.win-caption-toolbar_ .display .toolbar-field_ {
+		.total-time,
+		.hover-time {
+			opacity: .5;
+
+			&:before {
+				filter: invert(1) drop-shadow(0 1px 0 rgba(#002,.25));
+			}
+		}
+	}
+}
+
 [data-ui="karaqu-dark"] {
 	.win-body_ content {
 		filter: grayscale(1);

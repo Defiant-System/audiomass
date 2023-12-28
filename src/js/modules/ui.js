@@ -821,10 +821,8 @@ const UI = {
 					});
 					// return console.log(event);
 				}
-
 				// make dot active
 				el.addClass("active");
-
 				// prepare info about drag
 				let content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),

@@ -49,6 +49,7 @@ const UI = {
 			Spawn = event.spawn,
 			Drag = Self.drag,
 			data,
+			name,
 			value,
 			dEl,
 			row,
@@ -132,7 +133,7 @@ const UI = {
 						el.parent().find(".active").removeClass("active");
 						el.addClass("active");
 						// collect info
-						dEl = el.parents(".dialog-box"),
+						dEl = el.parents(".dialog-box");
 						data = {
 							dEl,
 							row: el.parents(".list-row"),
@@ -143,6 +144,11 @@ const UI = {
 						// proxy values
 						data.func(data);
 						return;
+					case el.hasClass("preset"):
+						// collect info
+						dEl = el.parents(".dialog-box");
+						name = dEl.data("dlg");
+						return Self.renderPreset({ dEl, name, nr: el.data("id") });
 					case el.hasClass("toggler"):
 						return el.data("value") === "on"
 								? el.data({ value: "off" })
@@ -200,8 +206,9 @@ const UI = {
 				// save reference to axctive dialog
 				Dialogs._active = dEl;
 
-				// temp
-				if (event.name === "dlgParagraphicEq") Self.renderPreset({ ...event, dEl, nr: 1 });
+				// auto render default preset
+				let tmpArr = ["dlgParagraphicEq", "dlgCompressor1"];
+				if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, nr: 1 });
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -301,7 +308,31 @@ const UI = {
 			str = [],
 			xPath,
 			xNode;
+		// console.log(event);
 		switch (event.name) {
+			case "dlgCompressor":
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@nr="${event.nr}"]`;
+				xNode = window.bluePrint.selectSingleNode(xPath);
+
+				[...xNode.attributes]
+					.filter(a => event.dEl.find(`.value input[name="${a.name}"]`).length)
+					.map(a => {
+						let iEl = event.dEl.find(`.value input[name="${a.name}"]`),
+							knobEl = iEl.parents(".field-box").find(".knob"),
+							step = +iEl.data("step") || 1,
+							val = {
+								min: +iEl.data("min"),
+								max: +iEl.data("max"),
+								suffix: iEl.data("suffix") || "",
+								decimals: (step.toString().split(".")[1] || "").length,
+							},
+							value = Math.invLerp(val.min, val.max, a.value) * 100 | 1;
+						// input field
+						iEl.val(a.value);
+						// knob value
+						knobEl.data({ value });
+					});
+				break;
 			case "dlgParagraphicEq":
 				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@nr="${event.nr}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);

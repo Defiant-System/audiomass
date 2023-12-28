@@ -13,7 +13,7 @@
 			<div class="field-range-h">
 				<span class="label">Gain</span>
 				<div class="slider"><span class="handle"></span></div>
-				<span class="value"><input type="text" name="gain" data-min="10" data-max="200" data-suffix="%" data-default="100" data-change="set-gain"></span>
+				<span class="value"><input type="text" name="gain" data-min="0" data-max="250" data-suffix="%" data-default="100" data-change="set-gain"></span>
 			</div>
 		</div>
 		<div class="buttons">
@@ -98,6 +98,18 @@
 			</div>
 		</div>
 		<div class="buttons">
+			<div class="presets">
+				<span title="Presets"><i class="icon-presets"></i></span>
+				<div>
+					<ul>
+						<li class="preset" data-id="1">1</li>
+						<li class="preset" data-id="2">2</li>
+						<li class="preset" data-id="3">3</li>
+						<li class="preset" data-id="4">4</li>
+					</ul>
+				</div>
+			</div>
+
 			<div class="button" data-click="dlg-ok">Apply</div>
 			<div class="button" data-click="dlg-reset">Reset</div>
 		</div>
@@ -155,7 +167,7 @@
 			</div>
 		</div>
 		<div class="buttons">
-			<div class="presets hover">
+			<div class="presets">
 				<span title="Presets"><i class="icon-presets"></i></span>
 				<div>
 					<ul>

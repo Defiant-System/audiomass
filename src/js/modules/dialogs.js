@@ -153,13 +153,14 @@ const Dialogs = {
 		 * 500 Hz    Min: -25 dB     Max: 25 dB
 		 * 710 Hz    Min: -25 dB     Max: 25 dB
 		 * 1 KHz     Min: -25 dB     Max: 25 dB
-		 * 4 KHz     Min: -25 dB     Max: 25 dB
+		 * 1.4 KHz   Min: -25 dB     Max: 25 dB
 		 * 2 KHz     Min: -25 dB     Max: 25 dB
-		 * 8 KHz     Min: -25 dB     Max: 25 dB
+		 * 2.8 KHz   Min: -25 dB     Max: 25 dB
 		 * 4 KHz     Min: -25 dB     Max: 25 dB
-		 * 6 KHz     Min: -25 dB     Max: 25 dB
+		 * 5.6 KHz   Min: -25 dB     Max: 25 dB
 		 * 8 KHz     Min: -25 dB     Max: 25 dB
-		 * 3 KHz     Min: -25 dB     Max: 25 dB
+		 * 11.3 KHz  Min: -25 dB     Max: 25 dB
+		 * 16 KHz    Min: -25 dB     Max: 25 dB
 		 * 22 KHz    Min: -25 dB     Max: 25 dB
 		 */
 		let APP = imaudio,
@@ -176,15 +177,15 @@ const Dialogs = {
 			case "hz500":
 			case "hz710":
 			case "hz1K":
-			case "hz4K":
+			case "hz14K":
 			case "hz2K":
-			case "hz8K":
+			case "hz28K":
 			case "hz4K":
-			case "hz6K":
+			case "hz56K":
 			case "hz8K":
-			case "hz3K":
+			case "hz113K":
+			case "hz16K":
 			case "hz22K":
-				console.log( event.type, event.value );
 				break;
 			// standard dialog events
 			case "dlg-ok":

@@ -25,7 +25,7 @@ let Test = {
 				end: 2.5,
 			});
 
-			let name = "dlgNormalize";
+			let name = "dlgGraphicEq20";
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);
 			// setTimeout(() => {
 			// 	let dEl = spawn.find(`.dialog-box[data-dlg="${name}"]`);

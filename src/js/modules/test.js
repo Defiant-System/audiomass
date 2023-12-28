@@ -25,7 +25,12 @@ let Test = {
 				end: 2.5,
 			});
 
-			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgSpeed", spawn }), 200);
+			let name = "dlgGraphicEq";
+			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);
+			setTimeout(() => {
+				let dEl = spawn.find(`.dialog-box[data-dlg="${name}"]`);
+				UI.renderPreset({ name, dEl, id: 1 });
+			}, 800);
 		}, 550);
 
 		// return setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);

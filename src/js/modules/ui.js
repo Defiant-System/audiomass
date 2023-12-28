@@ -219,7 +219,7 @@ const UI = {
 				Dialogs._active = dEl;
 
 				// auto render default preset
-				let tmpArr = ["dlgParagraphicEq", "dlgCompressor1"];
+				let tmpArr = ["dlgParagraphicEq", "dlgCompressor"];
 				if (tmpArr.includes(event.name)) Self.renderPreset({ ...event, dEl, id: 1 });
 				break;
 			case "dlg-close":
@@ -320,6 +320,8 @@ const UI = {
 			str = [],
 			xPath,
 			xNode;
+		// set dialog in "transition" state
+		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans"));
 		// console.log(event);
 		switch (event.name) {
 			case "dlgSpeed":

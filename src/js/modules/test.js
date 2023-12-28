@@ -25,7 +25,9 @@ let Test = {
 				end: 1.825,
 			});
 
-			return;
+
+			return setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 300);
+
 
 			let name = "dlgParagraphicEq";
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);
@@ -57,6 +59,5 @@ let Test = {
 			}
 		}, 1000);
 		
-		// return setTimeout(() => window.find(`.toolbar-tool_[data-menu="view-settings"]`).trigger("mousedown"), 300);
 	}
 };

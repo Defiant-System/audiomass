@@ -141,9 +141,16 @@
 				break;
 
 			case "copy-selection":
-				console.log(event);
+				file = Spawn.data.tabs.active.file;
+				Spawn.data.clipboard = {
+					buffer: AudioUtils.CopyBufferSegment(file),
+				};
+				// TODO: enable toolbar-paste
+				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_")
 				break;
-			case "paste-selection": break;
+			case "paste-selection":
+				console.log( Spawn.data.clipboard.buffer );
+				break;
 			case "cut-selection": break;
 			case "silence-selection": break;
 		}

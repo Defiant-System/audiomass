@@ -319,6 +319,7 @@ const UI = {
 			xNode;
 		// console.log(event);
 		switch (event.name) {
+			case "dlgSpeed":
 			case "dlgGain":
 				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);
@@ -346,6 +347,35 @@ const UI = {
 						handle.css({ left });
 					});
 				break;
+			case "dlgGraphicEq":
+				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
+				xNode = window.bluePrint.selectSingleNode(xPath);
+				// slider dimensions
+				data.min = 2;
+				data.max = +event.dEl.find(".field-range .slider").prop("offsetHeight") - 3;
+				// iterate attributes
+				[...xNode.attributes]
+					.filter(a => event.dEl.find(`.value input[name="${a.name}"]`).length)
+					.map(a => {
+						let iEl = event.dEl.find(`.value input[name="${a.name}"]`),
+							handle = iEl.parents(".field-range").find(".slider .handle"),
+							step = +iEl.data("step") || 1,
+							val = {
+								min: +iEl.data("min"),
+								max: +iEl.data("max"),
+								suffix: iEl.data("suffix") || "",
+								decimals: (step.toString().split(".")[1] || "").length,
+							},
+							value = Math.invLerp(val.min, val.max, a.value),
+							top = Math.lerp(data.max, data.min, value);
+						// input field
+						iEl.val(a.value + val.suffix);
+						// handle element
+						handle.css({ top });
+					});
+				break;
+			case "dlgDelay":
+			case "dlgReverb":
 			case "dlgCompressor":
 				xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`;
 				xNode = window.bluePrint.selectSingleNode(xPath);

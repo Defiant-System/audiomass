@@ -25,9 +25,6 @@
 			<Slot id="3" threshold="-45" knee="26" ratio="2.05" attack="0.233" release="0" title="Dashed Distorion"/>
 			<Slot id="4" threshold="-60" knee="14" ratio="11.07" attack="0.036" release="0" title="Chaotic Distorion"/>
 		</Dialog>
-		<Dialog name="dlgGraphicEq">
-			
-		</Dialog>
 		<Dialog name="dlgParagraphicEq">
 			<Slot id="1">
 				<i id="1" type="high" gain="0" freq="5800" q="5.8" state="on"/>
@@ -36,6 +33,26 @@
 			<Slot id="2">
 				<i id="1" type="high" gain="0" freq="1800" q="5.8" state="on"/>
 			</Slot>
+		</Dialog>
+		<Dialog name="dlgGraphicEq">
+			<Slot id="1" hz32="-25" hz64="-22" hz125="-20" hz250="-18" hz500="-9" hz1K="0" hz2K="8" hz4K="10" hz8K="-8" hz16K="-25" title="Old Radio"/>
+			<Slot id="2" hz32="-18" hz64="-12" hz125="0" hz250="2" hz500="0" hz1K="4" hz2K="4" hz4K="-1" hz8K="-6" hz16K="8" title="Lo Fi"/>
+			<Slot id="3" hz32="0" hz64="0" hz125="0" hz250="0" hz500="0" hz1K="0" hz2K="0" hz4K="0" hz8K="0" hz16K="0" title="Reset"/>
+		</Dialog>
+		<Dialog name="dlgDelay">
+			<Slot id="1" time="0.3" feedback="0.4" wet="0.4" title="Classic"/>
+			<Slot id="2" time="3" feedback="0.6" wet="0.3" title="Spacey"/>
+		</Dialog>
+		<Dialog name="dlgReverb">
+			<Slot id="1" time="0.3" decay="0.4" wet="0.4" title="Classic"/>
+			<Slot id="2" time="3" decay="0.6" wet="0.3" title="Spacey"/>
+		</Dialog>
+		<Dialog name="dlgSpeed">
+			<Slot id="1" rate="0.25"/>
+			<Slot id="2" rate="0.5"/>
+			<Slot id="3" rate="1"/>
+			<Slot id="4" rate="1.25"/>
+			<Slot id="5" rate="1.5"/>
 		</Dialog>
 	</Presets>
 </Data>

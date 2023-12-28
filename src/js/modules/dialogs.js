@@ -221,15 +221,15 @@ const Dialogs = {
 	},
 	dlgDelay(event) {
 		/*
-		 * threshold   min: 0    max: 5
-		 * ratio       min: 0    max: 1
+		 * time        min: 0    max: 5
+		 * feedback    min: 0    max: 1
 		 * wet         min: 0    max: 1
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
-			case "set-threshold":
-			case "set-ratio":
+			case "set-time":
+			case "set-feedback":
 			case "set-wet":
 				break;
 			// standard dialog events
@@ -264,16 +264,16 @@ const Dialogs = {
 	},
 	dlgReverb(event) {
 		/*
-		 * threshold   min: 0    max: 5
-		 * ratio       min: 0    max: 1
-		 * wet         min: 0    max: 1
+		 * time      min: 0    max: 3
+		 * decay     min: 0    max: 3
+		 * wet       min: 0    max: 1
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
-			case "threshold":
-			case "ratio":
-			case "wet":
+			case "set-time":
+			case "set-decay":
+			case "set-wet":
 				break;
 			// standard dialog events
 			case "dlg-ok":
@@ -287,7 +287,7 @@ const Dialogs = {
 	},
 	dlgSpeed(event) {
 		/*
-		 * gain -  Min: 0.2   Max: 2
+		 * rate -  Min: 0.2   Max: 2
 		 */
 		let APP = imaudio,
 			Self = Dialogs;

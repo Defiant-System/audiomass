@@ -803,20 +803,30 @@ const UI = {
 				// prevent default behaviour
 				event.preventDefault();
 				
-				let el = $(event.target);
+				let el = $(event.target),
+					dEl = el.parents(".dialog-box");
 				if (el.hasClass("peq-dot-wrapper")) {
-					let id = 1,
-						top = 100,
-						left = 100;
-					el = el.append(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+					let id = Date.now(),
+						top = event.offsetY - 2,
+						left = event.offsetX - 2,
+						node = $.nodeFromString(`<i id="${id}" type="peak" gain="0" freq="0" q="5" state="on"/>`);
+					// add dot to "canvas"
+					el = el.prepend(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+					// render new list row
+					window.render({
+						match: "*",
+						data: node,
+						template: "peq-list-row",
+						prepend: dEl.find(`.peq-list .list-body`),
+					});
+					// return console.log(event);
 				}
 
 				// make dot active
 				el.addClass("active");
 
 				// prepare info about drag
-				let dEl = el.parents(".dialog-box"),
-					content = dEl.parents("content"),
+				let content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
 					yiEl = row.find(`span[data-name="gain"]`),
 					xiEl = row.find(`span[data-name="freq"]`),

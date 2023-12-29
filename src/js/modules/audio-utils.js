@@ -13,11 +13,12 @@ let AudioUtils = {
 				sampleRate: buffer.sampleRate,
 				duration: buffer.duration,
 				numberOfChannels: buffer.numberOfChannels,
+				type: file._file.blob.type,
 			};
-		imaudio.workers.wav.send(data)
-			.then(message => {
-				file._ws.loadBlob(message.data);
-			});
+		
+		imaudio.workers.wav
+			.send(data)
+			.then(message => console.log(message.data));
 	},
 
 	CreateBuffer(channels, length, sampleRate) {
@@ -90,7 +91,11 @@ let AudioUtils = {
 			}
 		}
 		
-		this.LoadDecoded(data.file, uberSegment);
+		// console.log( originalBuffer );
+		// console.log( uberSegment );
+		console.log( data.file._file.blob );
+		this.LoadDecoded(data.file, originalBuffer);
+		// this.LoadDecoded(data.file, uberSegment);
 		
 		// let start = offset / sampleRate,
 		// 	end = start + (data.buffer.length / sampleRate);

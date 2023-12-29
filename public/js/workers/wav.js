@@ -1,78 +1,52 @@
 
-function getWavHeader(options) {
-	let numFrames      = options.numFrames;
-	let numChannels    = options.numChannels || 2;
-	let sampleRate     = options.sampleRate || 44100;
-	let bytesPerSample = options.isFloat? 4 : 2;
-	let format         = options.isFloat? 3 : 1;
-	let blockAlign     = numChannels * bytesPerSample;
-	let byteRate       = sampleRate * blockAlign;
-	let dataSize       = numFrames * blockAlign;
-	let buffer         = new ArrayBuffer(44);
-	let dataView       = new DataView(buffer);
-	let p = 0;
-
-	let writeString = s => {
-		for (let i = 0; i < s.length; i++) {
-			dataView.setUint8(p + i, s.charCodeAt(i));
-		}
-		p += s.length;
-	};
-
-	let writeUint32 = d => {
-		dataView.setUint32(p, d, true);
-		p += 4;
-	};
-
-	let writeUint16 = d => {
-		dataView.setUint16(p, d, true);
-		p += 2;
-	};
-
-	writeString("RIFF");              // ChunkID
-	writeUint32(dataSize + 36);       // ChunkSize
-	writeString("WAVE");              // Format
-	writeString("fmt ");              // Subchunk1ID
-	writeUint32(16);                  // Subchunk1Size
-	writeUint16(format);              // AudioFormat https://i.stack.imgur.com/BuSmb.png
-	writeUint16(numChannels);         // NumChannels
-	writeUint32(sampleRate);          // SampleRate
-	writeUint32(byteRate);            // ByteRate
-	writeUint16(blockAlign);          // BlockAlign
-	writeUint16(bytesPerSample * 8);  // BitsPerSample
-	writeString("data");              // Subchunk2ID
-	writeUint32(dataSize);            // Subchunk2Size
-
-	return new Uint8Array(buffer);
+function encodeWAV(samples, channels, sampleRate) {
+	let buffer = new ArrayBuffer(44 + samples.length * 2);
+	let view = new DataView(buffer);
+	writeString(view, 0, "RIFF");
+	view.setUint32(4, 36 + samples.length * 2, true);
+	writeString(view, 8, "WAVE");
+	writeString(view, 12, "fmt ");
+	view.setUint32(16, 16, true);
+	view.setUint16(20, 1, true);
+	view.setUint16(22, channels, true);
+	view.setUint32(24, sampleRate, true);
+	view.setUint32(28, sampleRate * channels * 2, true);
+	view.setUint16(32, channels * 2, true);
+	view.setUint16(34, 16, true);
+	writeString(view, 36, "data");
+	view.setUint32(40, samples.length * 2, true);
+	floatTo16BitPCM(view, 44, samples);
+	return view;
 }
 
-function getWavBytes(buffer, options) {
-	let type = options.isFloat ? Float32Array : Uint16Array;
-	let numFrames = buffer.byteLength / type.BYTES_PER_ELEMENT;
-	let headerBytes = getWavHeader(Object.assign({}, options, { numFrames }));
-	let wavBytes = new Uint8Array(headerBytes.length + buffer.byteLength);
-	// prepend header, then add pcmBytes
-	wavBytes.set(headerBytes, 0);
-	wavBytes.set(new Uint8Array(buffer), headerBytes.length);
-	return wavBytes;
+function floatTo16BitPCM(output, offset, input) {
+	for (let i=0, il=input.length; i<il; i++, offset += 2) {
+		let s = Math.max(-1, Math.min(1, input[i]));
+		output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+	}
 }
 
+function writeString(view, offset, string) {
+	for (let i=0, il=string.length; i<il; i++) {
+		view.setUint8(offset + i, string.charCodeAt(i));
+	}
+}
 
-onmessage = function( ev ) {
-	let isFloat= true;
-    let channels = ev.data.numberOfChannels;
-    let sampleRate = ev.data.sampleRate;
-    let left = ev.data.left;
-    let right = ev.data.right;
-	let interleaved = new Float32Array(left.length + right.length);
+onmessage = function(event) {
+    let numberOfChannels = event.data.numberOfChannels;
+    let sampleRate = event.data.sampleRate;
+    let type = event.data.type;
+    let left = event.data.left;
+    let right = event.data.right;
+	let interleaved = new Float32Array(left.length * numberOfChannels);
 
-	for (let src=0, dst=0; src<left.length; src++, dst+=2) {
+	for (let src=0, dst=0, sl=left.length; src<sl; src++, dst+=2) {
 		interleaved[dst] = left[src];
 		interleaved[dst+1] = right[src];
 	}
 
-	let wavBytes = getWavBytes(interleaved.buffer, { isFloat, channels, sampleRate });
-	let blob = new Blob([wavBytes], { type: "audio/wav" });
+	let dataView = encodeWAV(interleaved, numberOfChannels, sampleRate);
+	let blob = new Blob([dataView], { type: "audio/wav" });
 
     postMessage(blob);
-}
+};

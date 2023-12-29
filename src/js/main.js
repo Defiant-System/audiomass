@@ -74,6 +74,7 @@ const imaudio = {
 	spawn: @import "./modules/spawn.js",
 	workers: {
 		wav: "~/js/workers/wav.js",
+		mp3: "~/js/workers/lame.js",
 	}
 };
 

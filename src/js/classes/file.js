@@ -172,11 +172,27 @@ class File {
 				// emit range related event
 				this._parent._spawn.emit("clear-range");
 				break;
+			case "ws-region-collapse-start":
+				value = this._activeRegion.start / this._activeRegion.totalDuration;
+				/* falls through */
+			case "ws-region-collapse-end":
+				// region end time index
+				value = value || this._activeRegion.end / this._activeRegion.totalDuration;
+				// clear active region
+				this._activeRegion.remove();
+				this._activeRegion = null;
+				// // emit range related event
+				this._parent._spawn.emit("clear-range");
+				// move cursor
+				ws.seekTo(value);
+				break;
 			case "ws-region-created":
 			case "ws-region-updated":
 				// move cursor to begining of region
 				value = event.region.start / event.region.totalDuration;
 				ws.seekTo(value);
+				// save reference to region
+				this._activeRegion = event.region;
 				// emit range related event
 				this._parent._spawn.emit("update-range", { region: event.region });
 				break;

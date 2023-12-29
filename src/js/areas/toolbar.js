@@ -41,6 +41,7 @@
 			Spawn = event.spawn,
 			Self = APP.spawn.toolbar,
 			file,
+			data,
 			value,
 			isOn,
 			el;
@@ -142,14 +143,20 @@
 
 			case "copy-selection":
 				file = Spawn.data.tabs.active.file;
+				// store buffer in clipboard
 				Spawn.data.clipboard = {
+					file,
 					buffer: AudioUtils.CopyBufferSegment(file),
 				};
-				// TODO: enable toolbar-paste
+				// enable toolbar-paste
 				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_")
+
+				// temp
+				file.dispatch({ type: "ws-region-collapse-end" });
 				break;
 			case "paste-selection":
-				console.log( Spawn.data.clipboard.buffer );
+				data = Spawn.data.clipboard;
+				AudioUtils.InsertSegmentToBuffer(data);
 				break;
 			case "cut-selection": break;
 			case "silence-selection": break;

@@ -40,6 +40,7 @@
 		let APP = imaudio,
 			Spawn = event.spawn,
 			Self = APP.spawn.toolbar,
+			buffer,
 			file,
 			data,
 			value,
@@ -143,11 +144,9 @@
 
 			case "copy-selection":
 				file = Spawn.data.tabs.active.file;
+				buffer = AudioUtils.CopyBufferSegment(file);
 				// store buffer in clipboard
-				Spawn.data.clipboard = {
-					file,
-					buffer: AudioUtils.CopyBufferSegment(file),
-				};
+				Spawn.data.clipboard = { file, buffer };
 				// enable toolbar-paste
 				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_")
 

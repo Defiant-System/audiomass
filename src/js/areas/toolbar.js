@@ -152,6 +152,7 @@
 
 				// temp
 				file.dispatch({ type: "ws-region-collapse-end" });
+				setTimeout(() => Spawn.data.toolbar.els.paste.trigger("click"), 300);
 				break;
 			case "paste-selection":
 				data = Spawn.data.clipboard;

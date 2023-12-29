@@ -5,7 +5,7 @@ class File {
 		this._parent = parent;
 		this._el = el;
 		// save reference to original FS file
-		this._file = fsFile || new karaqu.File({ kind: "wav" });
+		this._file = fsFile || new karaqu.File({ kind: "mp3" });
 		// file is not ready until it is decoded
 		this._ready = false;
 

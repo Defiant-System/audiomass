@@ -6,6 +6,12 @@ let AudioUtils = {
 		return ((val * dec) >> 0) / dec;
 	},
 
+	LoadDecoded(file, buffer) {
+		let blob = new Blob([buffer], { type: file._file.blob.type });
+		console.log( blob );
+		// file._ws.loadBlob(blob);
+	},
+
 	CreateBuffer(channels, length, rate) {
 		return new AudioContext().createBuffer(channels, length, rate);
 	},
@@ -14,24 +20,25 @@ let AudioUtils = {
 		let region = file._activeRegion;
 		let offset = this.TrimTo(region.start, 3);
 		let duration = this.TrimTo(region.end - region.start, 3);
-		let originalBuffer = file._ws.getDecodedData();
+		let original_buffer = file._ws.getDecodedData();
+		let peaks = file._ws.exportPeaks();
 
-		let new_len    = ((duration/1) * originalBuffer.sampleRate) >> 0;
-		let new_offset = ((offset/1)   * originalBuffer.sampleRate) >> 0;
+		let new_len    = ((duration/1) * original_buffer.sampleRate) >> 0;
+		let new_offset = ((offset/1)   * original_buffer.sampleRate) >> 0;
 
-		let channels = originalBuffer.numberOfChannels;
-		let length = duration * originalBuffer.sampleRate;
-		let rate = originalBuffer.sampleRate;
-		let new_segment = this.CreateBuffer(channels, length, rate);
+		let channels = original_buffer.numberOfChannels;
+		let length = duration * original_buffer.sampleRate;
+		let rate = original_buffer.sampleRate;
+		let empty_segment = this.CreateBuffer(channels, length, rate);
 
-		for (let i=0, u=0; i<channels; ++i) {
-			if (originalBuffer.numberOfChannels[i] === 0) continue;
-			let buffer = originalBuffer.getChannelData(i).slice(new_offset, new_len + new_offset);
-			new_segment.getChannelData(u).set(buffer);
+		for (let i=0, u=0; i<peaks.length; ++i) {
+			// if (wavesurfer.ActiveChannels[ i ] === 0) continue;
+			let buffer_array = original_buffer.getChannelData(i).slice(new_offset, new_len + new_offset);
+			empty_segment.getChannelData(u).set(buffer_array);
 			++u;
 		}
 
-		return new_segment;
+		return empty_segment;
 	},
 
 	InsertSegmentToBuffer(data) {
@@ -42,7 +49,7 @@ let AudioUtils = {
 		let uberSegment = this.CreateBuffer(channels, length, rate);
 
 		let offset = this.TrimTo(data.file._ws.getCurrentTime(), 3);
-		offset = ((offset / 1) * originalBuffer.sampleRate) >> 0;
+		offset = ((offset / 1) * rate) >> 0;
 		
 		for (let i=0; i<channels; ++i) {
 			let chan_data = originalBuffer.getChannelData(i);
@@ -54,15 +61,15 @@ let AudioUtils = {
 								: data.buffer.getChannelData(i);
 
 
-			// // check to see if we have only 1 channel selected
-			// if (wavesurfer.SelectedChannelsLen === 1) {
-			// 	// check if we have the selected channel
-			// 	if (wavesurfer.ActiveChannels[ i ] === 0) {
-			// 		// keep original
-			// 		uberChanData.set( chan_data );
-			// 		continue;
-			// 	}
-			// }
+			// check to see if we have only 1 channel selected
+			if (channels === 1) {
+				// check if we have the selected channel
+				if (wavesurfer.ActiveChannels[ i ] === 0) {
+					// keep original
+					uberChanData.set( chan_data );
+					continue;
+				}
+			}
 
 			if (offset > 0) {
 				uberChanData.set(chan_data.slice (0, offset));
@@ -77,11 +84,10 @@ let AudioUtils = {
 			}
 		}
 		
-		// loadDecoded ( uberSegment, originalBuffer );
+		this.LoadDecoded(data.file, uberSegment);
 
-		// return [
-		// 	(_offset / originalBuffer.sampleRate), 
-		// 	(_offset / originalBuffer.sampleRate) + (buffer.length / originalBuffer.sampleRate)
-		// ];
+		let start = offset / rate,
+			end = start + (data.buffer.length / rate);
+		return [start, end];
 	}
 };

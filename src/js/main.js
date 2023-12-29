@@ -26,12 +26,13 @@ let {
 
 const imaudio = {
 	init() {
-		
+		this.dispatch({ type: "init-workers" });
 	},
 	dispose(event) {
 		if (event.spawn) {
 			return this.spawn.dispose(event);
 		}
+		Object.keys(this.workers).map(key => this.workers[key].terminate());
 	},
 	dispatch(event) {
 		let Self = imaudio,
@@ -53,9 +54,27 @@ const imaudio = {
 				spawn = window.open("spawn");
 				Self.spawn.dispatch({ ...event, spawn });
 				break;
+			// custom events
+			case "init-workers":
+				// simple wrapper around workers
+				Object.keys(Self.workers).map(key => {
+					let worker = new Worker(Self.workers[key]);
+					worker.send = function(message) {
+						this.postMessage(message);
+						return new Promise((resolve, reject) => {
+							this.onmessage = e => resolve(e);
+							this.onerror = e => reject(e);
+						});
+					};
+					Self.workers[key] = worker;
+				});
+				break;
 		}
 	},
 	spawn: @import "./modules/spawn.js",
+	workers: {
+		wav: "~/js/workers/wav.js",
+	}
 };
 
 window.exports = imaudio;

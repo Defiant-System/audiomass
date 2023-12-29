@@ -11,6 +11,11 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
+
+		// APP.workers.wav.send("test")
+		// 	.then(e => {
+		// 		console.log( e );
+		// 	});
 		return;
 
 		return setTimeout(() => {

@@ -33,11 +33,11 @@ function writeString(view, offset, string) {
 }
 
 onmessage = function(event) {
-    let numberOfChannels = event.data.numberOfChannels;
-    let sampleRate = event.data.sampleRate;
-    let type = event.data.type;
-    let left = event.data.left;
-    let right = event.data.right;
+	let numberOfChannels = event.data.numberOfChannels;
+	let sampleRate = event.data.sampleRate;
+	let type = event.data.type;
+	let left = event.data.left;
+	let right = event.data.right;
 	let interleaved = new Float32Array(left.length * numberOfChannels);
 
 	for (let src=0, dst=0, sl=left.length; src<sl; src++, dst+=2) {
@@ -48,5 +48,5 @@ onmessage = function(event) {
 	let dataView = encodeWAV(interleaved, numberOfChannels, sampleRate);
 	let blob = new Blob([dataView], { type: "audio/wav" });
 
-    postMessage(blob);
+	postMessage(blob);
 };

@@ -18,7 +18,7 @@ let AudioUtils = {
 		
 		imaudio.workers.wav
 			.send(data)
-			.then(message => console.log(message.data));
+			.then(message => file._ws.loadBlob(message.data));
 	},
 
 	CreateBuffer(channels, length, sampleRate) {
@@ -68,16 +68,6 @@ let AudioUtils = {
 								? data.buffer.getChannelData(0)
 								: data.buffer.getChannelData(i);
 
-			// check to see if we have only 1 channel selected
-			if (channels === 1) {
-				// check if we have the selected channel
-				if (wavesurfer.ActiveChannels[i] === 0) {
-					// keep original
-					uberChanData.set(chan_data);
-					continue;
-				}
-			}
-
 			if (offset > 0) {
 				uberChanData.set(chan_data.slice(0, offset));
 			}
@@ -93,12 +83,8 @@ let AudioUtils = {
 		
 		// console.log( originalBuffer );
 		// console.log( uberSegment );
-		console.log( data.file._file.blob );
-		this.LoadDecoded(data.file, originalBuffer);
-		// this.LoadDecoded(data.file, uberSegment);
+		// console.log( data.file._file.blob );
+		this.LoadDecoded(data.file, uberSegment);
 		
-		// let start = offset / sampleRate,
-		// 	end = start + (data.buffer.length / sampleRate);
-		// return [start, end];
 	},
 };

@@ -39,6 +39,7 @@ class File {
 			container: el[0],
 			cursorColor: "#f90", // afdeff
 			hideScrollbar: true,
+			sampleRate: 44100,
 			// dragToSeek: true,
 			// autoCenter: true,
 			// autoScroll: false,

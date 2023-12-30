@@ -101,7 +101,7 @@ let AudioUtils = {
 	},
 
 	OverwriteBufferWithSegment(data) {
-		this.TrimBuffer(data);
+		this.TrimBuffer({ ...data, skipLoad: true });
 		this.InsertSegmentToBuffer(data);
 	},
 
@@ -130,6 +130,7 @@ let AudioUtils = {
 			uberChanData.set(chanData.slice(newOffset + newLen), newOffset);
 		}
 
+		if (data.skipLoad) return;
 		this.LoadDecoded(data, uberSegment);
 	},
 };

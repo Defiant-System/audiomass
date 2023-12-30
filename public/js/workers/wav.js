@@ -36,13 +36,14 @@ onmessage = function(event) {
 	let numberOfChannels = event.data.numberOfChannels;
 	let sampleRate = event.data.sampleRate;
 	let type = event.data.type;
-	let left = event.data.left;
-	let right = event.data.right;
-	let interleaved = new Float32Array(left.length * numberOfChannels);
+	let data = [event.data.left, event.data.right];
+	let interleaved = new Float32Array(data[0].length * numberOfChannels);
 
-	for (let src=0, dst=0, sl=left.length; src<sl; src++, dst+=2) {
-		interleaved[dst] = left[src];
-		interleaved[dst+1] = right[src];
+	for (let channel=0; channel<numberOfChannels; channel++) {
+		let channelData = data[channel];
+		for (let i=0, il=channelData.length; i<il; i++) {
+			interleaved[i * numberOfChannels + channel] = channelData[i];
+		}
 	}
 
 	let dataView = encodeWAV(interleaved, numberOfChannels, sampleRate);

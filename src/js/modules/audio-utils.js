@@ -8,14 +8,13 @@ let AudioUtils = {
 
 	LoadDecoded(file, buffer) {
 		let data = {
+				numberOfChannels: buffer.numberOfChannels,
 				left: buffer.getChannelData(0),
-				right: buffer.getChannelData(1),
+				right: buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : null,
 				sampleRate: buffer.sampleRate,
 				duration: buffer.duration,
-				numberOfChannels: buffer.numberOfChannels,
 				type: file._file.blob.type,
 			};
-		
 		imaudio.workers.wav
 			.send(data)
 			.then(message => file._ws.loadBlob(message.data));
@@ -62,16 +61,11 @@ let AudioUtils = {
 		for (let i=0; i<channels; ++i) {
 			let chan_data = originalBuffer.getChannelData(i);
 			let uberChanData = uberSegment.getChannelData(i);
-			let segment_chan_data = null;
+			let segment_chan_data = data.buffer.numberOfChannels === 1
+									? data.buffer.getChannelData(0)
+									: data.buffer.getChannelData(i);
 
-			segment_chan_data = data.buffer.numberOfChannels === 1
-								? data.buffer.getChannelData(0)
-								: data.buffer.getChannelData(i);
-
-			if (offset > 0) {
-				uberChanData.set(chan_data.slice(0, offset));
-			}
-
+			if (offset > 0) uberChanData.set(chan_data.slice(0, offset));
 			uberChanData.set(segment_chan_data, offset);
 
 			if (offset < (originalBuffer.length + data.buffer.length)) {
@@ -81,10 +75,6 @@ let AudioUtils = {
 			}
 		}
 		
-		// console.log( originalBuffer );
-		// console.log( uberSegment );
-		// console.log( data.file._file.blob );
 		this.LoadDecoded(data.file, uberSegment);
-		
 	},
 };

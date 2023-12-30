@@ -52,7 +52,7 @@
 						width = parseInt(stWidth * (vWidth / cWidth), 10) - 2,
 						scroll = event.ws.getScroll(),
 						available = cWidth - vWidth,
-						left = parseInt((scroll / available) * (stWidth - width + 2), 10) + 1;
+						left = parseInt((scroll / available) * (stWidth - width - 2), 10) + 1;
 					// sync scrollbar
 					Spawn.data.waves.els.scrollHandle.css({ width, left });
 				}

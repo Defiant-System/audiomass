@@ -70,6 +70,9 @@ const imaudio = {
 						on(type, callback) {
 							this._stack[type] = callback;
 							return this;
+						},
+						terminate() {
+							this._worker.terminate();
 						}
 					};
 				});

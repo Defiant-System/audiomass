@@ -16,7 +16,7 @@ let AudioUtils = {
 				type: data.file._file.blob.type,
 			};
 		// engage worker
-		imaudio.workers.mp3
+		imaudio.workers.wav
 			.send(args)
 			.on("message", event => {
 				switch (event.type) {
@@ -34,28 +34,28 @@ let AudioUtils = {
 		return new AudioContext().createBuffer(channels, length, sampleRate);
 	},
 
-	CopyBufferSegment(file) {
-		let region = file._activeRegion;
+	CopyBufferSegment(data) {
+		let region = data.file._activeRegion;
 		let offset = this.TrimTo(region.start, 3);
 		let duration = this.TrimTo(region.end - region.start, 3);
-		let original_buffer = file._ws.getDecodedData();
-		let peaks = file._ws.exportPeaks();
+		let originalBuffer = data.file._ws.getDecodedData();
+		let peaks = data.file._ws.exportPeaks();
 
-		let new_len    = ((duration/1) * original_buffer.sampleRate) >> 0;
-		let new_offset = ((offset/1)   * original_buffer.sampleRate) >> 0;
+		let newLen    = ((duration/1) * originalBuffer.sampleRate) >> 0;
+		let newOffset = ((offset/1)   * originalBuffer.sampleRate) >> 0;
 
-		let channels = original_buffer.numberOfChannels;
-		let length = duration * original_buffer.sampleRate;
-		let sampleRate = original_buffer.sampleRate;
-		let empty_segment = this.CreateBuffer(channels, length, sampleRate);
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+		let length = duration * sampleRate;
+		let emptySegment = this.CreateBuffer(channels, length, sampleRate);
 
 		for (let i=0, u=0; i<peaks.length; ++i) {
-			let buffer_array = original_buffer.getChannelData(i).slice(new_offset, new_len + new_offset);
-			empty_segment.getChannelData(u).set(buffer_array);
+			let buffer_array = originalBuffer.getChannelData(i).slice(newOffset, newLen + newOffset);
+			emptySegment.getChannelData(u).set(buffer_array);
 			++u;
 		}
 
-		return empty_segment;
+		return emptySegment;
 	},
 
 	InsertSegmentToBuffer(data) {
@@ -68,27 +68,63 @@ let AudioUtils = {
 		offset = ((offset / 1) * sampleRate) >> 0;
 		
 		for (let i=0; i<channels; ++i) {
-			let chan_data = originalBuffer.getChannelData(i);
+			let chanData = originalBuffer.getChannelData(i);
 			let uberChanData = uberSegment.getChannelData(i);
-			let segment_chan_data = data.buffer.numberOfChannels === 1
+			let segmentChanData = data.buffer.numberOfChannels === 1
 									? data.buffer.getChannelData(0)
 									: data.buffer.getChannelData(i);
 
-			if (offset > 0) uberChanData.set(chan_data.slice(0, offset));
-			uberChanData.set(segment_chan_data, offset);
+			if (offset > 0) uberChanData.set(chanData.slice(0, offset));
+			uberChanData.set(segmentChanData, offset);
 
 			if (offset < (originalBuffer.length + data.buffer.length)) {
-				let cut_buffer = chan_data.slice(offset),
-					cut_offset = offset + segment_chan_data.length;
+				let cut_buffer = chanData.slice(offset),
+					cut_offset = offset + segmentChanData.length;
 				uberChanData.set(cut_buffer, cut_offset);
 			}
 		}
 		
-		// this.LoadDecoded(data, originalBuffer);
 		this.LoadDecoded(data, uberSegment);
 
 		// let start = offset / sampleRate,
 		// 	end = start + (data.buffer.length / sampleRate);
 		// return [start, end];
+	},
+
+	MakeSilenceBuffer(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+		let length = data.duration * sampleRate;
+		let emptySegment = this.CreateBuffer(channels, length, sampleRate);
+		return emptySegment;
+	},
+
+	TrimBuffer(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let offset = region.start;
+		let duration = region.end - region.start;
+		var newLen    = ((duration/1) * sampleRate) >> 0;
+		var newOffset = ((offset/1)   * sampleRate) >> 0;
+
+		let length = originalBuffer.length - newLen;
+		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
+		let emptySegment = this.CreateBuffer(channels, newLen, sampleRate);
+
+		for (var i=0; i<channels; ++i) {
+			var chanData = originalBuffer.getChannelData(i);
+			var segmentChanData = emptySegment.getChannelData(i);
+			var uberChanData = uberSegment.getChannelData(i);
+
+			segmentChanData.set(chanData.slice(newOffset, newOffset + newLen));
+			uberChanData.set(chanData.slice(0, newOffset));
+			uberChanData.set(chanData.slice(newOffset + newLen), newOffset);
+		}
+
+		this.LoadDecoded(data, uberSegment);
 	},
 };

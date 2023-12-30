@@ -144,22 +144,30 @@
 
 			case "copy-selection":
 				file = Spawn.data.tabs.active.file;
-				buffer = AudioUtils.CopyBufferSegment(file);
+				buffer = AudioUtils.CopyBufferSegment({ file });
 				// store buffer in clipboard
 				Spawn.data.clipboard = { file, buffer };
 				// enable toolbar-paste
-				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_")
-
-				// temp
-				file.dispatch({ type: "ws-region-collapse-end" });
-				setTimeout(() => Spawn.data.toolbar.els.paste.trigger("click"), 300);
+				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_");
 				break;
+			case "cut-selection":
+				file = Spawn.data.tabs.active.file;
+				// no need to duplicate code
+				Self.dispatch({ ...event, type: "copy-selection" });
+				// remove selected range
+				AudioUtils.TrimBuffer({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
+
 			case "paste-selection":
 				data = Spawn.data.clipboard;
 				AudioUtils.InsertSegmentToBuffer({ ...data, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
-			case "cut-selection": break;
-			case "silence-selection": break;
+			case "silence-selection":
+				file = Spawn.data.tabs.active.file;
+				buffer = AudioUtils.CopyBufferSegment({ file });
+				data = AudioUtils.MakeSilenceBuffer({ file, duration: buffer.duration });
+
+				break;
 		}
 	},
 	format(time=0) {

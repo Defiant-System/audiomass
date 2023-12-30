@@ -40,6 +40,8 @@
 		let APP = imaudio,
 			Spawn = event.spawn,
 			Self = APP.spawn.toolbar,
+			duration,
+			segment,
 			buffer,
 			file,
 			data,
@@ -144,9 +146,9 @@
 
 			case "copy-selection":
 				file = Spawn.data.tabs.active.file;
-				buffer = AudioUtils.CopyBufferSegment({ file });
-				// store buffer in clipboard
-				Spawn.data.clipboard = { file, buffer };
+				segment = AudioUtils.CopyBufferSegment({ file });
+				// store segment in clipboard
+				Spawn.data.clipboard = { file, segment };
 				// enable toolbar-paste
 				Spawn.data.toolbar.els.paste.removeClass("tool-disabled_");
 				break;
@@ -157,16 +159,18 @@
 				// remove selected range
 				AudioUtils.TrimBuffer({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
-
 			case "paste-selection":
 				data = Spawn.data.clipboard;
 				AudioUtils.InsertSegmentToBuffer({ ...data, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "silence-selection":
 				file = Spawn.data.tabs.active.file;
-				buffer = AudioUtils.CopyBufferSegment({ file });
-				data = AudioUtils.MakeSilenceBuffer({ file, duration: buffer.duration });
+				duration = file._activeRegion.end - file._activeRegion.start;
+				segment = AudioUtils.MakeSilenceBuffer({ file, duration });
+				// remove selected range
+				// AudioUtils.TrimBuffer({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 
+				AudioUtils.OverwriteBufferWithSegment({ file, segment, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 		}
 	},

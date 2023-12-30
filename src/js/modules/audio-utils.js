@@ -61,7 +61,7 @@ let AudioUtils = {
 	InsertSegmentToBuffer(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;
-		let length = originalBuffer.length + data.buffer.length;
+		let length = originalBuffer.length + data.segment.length;
 		let sampleRate = originalBuffer.sampleRate;
 		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
 		let offset = this.TrimTo(data.file._ws.getCurrentTime(), 3);
@@ -70,14 +70,14 @@ let AudioUtils = {
 		for (let i=0; i<channels; ++i) {
 			let chanData = originalBuffer.getChannelData(i);
 			let uberChanData = uberSegment.getChannelData(i);
-			let segmentChanData = data.buffer.numberOfChannels === 1
-									? data.buffer.getChannelData(0)
-									: data.buffer.getChannelData(i);
+			let segmentChanData = data.segment.numberOfChannels === 1
+									? data.segment.getChannelData(0)
+									: data.segment.getChannelData(i);
 
 			if (offset > 0) uberChanData.set(chanData.slice(0, offset));
 			uberChanData.set(segmentChanData, offset);
 
-			if (offset < (originalBuffer.length + data.buffer.length)) {
+			if (offset < (originalBuffer.length + data.segment.length)) {
 				let cut_buffer = chanData.slice(offset),
 					cut_offset = offset + segmentChanData.length;
 				uberChanData.set(cut_buffer, cut_offset);
@@ -87,7 +87,7 @@ let AudioUtils = {
 		this.LoadDecoded(data, uberSegment);
 
 		// let start = offset / sampleRate,
-		// 	end = start + (data.buffer.length / sampleRate);
+		// 	end = start + (data.segment.length / sampleRate);
 		// return [start, end];
 	},
 
@@ -98,6 +98,11 @@ let AudioUtils = {
 		let length = data.duration * sampleRate;
 		let emptySegment = this.CreateBuffer(channels, length, sampleRate);
 		return emptySegment;
+	},
+
+	OverwriteBufferWithSegment(data) {
+		this.TrimBuffer(data);
+		this.InsertSegmentToBuffer(data);
 	},
 
 	TrimBuffer(data) {

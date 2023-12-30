@@ -16,7 +16,7 @@ let Test = {
 		// 	.then(e => {
 		// 		console.log( e );
 		// 	});
-		// return;
+		return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
@@ -31,8 +31,8 @@ let Test = {
 			});
 
 
-			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
-			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 300);
+			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
+			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 300);
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 300);
 			return;
 

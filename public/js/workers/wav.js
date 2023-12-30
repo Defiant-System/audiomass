@@ -32,12 +32,16 @@ function writeString(view, offset, string) {
 	}
 }
 
-onmessage = function(event) {
+let Self = self;
+
+Self.onmessage = event => {
 	let numberOfChannels = event.data.numberOfChannels;
 	let sampleRate = event.data.sampleRate;
 	let type = event.data.type;
 	let data = [event.data.left, event.data.right];
 	let interleaved = new Float32Array(data[0].length * numberOfChannels);
+	// signal work starting
+	postMessage({ type: "progress", value: 0 });
 
 	for (let channel=0; channel<numberOfChannels; channel++) {
 		let channelData = data[channel];
@@ -48,6 +52,6 @@ onmessage = function(event) {
 
 	let dataView = encodeWAV(interleaved, numberOfChannels, sampleRate);
 	let blob = new Blob([dataView], { type: "audio/wav" });
-
-	postMessage(blob);
+	// signal work done
+	postMessage({ type: "progress", value: 100, blob });
 };

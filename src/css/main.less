@@ -256,6 +256,67 @@ content {
 			}
 		}
 
+		.ui-progress {
+			opacity: 0;
+			visibility: hidden;
+			position: absolute;
+			bottom: 53px;
+			left: 0;
+			right: 0;
+			text-align: center;
+			transition: opacity 100ms ease-in-out;
+			--progress: 0;
+
+			&.show-progress {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			h3 {
+				font-size: 29px;
+				font-weight: 100;
+				text-shadow: 0 1px 0 #1b2642;
+			}
+
+			h2 {
+				font-size: 53px;
+				font-weight: 100;
+				line-height: 1.25;
+				text-shadow: 0 1px 1px #1b2642;
+
+				&:before {
+					counter-reset: variable var(--progress);
+    				content: counter(variable);
+				}
+				
+				&:after {
+					content: "%";
+				}
+			}
+
+			.progress {
+				display: inline-block;
+				position: relative;
+				top: -5px;
+				background: rgba(#fff,.25);
+				width: 137px;
+				height: 3px;
+				border-radius: 3px;
+
+				span {
+					background: rgba(#fff,.75);
+					box-shadow: inset 0 1px 0 rgba(#000,.25);
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					width: calc( var( --progress ) * 1% );
+					border-radius: inherit;
+					pointer-events: none;
+				}
+			}
+		}
+
 		.volume-wrapper {
 			position: absolute;
 			top: 50%;

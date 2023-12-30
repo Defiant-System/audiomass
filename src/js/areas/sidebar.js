@@ -14,6 +14,7 @@
 				txtSelDuration: Spawn.find(".sidebar .txt-sel-duration"),
 				vWrapper: Spawn.find(".volume-wrapper"),
 				volume: Spawn.find(".volume-knob"),
+				uiProgress: Spawn.find(".ui-progress"),
 			}
 		};
 		// default volume knob angle
@@ -52,6 +53,12 @@
 				Spawn.data.sidebar.els.txtSelEnd.html(value);
 				value = APP.spawn.toolbar.format(event.detail.region.end - event.detail.region.start);
 				Spawn.data.sidebar.els.txtSelDuration.html(value);
+				break;
+			case "progress":
+				el = Spawn.data.sidebar.els.uiProgress;
+				if (event.value === 0) el.addClass("show-progress");
+				else if (event.value === 100) el.removeClass("show-progress");
+				el.css({ "--progress": event.value });
 				break;
 		}
 	},

@@ -15518,48 +15518,59 @@ lamejs.WavHeader = WavHeader;
 lamejs();
 
 
+let Self = self;
 
-
-var mp3encoder = null;
-
-onmessage = function(event) {
+Self.onmessage = function(event) {
+	let convert = n => Math.max(-32768, Math.min(32768, n < 0 ? n*32768 : n*32767));
     let numberOfChannels = event.data.numberOfChannels;
     let sampleRate = event.data.sampleRate;
+	let kbps = event.data.kbps || 128;
+	let sampleBlockSize = 1152 * 2;
     let type = event.data.type;
     let left = event.data.left;
     let right = event.data.right;
-	let kbps = 128;
+    let len = left.length;
+	let i = 0;
+	// signal work starting
+	postMessage({ type: "progress", value: 0 });
 
-	if (!mp3encoder) {
-		mp3encoder = new lamejs.Mp3Encoder(numberOfChannels, sampleRate, kbps);
+	let dataAsInt16ArrayLeft = new Int16Array(len);
+	let dataAsInt16ArrayRight = new Int16Array(len);
+	while(i < len) {
+		dataAsInt16ArrayLeft[i] = convert(left[i]);
+	 	dataAsInt16ArrayRight[i] = convert(right[i]);
+	 	++i;
 	}
 
-	var sampleBlockSize = 1152 * 2;
-	var sampleChunk;
-	var mp3Data = [];
-	var percentage = 0;
-	var sampleChunkLeft = null;
-	var sampleChunkRight = null;
+	let samples_left = new Int16Array(dataAsInt16ArrayLeft.buffer);
+	let samples_right = new Int16Array(dataAsInt16ArrayRight.buffer);
+	let mp3encoder = new lamejs.Mp3Encoder(numberOfChannels, sampleRate, kbps);
+	let mp3Data = [];
+	let percentage = 0;
 
-	for(var i = 0; i < left.length; i += sampleBlockSize) {
-		sampleChunkLeft = left.subarray(i, i + sampleBlockSize);
-		if (right) sampleChunkRight = right.subarray(i, i + sampleBlockSize);
+	for(let i=0, il=len; i<il; i+=sampleBlockSize) {
+		let isb = i + sampleBlockSize,
+			sampleChunkLeft = samples_left.subarray(i, isb),
+			sampleChunkRight = right ? samples_right.subarray(i, isb) : null,
+			mp3buf = mp3encoder.encodeBuffer(sampleChunkLeft, sampleChunkRight),
+			value = ((i / len) * 100) >> 0;
 
-		var mp3buf = mp3encoder.encodeBuffer(sampleChunkLeft, sampleChunkRight);
-
-		// if ( (((i / left.length) * 100) >> 0) > percentage ) {
-		// 	percentage = (((i / left.length) * 100) >> 0);
-		// 	postMessage({ percentage: percentage });
-		// }
+		if (value > percentage) {
+			percentage = value;
+			// signal work progress
+			postMessage({ type: "progress", value });
+		}
 		
 		if (mp3buf.length > 0) mp3Data.push(mp3buf);
 	}
 
 	mp3buf = mp3encoder.flush();
-	if(mp3buf.length > 0) mp3Data.push(mp3buf);
+	if (mp3buf.length > 0) mp3Data.push(mp3buf);
+	let blob = new Blob(mp3Data, { type: "audio/mp3" });
+	// signal work done
+	postMessage({ type: "progress", value: 100, blob });
+};
 
-	var blob = new Blob(mp3Data, { type: "audio/mp3" });
-	
-	postMessage(blob);
-	// postMessage( mp3Data );
-}
+
+
+

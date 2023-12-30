@@ -6,18 +6,28 @@ let AudioUtils = {
 		return ((val * dec) >> 0) / dec;
 	},
 
-	LoadDecoded(file, buffer) {
-		let data = {
+	LoadDecoded(data, buffer) {
+		let args = {
 				numberOfChannels: buffer.numberOfChannels,
 				left: buffer.getChannelData(0),
 				right: buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : null,
 				sampleRate: buffer.sampleRate,
 				duration: buffer.duration,
-				type: file._file.blob.type,
+				type: data.file._file.blob.type,
 			};
-		imaudio.workers.wav
-			.send(data)
-			.then(message => file._ws.loadBlob(message.data));
+		// engage worker
+		imaudio.workers.mp3
+			.send(args)
+			.on("message", event => {
+				switch (event.type) {
+					case "progress":
+						// proxy event to sidebar
+						data.sidebar.dispatch({ ...event, spawn: data.spawn });
+						// replace blob in view
+						if (event.value === 100) data.file._ws.loadBlob(event.blob);
+						break;
+				}
+			});
 	},
 
 	CreateBuffer(channels, length, sampleRate) {
@@ -74,10 +84,11 @@ let AudioUtils = {
 			}
 		}
 		
-		this.LoadDecoded(data.file, uberSegment);
+		// this.LoadDecoded(data, originalBuffer);
+		this.LoadDecoded(data, uberSegment);
 
-		let start = offset / sampleRate,
-			end = start + (data.buffer.length / sampleRate);
-		return [start, end];
+		// let start = offset / sampleRate,
+		// 	end = start + (data.buffer.length / sampleRate);
+		// return [start, end];
 	},
 };

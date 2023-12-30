@@ -58,15 +58,20 @@ const imaudio = {
 			case "init-workers":
 				// simple wrapper around workers
 				Object.keys(Self.workers).map(key => {
-					let worker = new Worker(Self.workers[key]);
-					worker.send = function(message) {
-						this.postMessage(message);
-						return new Promise((resolve, reject) => {
-							this.onmessage = e => resolve(e);
-							this.onerror = e => reject(e);
-						});
+					Self.workers[key] = {
+						_stack: {},
+						_worker: new Worker(Self.workers[key]),
+						send(msg) {
+							this._worker.postMessage(msg);
+							this._worker.onmessage = e => this._stack["message"] ? this._stack["message"](e.data) : null;
+							this._worker.onerror = e => this._stack["error"] ? this._stack["error"](e.data) : null;
+							return this;
+						},
+						on(type, callback) {
+							this._stack[type] = callback;
+							return this;
+						}
 					};
-					Self.workers[key] = worker;
 				});
 				break;
 		}

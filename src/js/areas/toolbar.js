@@ -156,7 +156,7 @@
 				break;
 			case "paste-selection":
 				data = Spawn.data.clipboard;
-				AudioUtils.InsertSegmentToBuffer(data);
+				AudioUtils.InsertSegmentToBuffer({ ...data, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "cut-selection": break;
 			case "silence-selection": break;

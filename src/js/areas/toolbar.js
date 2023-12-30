@@ -158,6 +158,8 @@
 				Self.dispatch({ ...event, type: "copy-selection" });
 				// remove selected range
 				AudioUtils.TrimBuffer({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				// collapse selection to start
+				file.dispatch({ type: "ws-region-collapse-start" });
 				break;
 			case "paste-selection":
 				data = Spawn.data.clipboard;

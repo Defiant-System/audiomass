@@ -54,7 +54,6 @@ let AudioUtils = {
 		let length = originalBuffer.length + data.buffer.length;
 		let sampleRate = originalBuffer.sampleRate;
 		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
-		
 		let offset = this.TrimTo(data.file._ws.getCurrentTime(), 3);
 		offset = ((offset / 1) * sampleRate) >> 0;
 		
@@ -76,5 +75,9 @@ let AudioUtils = {
 		}
 		
 		this.LoadDecoded(data.file, uberSegment);
+
+		let start = offset / sampleRate,
+			end = start + (data.buffer.length / sampleRate);
+		return [start, end];
 	},
 };

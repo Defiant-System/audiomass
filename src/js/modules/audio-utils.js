@@ -6,7 +6,7 @@ let AudioUtils = {
 		return ((val * dec) >> 0) / dec;
 	},
 
-	LoadDecoded(data, buffer) {
+	LoadDecoded(data, buffer, marker) {
 		let args = {
 				numberOfChannels: buffer.numberOfChannels,
 				left: buffer.getChannelData(0),
@@ -18,13 +18,20 @@ let AudioUtils = {
 		// engage worker
 		imaudio.workers.wav
 			.send(args)
-			.on("message", event => {
+			.on("message", async event => {
 				switch (event.type) {
 					case "progress":
 						// proxy event to sidebar
 						data.sidebar.dispatch({ ...event, spawn: data.spawn });
 						// replace blob in view
-						if (event.value === 100) data.file._ws.loadBlob(event.blob);
+						if (event.value >= 100) {
+							await data.file._ws.loadBlob(event.blob);
+							// what to mark when done, if any
+							if (marker) {
+								if (marker.end) data.file._regions.addRegion({ ...marker, id: "region-selected" });
+								else data.file._ws.skip(marker.start);
+							}
+						}
 						break;
 				}
 			});
@@ -66,26 +73,26 @@ let AudioUtils = {
 		let region = data.file._activeRegion;
 		let offset = region ? region.start : data.file._ws.getCurrentTime();
 		let duration = region ? region.end - region.start : 0;
-
-		offset = (this.TrimTo(offset, 3) * sampleRate) >> 0;
-		duration = (this.TrimTo(duration, 3) * sampleRate) >> 0;
+		let newOffset = (this.TrimTo(offset, 3) * sampleRate) >> 0;
+		let newDuration = (this.TrimTo(duration, 3) * sampleRate) >> 0;
 
 		let pasteSegment = data.segment;
-		let newLength = length - duration + pasteSegment.length;
+		let newLength = length - newDuration + pasteSegment.length;
 		let uberSegment = this.CreateBuffer(channels, newLength, sampleRate);
 		
 		for (let i=0; i<channels; ++i) {
 			let chanData = originalBuffer.getChannelData(i);
 			let uberChanData = uberSegment.getChannelData(i);
 			let pasteChanData = pasteSegment.getChannelData(i);
-			let durOffset = offset + duration;
+			let durOffset = newOffset + newDuration;
 
-			uberChanData.set(chanData.slice(0, offset));
-			uberChanData.set(pasteChanData, offset);
-			uberChanData.set(chanData.slice(durOffset, length), offset + pasteSegment.length);
+			uberChanData.set(chanData.slice(0, newOffset));
+			uberChanData.set(pasteChanData, newOffset);
+			uberChanData.set(chanData.slice(durOffset, length), newOffset + pasteSegment.length);
 		}
 
-		this.LoadDecoded(data, uberSegment);
+		let marker = { start: offset, end: offset + pasteSegment.duration };
+		this.LoadDecoded(data, uberSegment, marker);
 	},
 
 	MakeSilenceBuffer(data) {

@@ -133,6 +133,10 @@ let AudioUtils = {
 		this.LoadDecoded(data, uberSegment);
 	},
 
+	RemoveSilence(data) {
+
+	},
+
 	TrimBuffer(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;

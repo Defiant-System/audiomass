@@ -12,11 +12,8 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 
-		// APP.workers.wav.send("test")
-		// 	.then(e => {
-		// 		console.log( e );
-		// 	});
-		return;
+		// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 500);
+		// return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
@@ -32,12 +29,12 @@ let Test = {
 
 
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
-			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
+			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 800);
-			return;
+			// return;
 
 
-			let name = "dlgParagraphicEq";
+			let name = "dlgSilence";
 			setTimeout(() => APP.dispatch({ type: "open-dialog", arg: name, spawn }), 200);
 			// setTimeout(() => {
 			// 	let dEl = spawn.find(`.dialog-box[data-dlg="${name}"]`);

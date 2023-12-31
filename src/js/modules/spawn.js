@@ -148,6 +148,10 @@
 				// forward event
 				UI.doDialog({ type: "dlg-open", name: event.arg, spawn: Spawn });
 				break;
+			case "remove-silence":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.RemoveSilence({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });

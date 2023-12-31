@@ -16,24 +16,24 @@ let Test = {
 		// 	.then(e => {
 		// 		console.log( e );
 		// 	});
-		// return;
+		return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			// file._ws.skip(5);
-			// return file._ws.zoom(200);
+			// file._ws.zoom(200);
 			// file._ws.setVolume(.1);
 
 			file._regions.addRegion({
 				id: "region-selected",
-				start: 1.475,
-				end: 1.825,
+				start: 1.075,
+				end: 1.725,
 			});
 
 
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
-			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 300);
-			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 300);
+			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
+			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 800);
 			return;
 
 

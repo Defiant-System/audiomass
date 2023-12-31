@@ -347,6 +347,7 @@ const UI = {
 		switch (event.name) {
 			case "dlgDistortion":
 			case "dlgNormalize":
+			case "dlgSilence":
 			case "dlgSpeed":
 			case "dlgGain":
 				// slider dimensions

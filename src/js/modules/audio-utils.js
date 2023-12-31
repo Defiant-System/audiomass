@@ -134,7 +134,40 @@ let AudioUtils = {
 	},
 
 	RemoveSilence(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+		let region = data.file._activeRegion;
 
+		let offset = region ? region.start : 0;
+		let duration = region ? region.end - region.start : originalBuffer.duration;
+		offset = this.TrimTo(offset, 3);
+		duration = this.TrimTo(duration, 3);
+
+		let silences = [[], []];
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i),
+				found = false,
+				start = 0;
+
+			for (var j=0; j<chanData.length; ++j) {
+				let gain = Math.abs(chanData[j]),
+					limit = 0.000368;
+				if (!found && gain < limit) {
+					start = j;
+					found = true;
+				} else {
+					if (found && gain > limit) {
+						silences[i].push([start, j]);
+						start = 0;
+						found = false;
+					}
+				}
+			}
+		}
+
+		console.log( silences[0].slice(0, 10) );
 	},
 
 	TrimBuffer(data) {

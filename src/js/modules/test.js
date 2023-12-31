@@ -12,8 +12,8 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 
-		// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 500);
-		// return;
+		setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 600);
+		return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;

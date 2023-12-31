@@ -46,10 +46,11 @@
 		<Menu name="Distortion" click="open-dialog" arg="dlgDistortion"/>
 		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
 		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
+		<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
 		<Menu type="divider"/>
 		<Menu name="Reverse" disabled="1"/>
 		<Menu name="Invert" disabled="1"/>
-		<Menu name="Remove Silence" disabled="1"/>
+		<Menu name="Remove Silence" click="remove-silence"/>
 	</Menu>
 	<Menu name="View">
 		<Menu name="Follow Cursor" is-checked="1"/>

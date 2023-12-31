@@ -306,4 +306,24 @@ const Dialogs = {
 				break;
 		}
 	},
+	dlgSilence(event) {
+		/*
+		 * length -  Min: 0   Max: 30
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// "fast events"
+			case "set-length":
+				break;
+			// standard dialog events
+			case "dlg-ok":
+			case "dlg-open":
+			case "dlg-reset":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSilence" });
+				break;
+		}
+	},
 };

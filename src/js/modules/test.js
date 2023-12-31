@@ -16,7 +16,7 @@ let Test = {
 		// 	.then(e => {
 		// 		console.log( e );
 		// 	});
-		return;
+		// return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;

@@ -63,9 +63,10 @@ let AudioUtils = {
 		let channels = originalBuffer.numberOfChannels;
 		let length = originalBuffer.length + data.segment.length;
 		let sampleRate = originalBuffer.sampleRate;
+
 		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
 		let offset = this.TrimTo(data.file._ws.getCurrentTime(), 3);
-		offset = ((offset / 1) * sampleRate) >> 0;
+		offset = (offset * sampleRate) >> 0;
 		
 		for (let i=0; i<channels; ++i) {
 			let chanData = originalBuffer.getChannelData(i);
@@ -78,9 +79,9 @@ let AudioUtils = {
 			uberChanData.set(segmentChanData, offset);
 
 			if (offset < (originalBuffer.length + data.segment.length)) {
-				let cut_buffer = chanData.slice(offset),
-					cut_offset = offset + segmentChanData.length;
-				uberChanData.set(cut_buffer, cut_offset);
+				let cutBuffer = chanData.slice(offset),
+					cutOffset = offset + segmentChanData.length;
+				uberChanData.set(cutBuffer, cutOffset);
 			}
 		}
 		
@@ -100,9 +101,35 @@ let AudioUtils = {
 		return emptySegment;
 	},
 
-	OverwriteBufferWithSegment(data) {
-		this.TrimBuffer({ ...data, skipLoad: true });
-		this.InsertSegmentToBuffer(data);
+	OverwriteBufferWithSilence(data) {
+		let region = data.file._activeRegion;
+		let offset = this.TrimTo(region.start, 3);
+		let duration = this.TrimTo(region.end - region.start, 3);
+
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let length = originalBuffer.length;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
+		let silentSegment = this.MakeSilenceBuffer({ ...data, duration });
+
+
+		offset = (offset * sampleRate) >> 0;
+		duration = (duration * sampleRate) >> 0;
+
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = uberSegment.getChannelData(i);
+			let durOffset = offset + duration;
+
+			uberChanData.set(chanData.slice(0, offset));
+			uberChanData.set(silentSegment, offset);
+			uberChanData.set(chanData.slice(durOffset, length), durOffset);
+		}
+
+		this.LoadDecoded(data, uberSegment);
 	},
 
 	TrimBuffer(data) {
@@ -130,7 +157,7 @@ let AudioUtils = {
 			uberChanData.set(chanData.slice(newOffset + newLen), newOffset);
 		}
 
-		if (data.skipLoad) return;
+		// if (data.skipLoad) return;
 		this.LoadDecoded(data, uberSegment);
 	},
 };

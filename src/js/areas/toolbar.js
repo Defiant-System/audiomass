@@ -167,10 +167,11 @@
 				break;
 			case "silence-selection":
 				file = Spawn.data.tabs.active.file;
-				duration = file._activeRegion.end - file._activeRegion.start;
-				segment = AudioUtils.MakeSilenceBuffer({ file, duration });
+				// duration = file._activeRegion.end - file._activeRegion.start;
+				// segment = AudioUtils.MakeSilenceBuffer({ file, duration });
+				// AudioUtils.OverwriteBufferWithSegment({ file, segment, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				// overwrite selected range with silent segment
-				AudioUtils.OverwriteBufferWithSegment({ file, segment, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				AudioUtils.OverwriteBufferWithSilence({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 		}
 	},

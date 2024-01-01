@@ -17,7 +17,7 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -42,7 +42,7 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -70,7 +70,7 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -93,7 +93,7 @@ const Dialogs = {
 			case "set-q":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -131,7 +131,7 @@ const Dialogs = {
 			case "set-hz16K":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -188,7 +188,7 @@ const Dialogs = {
 			case "hz22K":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -211,7 +211,7 @@ const Dialogs = {
 			case "set-look-ahead":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -234,7 +234,7 @@ const Dialogs = {
 			case "set-wet":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -254,7 +254,7 @@ const Dialogs = {
 			case "set-gain":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -277,7 +277,7 @@ const Dialogs = {
 			case "set-wet":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -297,7 +297,7 @@ const Dialogs = {
 			case "set-rate":
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":
@@ -315,9 +315,13 @@ const Dialogs = {
 		switch (event.type) {
 			// "fast events"
 			case "set-duration":
+				Self.data.duration = event.value;
 				break;
 			// standard dialog events
-			case "dlg-ok":
+			case "dlg-apply":
+				APP.dispatch({ type: "insert-silence", spawn: event.spawn, ...Self.data });
+				Self.dlgSilence({ ...event, type: "dlg-close" });
+				break;
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-preview":

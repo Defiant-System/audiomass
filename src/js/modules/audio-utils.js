@@ -126,7 +126,7 @@ let AudioUtils = {
 
 			uberChanData.set(chanData.slice(0, startRate));
 			uberChanData.set(silentSegment, startRate);
-			uberChanData.set(chanData.slice(durOffset, length), durOffset);
+			uberChanData.set(chanData.slice(startRate, length), durOffset);
 		}
 
 		this.LoadDecoded(data, newSegment, { start });

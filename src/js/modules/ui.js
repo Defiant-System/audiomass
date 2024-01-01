@@ -245,10 +245,11 @@ const UI = {
 				break;
 			// common events for all dialogs
 			case "dlg-open-common":
-				// fast references for knob twist event
-				Dialogs.data = {};
+				// anything to do?
 				break;
 			case "dlg-init-fields":
+				// fast references for UI element events + values
+				Dialogs.data = {};
 				// init values
 				dEl = event.dEl || $(`.dialog-box[data-dlg="${event.name}"]`);
 				// iterate fields
@@ -276,6 +277,8 @@ const UI = {
 							};
 							value = Math.lerp(val.ui.minX, val.ui.maxX, val.ui.perc);
 							uEl.css({ left: value });
+							// initial field value
+							Dialogs.data[iEl.attr("name")] = val.value;
 							break;
 						case el.hasClass("field-range"):
 							// input field value
@@ -289,6 +292,8 @@ const UI = {
 							};
 							value = Math.lerp(val.ui.minY, val.ui.maxY, val.ui.perc);
 							uEl.css({ top: value });
+							// initial field value
+							Dialogs.data[iEl.attr("name")] = val.value;
 							break;
 						case el.hasClass("field-box"):
 							val.ui = {
@@ -304,11 +309,13 @@ const UI = {
 
 							value = Math.round(Math.lerp(val.ui.min, val.ui.max, val.ui.perc));
 							uEl.data({ value });
+							// initial field value
+							Dialogs.data[iEl.attr("name")] = val.value;
 							break;
 					}
 				});
 				break;
-			case "dlg-ok-common":
+			case "dlg-apply-common":
 				// close dialog
 				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;

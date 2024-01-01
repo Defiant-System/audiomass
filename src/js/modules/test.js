@@ -11,17 +11,26 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
+		return;
 
-		// return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			file._ws.skip(1.5);
+
+			setTimeout(() => APP.dispatch({ type: "insert-silence", duration: 2, spawn }), 100);
+
+			// let arg = "dlgSilence";
+			// setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 200);
+			// setTimeout(() => Dialogs._active.find(`.button[data-click="dlg-apply"]`).trigger("click"), 300);
+		}, 550);
+
+
+		return setTimeout(() => {
+			let file = spawn.data.tabs.active.file;
+			// file._ws.skip(1.5);
 			// file._ws.zoom(200);
 			// file._ws.setVolume(.1);
-
-			setTimeout(() => APP.dispatch({ type: "insert-silence", length: 1, spawn }), 100);
-			return;
 
 			file._regions.addRegion({
 				id: "region-selected",

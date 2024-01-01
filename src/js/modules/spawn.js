@@ -148,14 +148,22 @@
 				// forward event
 				UI.doDialog({ type: "dlg-open", name: event.arg, spawn: Spawn });
 				break;
+
+			/* FX: START */
 			case "remove-silence":
 				file = Spawn.data.tabs.active.file;
-				AudioUtils.TrimSilence({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				AudioUtils.TrimSilence({ file, edgesOnly: false, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
+			case "trim-region":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.TrimSilence({ file, edgesOnly: true, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "insert-silence":
 				file = Spawn.data.tabs.active.file;
-				AudioUtils.InsertSilence({ file, duration: 1, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				AudioUtils.InsertSilence({ file, duration: event.duration || 1, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
+			/* FX: END */
+
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });

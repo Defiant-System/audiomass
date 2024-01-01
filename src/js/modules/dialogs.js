@@ -308,13 +308,13 @@ const Dialogs = {
 	},
 	dlgSilence(event) {
 		/*
-		 * length -  Min: 0   Max: 30
+		 * duration -  Min: 0   Max: 10
 		 */
 		let APP = imaudio,
 			Self = Dialogs;
 		switch (event.type) {
 			// "fast events"
-			case "set-length":
+			case "set-duration":
 				break;
 			// standard dialog events
 			case "dlg-ok":

@@ -12,14 +12,16 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 
-		setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 600);
-		return;
+		// return;
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
-			// file._ws.skip(5);
+			file._ws.skip(1.5);
 			// file._ws.zoom(200);
 			// file._ws.setVolume(.1);
+
+			setTimeout(() => APP.dispatch({ type: "insert-silence", length: 1, spawn }), 100);
+			return;
 
 			file._regions.addRegion({
 				id: "region-selected",
@@ -30,8 +32,9 @@ let Test = {
 
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
-			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 800);
-			// return;
+			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 600);
+			setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
+			return;
 
 
 			let name = "dlgSilence";

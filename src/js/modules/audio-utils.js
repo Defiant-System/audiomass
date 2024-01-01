@@ -30,6 +30,8 @@ let AudioUtils = {
 							if (marker) {
 								if (marker.end) data.file._regions.addRegion({ ...marker, id: "region-selected" });
 								else data.file._ws.skip(marker.start);
+							// } else {
+							// 	data.file.dispatch({ type: "ws-region-collapse-start" });
 							}
 						}
 						break;
@@ -78,11 +80,11 @@ let AudioUtils = {
 
 		let pasteSegment = data.segment;
 		let newLength = length - newDuration + pasteSegment.length;
-		let uberSegment = this.CreateBuffer(channels, newLength, sampleRate);
+		let newSegment = this.CreateBuffer(channels, newLength, sampleRate);
 		
 		for (let i=0; i<channels; ++i) {
 			let chanData = originalBuffer.getChannelData(i);
-			let uberChanData = uberSegment.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
 			let pasteChanData = pasteSegment.getChannelData(i);
 			let durOffset = newOffset + newDuration;
 
@@ -92,7 +94,7 @@ let AudioUtils = {
 		}
 
 		let marker = { start: offset, end: offset + pasteSegment.duration };
-		this.LoadDecoded(data, uberSegment, marker);
+		this.LoadDecoded(data, newSegment, marker);
 	},
 
 	MakeSilenceBuffer(data) {
@@ -102,6 +104,32 @@ let AudioUtils = {
 		let length = data.duration * sampleRate;
 		let emptySegment = this.CreateBuffer(channels, length, sampleRate);
 		return emptySegment;
+	},
+
+	InsertSilence(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+		let durLength = data.duration * sampleRate;
+		let length = originalBuffer.length + durLength;
+		let newSegment = this.CreateBuffer(channels, length, sampleRate);
+		let silentSegment = this.MakeSilenceBuffer(data);
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let startRate = start * sampleRate;
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
+			let durOffset = startRate + durLength;
+
+			uberChanData.set(chanData.slice(0, startRate));
+			uberChanData.set(silentSegment, startRate);
+			uberChanData.set(chanData.slice(durOffset, length), durOffset);
+		}
+
+		this.LoadDecoded(data, newSegment, { start });
 	},
 
 	OverwriteBufferWithSilence(data) {
@@ -114,7 +142,7 @@ let AudioUtils = {
 		let length = originalBuffer.length;
 		let sampleRate = originalBuffer.sampleRate;
 
-		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
+		let newSegment = this.CreateBuffer(channels, length, sampleRate);
 		let silentSegment = this.MakeSilenceBuffer({ ...data, duration });
 
 		offset = (offset * sampleRate) >> 0;
@@ -122,7 +150,7 @@ let AudioUtils = {
 
 		for (let i=0; i<channels; ++i) {
 			let chanData = originalBuffer.getChannelData(i);
-			let uberChanData = uberSegment.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
 			let durOffset = offset + duration;
 
 			uberChanData.set(chanData.slice(0, offset));
@@ -130,10 +158,11 @@ let AudioUtils = {
 			uberChanData.set(chanData.slice(durOffset, length), durOffset);
 		}
 
-		this.LoadDecoded(data, uberSegment);
+		this.LoadDecoded(data, newSegment);
 	},
 
-	RemoveSilence(data) {
+	TrimSilence(data) {
+		let edgesOnly = data.edgesOnly || true;
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;
 		let sampleRate = originalBuffer.sampleRate;
@@ -144,30 +173,90 @@ let AudioUtils = {
 		offset = this.TrimTo(offset, 3);
 		duration = this.TrimTo(duration, 3);
 
-		let silences = [[], []];
-
-		for (let i=0; i<channels; ++i) {
-			let chanData = originalBuffer.getChannelData(i),
-				found = false,
-				start = 0;
-
-			for (var j=0; j<chanData.length; ++j) {
-				let gain = Math.abs(chanData[j]),
-					limit = 0.000368;
-				if (!found && gain < limit) {
-					start = j;
+		let channel = originalBuffer.getChannelData(0),
+			silArr = [],
+			silOffset = 210,
+			volOffset = 56,
+			count = 0,
+			invCount = 0,
+			jump = 500,
+			found = false,
+			start = 0,
+			end = 0,
+			jl = channel.length,
+			j = 0;
+		for (; j<jl; ++j) {
+			if (Math.abs (channel[j]) < 0.000368) {
+				if (count === 0) {
+					start = j > jump ? j - jump : j;
+				}
+				if (++count > silOffset) {
+					invCount = 0;
+					end = j;
 					found = true;
-				} else {
-					if (found && gain > limit) {
-						silences[i].push([start, j]);
+				}
+			} else {
+				if (found) {
+					if (++invCount > volOffset) {
+						silArr.push([start, end]);
+						j += jump;
+						count = 0;
 						start = 0;
+						end =   0;
 						found = false;
+						invCount = 0;
+					} else {
+						end = j;
 					}
+				} else {
+					count = 0;
+					start = 0;
+					end =   0;
+					found = false;
+					invCount = 0;
 				}
 			}
 		}
+		
+		if (silArr.length) {
+			let reduce = silArr.reduce((acc, curr) => acc + (curr[1] - curr[0]), 0);
+			let newLength = originalBuffer.length - reduce;
+			let newSegment = this.CreateBuffer(channels, newLength, sampleRate);
 
-		console.log( silences[0].slice(0, 10) );
+			for (let i=0; i<channels; ++i) {
+				let channel = originalBuffer.getChannelData(i);
+				let newChannel = newSegment.getChannelData(i);
+				let silOffset = 0;
+				let o = 0;
+				let h = 0;
+				let silCurr = silArr[o];
+				let silCurrStart = silCurr[0];
+				let silCurrEnd = silCurr[1];
+
+				for (let j=0; j<newLength; ++j) {
+					h = j + silOffset;
+					if (h > silCurrStart && h < silCurrEnd) {
+						if (h < silCurrStart + jump) {
+							let perc = (jump - (h - silCurrStart)) / jump;
+							newChannel[j] = channel[h] * perc;
+							newChannel[j] += (1 - perc) * channel[j + (silOffset + (silCurrEnd - silCurrStart))];
+							continue;
+						} else {
+							silOffset = silOffset + silCurrEnd - silCurrStart;
+							silCurr = silArr[++o];
+							if (silCurr) {
+								silCurrStart = silCurr[0];
+								silCurrEnd = silCurr[1];
+							}
+							h = j + silOffset;
+						}
+					}
+					newChannel[j] = channel[h];
+				}
+			}
+			// show new waveform
+			this.LoadDecoded(data, newSegment);
+		}
 	},
 
 	TrimBuffer(data) {
@@ -182,13 +271,13 @@ let AudioUtils = {
 		var newOffset = ((offset/1)   * sampleRate) >> 0;
 
 		let length = originalBuffer.length - newLen;
-		let uberSegment = this.CreateBuffer(channels, length, sampleRate);
+		let newSegment = this.CreateBuffer(channels, length, sampleRate);
 		let emptySegment = this.CreateBuffer(channels, newLen, sampleRate);
 
 		for (var i=0; i<channels; ++i) {
 			var chanData = originalBuffer.getChannelData(i);
 			var segmentChanData = emptySegment.getChannelData(i);
-			var uberChanData = uberSegment.getChannelData(i);
+			var uberChanData = newSegment.getChannelData(i);
 
 			segmentChanData.set(chanData.slice(newOffset, newOffset + newLen));
 			uberChanData.set(chanData.slice(0, newOffset));
@@ -196,6 +285,6 @@ let AudioUtils = {
 		}
 
 		// if (data.skipLoad) return;
-		this.LoadDecoded(data, uberSegment);
+		this.LoadDecoded(data, newSegment);
 	},
 };

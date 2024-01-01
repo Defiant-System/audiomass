@@ -89,7 +89,7 @@
 				el = Spawn.data.toolbar.els.content;
 				isOn = event.value || el.hasClass("show-sidebar");
 				el.toggleClass("show-sidebar", isOn);
-				return isOn;
+				return !isOn;
 
 			case "rewind-audio":
 				file = Spawn.data.tabs.active.file;

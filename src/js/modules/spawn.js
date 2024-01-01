@@ -150,7 +150,11 @@
 				break;
 			case "remove-silence":
 				file = Spawn.data.tabs.active.file;
-				AudioUtils.RemoveSilence({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				AudioUtils.TrimSilence({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
+			case "insert-silence":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.InsertSilence({ file, duration: 1, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;

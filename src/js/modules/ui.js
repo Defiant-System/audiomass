@@ -352,6 +352,7 @@ const UI = {
 		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans").css({ "--aStep": "" }));
 		// console.log(event);
 		switch (event.name) {
+			case "dlgChannelInfo":
 			case "dlgDistortion":
 			case "dlgNormalize":
 			case "dlgSilence":

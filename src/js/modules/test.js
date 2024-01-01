@@ -11,7 +11,10 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
-		return;
+		// setTimeout(() => APP.dispatch({ type: "trim-start-end", spawn }), 600);
+		// return;
+
+		// return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgChannelInfo", spawn }), 200);
 
 		/*
 		return setTimeout(() => {
@@ -32,19 +35,20 @@ let Test = {
 			// file._ws.zoom(200);
 			// file._ws.setVolume(.1);
 
-			file._regions.addRegion({
-				id: "region-selected",
-				start: 1.075,
-				end: 1.725,
-			});
+			// file._regions.addRegion({
+			// 	id: "region-selected",
+			// 	start: 1.0,
+			// 	end: 2.5,
+			// });
 
 
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
-			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 600);
-			setTimeout(() => file.dispatch({ type: "ws-region-collapse-start" }), 900);
+			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 600);
+			// setTimeout(() => file.dispatch({ type: "ws-region-collapse-start" }), 900);
 			// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
-			setTimeout(() => APP.dispatch({ type: "trim-start-end", spawn }), 1000);
+
+			setTimeout(() => APP.dispatch({ type: "reverse-region", spawn }), 1000);
 			return;
 
 

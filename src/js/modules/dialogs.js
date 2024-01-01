@@ -330,4 +330,24 @@ const Dialogs = {
 				break;
 		}
 	},
+	dlgChannelInfo(event) {
+		/*
+		 * 
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// "fast events"
+			case "set-flip-channels":
+				break;
+			// standard dialog events
+			case "dlg-apply":
+			case "dlg-open":
+			case "dlg-reset":
+			case "dlg-preview":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgChannelInfo" });
+				break;
+		}
+	},
 };

@@ -54,8 +54,8 @@ let AudioUtils = {
 		let duration = this.TrimTo(region.end - region.start, 3);
 		let originalBuffer = data.file._ws.getDecodedData();
 
-		let newLen    = ((duration/1) * originalBuffer.sampleRate) >> 0;
-		let newOffset = ((offset/1)   * originalBuffer.sampleRate) >> 0;
+		let newLen    = (duration * originalBuffer.sampleRate) >> 0;
+		let newOffset = (offset   * originalBuffer.sampleRate) >> 0;
 
 		let channels = originalBuffer.numberOfChannels;
 		let sampleRate = originalBuffer.sampleRate;
@@ -163,6 +163,34 @@ let AudioUtils = {
 			uberChanData.set(chanData.slice(durOffset, length), durOffset);
 		}
 
+		this.LoadDecoded(data, newSegment);
+	},
+
+	Reverse(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let end = region ? region.end : originalBuffer.duration;
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end, 3);
+		let rateOffset = (offset   * sampleRate) >> 0;
+		let rateLength = (duration * sampleRate) >> 0;
+
+		let newSegment = this.CreateBuffer(channels, originalBuffer.length, sampleRate);
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
+
+			uberChanData.set(chanData.slice(0, rateOffset));
+			uberChanData.set(chanData.slice(rateOffset, rateLength).reverse(), rateOffset);
+			uberChanData.set(chanData.slice(rateLength), rateLength);
+		}
+
+		// show new waveform
 		this.LoadDecoded(data, newSegment);
 	},
 
@@ -289,24 +317,21 @@ let AudioUtils = {
 		let region = data.file._activeRegion;
 		let offset = region.start;
 		let duration = region.end - region.start;
-		var newLen    = ((duration/1) * sampleRate) >> 0;
-		var newOffset = ((offset/1)   * sampleRate) >> 0;
+		let newLen    = (duration * sampleRate) >> 0;
+		let newOffset = (offset   * sampleRate) >> 0;
 
 		let length = originalBuffer.length - newLen;
 		let newSegment = this.CreateBuffer(channels, length, sampleRate);
-		let emptySegment = this.CreateBuffer(channels, newLen, sampleRate);
 
-		for (var i=0; i<channels; ++i) {
-			var chanData = originalBuffer.getChannelData(i);
-			var segmentChanData = emptySegment.getChannelData(i);
-			var uberChanData = newSegment.getChannelData(i);
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
 
-			segmentChanData.set(chanData.slice(newOffset, newOffset + newLen));
 			uberChanData.set(chanData.slice(0, newOffset));
 			uberChanData.set(chanData.slice(newOffset + newLen), newOffset);
 		}
 
-		// if (data.skipLoad) return;
+		// show new waveform
 		this.LoadDecoded(data, newSegment);
 	},
 };

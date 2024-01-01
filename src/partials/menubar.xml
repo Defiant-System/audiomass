@@ -51,6 +51,7 @@
 		<Menu name="Reverse" disabled="1"/>
 		<Menu name="Invert" disabled="1"/>
 		<Menu name="Remove Silence" click="remove-silence"/>
+		<Menu name="Trim Start &amp; End" click="trim-start-end"/>
 	</Menu>
 	<Menu name="View">
 		<Menu name="Follow Cursor" is-checked="1"/>

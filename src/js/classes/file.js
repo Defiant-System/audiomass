@@ -190,7 +190,7 @@ class File {
 			case "ws-region-created":
 			case "ws-region-updated":
 				// move cursor to begining of region
-				value = event.region.start / event.region.totalDuration;
+				value = event.region.start / (event.region.totalDuration || ws.decodedData.duration);
 				ws.seekTo(value);
 				// save reference to region
 				this._activeRegion = event.region;

@@ -11,9 +11,9 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-file", spawn }), 300);
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
-		return;
+		// return;
 
-
+		/*
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			file._ws.skip(1.5);
@@ -24,7 +24,7 @@ let Test = {
 			// setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 200);
 			// setTimeout(() => Dialogs._active.find(`.button[data-click="dlg-apply"]`).trigger("click"), 300);
 		}, 550);
-
+		*/
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
@@ -42,7 +42,9 @@ let Test = {
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="cut-selection"]`).trigger("click"), 300);
 			// setTimeout(() => spawn.find(`.toolbar-tool_[data-click="copy-selection"]`).trigger("click"), 100);
 			setTimeout(() => spawn.find(`.toolbar-tool_[data-click="silence-selection"]`).trigger("click"), 600);
-			setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
+			setTimeout(() => file.dispatch({ type: "ws-region-collapse-start" }), 900);
+			// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
+			setTimeout(() => APP.dispatch({ type: "trim-start-end", spawn }), 1000);
 			return;
 
 

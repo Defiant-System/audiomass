@@ -154,7 +154,7 @@
 				file = Spawn.data.tabs.active.file;
 				AudioUtils.TrimSilence({ file, edgesOnly: false, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
-			case "trim-region":
+			case "trim-start-end":
 				file = Spawn.data.tabs.active.file;
 				AudioUtils.TrimSilence({ file, edgesOnly: true, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;

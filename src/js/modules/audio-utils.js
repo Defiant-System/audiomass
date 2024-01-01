@@ -28,8 +28,13 @@ let AudioUtils = {
 							await data.file._ws.loadBlob(event.blob);
 							// what to mark when done, if any
 							if (marker) {
-								if (marker.end) data.file._regions.addRegion({ ...marker, id: "region-selected" });
-								else data.file._ws.skip(marker.start);
+								if (marker.end) {
+									id: "region-selected",
+									data.file._regions.clearRegions();
+									data.file._regions.addRegion({ ...marker, id: "region-selected" });
+								} else {
+									data.file._ws.skip(marker.start);
+								}
 							// } else {
 							// 	data.file.dispatch({ type: "ws-region-collapse-start" });
 							}
@@ -162,7 +167,7 @@ let AudioUtils = {
 	},
 
 	TrimSilence(data) {
-		let edgesOnly = data.edgesOnly || true;
+		let edgesOnly = data.edgesOnly ?? true;
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;
 		let sampleRate = originalBuffer.sampleRate;
@@ -170,6 +175,7 @@ let AudioUtils = {
 
 		let offset = region ? region.start : 0;
 		let duration = region ? region.end - region.start : originalBuffer.duration;
+		let marker = { start: offset, end: region ? region.end : null };
 		offset = this.TrimTo(offset, 3);
 		duration = this.TrimTo(duration, 3);
 
@@ -219,6 +225,22 @@ let AudioUtils = {
 		}
 		
 		if (silArr.length) {
+			if (edgesOnly) {
+				// trim from start & end of range
+				let newArr = [];
+				let check = silArr[0];
+				if (check[0] === 0) {
+					let startSilence = check[1] / sampleRate;
+					marker.start -= startSilence;
+					if (marker.end) marker.end -= startSilence;
+					// add entry to new array
+					newArr.push(check);
+				}
+				check = silArr[silArr.length-1];
+				if (check[1] === jl) newArr.push(check);
+				// trim only edges
+				silArr = newArr;
+			}
 			let reduce = silArr.reduce((acc, curr) => acc + (curr[1] - curr[0]), 0);
 			let newLength = originalBuffer.length - reduce;
 			let newSegment = this.CreateBuffer(channels, newLength, sampleRate);
@@ -255,7 +277,7 @@ let AudioUtils = {
 				}
 			}
 			// show new waveform
-			this.LoadDecoded(data, newSegment);
+			this.LoadDecoded(data, newSegment, marker);
 		}
 	},
 

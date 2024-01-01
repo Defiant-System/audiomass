@@ -70,6 +70,10 @@ class File {
 			}
 		});
 
+		// auto-obey sidebar volume
+		let volume = parent._spawn.data.sidebar.els.vWrapper.find(".txt-volume h2").html();
+		this._ws.setVolume(volume/100);
+
 		// wavesurfer events
 		this._ws.on("load", url => this.dispatch({ type: "ws-load", url }));
 		this._ws.on("loading", percent => this.dispatch({ type: "ws-loading", percent }));

@@ -23,13 +23,14 @@
 		<Menu name="Close File" click="close-file" hotkey="alt+w"/>
 	</Menu>
 	<Menu name="Edit">
-		<Menu name="Undo" hotkey="shift+z"/>
-		<Menu name="Redo" hotkey="shift+y"/>
+		<Menu name="Undo" hotkey="alt+z"/>
+		<Menu name="Redo" hotkey="alt+y"/>
 		<Menu type="divider"/>
-		<Menu name="Play" hotkey="Space"/>
-		<Menu name="Stop"/>
-		<Menu name="Select All" hotkey="shift+a"/>
-		<Menu name="Deselect"/>
+		<Menu name="Copy" hotkey="alt+c"/>
+		<Menu name="Cut" hotkey="alt+x"/>
+		<Menu name="Paste" hotkey="alt+v"/>
+		<Menu name="Select All" hotkey="alt+a"/>
+		<Menu name="Deselect" click="deselect-region"/>
 		<Menu type="divider"/>
 		<Menu name="Reverse" click="reverse-region"/>
 		<Menu name="Invert" click="invert-region"/>
@@ -90,11 +91,11 @@
 	<Menu for="selection">
 		<Menu name="Effects" invoke="effects"/>
 		<Menu type="divider"/>
-		<Menu name="Copy"/>
-		<Menu name="Cut"/>
-		<Menu name="Paste" disabled="1"/>
+		<Menu name="Copy" hotkey="alt+c"/>
+		<Menu name="Cut" hotkey="alt+x"/>
+		<Menu name="Paste" hotkey="alt+v"/>
 		<Menu name="Deselect" click="deselect-region"/>
 		<Menu type="divider"/>
-		<Menu name="File from Selection"/>
+		<Menu name="New from Selection"/>
 	</Menu>
 </MenuBar>

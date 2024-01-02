@@ -45,11 +45,12 @@
 		<Menu name="Delay" click="open-dialog" arg="dlgDelay"/>
 		<Menu name="Distortion" click="open-dialog" arg="dlgDistortion"/>
 		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
-		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
-		<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
 		<Menu type="divider"/>
+		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
 		<Menu name="Reverse" click="reverse-region"/>
 		<Menu name="Invert" click="invert-region"/>
+		<Menu type="divider"/>
+		<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
 		<Menu name="Remove Silence" click="remove-silence"/>
 		<Menu name="Trim Start &amp; End" click="trim-start-end"/>
 	</Menu>

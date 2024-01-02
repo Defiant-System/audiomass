@@ -13,6 +13,7 @@
 let {
 	AudioContext,
 	AudioMotionAnalyzer,
+	OfflineAudioContext,
 	WaveSurfer,
 	RegionsPlugin,
 	TimelinePlugin,

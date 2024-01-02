@@ -1,4 +1,19 @@
-function t$7(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){try{h(s.next(t))}catch(t){r(t)}}function a(t){try{h(s.throw(t))}catch(t){r(t)}}function h(t){var e;t.done?n(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(o,a)}h((s=s.apply(t,e||[])).next())}))}"function"==typeof SuppressedError&&SuppressedError;const e$7={decode:function(t,e){return t$7(this,void 0,void 0,(function*(){const i=new AudioContext({sampleRate:e});return i.decodeAudioData(t).finally((()=>i.close()))}))},createBuffer:function(t,e){return"number"==typeof t[0]&&(t=[t]),function(t){const e=t[0];if(e.some((t=>t>1||t<-1))){const i=e.length;let s=0;for(let t=0;t<i;t++){const i=Math.abs(e[t]);i>s&&(s=i)}for(const e of t)for(let t=0;t<i;t++)e[t]/=s}}(t),{duration:e,length:t[0].length,sampleRate:t[0].length/e,numberOfChannels:t.length,getChannelData:e=>null==t?void 0:t[e],copyFromChannel:AudioBuffer.prototype.copyFromChannel,copyToChannel:AudioBuffer.prototype.copyToChannel}}};const i$7={fetchBlob:function(t,e,i){return t$7(this,void 0,void 0,(function*(){const s=yield fetch(t,i);if(!s.ok)throw new Error(`Failed to fetch ${t}: ${s.status} (${s.statusText})`);return function(t,e){t$7(this,void 0,void 0,(function*(){if(!t.body||!t.headers)return;const i=t.body.getReader(),s=Number(t.headers.get("Content-Length"))||0;let n=0;const r=t=>t$7(this,void 0,void 0,(function*(){n+=(null==t?void 0:t.length)||0;const i=Math.round(n/s*100);e(i)})),o=()=>t$7(this,void 0,void 0,(function*(){let t;try{t=yield i.read()}catch(t){return}t.done||(r(t.value),yield o())}));o()}))}(s.clone(),e),s.blob()}))}};class s$6{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class n$4 extends s$6{constructor(t){super(),this.isExternalMedia=!1,t.media?(this.media=t.media,this.isExternalMedia=!0):this.media=document.createElement("audio"),t.mediaControls&&(this.media.controls=!0),t.autoplay&&(this.media.autoplay=!0),null!=t.playbackRate&&this.onceMediaEvent("canplay",(()=>{null!=t.playbackRate&&(this.media.playbackRate=t.playbackRate)}))}onMediaEvent(t,e,i){return this.media.addEventListener(t,e,i),()=>this.media.removeEventListener(t,e)}onceMediaEvent(t,e){return this.onMediaEvent(t,e,{once:!0})}getSrc(){return this.media.currentSrc||this.media.src||""}revokeSrc(){const t=this.getSrc();t.startsWith("blob:")&&URL.revokeObjectURL(t)}setSrc(t,e){if(this.getSrc()===t)return;this.revokeSrc();const i=e instanceof Blob?URL.createObjectURL(e):t;this.media.src=i,this.media.load()}destroy(){this.media.pause(),this.isExternalMedia||(this.media.remove(),this.revokeSrc(),this.media.src="",this.media.load())}setMediaElement(t){this.media=t}play(){return this.media.play()}pause(){this.media.pause()}isPlaying(){return!this.media.paused&&!this.media.ended}setTime(t){this.media.currentTime=t}getDuration(){return this.media.duration}getCurrentTime(){return this.media.currentTime}getVolume(){return this.media.volume}setVolume(t){this.media.volume=t}getMuted(){return this.media.muted}setMuted(t){this.media.muted=t}getPlaybackRate(){return this.media.playbackRate}setPlaybackRate(t,e){null!=e&&(this.media.preservesPitch=e),this.media.playbackRate=t}getMediaElement(){return this.media}setSinkId(t){return this.media.setSinkId(t)}}class r$2 extends s$6{constructor(t,e){super(),this.timeouts=[],this.isScrollable=!1,this.audioData=null,this.resizeObserver=null,this.isDragging=!1,this.options=t;const i=this.parentFromOptionsContainer(t.container);this.parent=i;const[s,n]=this.initHtml();i.appendChild(s),this.container=s,this.scrollContainer=n.querySelector(".scroll"),this.wrapper=n.querySelector(".wrapper"),this.canvasWrapper=n.querySelector(".canvases"),this.progressWrapper=n.querySelector(".progress"),this.cursor=n.querySelector(".cursor"),e&&n.appendChild(e),this.initEvents()}parentFromOptionsContainer(t){let e;if("string"==typeof t?e=document.querySelector(t):t instanceof HTMLElement&&(e=t),!e)throw new Error("Container not found");return e}initEvents(){const t=t=>{const e=this.wrapper.getBoundingClientRect(),i=t.clientX-e.left,s=t.clientX-e.left;return[i/e.width,s/e.height]};this.wrapper.addEventListener("click",(e=>{const[i,s]=t(e);this.emit("click",i,s)})),this.wrapper.addEventListener("dblclick",(e=>{const[i,s]=t(e);this.emit("dblclick",i,s)})),this.options.dragToSeek&&this.initDrag(),this.scrollContainer.addEventListener("scroll",(()=>{const{scrollLeft:t,scrollWidth:e,clientWidth:i}=this.scrollContainer,s=t/e,n=(t+i)/e;this.emit("scroll",s,n)}));const e=this.createDelay(100);this.resizeObserver=new ResizeObserver((()=>{e((()=>this.reRender()))})),this.resizeObserver.observe(this.scrollContainer)}initDrag(){!function(t,e,i,s,n=3,r=0){if(!t)return()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u)}},u=()=>{d&&(null==s||s()),o()},p=t=>{d&&(t.stopPropagation(),t.preventDefault())},f=t=>{d&&t.preventDefault()};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",f,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",f),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0})}),10)}};t.addEventListener("pointerdown",a)}(this.wrapper,((t,e,i)=>{this.emit("drag",Math.max(0,Math.min(1,i/this.wrapper.getBoundingClientRect().width)))}),(()=>this.isDragging=!0),(()=>this.isDragging=!1))}getHeight(t){return null==t?128:isNaN(Number(t))?"auto"===t&&this.parent.clientHeight||128:Number(t)}initHtml(){const t=document.createElement("div"),e=t.attachShadow({mode:"open"});return e.innerHTML=`\n      <style>\n        :host {\n          user-select: none;\n          min-width: 1px;\n        }\n        :host audio {\n          display: block;\n          width: 100%;\n        }\n        :host .scroll {\n          overflow-x: auto;\n          overflow-y: hidden;\n          width: 100%;\n          position: relative;\n        }\n        :host .noScrollbar {\n          scrollbar-color: transparent;\n          scrollbar-width: none;\n        }\n        :host .noScrollbar::-webkit-scrollbar {\n          display: none;\n          -webkit-appearance: none;\n        }\n        :host .wrapper {\n          position: relative;\n          overflow: visible;\n          z-index: 2;\n        }\n        :host .canvases {\n          min-height: ${this.getHeight(this.options.height)}px;\n        }\n        :host .canvases > div {\n          position: relative;\n        }\n        :host canvas {\n          display: block;\n          position: absolute;\n          top: 0;\n          image-rendering: pixelated;\n        }\n        :host .progress {\n          pointer-events: none;\n          position: absolute;\n          z-index: 2;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          overflow: hidden;\n        }\n        :host .progress > div {\n          position: relative;\n        }\n        :host .cursor {\n          pointer-events: none;\n          position: absolute;\n          z-index: 5;\n          top: 0;\n          left: 0;\n          height: 100%;\n          border-radius: 2px;\n        }\n      </style>\n\n      <div class="scroll" part="scroll">\n        <div class="wrapper" part="wrapper">\n          <div class="canvases"></div>\n          <div class="progress" part="progress"></div>\n          <div class="cursor" part="cursor"></div>\n        </div>\n      </div>\n    `,[t,e]}setOptions(t){if(this.options.container!==t.container){const e=this.parentFromOptionsContainer(t.container);e.appendChild(this.container),this.parent=e}t.dragToSeek&&!this.options.dragToSeek&&this.initDrag(),this.options=t,this.reRender()}getWrapper(){return this.wrapper}getScroll(){return this.scrollContainer.scrollLeft}destroy(){var t;this.container.remove(),null===(t=this.resizeObserver)||void 0===t||t.disconnect()}createDelay(t=10){const e={};return this.timeouts.push(e),i=>{e.timeout&&clearTimeout(e.timeout),e.timeout=setTimeout(i,t)}}convertColorValues(t){if(!Array.isArray(t))return t||"";if(t.length<2)return t[0]||"";const e=document.createElement("canvas"),i=e.getContext("2d"),s=e.height*(window.devicePixelRatio||1),n=i.createLinearGradient(0,0,0,s),r=1/(t.length-1);return t.forEach(((t,e)=>{const i=e*r;n.addColorStop(i,t)})),n}renderBarWaveform(t,e,i,s){const n=t[0],r=t[1]||t[0],o=n.length,{width:a,height:h}=i.canvas,l=h/2,d=window.devicePixelRatio||1,c=e.barWidth?e.barWidth*d:1,u=e.barGap?e.barGap*d:e.barWidth?c/2:0,p=e.barRadius||0,f=a/(c+u)/o,m=p&&"roundRect"in i?"roundRect":"rect";i.beginPath();let v=0,g=0,_=0;for(let t=0;t<=o;t++){const o=Math.round(t*f);if(o>v){const t=Math.round(g*l*s),n=t+Math.round(_*l*s)||1;let r=l-t;"top"===e.barAlign?r=0:"bottom"===e.barAlign&&(r=h-n),i[m](v*(c+u),r,c,n,p),v=o,g=0,_=0}const a=Math.abs(n[t]||0),d=Math.abs(r[t]||0);a>g&&(g=a),d>_&&(_=d)}i.fill(),i.closePath()}renderLineWaveform(t,e,i,s){const n=e=>{const n=t[e]||t[0],r=n.length,{height:o}=i.canvas,a=o/2,h=i.canvas.width/r;i.moveTo(0,a);let l=0,d=0;for(let t=0;t<=r;t++){const r=Math.round(t*h);if(r>l){const t=a+(Math.round(d*a*s)||1)*(0===e?-1:1);i.lineTo(l,t),l=r,d=0}const o=Math.abs(n[t]||0);o>d&&(d=o)}i.lineTo(l,a)};i.beginPath(),n(0),n(1),i.fill(),i.closePath()}renderWaveform(t,e,i){if(i.fillStyle=this.convertColorValues(e.waveColor),e.renderFunction)return void e.renderFunction(t,i);let s=e.barHeight||1;if(e.normalize){const e=Array.from(t[0]).reduce(((t,e)=>Math.max(t,Math.abs(e))),0);s=e?1/e:1}e.barWidth||e.barGap||e.barAlign?this.renderBarWaveform(t,e,i,s):this.renderLineWaveform(t,e,i,s)}renderSingleCanvas(t,e,i,s,n,r,o,a){const h=window.devicePixelRatio||1,l=document.createElement("canvas"),d=t[0].length;l.width=Math.round(i*(r-n)/d),l.height=s*h,l.style.width=`${Math.floor(l.width/h)}px`,l.style.height=`${s}px`,l.style.left=`${Math.floor(n*i/h/d)}px`,o.appendChild(l);const c=l.getContext("2d");if(this.renderWaveform(t.map((t=>t.slice(n,r))),e,c),l.width>0&&l.height>0){const t=l.cloneNode(),i=t.getContext("2d");i.drawImage(l,0,0),i.globalCompositeOperation="source-in",i.fillStyle=this.convertColorValues(e.progressColor),i.fillRect(0,0,l.width,l.height),a.appendChild(t)}}renderChannel(t,e,i){const s=document.createElement("div"),n=this.getHeight(e.height);s.style.height=`${n}px`,this.canvasWrapper.style.minHeight=`${n}px`,this.canvasWrapper.appendChild(s);const r=s.cloneNode();this.progressWrapper.appendChild(r);const{scrollLeft:o,scrollWidth:a,clientWidth:h}=this.scrollContainer,l=t[0].length,d=l/a;let c=Math.min(r$2.MAX_CANVAS_WIDTH,h);if(e.barWidth||e.barGap){const t=e.barWidth||.5,i=t+(e.barGap||t/2);c%i!=0&&(c=Math.floor(c/i)*i)}const u=Math.floor(Math.abs(o)*d),p=Math.floor(u+c*d),f=p-u,m=(o,a)=>{this.renderSingleCanvas(t,e,i,n,Math.max(0,o),Math.min(a,l),s,r)},v=this.createDelay(),g=this.createDelay(),_=(t,e)=>{m(t,e),t>0&&v((()=>{_(t-f,e-f)}))},E=(t,e)=>{m(t,e),e<l&&g((()=>{E(t+f,e+f)}))};_(u,p),p<l&&E(p,p+f)}render(t){this.timeouts.forEach((t=>t.timeout&&clearTimeout(t.timeout))),this.timeouts=[],this.canvasWrapper.innerHTML="",this.progressWrapper.innerHTML="",null!=this.options.width&&(this.scrollContainer.style.width="number"==typeof this.options.width?`${this.options.width}px`:this.options.width);const e=window.devicePixelRatio||1,i=this.scrollContainer.clientWidth,s=Math.ceil(t.duration*(this.options.minPxPerSec||0));this.isScrollable=s>i;const n=this.options.fillParent&&!this.isScrollable,r=(n?i:s)*e;if(this.wrapper.style.width=n?"100%":`${s}px`,this.scrollContainer.style.overflowX=this.isScrollable?"auto":"hidden",this.scrollContainer.classList.toggle("noScrollbar",!!this.options.hideScrollbar),this.cursor.style.backgroundColor=`${this.options.cursorColor||this.options.progressColor}`,this.cursor.style.width=`${this.options.cursorWidth}px`,this.options.splitChannels)for(let e=0;e<t.numberOfChannels;e++){const i=Object.assign(Object.assign({},this.options),this.options.splitChannels[e]);this.renderChannel([t.getChannelData(e)],i,r)}else{const e=[t.getChannelData(0)];t.numberOfChannels>1&&e.push(t.getChannelData(1)),this.renderChannel(e,this.options,r)}this.audioData=t,this.emit("render")}reRender(){if(!this.audioData)return;const{scrollWidth:t}=this.scrollContainer,e=this.progressWrapper.clientWidth;if(this.render(this.audioData),this.isScrollable&&t!==this.scrollContainer.scrollWidth){const t=this.progressWrapper.clientWidth;this.scrollContainer.scrollLeft+=t-e}}zoom(t){this.options.minPxPerSec=t,this.reRender()}scrollIntoView(t,e=!1){const{clientWidth:i,scrollLeft:s,scrollWidth:n}=this.scrollContainer,r=n*t,o=i/2;if(r>s+(e&&this.options.autoCenter&&!this.isDragging?o:i)||r<s)if(this.options.autoCenter&&!this.isDragging){const t=o/20;r-(s+o)>=t&&r<s+i?this.scrollContainer.scrollLeft+=t:this.scrollContainer.scrollLeft=r-o}else if(this.isDragging){const t=10;this.scrollContainer.scrollLeft=r<s?r-t:r-i+t}else this.scrollContainer.scrollLeft=r;{const{scrollLeft:t}=this.scrollContainer,e=t/n,s=(t+i)/n;this.emit("scroll",e,s)}}renderProgress(t,e){if(isNaN(t))return;const i=100*t;this.canvasWrapper.style.clipPath=`polygon(${i}% 0, 100% 0, 100% 100%, ${i}% 100%)`,this.progressWrapper.style.width=`${i}%`,this.cursor.style.left=`${i}%`,this.cursor.style.marginLeft=100===Math.round(i)?`-${this.options.cursorWidth}px`:"",this.isScrollable&&this.options.autoScroll&&this.scrollIntoView(t,e)}exportImage(t,e,i){return t$7(this,void 0,void 0,(function*(){const s=this.canvasWrapper.querySelectorAll("canvas");if(!s.length)throw new Error("No waveform data");if("dataURL"===i){const i=Array.from(s).map((i=>i.toDataURL(t,e)));return Promise.resolve(i)}return Promise.all(Array.from(s).map((i=>new Promise(((s,n)=>{i.toBlob((t=>{t?s(t):n(new Error("Could not export image"))}),t,e)})))))}))}}r$2.MAX_CANVAS_WIDTH=4e3;class o$2 extends s$6{constructor(){super(...arguments),this.unsubscribe=()=>{}}start(){this.unsubscribe=this.on("tick",(()=>{requestAnimationFrame((()=>{this.emit("tick")}))})),this.emit("tick")}stop(){this.unsubscribe()}destroy(){this.unsubscribe()}}class a$1 extends s$6{constructor(t=new AudioContext){super(),this.bufferNode=null,this.autoplay=!1,this.playStartTime=0,this.playedDuration=0,this._muted=!1,this.buffer=null,this.currentSrc="",this.paused=!0,this.crossOrigin=null,this.audioContext=t,this.gainNode=this.audioContext.createGain(),this.gainNode.connect(this.audioContext.destination)}load(){return t$7(this,void 0,void 0,(function*(){}))}get src(){return this.currentSrc}set src(t){this.currentSrc=t,fetch(t).then((t=>t.arrayBuffer())).then((t=>this.audioContext.decodeAudioData(t))).then((t=>{this.buffer=t,this.emit("loadedmetadata"),this.emit("canplay"),this.autoplay&&this.play()}))}_play(){var t;this.paused&&(this.paused=!1,null===(t=this.bufferNode)||void 0===t||t.disconnect(),this.bufferNode=this.audioContext.createBufferSource(),this.bufferNode.buffer=this.buffer,this.bufferNode.connect(this.gainNode),this.playedDuration>=this.duration&&(this.playedDuration=0),this.bufferNode.start(this.audioContext.currentTime,this.playedDuration),this.playStartTime=this.audioContext.currentTime,this.bufferNode.onended=()=>{this.currentTime>=this.duration&&(this.pause(),this.emit("ended"))})}_pause(){var t;this.paused||(this.paused=!0,null===(t=this.bufferNode)||void 0===t||t.stop(),this.playedDuration+=this.audioContext.currentTime-this.playStartTime)}play(){return t$7(this,void 0,void 0,(function*(){this._play(),this.emit("play")}))}pause(){this._pause(),this.emit("pause")}stopAt(t){var e,i;const s=t-this.currentTime;null===(e=this.bufferNode)||void 0===e||e.stop(this.audioContext.currentTime+s),null===(i=this.bufferNode)||void 0===i||i.addEventListener("ended",(()=>{this.bufferNode=null,this.pause()}),{once:!0})}setSinkId(t){return t$7(this,void 0,void 0,(function*(){return this.audioContext.setSinkId(t)}))}get playbackRate(){var t,e;return null!==(e=null===(t=this.bufferNode)||void 0===t?void 0:t.playbackRate.value)&&void 0!==e?e:1}set playbackRate(t){this.bufferNode&&(this.bufferNode.playbackRate.value=t)}get currentTime(){return this.paused?this.playedDuration:this.playedDuration+this.audioContext.currentTime-this.playStartTime}set currentTime(t){this.emit("seeking"),this.paused?this.playedDuration=t:(this._pause(),this.playedDuration=t,this._play()),this.emit("timeupdate")}get duration(){var t;return(null===(t=this.buffer)||void 0===t?void 0:t.duration)||0}get volume(){return this.gainNode.gain.value}set volume(t){this.gainNode.gain.value=t,this.emit("volumechange")}get muted(){return this._muted}set muted(t){this._muted!==t&&(this._muted=t,this._muted?this.gainNode.disconnect():this.gainNode.connect(this.audioContext.destination))}getGainNode(){return this.gainNode}}const h$1={waveColor:"#999",progressColor:"#555",cursorWidth:1,minPxPerSec:0,fillParent:!0,interact:!0,dragToSeek:!1,autoScroll:!0,autoCenter:!0,sampleRate:8e3};class l$1 extends n$4{static create(t){return new l$1(t)}constructor(t){const e=t.media||("WebAudio"===t.backend?new a$1:void 0);super({media:e,mediaControls:t.mediaControls,autoplay:t.autoplay,playbackRate:t.audioRate}),this.plugins=[],this.decodedData=null,this.subscriptions=[],this.mediaSubscriptions=[],this.options=Object.assign({},h$1,t),this.timer=new o$2;const i=e?void 0:this.getMediaElement();this.renderer=new r$2(this.options,i),this.initPlayerEvents(),this.initRendererEvents(),this.initTimerEvents(),this.initPlugins();const s=this.options.url||this.getSrc()||"";(s||this.options.peaks&&this.options.duration)&&this.load(s,this.options.peaks,this.options.duration)}initTimerEvents(){this.subscriptions.push(this.timer.on("tick",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),!0),this.emit("timeupdate",t),this.emit("audioprocess",t)})))}initPlayerEvents(){this.isPlaying()&&(this.emit("play"),this.timer.start()),this.mediaSubscriptions.push(this.onMediaEvent("timeupdate",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),this.isPlaying()),this.emit("timeupdate",t)})),this.onMediaEvent("play",(()=>{this.emit("play"),this.timer.start()})),this.onMediaEvent("pause",(()=>{this.emit("pause"),this.timer.stop()})),this.onMediaEvent("emptied",(()=>{this.timer.stop()})),this.onMediaEvent("ended",(()=>{this.emit("finish")})),this.onMediaEvent("seeking",(()=>{this.emit("seeking",this.getCurrentTime())})))}initRendererEvents(){this.subscriptions.push(this.renderer.on("click",((t,e)=>{this.options.interact&&(this.seekTo(t),this.emit("interaction",t*this.getDuration()),this.emit("click",t,e))})),this.renderer.on("dblclick",((t,e)=>{this.emit("dblclick",t,e)})),this.renderer.on("scroll",((t,e)=>{const i=this.getDuration();this.emit("scroll",t*i,e*i)})),this.renderer.on("render",(()=>{this.emit("redraw")})));{let t;this.subscriptions.push(this.renderer.on("drag",(e=>{this.options.interact&&(this.renderer.renderProgress(e),clearTimeout(t),t=setTimeout((()=>{this.seekTo(e)}),this.isPlaying()?0:200),this.emit("interaction",e*this.getDuration()),this.emit("drag",e))})))}}initPlugins(){var t;(null===(t=this.options.plugins)||void 0===t?void 0:t.length)&&this.options.plugins.forEach((t=>{this.registerPlugin(t)}))}unsubscribePlayerEvents(){this.mediaSubscriptions.forEach((t=>t())),this.mediaSubscriptions=[]}setOptions(t){this.options=Object.assign({},this.options,t),this.renderer.setOptions(this.options),t.audioRate&&this.setPlaybackRate(t.audioRate),null!=t.mediaControls&&(this.getMediaElement().controls=t.mediaControls)}registerPlugin(t){return t.init(this),this.plugins.push(t),this.subscriptions.push(t.once("destroy",(()=>{this.plugins=this.plugins.filter((e=>e!==t))}))),t}getWrapper(){return this.renderer.getWrapper()}getScroll(){return this.renderer.getScroll()}getActivePlugins(){return this.plugins}loadAudio(t,e,i,s){return t$7(this,void 0,void 0,(function*(){if(this.emit("load",t),!this.options.media&&this.isPlaying()&&this.pause(),this.decodedData=null,!e&&!i){const i=t=>this.emit("loading",t);e=yield i$7.fetchBlob(t,i,this.options.fetchParams)}this.setSrc(t,e);const n=(yield Promise.resolve(s||this.getDuration()))||(yield new Promise((t=>{this.onceMediaEvent("loadedmetadata",(()=>t(this.getDuration())))})));if(i)this.decodedData=e$7.createBuffer(i,n||0);else if(e){const t=yield e.arrayBuffer();this.decodedData=yield e$7.decode(t,this.options.sampleRate)}this.decodedData&&(this.emit("decode",this.getDuration()),this.renderer.render(this.decodedData)),this.emit("ready",this.getDuration())}))}load(t,e,i){return t$7(this,void 0,void 0,(function*(){yield this.loadAudio(t,void 0,e,i)}))}loadBlob(t,e,i){return t$7(this,void 0,void 0,(function*(){yield this.loadAudio("blob",t,e,i)}))}zoom(t){if(!this.decodedData)throw new Error("No audio loaded");this.renderer.zoom(t),this.emit("zoom",t)}getDecodedData(){return this.decodedData}exportPeaks({channels:t=2,maxLength:e=8e3,precision:i=1e4}={}){if(!this.decodedData)throw new Error("The audio has not been decoded yet");const s=Math.min(t,this.decodedData.numberOfChannels),n=[];for(let t=0;t<s;t++){const s=this.decodedData.getChannelData(t),r=[],o=Math.round(s.length/e);for(let t=0;t<e;t++){const e=s.slice(t*o,(t+1)*o);let n=0;for(let t=0;t<e.length;t++){const i=e[t];Math.abs(i)>Math.abs(n)&&(n=i)}r.push(Math.round(n*i)/i)}n.push(r)}return n}getDuration(){let t=super.getDuration()||0;return 0!==t&&t!==1/0||!this.decodedData||(t=this.decodedData.duration),t}toggleInteraction(t){this.options.interact=t}seekTo(t){const e=this.getDuration()*t;this.setTime(e)}playPause(){return t$7(this,void 0,void 0,(function*(){return this.isPlaying()?this.pause():this.play()}))}stop(){this.pause(),this.setTime(0)}skip(t){this.setTime(this.getCurrentTime()+t)}empty(){this.load("",[[0]],.001)}setMediaElement(t){this.unsubscribePlayerEvents(),super.setMediaElement(t),this.initPlayerEvents()}exportImage(t="image/png",e=1,i="dataURL"){return t$7(this,void 0,void 0,(function*(){return this.renderer.exportImage(t,e,i)}))}destroy(){this.emit("destroy"),this.plugins.forEach((t=>t.destroy())),this.subscriptions.forEach((t=>t())),this.unsubscribePlayerEvents(),this.timer.destroy(),this.renderer.destroy(),super.destroy()}}class t$6{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class e$6 extends t$6{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}function i$6(t,e,i,s,n=3,r=0){if(!t)return()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u)}},u=()=>{d&&(null==s||s()),o()},p=t=>{d&&(t.stopPropagation(),t.preventDefault())},f=t=>{d&&t.preventDefault()};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",f,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",f),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0})}),10)}};return t.addEventListener("pointerdown",a),()=>{o(),t.removeEventListener("pointerdown",a)}}class n$3 extends t$6{constructor(t,e,i=0){var s,n,r,o,a,h,l;super(),this.totalDuration=e,this.numberOfChannels=i,this.minLength=0,this.maxLength=1/0,this.id=t.id||`region-${Math.random().toString(32).slice(2)}`,this.start=this.clampPosition(t.start),this.end=this.clampPosition(null!==(s=t.end)&&void 0!==s?s:t.start),this.drag=null===(n=t.drag)||void 0===n||n,this.resize=null===(r=t.resize)||void 0===r||r,this.color=null!==(o=t.color)&&void 0!==o?o:"rgba(0, 0, 0, 0.1)",this.minLength=null!==(a=t.minLength)&&void 0!==a?a:this.minLength,this.maxLength=null!==(h=t.maxLength)&&void 0!==h?h:this.maxLength,this.channelIdx=null!==(l=t.channelIdx)&&void 0!==l?l:-1,this.element=this.initElement(),this.setContent(t.content),this.setPart(),this.renderPosition(),this.initMouseEvents()}clampPosition(t){return Math.max(0,Math.min(this.totalDuration,t))}setPart(){const t=this.start===this.end;this.element.setAttribute("part",`${t?"marker":"region"} ${this.id}`)}addResizeHandles(t){const e=document.createElement("div");e.setAttribute("data-resize","left"),e.setAttribute("style","\n        position: absolute;\n        z-index: 2;\n        width: 6px;\n        height: 100%;\n        top: 0;\n        left: 0;\n        border-left: 2px solid rgba(0, 0, 0, 0.5);\n        border-radius: 2px 0 0 2px;\n        cursor: ew-resize;\n        word-break: keep-all;\n      "),e.setAttribute("part","region-handle region-handle-left");const i=e.cloneNode();i.setAttribute("data-resize","right"),i.style.left="",i.style.right="0",i.style.borderRight=i.style.borderLeft,i.style.borderLeft="",i.style.borderRadius="0 2px 2px 0",i.setAttribute("part","region-handle region-handle-right"),t.appendChild(e),t.appendChild(i);i$6(e,(t=>this.onResize(t,"start")),(()=>null),(()=>this.onEndResizing()),1),i$6(i,(t=>this.onResize(t,"end")),(()=>null),(()=>this.onEndResizing()),1)}removeResizeHandles(t){const e=t.querySelector('[data-resize="left"]'),i=t.querySelector('[data-resize="right"]');e&&t.removeChild(e),i&&t.removeChild(i)}initElement(){const t=document.createElement("div"),e=this.start===this.end;let i=0,s=100;return this.channelIdx>=0&&this.channelIdx<this.numberOfChannels&&(s=100/this.numberOfChannels,i=s*this.channelIdx),t.setAttribute("style",`\n      position: absolute;\n      top: ${i}%;\n      height: ${s}%;\n      background-color: ${e?"none":this.color};\n      border-left: ${e?"2px solid "+this.color:"none"};\n      border-radius: 2px;\n      box-sizing: border-box;\n      transition: background-color 0.2s ease;\n      cursor: ${this.drag?"grab":"default"};\n      pointer-events: all;\n    `),!e&&this.resize&&this.addResizeHandles(t),t}renderPosition(){const t=this.start/this.totalDuration,e=(this.totalDuration-this.end)/this.totalDuration;this.element.style.left=100*t+"%",this.element.style.right=100*e+"%"}initMouseEvents(){const{element:t}=this;t&&(t.addEventListener("click",(t=>this.emit("click",t))),t.addEventListener("mouseenter",(t=>this.emit("over",t))),t.addEventListener("mouseleave",(t=>this.emit("leave",t))),t.addEventListener("dblclick",(t=>this.emit("dblclick",t))),i$6(t,(t=>this.onMove(t)),(()=>this.onStartMoving()),(()=>this.onEndMoving())))}onStartMoving(){this.drag&&(this.element.style.cursor="grabbing")}onEndMoving(){this.drag&&(this.element.style.cursor="grab",this.emit("update-end"))}_onUpdate(t,e){if(!this.element.parentElement)return;const i=t/this.element.parentElement.clientWidth*this.totalDuration,s=e&&"start"!==e?this.start:this.start+i,n=e&&"end"!==e?this.end:this.end+i,r=n-s;s>=0&&n<=this.totalDuration&&s<=n&&r>=this.minLength&&r<=this.maxLength&&(this.start=s,this.end=n,this.renderPosition(),this.emit("update"))}onMove(t){this.drag&&this._onUpdate(t)}onResize(t,e){this.resize&&this._onUpdate(t,e)}onEndResizing(){this.resize&&this.emit("update-end")}_setTotalDuration(t){this.totalDuration=t,this.renderPosition()}play(){this.emit("play")}setContent(t){var e;if(null===(e=this.content)||void 0===e||e.remove(),t){if("string"==typeof t){this.content=document.createElement("div");const e=this.start===this.end;this.content.style.padding=`0.2em ${e?.2:.4}em`,this.content.style.display="inline-block",this.content.textContent=t}else this.content=t;this.content.setAttribute("part","region-content"),this.element.appendChild(this.content)}else this.content=void 0}setOptions(t){var e,i;if(t.color&&(this.color=t.color,this.element.style.backgroundColor=this.color),void 0!==t.drag&&(this.drag=t.drag,this.element.style.cursor=this.drag?"grab":"default"),void 0!==t.start||void 0!==t.end){const s=this.start===this.end;this.start=this.clampPosition(null!==(e=t.start)&&void 0!==e?e:this.start),this.end=this.clampPosition(null!==(i=t.end)&&void 0!==i?i:s?this.start:this.end),this.renderPosition(),this.setPart()}if(t.content&&this.setContent(t.content),t.id&&(this.id=t.id,this.setPart()),void 0!==t.resize&&t.resize!==this.resize){const e=this.start===this.end;this.resize=t.resize,this.resize&&!e?this.addResizeHandles(this.element):this.removeResizeHandles(this.element)}}remove(){this.emit("remove"),this.element.remove(),this.element=null}}class s$5 extends e$6{constructor(t){super(t),this.regions=[],this.regionsContainer=this.initRegionsContainer()}static create(t){return new s$5(t)}onInit(){if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");this.wavesurfer.getWrapper().appendChild(this.regionsContainer);let t=[];this.subscriptions.push(this.wavesurfer.on("timeupdate",(e=>{const i=this.regions.filter((t=>t.start<=e&&(t.end===t.start?t.start+.05:t.end)>=e));i.forEach((e=>{t.includes(e)||this.emit("region-in",e)})),t.forEach((t=>{i.includes(t)||this.emit("region-out",t)})),t=i})))}initRegionsContainer(){const t=document.createElement("div");return t.setAttribute("style","\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      z-index: 3;\n      pointer-events: none;\n    "),t}getRegions(){return this.regions}avoidOverlapping(t){if(!t.content)return;const e=t.content,i=e.getBoundingClientRect(),s=this.regions.map((e=>{if(e===t||!e.content)return 0;const s=e.content.getBoundingClientRect();return i.left<s.left+s.width&&s.left<i.left+i.width?s.height:0})).reduce(((t,e)=>t+e),0);e.style.marginTop=`${s}px`}saveRegion(t){this.regionsContainer.appendChild(t.element),this.avoidOverlapping(t),this.regions.push(t);const e=[t.on("update-end",(()=>{this.avoidOverlapping(t),this.emit("region-updated",t)})),t.on("play",(()=>{var e,i;null===(e=this.wavesurfer)||void 0===e||e.play(),null===(i=this.wavesurfer)||void 0===i||i.setTime(t.start)})),t.on("click",(e=>{this.emit("region-clicked",t,e)})),t.on("dblclick",(e=>{this.emit("region-double-clicked",t,e)})),t.once("remove",(()=>{e.forEach((t=>t())),this.regions=this.regions.filter((e=>e!==t))}))];this.subscriptions.push(...e),this.emit("region-created",t)}addRegion(t){var e,i;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");const s=this.wavesurfer.getDuration(),n=null===(i=null===(e=this.wavesurfer)||void 0===e?void 0:e.getDecodedData())||void 0===i?void 0:i.numberOfChannels,r=new n$3(t,s,n);return s?this.saveRegion(r):this.subscriptions.push(this.wavesurfer.once("ready",(t=>{r._setTotalDuration(t),this.saveRegion(r)}))),r}enableDragSelection(t){var e;const i=null===(e=this.wavesurfer)||void 0===e?void 0:e.getWrapper();if(!(i&&i instanceof HTMLElement))return()=>{};let s=null,n=0;return i$6(i,((t,e,i)=>{s&&s._onUpdate(t,i>n?"end":"start")}),(e=>{var i,r;if(n=e,!this.wavesurfer)return;const o=this.wavesurfer.getDuration(),a=null===(r=null===(i=this.wavesurfer)||void 0===i?void 0:i.getDecodedData())||void 0===r?void 0:r.numberOfChannels,h=this.wavesurfer.getWrapper().clientWidth,l=e/h*o,d=(e+5)/h*o;s=new n$3(Object.assign(Object.assign({},t),{start:l,end:d}),o,a),this.regionsContainer.appendChild(s.element)}),(()=>{s&&(this.saveRegion(s),s=null)}))}clearRegions(){this.regions.forEach((t=>t.remove()))}destroy(){this.clearRegions(),super.destroy(),this.regionsContainer.remove()}}class t$5{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class e$5 extends t$5{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}const i$5={height:20,formatTimeCallback:t=>{if(t/60>1){return`${Math.floor(t/60)}:${`${(t=Math.round(t%60))<10?"0":""}${t}`}`}return`${Math.round(1e3*t)/1e3}`}};class n$2 extends e$5{constructor(t){super(t||{}),this.options=Object.assign({},i$5,t),this.timelineWrapper=this.initTimelineWrapper()}static create(t){return new n$2(t)}onInit(){var t;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");let e=this.wavesurfer.getWrapper();if(this.options.container instanceof HTMLElement)e=this.options.container;else if("string"==typeof this.options.container){const t=document.querySelector(this.options.container);if(!t)throw Error(`No Timeline container found matching ${this.options.container}`);e=t}this.options.insertPosition?(e.firstElementChild||e).insertAdjacentElement(this.options.insertPosition,this.timelineWrapper):e.appendChild(this.timelineWrapper),this.subscriptions.push(this.wavesurfer.on("redraw",(()=>this.initTimeline()))),((null===(t=this.wavesurfer)||void 0===t?void 0:t.getDuration())||this.options.duration)&&this.initTimeline()}destroy(){this.timelineWrapper.remove(),super.destroy()}initTimelineWrapper(){const t=document.createElement("div");return t.setAttribute("part","timeline"),t.setAttribute("style","pointer-events: none;"),t}defaultTimeInterval(t){return t>=25?1:5*t>=25?5:15*t>=25?15:60*Math.ceil(.5/t)}defaultPrimaryLabelInterval(t){return t>=25?10:5*t>=25?6:4}defaultSecondaryLabelInterval(t){return t>=25?5:2}initTimeline(){var t,e,i,s,n,r,o;const a=null!==(i=null!==(e=null===(t=this.wavesurfer)||void 0===t?void 0:t.getDuration())&&void 0!==e?e:this.options.duration)&&void 0!==i?i:0,h=this.timelineWrapper.scrollWidth/a,l=null!==(s=this.options.timeInterval)&&void 0!==s?s:this.defaultTimeInterval(h),d=null!==(n=this.options.primaryLabelInterval)&&void 0!==n?n:this.defaultPrimaryLabelInterval(h),c=this.options.primaryLabelSpacing,u=null!==(r=this.options.secondaryLabelInterval)&&void 0!==r?r:this.defaultSecondaryLabelInterval(h),p=this.options.secondaryLabelSpacing,f="beforebegin"===this.options.insertPosition,m=document.createElement("div");if(m.setAttribute("style",`\n      height: ${this.options.height}px;\n      overflow: hidden;\n      font-size: ${this.options.height/2}px;\n      white-space: nowrap;\n      position: relative;\n    `),f){const t="\n        position: absolute;\n        top: 0;\n        left: 0;\n        right: 0;\n        z-index: 2;\n      ";m.setAttribute("style",m.getAttribute("style")+t)}"string"==typeof this.options.style?m.setAttribute("style",m.getAttribute("style")+this.options.style):"object"==typeof this.options.style&&Object.assign(m.style,this.options.style);const v=document.createElement("div");v.setAttribute("style",`\n      width: 0;\n      height: 50%;\n      display: flex;\n      flex-direction: column;\n      justify-content: ${f?"flex-start":"flex-end"};\n      ${f?"top: 0;":"bottom: 0;"}\n      overflow: visible;\n      border-left: 1px solid currentColor;\n      opacity: ${null!==(o=this.options.secondaryLabelOpacity)&&void 0!==o?o:.25};\n      position: absolute;\n      z-index: 1;\n    `);for(let t=0,e=0;t<a;t+=l,e++){const i=v.cloneNode(),s=Math.round(100*t)/100%d==0||c&&e%c==0,n=Math.round(100*t)/100%u==0||p&&e%p==0;(s||n)&&(i.style.height="100%",i.style.textIndent="3px",i.textContent=this.options.formatTimeCallback(t),s&&(i.style.opacity="1"));const r=s?"primary":n?"secondary":"tick";i.setAttribute("part",`timeline-notch timeline-notch-${r}`),i.style.left=t*h+"px",m.appendChild(i)}this.timelineWrapper.innerHTML="",this.timelineWrapper.appendChild(m),this.emit("ready")}}class t$4{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class e$4 extends t$4{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}function i$4(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){try{h(s.next(t))}catch(t){r(t)}}function a(t){try{h(s.throw(t))}catch(t){r(t)}}function h(t){var e;t.done?n(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(o,a)}h((s=s.apply(t,e||[])).next())}))}"function"==typeof SuppressedError&&SuppressedError;const s$4={decode:function(t,e){return i$4(this,void 0,void 0,(function*(){const i=new AudioContext({sampleRate:e});return i.decodeAudioData(t).finally((()=>i.close()))}))},createBuffer:function(t,e){return"number"==typeof t[0]&&(t=[t]),function(t){const e=t[0];if(e.some((t=>t>1||t<-1))){const i=e.length;let s=0;for(let t=0;t<i;t++){const i=Math.abs(e[t]);i>s&&(s=i)}for(const e of t)for(let t=0;t<i;t++)e[t]/=s}}(t),{duration:e,length:t[0].length,sampleRate:t[0].length/e,numberOfChannels:t.length,getChannelData:e=>null==t?void 0:t[e],copyFromChannel:AudioBuffer.prototype.copyFromChannel,copyToChannel:AudioBuffer.prototype.copyToChannel}}};const n$1={fetchBlob:function(t,e,i){return i$4(this,void 0,void 0,(function*(){const s=yield fetch(t,i);if(!s.ok)throw new Error(`Failed to fetch ${t}: ${s.status} (${s.statusText})`);return function(t,e){i$4(this,void 0,void 0,(function*(){if(!t.body||!t.headers)return;const i=t.body.getReader(),s=Number(t.headers.get("Content-Length"))||0;let n=0;const r=t=>i$4(this,void 0,void 0,(function*(){n+=(null==t?void 0:t.length)||0;const i=Math.round(n/s*100);e(i)})),o=()=>i$4(this,void 0,void 0,(function*(){let t;try{t=yield i.read()}catch(t){return}t.done||(r(t.value),yield o())}));o()}))}(s.clone(),e),s.blob()}))}};class r$1 extends t$4{constructor(t){super(),this.isExternalMedia=!1,t.media?(this.media=t.media,this.isExternalMedia=!0):this.media=document.createElement("audio"),t.mediaControls&&(this.media.controls=!0),t.autoplay&&(this.media.autoplay=!0),null!=t.playbackRate&&this.onceMediaEvent("canplay",(()=>{null!=t.playbackRate&&(this.media.playbackRate=t.playbackRate)}))}onMediaEvent(t,e,i){return this.media.addEventListener(t,e,i),()=>this.media.removeEventListener(t,e)}onceMediaEvent(t,e){return this.onMediaEvent(t,e,{once:!0})}getSrc(){return this.media.currentSrc||this.media.src||""}revokeSrc(){const t=this.getSrc();t.startsWith("blob:")&&URL.revokeObjectURL(t)}setSrc(t,e){if(this.getSrc()===t)return;this.revokeSrc();const i=e instanceof Blob?URL.createObjectURL(e):t;this.media.src=i,this.media.load()}destroy(){this.media.pause(),this.isExternalMedia||(this.media.remove(),this.revokeSrc(),this.media.src="",this.media.load())}setMediaElement(t){this.media=t}play(){return this.media.play()}pause(){this.media.pause()}isPlaying(){return!this.media.paused&&!this.media.ended}setTime(t){this.media.currentTime=t}getDuration(){return this.media.duration}getCurrentTime(){return this.media.currentTime}getVolume(){return this.media.volume}setVolume(t){this.media.volume=t}getMuted(){return this.media.muted}setMuted(t){this.media.muted=t}getPlaybackRate(){return this.media.playbackRate}setPlaybackRate(t,e){null!=e&&(this.media.preservesPitch=e),this.media.playbackRate=t}getMediaElement(){return this.media}setSinkId(t){return this.media.setSinkId(t)}}class o$1 extends t$4{constructor(t,e){super(),this.timeouts=[],this.isScrollable=!1,this.audioData=null,this.resizeObserver=null,this.isDragging=!1,this.options=t;const i=this.parentFromOptionsContainer(t.container);this.parent=i;const[s,n]=this.initHtml();i.appendChild(s),this.container=s,this.scrollContainer=n.querySelector(".scroll"),this.wrapper=n.querySelector(".wrapper"),this.canvasWrapper=n.querySelector(".canvases"),this.progressWrapper=n.querySelector(".progress"),this.cursor=n.querySelector(".cursor"),e&&n.appendChild(e),this.initEvents()}parentFromOptionsContainer(t){let e;if("string"==typeof t?e=document.querySelector(t):t instanceof HTMLElement&&(e=t),!e)throw new Error("Container not found");return e}initEvents(){const t=t=>{const e=this.wrapper.getBoundingClientRect(),i=t.clientX-e.left,s=t.clientX-e.left;return[i/e.width,s/e.height]};this.wrapper.addEventListener("click",(e=>{const[i,s]=t(e);this.emit("click",i,s)})),this.wrapper.addEventListener("dblclick",(e=>{const[i,s]=t(e);this.emit("dblclick",i,s)})),this.options.dragToSeek&&this.initDrag(),this.scrollContainer.addEventListener("scroll",(()=>{const{scrollLeft:t,scrollWidth:e,clientWidth:i}=this.scrollContainer,s=t/e,n=(t+i)/e;this.emit("scroll",s,n)}));const e=this.createDelay(100);this.resizeObserver=new ResizeObserver((()=>{e((()=>this.reRender()))})),this.resizeObserver.observe(this.scrollContainer)}initDrag(){!function(t,e,i,s,n=3,r=0){if(!t)return()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u)}},u=()=>{d&&(null==s||s()),o()},p=t=>{d&&(t.stopPropagation(),t.preventDefault())},f=t=>{d&&t.preventDefault()};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",f,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",f),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0})}),10)}};t.addEventListener("pointerdown",a)}(this.wrapper,((t,e,i)=>{this.emit("drag",Math.max(0,Math.min(1,i/this.wrapper.getBoundingClientRect().width)))}),(()=>this.isDragging=!0),(()=>this.isDragging=!1))}getHeight(t){return null==t?128:isNaN(Number(t))?"auto"===t&&this.parent.clientHeight||128:Number(t)}initHtml(){const t=document.createElement("div"),e=t.attachShadow({mode:"open"});return e.innerHTML=`\n      <style>\n        :host {\n          user-select: none;\n          min-width: 1px;\n        }\n        :host audio {\n          display: block;\n          width: 100%;\n        }\n        :host .scroll {\n          overflow-x: auto;\n          overflow-y: hidden;\n          width: 100%;\n          position: relative;\n        }\n        :host .noScrollbar {\n          scrollbar-color: transparent;\n          scrollbar-width: none;\n        }\n        :host .noScrollbar::-webkit-scrollbar {\n          display: none;\n          -webkit-appearance: none;\n        }\n        :host .wrapper {\n          position: relative;\n          overflow: visible;\n          z-index: 2;\n        }\n        :host .canvases {\n          min-height: ${this.getHeight(this.options.height)}px;\n        }\n        :host .canvases > div {\n          position: relative;\n        }\n        :host canvas {\n          display: block;\n          position: absolute;\n          top: 0;\n          image-rendering: pixelated;\n        }\n        :host .progress {\n          pointer-events: none;\n          position: absolute;\n          z-index: 2;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          overflow: hidden;\n        }\n        :host .progress > div {\n          position: relative;\n        }\n        :host .cursor {\n          pointer-events: none;\n          position: absolute;\n          z-index: 5;\n          top: 0;\n          left: 0;\n          height: 100%;\n          border-radius: 2px;\n        }\n      </style>\n\n      <div class="scroll" part="scroll">\n        <div class="wrapper" part="wrapper">\n          <div class="canvases"></div>\n          <div class="progress" part="progress"></div>\n          <div class="cursor" part="cursor"></div>\n        </div>\n      </div>\n    `,[t,e]}setOptions(t){if(this.options.container!==t.container){const e=this.parentFromOptionsContainer(t.container);e.appendChild(this.container),this.parent=e}t.dragToSeek&&!this.options.dragToSeek&&this.initDrag(),this.options=t,this.reRender()}getWrapper(){return this.wrapper}getScroll(){return this.scrollContainer.scrollLeft}destroy(){var t;this.container.remove(),null===(t=this.resizeObserver)||void 0===t||t.disconnect()}createDelay(t=10){const e={};return this.timeouts.push(e),i=>{e.timeout&&clearTimeout(e.timeout),e.timeout=setTimeout(i,t)}}convertColorValues(t){if(!Array.isArray(t))return t||"";if(t.length<2)return t[0]||"";const e=document.createElement("canvas"),i=e.getContext("2d"),s=e.height*(window.devicePixelRatio||1),n=i.createLinearGradient(0,0,0,s),r=1/(t.length-1);return t.forEach(((t,e)=>{const i=e*r;n.addColorStop(i,t)})),n}renderBarWaveform(t,e,i,s){const n=t[0],r=t[1]||t[0],o=n.length,{width:a,height:h}=i.canvas,l=h/2,d=window.devicePixelRatio||1,c=e.barWidth?e.barWidth*d:1,u=e.barGap?e.barGap*d:e.barWidth?c/2:0,p=e.barRadius||0,f=a/(c+u)/o,m=p&&"roundRect"in i?"roundRect":"rect";i.beginPath();let v=0,g=0,_=0;for(let t=0;t<=o;t++){const o=Math.round(t*f);if(o>v){const t=Math.round(g*l*s),n=t+Math.round(_*l*s)||1;let r=l-t;"top"===e.barAlign?r=0:"bottom"===e.barAlign&&(r=h-n),i[m](v*(c+u),r,c,n,p),v=o,g=0,_=0}const a=Math.abs(n[t]||0),d=Math.abs(r[t]||0);a>g&&(g=a),d>_&&(_=d)}i.fill(),i.closePath()}renderLineWaveform(t,e,i,s){const n=e=>{const n=t[e]||t[0],r=n.length,{height:o}=i.canvas,a=o/2,h=i.canvas.width/r;i.moveTo(0,a);let l=0,d=0;for(let t=0;t<=r;t++){const r=Math.round(t*h);if(r>l){const t=a+(Math.round(d*a*s)||1)*(0===e?-1:1);i.lineTo(l,t),l=r,d=0}const o=Math.abs(n[t]||0);o>d&&(d=o)}i.lineTo(l,a)};i.beginPath(),n(0),n(1),i.fill(),i.closePath()}renderWaveform(t,e,i){if(i.fillStyle=this.convertColorValues(e.waveColor),e.renderFunction)return void e.renderFunction(t,i);let s=e.barHeight||1;if(e.normalize){const e=Array.from(t[0]).reduce(((t,e)=>Math.max(t,Math.abs(e))),0);s=e?1/e:1}e.barWidth||e.barGap||e.barAlign?this.renderBarWaveform(t,e,i,s):this.renderLineWaveform(t,e,i,s)}renderSingleCanvas(t,e,i,s,n,r,o,a){const h=window.devicePixelRatio||1,l=document.createElement("canvas"),d=t[0].length;l.width=Math.round(i*(r-n)/d),l.height=s*h,l.style.width=`${Math.floor(l.width/h)}px`,l.style.height=`${s}px`,l.style.left=`${Math.floor(n*i/h/d)}px`,o.appendChild(l);const c=l.getContext("2d");if(this.renderWaveform(t.map((t=>t.slice(n,r))),e,c),l.width>0&&l.height>0){const t=l.cloneNode(),i=t.getContext("2d");i.drawImage(l,0,0),i.globalCompositeOperation="source-in",i.fillStyle=this.convertColorValues(e.progressColor),i.fillRect(0,0,l.width,l.height),a.appendChild(t)}}renderChannel(t,e,i){const s=document.createElement("div"),n=this.getHeight(e.height);s.style.height=`${n}px`,this.canvasWrapper.style.minHeight=`${n}px`,this.canvasWrapper.appendChild(s);const r=s.cloneNode();this.progressWrapper.appendChild(r);const{scrollLeft:o,scrollWidth:a,clientWidth:h}=this.scrollContainer,l=t[0].length,d=l/a;let c=Math.min(o$1.MAX_CANVAS_WIDTH,h);if(e.barWidth||e.barGap){const t=e.barWidth||.5,i=t+(e.barGap||t/2);c%i!=0&&(c=Math.floor(c/i)*i)}const u=Math.floor(Math.abs(o)*d),p=Math.floor(u+c*d),f=p-u,m=(o,a)=>{this.renderSingleCanvas(t,e,i,n,Math.max(0,o),Math.min(a,l),s,r)},v=this.createDelay(),g=this.createDelay(),_=(t,e)=>{m(t,e),t>0&&v((()=>{_(t-f,e-f)}))},E=(t,e)=>{m(t,e),e<l&&g((()=>{E(t+f,e+f)}))};_(u,p),p<l&&E(p,p+f)}render(t){this.timeouts.forEach((t=>t.timeout&&clearTimeout(t.timeout))),this.timeouts=[],this.canvasWrapper.innerHTML="",this.progressWrapper.innerHTML="",null!=this.options.width&&(this.scrollContainer.style.width="number"==typeof this.options.width?`${this.options.width}px`:this.options.width);const e=window.devicePixelRatio||1,i=this.scrollContainer.clientWidth,s=Math.ceil(t.duration*(this.options.minPxPerSec||0));this.isScrollable=s>i;const n=this.options.fillParent&&!this.isScrollable,r=(n?i:s)*e;if(this.wrapper.style.width=n?"100%":`${s}px`,this.scrollContainer.style.overflowX=this.isScrollable?"auto":"hidden",this.scrollContainer.classList.toggle("noScrollbar",!!this.options.hideScrollbar),this.cursor.style.backgroundColor=`${this.options.cursorColor||this.options.progressColor}`,this.cursor.style.width=`${this.options.cursorWidth}px`,this.options.splitChannels)for(let e=0;e<t.numberOfChannels;e++){const i=Object.assign(Object.assign({},this.options),this.options.splitChannels[e]);this.renderChannel([t.getChannelData(e)],i,r)}else{const e=[t.getChannelData(0)];t.numberOfChannels>1&&e.push(t.getChannelData(1)),this.renderChannel(e,this.options,r)}this.audioData=t,this.emit("render")}reRender(){if(!this.audioData)return;const{scrollWidth:t}=this.scrollContainer,e=this.progressWrapper.clientWidth;if(this.render(this.audioData),this.isScrollable&&t!==this.scrollContainer.scrollWidth){const t=this.progressWrapper.clientWidth;this.scrollContainer.scrollLeft+=t-e}}zoom(t){this.options.minPxPerSec=t,this.reRender()}scrollIntoView(t,e=!1){const{clientWidth:i,scrollLeft:s,scrollWidth:n}=this.scrollContainer,r=n*t,o=i/2;if(r>s+(e&&this.options.autoCenter&&!this.isDragging?o:i)||r<s)if(this.options.autoCenter&&!this.isDragging){const t=o/20;r-(s+o)>=t&&r<s+i?this.scrollContainer.scrollLeft+=t:this.scrollContainer.scrollLeft=r-o}else if(this.isDragging){const t=10;this.scrollContainer.scrollLeft=r<s?r-t:r-i+t}else this.scrollContainer.scrollLeft=r;{const{scrollLeft:t}=this.scrollContainer,e=t/n,s=(t+i)/n;this.emit("scroll",e,s)}}renderProgress(t,e){if(isNaN(t))return;const i=100*t;this.canvasWrapper.style.clipPath=`polygon(${i}% 0, 100% 0, 100% 100%, ${i}% 100%)`,this.progressWrapper.style.width=`${i}%`,this.cursor.style.left=`${i}%`,this.cursor.style.marginLeft=100===Math.round(i)?`-${this.options.cursorWidth}px`:"",this.isScrollable&&this.options.autoScroll&&this.scrollIntoView(t,e)}exportImage(t,e,i){return i$4(this,void 0,void 0,(function*(){const s=this.canvasWrapper.querySelectorAll("canvas");if(!s.length)throw new Error("No waveform data");if("dataURL"===i){const i=Array.from(s).map((i=>i.toDataURL(t,e)));return Promise.resolve(i)}return Promise.all(Array.from(s).map((i=>new Promise(((s,n)=>{i.toBlob((t=>{t?s(t):n(new Error("Could not export image"))}),t,e)})))))}))}}o$1.MAX_CANVAS_WIDTH=4e3;class a extends t$4{constructor(){super(...arguments),this.unsubscribe=()=>{}}start(){this.unsubscribe=this.on("tick",(()=>{requestAnimationFrame((()=>{this.emit("tick")}))})),this.emit("tick")}stop(){this.unsubscribe()}destroy(){this.unsubscribe()}}class h extends t$4{constructor(t=new AudioContext){super(),this.bufferNode=null,this.autoplay=!1,this.playStartTime=0,this.playedDuration=0,this._muted=!1,this.buffer=null,this.currentSrc="",this.paused=!0,this.crossOrigin=null,this.audioContext=t,this.gainNode=this.audioContext.createGain(),this.gainNode.connect(this.audioContext.destination)}load(){return i$4(this,void 0,void 0,(function*(){}))}get src(){return this.currentSrc}set src(t){this.currentSrc=t,fetch(t).then((t=>t.arrayBuffer())).then((t=>this.audioContext.decodeAudioData(t))).then((t=>{this.buffer=t,this.emit("loadedmetadata"),this.emit("canplay"),this.autoplay&&this.play()}))}_play(){var t;this.paused&&(this.paused=!1,null===(t=this.bufferNode)||void 0===t||t.disconnect(),this.bufferNode=this.audioContext.createBufferSource(),this.bufferNode.buffer=this.buffer,this.bufferNode.connect(this.gainNode),this.playedDuration>=this.duration&&(this.playedDuration=0),this.bufferNode.start(this.audioContext.currentTime,this.playedDuration),this.playStartTime=this.audioContext.currentTime,this.bufferNode.onended=()=>{this.currentTime>=this.duration&&(this.pause(),this.emit("ended"))})}_pause(){var t;this.paused||(this.paused=!0,null===(t=this.bufferNode)||void 0===t||t.stop(),this.playedDuration+=this.audioContext.currentTime-this.playStartTime)}play(){return i$4(this,void 0,void 0,(function*(){this._play(),this.emit("play")}))}pause(){this._pause(),this.emit("pause")}stopAt(t){var e,i;const s=t-this.currentTime;null===(e=this.bufferNode)||void 0===e||e.stop(this.audioContext.currentTime+s),null===(i=this.bufferNode)||void 0===i||i.addEventListener("ended",(()=>{this.bufferNode=null,this.pause()}),{once:!0})}setSinkId(t){return i$4(this,void 0,void 0,(function*(){return this.audioContext.setSinkId(t)}))}get playbackRate(){var t,e;return null!==(e=null===(t=this.bufferNode)||void 0===t?void 0:t.playbackRate.value)&&void 0!==e?e:1}set playbackRate(t){this.bufferNode&&(this.bufferNode.playbackRate.value=t)}get currentTime(){return this.paused?this.playedDuration:this.playedDuration+this.audioContext.currentTime-this.playStartTime}set currentTime(t){this.emit("seeking"),this.paused?this.playedDuration=t:(this._pause(),this.playedDuration=t,this._play()),this.emit("timeupdate")}get duration(){var t;return(null===(t=this.buffer)||void 0===t?void 0:t.duration)||0}get volume(){return this.gainNode.gain.value}set volume(t){this.gainNode.gain.value=t,this.emit("volumechange")}get muted(){return this._muted}set muted(t){this._muted!==t&&(this._muted=t,this._muted?this.gainNode.disconnect():this.gainNode.connect(this.audioContext.destination))}getGainNode(){return this.gainNode}}const l={waveColor:"#999",progressColor:"#555",cursorWidth:1,minPxPerSec:0,fillParent:!0,interact:!0,dragToSeek:!1,autoScroll:!0,autoCenter:!0,sampleRate:8e3};class d extends r$1{static create(t){return new d(t)}constructor(t){const e=t.media||("WebAudio"===t.backend?new h:void 0);super({media:e,mediaControls:t.mediaControls,autoplay:t.autoplay,playbackRate:t.audioRate}),this.plugins=[],this.decodedData=null,this.subscriptions=[],this.mediaSubscriptions=[],this.options=Object.assign({},l,t),this.timer=new a;const i=e?void 0:this.getMediaElement();this.renderer=new o$1(this.options,i),this.initPlayerEvents(),this.initRendererEvents(),this.initTimerEvents(),this.initPlugins();const s=this.options.url||this.getSrc()||"";(s||this.options.peaks&&this.options.duration)&&this.load(s,this.options.peaks,this.options.duration)}initTimerEvents(){this.subscriptions.push(this.timer.on("tick",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),!0),this.emit("timeupdate",t),this.emit("audioprocess",t)})))}initPlayerEvents(){this.isPlaying()&&(this.emit("play"),this.timer.start()),this.mediaSubscriptions.push(this.onMediaEvent("timeupdate",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),this.isPlaying()),this.emit("timeupdate",t)})),this.onMediaEvent("play",(()=>{this.emit("play"),this.timer.start()})),this.onMediaEvent("pause",(()=>{this.emit("pause"),this.timer.stop()})),this.onMediaEvent("emptied",(()=>{this.timer.stop()})),this.onMediaEvent("ended",(()=>{this.emit("finish")})),this.onMediaEvent("seeking",(()=>{this.emit("seeking",this.getCurrentTime())})))}initRendererEvents(){this.subscriptions.push(this.renderer.on("click",((t,e)=>{this.options.interact&&(this.seekTo(t),this.emit("interaction",t*this.getDuration()),this.emit("click",t,e))})),this.renderer.on("dblclick",((t,e)=>{this.emit("dblclick",t,e)})),this.renderer.on("scroll",((t,e)=>{const i=this.getDuration();this.emit("scroll",t*i,e*i)})),this.renderer.on("render",(()=>{this.emit("redraw")})));{let t;this.subscriptions.push(this.renderer.on("drag",(e=>{this.options.interact&&(this.renderer.renderProgress(e),clearTimeout(t),t=setTimeout((()=>{this.seekTo(e)}),this.isPlaying()?0:200),this.emit("interaction",e*this.getDuration()),this.emit("drag",e))})))}}initPlugins(){var t;(null===(t=this.options.plugins)||void 0===t?void 0:t.length)&&this.options.plugins.forEach((t=>{this.registerPlugin(t)}))}unsubscribePlayerEvents(){this.mediaSubscriptions.forEach((t=>t())),this.mediaSubscriptions=[]}setOptions(t){this.options=Object.assign({},this.options,t),this.renderer.setOptions(this.options),t.audioRate&&this.setPlaybackRate(t.audioRate),null!=t.mediaControls&&(this.getMediaElement().controls=t.mediaControls)}registerPlugin(t){return t.init(this),this.plugins.push(t),this.subscriptions.push(t.once("destroy",(()=>{this.plugins=this.plugins.filter((e=>e!==t))}))),t}getWrapper(){return this.renderer.getWrapper()}getScroll(){return this.renderer.getScroll()}getActivePlugins(){return this.plugins}loadAudio(t,e,i,s){return i$4(this,void 0,void 0,(function*(){if(this.emit("load",t),!this.options.media&&this.isPlaying()&&this.pause(),this.decodedData=null,!e&&!i){const i=t=>this.emit("loading",t);e=yield n$1.fetchBlob(t,i,this.options.fetchParams)}this.setSrc(t,e);const n=(yield Promise.resolve(s||this.getDuration()))||(yield new Promise((t=>{this.onceMediaEvent("loadedmetadata",(()=>t(this.getDuration())))})));if(i)this.decodedData=s$4.createBuffer(i,n||0);else if(e){const t=yield e.arrayBuffer();this.decodedData=yield s$4.decode(t,this.options.sampleRate)}this.decodedData&&(this.emit("decode",this.getDuration()),this.renderer.render(this.decodedData)),this.emit("ready",this.getDuration())}))}load(t,e,i){return i$4(this,void 0,void 0,(function*(){yield this.loadAudio(t,void 0,e,i)}))}loadBlob(t,e,i){return i$4(this,void 0,void 0,(function*(){yield this.loadAudio("blob",t,e,i)}))}zoom(t){if(!this.decodedData)throw new Error("No audio loaded");this.renderer.zoom(t),this.emit("zoom",t)}getDecodedData(){return this.decodedData}exportPeaks({channels:t=2,maxLength:e=8e3,precision:i=1e4}={}){if(!this.decodedData)throw new Error("The audio has not been decoded yet");const s=Math.min(t,this.decodedData.numberOfChannels),n=[];for(let t=0;t<s;t++){const s=this.decodedData.getChannelData(t),r=[],o=Math.round(s.length/e);for(let t=0;t<e;t++){const e=s.slice(t*o,(t+1)*o);let n=0;for(let t=0;t<e.length;t++){const i=e[t];Math.abs(i)>Math.abs(n)&&(n=i)}r.push(Math.round(n*i)/i)}n.push(r)}return n}getDuration(){let t=super.getDuration()||0;return 0!==t&&t!==1/0||!this.decodedData||(t=this.decodedData.duration),t}toggleInteraction(t){this.options.interact=t}seekTo(t){const e=this.getDuration()*t;this.setTime(e)}playPause(){return i$4(this,void 0,void 0,(function*(){return this.isPlaying()?this.pause():this.play()}))}stop(){this.pause(),this.setTime(0)}skip(t){this.setTime(this.getCurrentTime()+t)}empty(){this.load("",[[0]],.001)}setMediaElement(t){this.unsubscribePlayerEvents(),super.setMediaElement(t),this.initPlayerEvents()}exportImage(t="image/png",e=1,i="dataURL"){return i$4(this,void 0,void 0,(function*(){return this.renderer.exportImage(t,e,i)}))}destroy(){this.emit("destroy"),this.plugins.forEach((t=>t.destroy())),this.subscriptions.forEach((t=>t())),this.unsubscribePlayerEvents(),this.timer.destroy(),this.renderer.destroy(),super.destroy()}}const c={height:50,overlayColor:"rgba(100, 100, 100, 0.1)",insertPosition:"afterend"};class u extends e$4{constructor(t){super(t),this.miniWavesurfer=null,this.container=null,this.options=Object.assign({},c,t),this.minimapWrapper=this.initMinimapWrapper(),this.overlay=this.initOverlay()}static create(t){return new u(t)}onInit(){var t,e;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");this.options.container?("string"==typeof this.options.container?this.container=document.querySelector(this.options.container):this.options.container instanceof HTMLElement&&(this.container=this.options.container),null===(t=this.container)||void 0===t||t.appendChild(this.minimapWrapper)):(this.container=this.wavesurfer.getWrapper().parentElement,null===(e=this.container)||void 0===e||e.insertAdjacentElement(this.options.insertPosition,this.minimapWrapper)),this.initWaveSurferEvents()}initMinimapWrapper(){const t=document.createElement("div");return t.style.position="relative",t.setAttribute("part","minimap"),t}initOverlay(){const t=document.createElement("div");return t.setAttribute("style","position: absolute; z-index: 2; left: 0; top: 0; bottom: 0; transition: left 100ms ease-out; pointer-events: none;"),t.style.backgroundColor=this.options.overlayColor,this.minimapWrapper.appendChild(t),t}initMinimap(){if(this.miniWavesurfer&&(this.miniWavesurfer.destroy(),this.miniWavesurfer=null),!this.wavesurfer)return;const t=this.wavesurfer.getDecodedData(),e=this.wavesurfer.getMediaElement();if(!t||!e)return;const i=[];for(let e=0;e<t.numberOfChannels;e++)i.push(t.getChannelData(e));this.miniWavesurfer=d.create(Object.assign(Object.assign({},this.options),{container:this.minimapWrapper,minPxPerSec:0,fillParent:!0,media:e,peaks:i,duration:t.duration})),this.subscriptions.push(this.miniWavesurfer.on("ready",(()=>{this.emit("ready")})),this.miniWavesurfer.on("interaction",(()=>{this.emit("interaction")})))}getOverlayWidth(){var t;const e=(null===(t=this.wavesurfer)||void 0===t?void 0:t.getWrapper().clientWidth)||1;return Math.round(this.minimapWrapper.clientWidth/e*100)}onRedraw(){const t=this.getOverlayWidth();this.overlay.style.width=`${t}%`}onScroll(t){if(!this.wavesurfer)return;const e=this.wavesurfer.getDuration();this.overlay.style.left=t/e*100+"%"}initWaveSurferEvents(){this.wavesurfer&&this.subscriptions.push(this.wavesurfer.on("decode",(()=>{this.initMinimap()})),this.wavesurfer.on("scroll",(t=>{this.onScroll(t)})),this.wavesurfer.on("redraw",(()=>{this.onRedraw()})))}destroy(){var t;null===(t=this.miniWavesurfer)||void 0===t||t.destroy(),this.minimapWrapper.remove(),super.destroy()}}class t$3{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class e$3 extends t$3{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}function i$3(t,e,i,s,n=3,r=0){if(!t)return()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u)}},u=()=>{d&&(null==s||s()),o()},p=t=>{d&&(t.stopPropagation(),t.preventDefault())},f=t=>{d&&t.preventDefault()};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",f,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",f),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0})}),10)}};return t.addEventListener("pointerdown",a),()=>{o(),t.removeEventListener("pointerdown",a)}}const o={points:[],lineWidth:4,lineColor:"rgba(0, 0, 255, 0.5)",dragPointSize:10,dragPointFill:"rgba(255, 255, 255, 0.8)",dragPointStroke:"rgba(255, 255, 255, 0.8)"};class n extends t$3{constructor(t,e){super(),this.options=t,this.polyPoints=new Map;const i=e.clientWidth,s=e.clientHeight,n=document.createElementNS("http://www.w3.org/2000/svg","svg");n.setAttribute("width","100%"),n.setAttribute("height","100%"),n.setAttribute("viewBox",`0 0 ${i} ${s}`),n.setAttribute("preserveAspectRatio","none"),n.setAttribute("style","position: absolute; left: 0; top: 0; z-index: 4;"),n.setAttribute("part","envelope"),this.svg=n;const r=document.createElementNS("http://www.w3.org/2000/svg","polyline");r.setAttribute("points",`0,${s} ${i},${s}`),r.setAttribute("stroke",t.lineColor),r.setAttribute("stroke-width",t.lineWidth),r.setAttribute("fill","none"),r.setAttribute("part","polyline"),r.setAttribute("style",t.dragLine?"cursor: row-resize; pointer-events: stroke;":""),n.appendChild(r),e.appendChild(n),t.dragLine&&i$3(r,((t,e)=>{const{height:i}=n.viewBox.baseVal,{points:s}=r;for(let t=1;t<s.numberOfItems-1;t++){const n=s.getItem(t);n.y=Math.min(i,Math.max(0,n.y+e))}const o=n.querySelectorAll("ellipse");Array.from(o).forEach((t=>{const s=Math.min(i,Math.max(0,Number(t.getAttribute("cy"))+e));t.setAttribute("cy",s.toString())})),this.emit("line-move",e/i)})),n.addEventListener("dblclick",(t=>{const e=n.getBoundingClientRect(),i=t.clientX-e.left,s=t.clientY-e.top;this.emit("point-create",i/e.width,s/e.height)}));{let t;const e=()=>clearTimeout(t);n.addEventListener("touchstart",(i=>{1===i.touches.length?t=window.setTimeout((()=>{i.preventDefault();const t=n.getBoundingClientRect(),e=i.touches[0].clientX-t.left,s=i.touches[0].clientY-t.top;this.emit("point-create",e/t.width,s/t.height)}),500):e()})),n.addEventListener("touchmove",e),n.addEventListener("touchend",e)}}makeDraggable(t,e){i$3(t,e,(()=>t.style.cursor="grabbing"),(()=>t.style.cursor="grab"),1)}createCircle(t,e){const i=document.createElementNS("http://www.w3.org/2000/svg","ellipse"),s=this.options.dragPointSize/2;return i.setAttribute("rx",s.toString()),i.setAttribute("ry",s.toString()),i.setAttribute("fill",this.options.dragPointFill),this.options.dragPointStroke&&(i.setAttribute("stroke",this.options.dragPointStroke),i.setAttribute("stroke-width","2")),i.setAttribute("style","cursor: grab; pointer-events: all;"),i.setAttribute("part","envelope-circle"),i.setAttribute("cx",t.toString()),i.setAttribute("cy",e.toString()),this.svg.appendChild(i),i}removePolyPoint(t){const e=this.polyPoints.get(t);if(!e)return;const{polyPoint:i,circle:s}=e,{points:n}=this.svg.querySelector("polyline"),r=Array.from(n).findIndex((t=>t.x===i.x&&t.y===i.y));n.removeItem(r),s.remove(),this.polyPoints.delete(t)}addPolyPoint(t,e,i){const{svg:s}=this,{width:n,height:r}=s.viewBox.baseVal,o=t*n,a=r-e*r,h=this.options.dragPointSize/2,l=s.createSVGPoint();l.x=t*n,l.y=r-e*r;const d=this.createCircle(o,a),{points:c}=s.querySelector("polyline"),u=Array.from(c).findIndex((t=>t.x>=o));c.insertItemBefore(l,Math.max(u,1)),this.polyPoints.set(i,{polyPoint:l,circle:d}),this.makeDraggable(d,((t,e)=>{const s=l.x+t,o=l.y+e;if(s<-h||o<-h||s>n+h||o>r+h)return void this.emit("point-dragout",i);const a=Array.from(c).find((t=>t.x>l.x)),u=Array.from(c).findLast((t=>t.x<l.x));a&&s>=a.x||u&&s<=u.x||(l.x=s,l.y=o,d.setAttribute("cx",s.toString()),d.setAttribute("cy",o.toString()),this.emit("point-move",i,s/n,o/r))}))}update(){const{svg:t}=this,e=t.viewBox.baseVal.width/t.clientWidth,i=t.viewBox.baseVal.height/t.clientHeight;t.querySelectorAll("ellipse").forEach((t=>{const s=this.options.dragPointSize/2,n=s*e,r=s*i;t.setAttribute("rx",n.toString()),t.setAttribute("ry",r.toString())}))}destroy(){this.polyPoints.clear(),this.svg.remove()}}class s$3 extends e$3{constructor(t){super(t),this.polyline=null,this.throttleTimeout=null,this.volume=1,this.points=t.points||[],this.options=Object.assign({},o,t),this.options.lineColor=this.options.lineColor||o.lineColor,this.options.dragPointFill=this.options.dragPointFill||o.dragPointFill,this.options.dragPointStroke=this.options.dragPointStroke||o.dragPointStroke,this.options.dragPointSize=this.options.dragPointSize||o.dragPointSize}static create(t){return new s$3(t)}addPoint(t){var e;t.id||(t.id=Math.random().toString(36).slice(2));const i=this.points.findLastIndex((e=>e.time<t.time));this.points.splice(i+1,0,t),this.emitPoints();const s=null===(e=this.wavesurfer)||void 0===e?void 0:e.getDuration();s&&this.addPolyPoint(t,s)}removePoint(t){var e;const i=this.points.indexOf(t);i>-1&&(this.points.splice(i,1),null===(e=this.polyline)||void 0===e||e.removePolyPoint(t),this.emitPoints())}getPoints(){return this.points}setPoints(t){this.points.slice().forEach((t=>this.removePoint(t))),t.forEach((t=>this.addPoint(t)))}destroy(){var t;null===(t=this.polyline)||void 0===t||t.destroy(),super.destroy()}getCurrentVolume(){return this.volume}setVolume(t){var e;this.volume=t,null===(e=this.wavesurfer)||void 0===e||e.setVolume(t)}onInit(){var t;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");const{options:e}=this;e.volume=null!==(t=e.volume)&&void 0!==t?t:this.wavesurfer.getVolume(),this.setVolume(e.volume),this.subscriptions.push(this.wavesurfer.on("decode",(t=>{this.initPolyline(),this.points.forEach((e=>{this.addPolyPoint(e,t)}))})),this.wavesurfer.on("redraw",(()=>{var t;null===(t=this.polyline)||void 0===t||t.update()})),this.wavesurfer.on("timeupdate",(t=>{this.onTimeUpdate(t)})))}emitPoints(){this.throttleTimeout&&clearTimeout(this.throttleTimeout),this.throttleTimeout=setTimeout((()=>{this.emit("points-change",this.points)}),200)}initPolyline(){if(this.polyline&&this.polyline.destroy(),!this.wavesurfer)return;const t=this.wavesurfer.getWrapper();this.polyline=new n(this.options,t),this.subscriptions.push(this.polyline.on("point-move",((t,e,i)=>{var s;const n=(null===(s=this.wavesurfer)||void 0===s?void 0:s.getDuration())||0;t.time=e*n,t.volume=1-i,this.emitPoints()})),this.polyline.on("point-dragout",(t=>{this.removePoint(t)})),this.polyline.on("point-create",((t,e)=>{var i;this.addPoint({time:t*((null===(i=this.wavesurfer)||void 0===i?void 0:i.getDuration())||0),volume:1-e})})),this.polyline.on("line-move",(t=>{var e;this.points.forEach((e=>{e.volume=Math.min(1,Math.max(0,e.volume-t))})),this.emitPoints(),this.onTimeUpdate((null===(e=this.wavesurfer)||void 0===e?void 0:e.getCurrentTime())||0)})))}addPolyPoint(t,e){var i;null===(i=this.polyline)||void 0===i||i.addPolyPoint(t.time/e,t.volume,t)}onTimeUpdate(t){if(!this.wavesurfer)return;let e=this.points.find((e=>e.time>t));e||(e={time:this.wavesurfer.getDuration()||0,volume:0});let i=this.points.findLast((e=>e.time<=t));i||(i={time:0,volume:0});const s=e.time-i.time,n=e.volume-i.volume,r=i.volume+(t-i.time)*(n/s),o=Math.min(1,Math.max(0,r)),a=Math.round(100*o)/100;a!==this.getCurrentVolume()&&(this.setVolume(a),this.emit("volume-change",a))}}class t$2{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class e$2 extends t$2{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}function s$2(t,e,i,s){switch(this.bufferSize=t,this.sampleRate=e,this.bandwidth=2/t*(e/2),this.sinTable=new Float32Array(t),this.cosTable=new Float32Array(t),this.windowValues=new Float32Array(t),this.reverseTable=new Uint32Array(t),this.peakBand=0,this.peak=0,i){case"bartlett":for(n=0;n<t;n++)this.windowValues[n]=2/(t-1)*((t-1)/2-Math.abs(n-(t-1)/2));break;case"bartlettHann":for(n=0;n<t;n++)this.windowValues[n]=.62-.48*Math.abs(n/(t-1)-.5)-.38*Math.cos(2*Math.PI*n/(t-1));break;case"blackman":for(s=s||.16,n=0;n<t;n++)this.windowValues[n]=(1-s)/2-.5*Math.cos(2*Math.PI*n/(t-1))+s/2*Math.cos(4*Math.PI*n/(t-1));break;case"cosine":for(n=0;n<t;n++)this.windowValues[n]=Math.cos(Math.PI*n/(t-1)-Math.PI/2);break;case"gauss":for(s=s||.25,n=0;n<t;n++)this.windowValues[n]=Math.pow(Math.E,-.5*Math.pow((n-(t-1)/2)/(s*(t-1)/2),2));break;case"hamming":for(n=0;n<t;n++)this.windowValues[n]=.54-.46*Math.cos(2*Math.PI*n/(t-1));break;case"hann":case void 0:for(n=0;n<t;n++)this.windowValues[n]=.5*(1-Math.cos(2*Math.PI*n/(t-1)));break;case"lanczoz":for(n=0;n<t;n++)this.windowValues[n]=Math.sin(Math.PI*(2*n/(t-1)-1))/(Math.PI*(2*n/(t-1)-1));break;case"rectangular":for(n=0;n<t;n++)this.windowValues[n]=1;break;case"triangular":for(n=0;n<t;n++)this.windowValues[n]=2/t*(t/2-Math.abs(n-(t-1)/2));break;default:throw Error("No such window function '"+i+"'")}for(var n,r=1,o=t>>1;r<t;){for(n=0;n<r;n++)this.reverseTable[n+r]=this.reverseTable[n]+o;r<<=1,o>>=1}for(n=0;n<t;n++)this.sinTable[n]=Math.sin(-Math.PI/n),this.cosTable[n]=Math.cos(-Math.PI/n);this.calculateSpectrum=function(t){var e,i,s,n=this.bufferSize,r=this.cosTable,o=this.sinTable,a=this.reverseTable,h=new Float32Array(n),l=new Float32Array(n),d=2/this.bufferSize,c=Math.sqrt,u=new Float32Array(n/2),p=Math.floor(Math.log(n)/Math.LN2);if(Math.pow(2,p)!==n)throw"Invalid buffer size, must be a power of 2.";if(n!==t.length)throw"Supplied buffer is not the same size as defined FFT. FFT Size: "+n+" Buffer Size: "+t.length;for(var f,m,v,g,_,E,y,b,w=1,L=0;L<n;L++)h[L]=t[a[L]]*this.windowValues[a[L]],l[L]=0;for(;w<n;){f=r[w],m=o[w],v=1,g=0;for(var C=0;C<w;C++){for(L=C;L<n;)E=v*h[_=L+w]-g*l[_],y=v*l[_]+g*h[_],h[_]=h[L]-E,l[_]=l[L]-y,h[L]+=E,l[L]+=y,L+=w<<1;v=(b=v)*f-g*m,g=b*m+g*f}w<<=1}L=0;for(var A=n/2;L<A;L++)(s=d*c((e=h[L])*e+(i=l[L])*i))>this.peak&&(this.peakBand=L,this.peak=s),u[L]=s;return u}}class i$2 extends e$2{static create(t){return new i$2(t||{})}constructor(t){if(super(t),this.utils={style:(t,e)=>Object.assign(t.style,e)},this.drawSpectrogram=t=>{isNaN(t[0][0])||(t=[t]),this.wrapper.style.height=this.height*t.length+"px",this.width=this.wavesurfer.getWrapper().offsetWidth,this.canvas.width=this.width,this.canvas.height=this.height*t.length;const e=this.spectrCc,i=this.height,s=this.width,n=this.buffer.sampleRate/2,r=this.frequencyMin,o=this.frequencyMax;if(e){for(let a=0;a<t.length;a++){const h=this.resample(t[a]),l=new ImageData(s,i);for(let t=0;t<h.length;t++)for(let e=0;e<h[t].length;e++){const n=this.colorMap[h[t][e]],r=4*((i-e)*s+t);l.data[r]=255*n[0],l.data[r+1]=255*n[1],l.data[r+2]=255*n[2],l.data[r+3]=255*n[3]}createImageBitmap(l).then((t=>{e.drawImage(t,0,i*(1-o/n),s,i*(o-r)/n,0,i*a,s,i)}))}this.loadLabels(this.options.labelsBackground,"12px","12px","",this.options.labelsColor,this.options.labelsHzColor||this.options.labelsColor,"center","#specLabels",t.length),this.emit("ready")}},this.frequenciesDataUrl=t.frequenciesDataUrl,this.container="string"==typeof t.container?document.querySelector(t.container):t.container,t.colorMap){if(t.colorMap.length<256)throw new Error("Colormap must contain 256 elements");for(let e=0;e<t.colorMap.length;e++){if(4!==t.colorMap[e].length)throw new Error("ColorMap entries must contain 4 values")}this.colorMap=t.colorMap}else{this.colorMap=[];for(let t=0;t<256;t++){const e=(255-t)/256;this.colorMap.push([e,e,e,1])}}this.fftSamples=t.fftSamples||512,this.height=t.height||this.fftSamples/2,this.noverlap=t.noverlap,this.windowFunc=t.windowFunc,this.alpha=t.alpha,this.frequencyMin=t.frequencyMin||0,this.frequencyMax=t.frequencyMax||0,this.createWrapper(),this.createCanvas()}onInit(){this.container=this.container||this.wavesurfer.getWrapper(),this.container.appendChild(this.wrapper),this.wavesurfer.options.fillParent&&this.utils.style(this.wrapper,{width:"100%",overflowX:"hidden",overflowY:"hidden"}),this.subscriptions.push(this.wavesurfer.on("redraw",(()=>this.render())))}destroy(){this.unAll(),this.wavesurfer.un("ready",this._onReady),this.wavesurfer.un("redraw",this._onRender),this.wavesurfer=null,this.util=null,this.options=null,this.wrapper&&(this.wrapper.remove(),this.wrapper=null),super.destroy()}createWrapper(){if(this.wrapper=document.createElement("div"),this.utils.style(this.wrapper,{display:"block",position:"relative",userSelect:"none"}),this.options.labels){const t=document.createElement("canvas");t.setAttribute("part","spec-labels"),this.utils.style(t,{position:"absolute",zIndex:9,width:"55px",height:"100%"}),this.wrapper.appendChild(t),this.labelsEl=t}this.wrapper.addEventListener("click",this._onWrapperClick)}_wrapperClickHandler(t){t.preventDefault();const e="offsetX"in t?t.offsetX:t.layerX;this.emit("click",e/this.width||0)}createCanvas(){const t=document.createElement("canvas");this.wrapper.appendChild(t),this.spectrCc=t.getContext("2d"),this.utils.style(t,{position:"absolute",left:0,top:0,width:"100%",height:"100%",zIndex:4}),this.canvas=t}render(){var t;this.frequenciesDataUrl?this.loadFrequenciesData(this.frequenciesDataUrl):this.drawSpectrogram(this.getFrequencies(null===(t=this.wavesurfer)||void 0===t?void 0:t.getDecodedData()))}getFrequencies(t){var e,i;const s=this.fftSamples,n=(null!==(e=this.options.splitChannels)&&void 0!==e?e:null===(i=this.wavesurfer)||void 0===i?void 0:i.options.splitChannels)?t.numberOfChannels:1;if(this.frequencyMax=this.frequencyMax||t.sampleRate/2,!t)return;this.buffer=t;const r=t.sampleRate,o=[];let a=this.noverlap;if(!a){const e=t.length/this.canvas.width;a=Math.max(0,Math.round(s-e))}const h=new s$2(s,r,this.windowFunc,this.alpha);for(let e=0;e<n;e++){const i=t.getChannelData(e),n=[];let r=0;for(;r+s<i.length;){const t=i.slice(r,r+s),e=h.calculateSpectrum(t),o=new Uint8Array(s/2);for(let t=0;t<s/2;t++)o[t]=Math.max(-255,45*Math.log10(e[t]));n.push(o),r+=s-a}o.push(n)}return o}loadFrequenciesData(t){return fetch(t).then((t=>t.json())).then(this.drawSpectrogram)}freqType(t){return t>=1e3?(t/1e3).toFixed(1):Math.round(t)}unitType(t){return t>=1e3?"KHz":"Hz"}loadLabels(t,e,i,s,n,r,o,a,h){t=t||"rgba(68,68,68,0)",e=e||"12px",i=i||"12px",s=s||"Helvetica",n=n||"#fff",r=r||"#fff",o=o||"center";const l=this.height||512,d=l/256*5,c=this.frequencyMin,u=(this.frequencyMax-c)/d,p=this.labelsEl.getContext("2d"),f=window.devicePixelRatio;if(this.labelsEl.height=this.height*h*f,this.labelsEl.width=55*f,p.scale(f,f),p)for(let a=0;a<h;a++){let h;for(p.fillStyle=t,p.fillRect(0,a*l,55,(1+a)*l),p.fill(),h=0;h<=d;h++){p.textAlign=o,p.textBaseline="middle";const t=c+u*h,d=this.freqType(t),f=this.unitType(t),m=16;let v;v=0==h?(1+a)*l+h-10:(1+a)*l-50*h+2,p.fillStyle=r,p.font=i+" "+s,p.fillText(f,m+24,v),p.fillStyle=n,p.font=e+" "+s,p.fillText(d,m,v)}}}resample(t){const e=this.width,i=[],s=1/t.length,n=1/e;let r;for(r=0;r<e;r++){const e=new Array(t[0].length);let o;for(o=0;o<t.length;o++){const i=o*s,a=i+s,h=r*n,l=h+n,d=a<=h||l<=i?0:Math.min(Math.max(a,h),Math.max(l,i))-Math.max(Math.min(a,h),Math.min(l,i));let c;if(d>0)for(c=0;c<t[0].length;c++)null==e[c]&&(e[c]=0),e[c]+=d/n*t[o][c]}const a=new Uint8Array(t[0].length);let h;for(h=0;h<t[0].length;h++)a[h]=e[h];i.push(a)}return i}}function e$1(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){try{h(s.next(t))}catch(t){r(t)}}function a(t){try{h(s.throw(t))}catch(t){r(t)}}function h(t){var e;t.done?n(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(o,a)}h((s=s.apply(t,e||[])).next())}))}"function"==typeof SuppressedError&&SuppressedError;class t$1{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class i$1 extends t$1{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}const s$1=["audio/webm","audio/wav","audio/mpeg","audio/mp4","audio/mp3"];class r extends i$1{constructor(t){var e,i,s,n;super(Object.assign(Object.assign({},t),{audioBitsPerSecond:null!==(e=t.audioBitsPerSecond)&&void 0!==e?e:128e3,scrollingWaveform:null!==(i=t.scrollingWaveform)&&void 0!==i&&i,scrollingWaveformWindow:null!==(s=t.scrollingWaveformWindow)&&void 0!==s?s:5,renderRecordedAudio:null===(n=t.renderRecordedAudio)||void 0===n||n})),this.stream=null,this.mediaRecorder=null,this.dataWindow=null,this.isWaveformPaused=!1,this.originalOptions={cursorWidth:1,interact:!0}}static create(t){return new r(t||{})}renderMicStream(t){const e=new AudioContext,i=e.createMediaStreamSource(t),s=e.createAnalyser();i.connect(s);const n=s.frequencyBinCount,r=new Float32Array(n);let o;const a=Math.floor((this.options.scrollingWaveformWindow||0)*e.sampleRate),h=()=>{if(this.isWaveformPaused)return void(o=requestAnimationFrame(h));if(s.getFloatTimeDomainData(r),this.options.scrollingWaveform){const t=Math.min(a,this.dataWindow?this.dataWindow.length+n:n),e=new Float32Array(a);if(this.dataWindow){const i=Math.max(0,a-this.dataWindow.length);e.set(this.dataWindow.slice(-t+n),i)}e.set(r,a-n),this.dataWindow=e}else this.dataWindow=r;const t=this.options.scrollingWaveformWindow;this.wavesurfer&&(this.originalOptions={cursorWidth:this.wavesurfer.options.cursorWidth,interact:this.wavesurfer.options.interact},this.wavesurfer.options.cursorWidth=0,this.wavesurfer.options.interact=!1,this.wavesurfer.load("",[this.dataWindow],t)),o=requestAnimationFrame(h)};return h(),{onDestroy:()=>{cancelAnimationFrame(o),null==i||i.disconnect(),null==e||e.close()},onEnd:()=>{this.isWaveformPaused=!0,cancelAnimationFrame(o),this.stopMic()}}}startMic(t){return e$1(this,void 0,void 0,(function*(){let e;try{e=yield navigator.mediaDevices.getUserMedia({audio:!(null==t?void 0:t.deviceId)||{deviceId:t.deviceId}})}catch(e){throw new Error("Error accessing the microphone: "+e.message)}const{onDestroy:i,onEnd:s}=this.renderMicStream(e);return this.subscriptions.push(this.once("destroy",i)),this.subscriptions.push(this.once("record-end",s)),this.stream=e,e}))}stopMic(){this.stream&&(this.stream.getTracks().forEach((t=>t.stop())),this.stream=null,this.mediaRecorder=null)}startRecording(t){return e$1(this,void 0,void 0,(function*(){const e=this.stream||(yield this.startMic(t));this.dataWindow=null;const i=this.mediaRecorder||new MediaRecorder(e,{mimeType:this.options.mimeType||s$1.find((t=>MediaRecorder.isTypeSupported(t))),audioBitsPerSecond:this.options.audioBitsPerSecond});this.mediaRecorder=i,this.stopRecording();const s=[];i.ondataavailable=t=>{t.data.size>0&&s.push(t.data)},i.onstop=()=>{var t;const e=new Blob(s,{type:i.mimeType});this.emit("record-end",e),this.options.renderRecordedAudio&&(null===(t=this.wavesurfer)||void 0===t||t.load(URL.createObjectURL(e)))},i.start(),this.isWaveformPaused=!1,this.emit("record-start")}))}isRecording(){var t;return"recording"===(null===(t=this.mediaRecorder)||void 0===t?void 0:t.state)}isPaused(){var t;return"paused"===(null===(t=this.mediaRecorder)||void 0===t?void 0:t.state)}isActive(){var t;return"inactive"!==(null===(t=this.mediaRecorder)||void 0===t?void 0:t.state)}stopRecording(){var t;this.isActive()&&(null===(t=this.mediaRecorder)||void 0===t||t.stop())}pauseRecording(){var t;this.isRecording()&&(this.isWaveformPaused=!0,null===(t=this.mediaRecorder)||void 0===t||t.pause(),this.emit("record-pause"))}resumeRecording(){var t;this.isPaused()&&(this.isWaveformPaused=!1,null===(t=this.mediaRecorder)||void 0===t||t.resume(),this.emit("record-resume"))}static getAvailableAudioDevices(){return e$1(this,void 0,void 0,(function*(){return navigator.mediaDevices.enumerateDevices().then((t=>t.filter((t=>"audioinput"===t.kind))))}))}destroy(){this.wavesurfer&&(this.wavesurfer.options.cursorWidth=this.originalOptions.cursorWidth,this.wavesurfer.options.interact=this.originalOptions.interact),super.destroy(),this.stopRecording(),this.stopMic()}}class e{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e)};return this.addEventListener(t,i),i}return()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e)}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={}}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)))}}class t extends e{constructor(t){super(),this.subscriptions=[],this.options=t}onInit(){}init(t){this.wavesurfer=t,this.onInit()}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()))}}const s={scale:.5};class i extends t{constructor(t){super(t||{}),this.wrapper=void 0,this.container=null,this.onWheel=t=>{if(!this.wavesurfer||!this.container||Math.abs(t.deltaX)>=Math.abs(t.deltaY))return;t.preventDefault();const e=this.wavesurfer.getDuration(),i=this.wavesurfer.options.minPxPerSec,s=t.clientX,n=this.container.clientWidth,r=(this.wavesurfer.getScroll()+s)/i,o=this.calculateNewZoom(i,-t.deltaY),a=n/o*(s/n);o*e<n?(this.wavesurfer.zoom(n/e),this.container.scrollLeft=0):(this.wavesurfer.zoom(o),this.container.scrollLeft=(r-a)*o)},this.calculateNewZoom=(t,e)=>{const i=Math.max(0,t+e*this.options.scale);return void 0===this.options.maxZoom?i:Math.min(i,this.options.maxZoom)},this.options=Object.assign({},s,t)}static create(t){return new i(t)}onInit(){var t;this.wrapper=null===(t=this.wavesurfer)||void 0===t?void 0:t.getWrapper(),this.wrapper&&(this.container=this.wrapper.parentElement,this.wrapper.addEventListener("wheel",this.onWheel))}destroy(){this.wrapper&&this.wrapper.removeEventListener("wheel",this.onWheel),super.destroy()}}
+function t$7(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){try{h(s.next(t));}catch(t){r(t);}}function a(t){try{h(s.throw(t));}catch(t){r(t);}}function h(t){var e;t.done?n(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e);}))).then(o,a);}h((s=s.apply(t,e||[])).next());}))}"function"==typeof SuppressedError&&SuppressedError;const e$7={decode:function(e,i){return t$7(this,void 0,void 0,(function*(){const t=new AudioContext({sampleRate:i});return t.decodeAudioData(e).finally((()=>t.close()))}))},createBuffer:function(t,e){return "number"==typeof t[0]&&(t=[t]),function(t){const e=t[0];if(e.some((t=>t>1||t<-1))){const i=e.length;let s=0;for(let t=0;t<i;t++){const i=Math.abs(e[t]);i>s&&(s=i);}for(const e of t)for(let t=0;t<i;t++)e[t]/=s;}}(t),{duration:e,length:t[0].length,sampleRate:t[0].length/e,numberOfChannels:t.length,getChannelData:e=>null==t?void 0:t[e],copyFromChannel:AudioBuffer.prototype.copyFromChannel,copyToChannel:AudioBuffer.prototype.copyToChannel}}};const i$7={fetchBlob:function(e,i,s){return t$7(this,void 0,void 0,(function*(){const n=yield fetch(e,s);if(!n.ok)throw new Error(`Failed to fetch ${e}: ${n.status} (${n.statusText})`);return function(e,i){t$7(this,void 0,void 0,(function*(){if(!e.body||!e.headers)return;const s=e.body.getReader(),n=Number(e.headers.get("Content-Length"))||0;let r=0;const o=e=>t$7(this,void 0,void 0,(function*(){r+=(null==e?void 0:e.length)||0;const t=Math.round(r/n*100);i(t);})),a=()=>t$7(this,void 0,void 0,(function*(){let t;try{t=yield s.read();}catch(t){return}t.done||(o(t.value),yield a());}));a();}));}(n.clone(),i),n.blob()}))}};class s$6{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e);};return this.addEventListener(t,i),i}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class n$4 extends s$6{constructor(t){super(),this.isExternalMedia=!1,t.media?(this.media=t.media,this.isExternalMedia=!0):this.media=document.createElement("audio"),t.mediaControls&&(this.media.controls=!0),t.autoplay&&(this.media.autoplay=!0),null!=t.playbackRate&&this.onceMediaEvent("canplay",(()=>{null!=t.playbackRate&&(this.media.playbackRate=t.playbackRate);}));}onMediaEvent(t,e,i){return this.media.addEventListener(t,e,i),()=>this.media.removeEventListener(t,e)}onceMediaEvent(t,e){return this.onMediaEvent(t,e,{once:!0})}getSrc(){return this.media.currentSrc||this.media.src||""}revokeSrc(){const t=this.getSrc();t.startsWith("blob:")&&URL.revokeObjectURL(t);}setSrc(t,e){if(this.getSrc()===t)return;this.revokeSrc();const i=e instanceof Blob?URL.createObjectURL(e):t;this.media.src=i,this.media.load();}destroy(){this.media.pause(),this.isExternalMedia||(this.media.remove(),this.revokeSrc(),this.media.src="",this.media.load());}setMediaElement(t){this.media=t;}play(){return this.media.play()}pause(){this.media.pause();}isPlaying(){return !this.media.paused&&!this.media.ended}setTime(t){this.media.currentTime=t;}getDuration(){return this.media.duration}getCurrentTime(){return this.media.currentTime}getVolume(){return this.media.volume}setVolume(t){this.media.volume=t;}getMuted(){return this.media.muted}setMuted(t){this.media.muted=t;}getPlaybackRate(){return this.media.playbackRate}setPlaybackRate(t,e){null!=e&&(this.media.preservesPitch=e),this.media.playbackRate=t;}getMediaElement(){return this.media}setSinkId(t){return this.media.setSinkId(t)}}class r$2 extends s$6{constructor(t,e){super(),this.timeouts=[],this.isScrollable=!1,this.audioData=null,this.resizeObserver=null,this.isDragging=!1,this.options=t;const i=this.parentFromOptionsContainer(t.container);this.parent=i;const[s,n]=this.initHtml();i.appendChild(s),this.container=s,this.scrollContainer=n.querySelector(".scroll"),this.wrapper=n.querySelector(".wrapper"),this.canvasWrapper=n.querySelector(".canvases"),this.progressWrapper=n.querySelector(".progress"),this.cursor=n.querySelector(".cursor"),e&&n.appendChild(e),this.initEvents();}parentFromOptionsContainer(t){let e;if("string"==typeof t?e=document.querySelector(t):t instanceof HTMLElement&&(e=t),!e)throw new Error("Container not found");return e}initEvents(){const t=t=>{const e=this.wrapper.getBoundingClientRect(),i=t.clientX-e.left,s=t.clientX-e.left;return [i/e.width,s/e.height]};this.wrapper.addEventListener("click",(e=>{const[i,s]=t(e);this.emit("click",i,s);})),this.wrapper.addEventListener("dblclick",(e=>{const[i,s]=t(e);this.emit("dblclick",i,s);})),this.options.dragToSeek&&this.initDrag(),this.scrollContainer.addEventListener("scroll",(()=>{const{scrollLeft:t,scrollWidth:e,clientWidth:i}=this.scrollContainer,s=t/e,n=(t+i)/e;this.emit("scroll",s,n);}));const e=this.createDelay(100);this.resizeObserver=new ResizeObserver((()=>{e((()=>this.reRender()));})),this.resizeObserver.observe(this.scrollContainer);}initDrag(){!function(t,e,i,s,n=3,r=0){if(!t)return ()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u);}},u=()=>{d&&(null==s||s()),o();},p=t=>{d&&(t.stopPropagation(),t.preventDefault());},m=t=>{d&&t.preventDefault();};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",m,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",m),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0});}),10);};};t.addEventListener("pointerdown",a);}(this.wrapper,((t,e,i)=>{this.emit("drag",Math.max(0,Math.min(1,i/this.wrapper.getBoundingClientRect().width)));}),(()=>this.isDragging=!0),(()=>this.isDragging=!1));}getHeight(t){return null==t?128:isNaN(Number(t))?"auto"===t&&this.parent.clientHeight||128:Number(t)}initHtml(){const t=document.createElement("div"),e=t.attachShadow({mode:"open"});return e.innerHTML=`\n      <style>\n        :host {\n          user-select: none;\n          min-width: 1px;\n        }\n        :host audio {\n          display: block;\n          width: 100%;\n        }\n        :host .scroll {\n          overflow-x: auto;\n          overflow-y: hidden;\n          width: 100%;\n          position: relative;\n        }\n        :host .noScrollbar {\n          scrollbar-color: transparent;\n          scrollbar-width: none;\n        }\n        :host .noScrollbar::-webkit-scrollbar {\n          display: none;\n          -webkit-appearance: none;\n        }\n        :host .wrapper {\n          position: relative;\n          overflow: visible;\n          z-index: 2;\n        }\n        :host .canvases {\n          min-height: ${this.getHeight(this.options.height)}px;\n        }\n        :host .canvases > div {\n          position: relative;\n        }\n        :host canvas {\n          display: block;\n          position: absolute;\n          top: 0;\n          image-rendering: pixelated;\n        }\n        :host .progress {\n          pointer-events: none;\n          position: absolute;\n          z-index: 2;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          overflow: hidden;\n        }\n        :host .progress > div {\n          position: relative;\n        }\n        :host .cursor {\n          pointer-events: none;\n          position: absolute;\n          z-index: 5;\n          top: 0;\n          left: 0;\n          height: 100%;\n          border-radius: 2px;\n        }\n      </style>\n\n      <div class="scroll" part="scroll">\n        <div class="wrapper" part="wrapper">\n          <div class="canvases"></div>\n          <div class="progress" part="progress"></div>\n          <div class="cursor" part="cursor"></div>\n        </div>\n      </div>\n    `,[t,e]}setOptions(t){if(this.options.container!==t.container){const e=this.parentFromOptionsContainer(t.container);e.appendChild(this.container),this.parent=e;}t.dragToSeek&&!this.options.dragToSeek&&this.initDrag(),this.options=t,this.reRender();}getWrapper(){return this.wrapper}getScroll(){return this.scrollContainer.scrollLeft}destroy(){var t;this.container.remove(),null===(t=this.resizeObserver)||void 0===t||t.disconnect();}createDelay(t=10){const e={};return this.timeouts.push(e),i=>{e.timeout&&clearTimeout(e.timeout),e.timeout=setTimeout(i,t);}}convertColorValues(t){if(!Array.isArray(t))return t||"";if(t.length<2)return t[0]||"";const e=document.createElement("canvas"),i=e.getContext("2d"),s=e.height*(window.devicePixelRatio||1),n=i.createLinearGradient(0,0,0,s),r=1/(t.length-1);return t.forEach(((t,e)=>{const i=e*r;n.addColorStop(i,t);})),n}renderBarWaveform(t,e,i,s){const n=t[0],r=t[1]||t[0],o=n.length,{width:a,height:h}=i.canvas,l=h/2,d=window.devicePixelRatio||1,c=e.barWidth?e.barWidth*d:1,u=e.barGap?e.barGap*d:e.barWidth?c/2:0,p=e.barRadius||0,m=a/(c+u)/o,v=p&&"roundRect"in i?"roundRect":"rect";i.beginPath();let g=0,f=0,b=0;for(let t=0;t<=o;t++){const o=Math.round(t*m);if(o>g){const t=Math.round(f*l*s),n=t+Math.round(b*l*s)||1;let r=l-t;"top"===e.barAlign?r=0:"bottom"===e.barAlign&&(r=h-n),i[v](g*(c+u),r,c,n,p),g=o,f=0,b=0;}const a=Math.abs(n[t]||0),d=Math.abs(r[t]||0);a>f&&(f=a),d>b&&(b=d);}i.fill(),i.closePath();}renderLineWaveform(t,e,i,s){const n=e=>{const n=t[e]||t[0],r=n.length,{height:o}=i.canvas,a=o/2,h=i.canvas.width/r;i.moveTo(0,a);let l=0,d=0;for(let t=0;t<=r;t++){const r=Math.round(t*h);if(r>l){const t=a+(Math.round(d*a*s)||1)*(0===e?-1:1);i.lineTo(l,t),l=r,d=0;}const o=Math.abs(n[t]||0);o>d&&(d=o);}i.lineTo(l,a);};i.beginPath(),n(0),n(1),i.fill(),i.closePath();}renderWaveform(t,e,i){if(i.fillStyle=this.convertColorValues(e.waveColor),e.renderFunction)return void e.renderFunction(t,i);let s=e.barHeight||1;if(e.normalize){const e=Array.from(t[0]).reduce(((t,e)=>Math.max(t,Math.abs(e))),0);s=e?1/e:1;}e.barWidth||e.barGap||e.barAlign?this.renderBarWaveform(t,e,i,s):this.renderLineWaveform(t,e,i,s);}renderSingleCanvas(t,e,i,s,n,r,o,a){const h=window.devicePixelRatio||1,l=document.createElement("canvas"),d=t[0].length;l.width=Math.round(i*(r-n)/d),l.height=s*h,l.style.width=`${Math.floor(l.width/h)}px`,l.style.height=`${s}px`,l.style.left=`${Math.floor(n*i/h/d)}px`,o.appendChild(l);const c=l.getContext("2d");if(this.renderWaveform(t.map((t=>t.slice(n,r))),e,c),l.width>0&&l.height>0){const t=l.cloneNode(),i=t.getContext("2d");i.drawImage(l,0,0),i.globalCompositeOperation="source-in",i.fillStyle=this.convertColorValues(e.progressColor),i.fillRect(0,0,l.width,l.height),a.appendChild(t);}}renderChannel(t,e,i){const s=document.createElement("div"),n=this.getHeight(e.height);s.style.height=`${n}px`,this.canvasWrapper.style.minHeight=`${n}px`,this.canvasWrapper.appendChild(s);const o=s.cloneNode();this.progressWrapper.appendChild(o);const{scrollLeft:a,scrollWidth:h,clientWidth:l}=this.scrollContainer,d=t[0].length,c=d/h;let u=Math.min(r$2.MAX_CANVAS_WIDTH,l);if(e.barWidth||e.barGap){const t=e.barWidth||.5,i=t+(e.barGap||t/2);u%i!=0&&(u=Math.floor(u/i)*i);}const p=Math.floor(Math.abs(a)*c),m=Math.floor(p+u*c),v=m-p,g=(r,a)=>{this.renderSingleCanvas(t,e,i,n,Math.max(0,r),Math.min(a,d),s,o);},f=this.createDelay(),b=this.createDelay(),y=(t,e)=>{g(t,e),t>0&&f((()=>{y(t-v,e-v);}));},C=(t,e)=>{g(t,e),e<d&&b((()=>{C(t+v,e+v);}));};y(p,m),m<d&&C(m,m+v);}render(t){this.timeouts.forEach((t=>t.timeout&&clearTimeout(t.timeout))),this.timeouts=[],this.canvasWrapper.innerHTML="",this.progressWrapper.innerHTML="",null!=this.options.width&&(this.scrollContainer.style.width="number"==typeof this.options.width?`${this.options.width}px`:this.options.width);const e=window.devicePixelRatio||1,i=this.scrollContainer.clientWidth,s=Math.ceil(t.duration*(this.options.minPxPerSec||0));this.isScrollable=s>i;const n=this.options.fillParent&&!this.isScrollable,r=(n?i:s)*e;if(this.wrapper.style.width=n?"100%":`${s}px`,this.scrollContainer.style.overflowX=this.isScrollable?"auto":"hidden",this.scrollContainer.classList.toggle("noScrollbar",!!this.options.hideScrollbar),this.cursor.style.backgroundColor=`${this.options.cursorColor||this.options.progressColor}`,this.cursor.style.width=`${this.options.cursorWidth}px`,this.options.splitChannels)for(let e=0;e<t.numberOfChannels;e++){const i=Object.assign(Object.assign({},this.options),this.options.splitChannels[e]);this.renderChannel([t.getChannelData(e)],i,r);}else {const e=[t.getChannelData(0)];t.numberOfChannels>1&&e.push(t.getChannelData(1)),this.renderChannel(e,this.options,r);}this.audioData=t,this.emit("render");}reRender(){if(!this.audioData)return;const{scrollWidth:t}=this.scrollContainer,e=this.progressWrapper.clientWidth;if(this.render(this.audioData),this.isScrollable&&t!==this.scrollContainer.scrollWidth){const t=this.progressWrapper.clientWidth;this.scrollContainer.scrollLeft+=t-e;}}zoom(t){this.options.minPxPerSec=t,this.reRender();}scrollIntoView(t,e=!1){const{clientWidth:i,scrollLeft:s,scrollWidth:n}=this.scrollContainer,r=n*t,o=i/2;if(r>s+(e&&this.options.autoCenter&&!this.isDragging?o:i)||r<s)if(this.options.autoCenter&&!this.isDragging){const t=o/20;r-(s+o)>=t&&r<s+i?this.scrollContainer.scrollLeft+=t:this.scrollContainer.scrollLeft=r-o;}else if(this.isDragging){const t=10;this.scrollContainer.scrollLeft=r<s?r-t:r-i+t;}else this.scrollContainer.scrollLeft=r;{const{scrollLeft:t}=this.scrollContainer,e=t/n,s=(t+i)/n;this.emit("scroll",e,s);}}renderProgress(t,e){if(isNaN(t))return;const i=100*t;this.canvasWrapper.style.clipPath=`polygon(${i}% 0, 100% 0, 100% 100%, ${i}% 100%)`,this.progressWrapper.style.width=`${i}%`,this.cursor.style.left=`${i}%`,this.cursor.style.marginLeft=100===Math.round(i)?`-${this.options.cursorWidth}px`:"",this.isScrollable&&this.options.autoScroll&&this.scrollIntoView(t,e);}exportImage(e,i,s){return t$7(this,void 0,void 0,(function*(){const t=this.canvasWrapper.querySelectorAll("canvas");if(!t.length)throw new Error("No waveform data");if("dataURL"===s){const s=Array.from(t).map((t=>t.toDataURL(e,i)));return Promise.resolve(s)}return Promise.all(Array.from(t).map((t=>new Promise(((s,n)=>{t.toBlob((t=>{t?s(t):n(new Error("Could not export image"));}),e,i);})))))}))}}r$2.MAX_CANVAS_WIDTH=4e3;class o$2 extends s$6{constructor(){super(...arguments),this.unsubscribe=()=>{};}start(){this.unsubscribe=this.on("tick",(()=>{requestAnimationFrame((()=>{this.emit("tick");}));})),this.emit("tick");}stop(){this.unsubscribe();}destroy(){this.unsubscribe();}}class a$1 extends s$6{constructor(t=new AudioContext){super(),this.bufferNode=null,this.autoplay=!1,this.playStartTime=0,this.playedDuration=0,this._muted=!1,this.buffer=null,this.currentSrc="",this.paused=!0,this.crossOrigin=null,this.audioContext=t,this.gainNode=this.audioContext.createGain(),this.gainNode.connect(this.audioContext.destination);}load(){return t$7(this,void 0,void 0,(function*(){}))}get src(){return this.currentSrc}set src(t){this.currentSrc=t,fetch(t).then((t=>t.arrayBuffer())).then((t=>this.audioContext.decodeAudioData(t))).then((t=>{this.buffer=t,this.emit("loadedmetadata"),this.emit("canplay"),this.autoplay&&this.play();}));}_play(){var t;this.paused&&(this.paused=!1,null===(t=this.bufferNode)||void 0===t||t.disconnect(),this.bufferNode=this.audioContext.createBufferSource(),this.bufferNode.buffer=this.buffer,this.bufferNode.connect(this.gainNode),this.playedDuration>=this.duration&&(this.playedDuration=0),this.bufferNode.start(this.audioContext.currentTime,this.playedDuration),this.playStartTime=this.audioContext.currentTime,this.bufferNode.onended=()=>{this.currentTime>=this.duration&&(this.pause(),this.emit("ended"));});}_pause(){var t;this.paused||(this.paused=!0,null===(t=this.bufferNode)||void 0===t||t.stop(),this.playedDuration+=this.audioContext.currentTime-this.playStartTime);}play(){return t$7(this,void 0,void 0,(function*(){this._play(),this.emit("play");}))}pause(){this._pause(),this.emit("pause");}stopAt(t){var e,i;const s=t-this.currentTime;null===(e=this.bufferNode)||void 0===e||e.stop(this.audioContext.currentTime+s),null===(i=this.bufferNode)||void 0===i||i.addEventListener("ended",(()=>{this.bufferNode=null,this.pause();}),{once:!0});}setSinkId(e){return t$7(this,void 0,void 0,(function*(){return this.audioContext.setSinkId(e)}))}get playbackRate(){var t,e;return null!==(e=null===(t=this.bufferNode)||void 0===t?void 0:t.playbackRate.value)&&void 0!==e?e:1}set playbackRate(t){this.bufferNode&&(this.bufferNode.playbackRate.value=t);}get currentTime(){return this.paused?this.playedDuration:this.playedDuration+this.audioContext.currentTime-this.playStartTime}set currentTime(t){this.emit("seeking"),this.paused?this.playedDuration=t:(this._pause(),this.playedDuration=t,this._play()),this.emit("timeupdate");}get duration(){var t;return (null===(t=this.buffer)||void 0===t?void 0:t.duration)||0}get volume(){return this.gainNode.gain.value}set volume(t){this.gainNode.gain.value=t,this.emit("volumechange");}get muted(){return this._muted}set muted(t){this._muted!==t&&(this._muted=t,this._muted?this.gainNode.disconnect():this.gainNode.connect(this.audioContext.destination));}getGainNode(){return this.gainNode}}const h$1={waveColor:"#999",progressColor:"#555",cursorWidth:1,minPxPerSec:0,fillParent:!0,interact:!0,dragToSeek:!1,autoScroll:!0,autoCenter:!0,sampleRate:8e3};class l$1 extends n$4{static create(t){return new l$1(t)}constructor(t){const e=t.media||("WebAudio"===t.backend?new a$1:void 0);super({media:e,mediaControls:t.mediaControls,autoplay:t.autoplay,playbackRate:t.audioRate}),this.plugins=[],this.decodedData=null,this.subscriptions=[],this.mediaSubscriptions=[],this.options=Object.assign({},h$1,t),this.timer=new o$2;const i=e?void 0:this.getMediaElement();this.renderer=new r$2(this.options,i),this.initPlayerEvents(),this.initRendererEvents(),this.initTimerEvents(),this.initPlugins();const s=this.options.url||this.getSrc()||"";(s||this.options.peaks&&this.options.duration)&&this.load(s,this.options.peaks,this.options.duration);}initTimerEvents(){this.subscriptions.push(this.timer.on("tick",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),!0),this.emit("timeupdate",t),this.emit("audioprocess",t);})));}initPlayerEvents(){this.isPlaying()&&(this.emit("play"),this.timer.start()),this.mediaSubscriptions.push(this.onMediaEvent("timeupdate",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),this.isPlaying()),this.emit("timeupdate",t);})),this.onMediaEvent("play",(()=>{this.emit("play"),this.timer.start();})),this.onMediaEvent("pause",(()=>{this.emit("pause"),this.timer.stop();})),this.onMediaEvent("emptied",(()=>{this.timer.stop();})),this.onMediaEvent("ended",(()=>{this.emit("finish");})),this.onMediaEvent("seeking",(()=>{this.emit("seeking",this.getCurrentTime());})));}initRendererEvents(){this.subscriptions.push(this.renderer.on("click",((t,e)=>{this.options.interact&&(this.seekTo(t),this.emit("interaction",t*this.getDuration()),this.emit("click",t,e));})),this.renderer.on("dblclick",((t,e)=>{this.emit("dblclick",t,e);})),this.renderer.on("scroll",((t,e)=>{const i=this.getDuration();this.emit("scroll",t*i,e*i);})),this.renderer.on("render",(()=>{this.emit("redraw");})));{let t;this.subscriptions.push(this.renderer.on("drag",(e=>{this.options.interact&&(this.renderer.renderProgress(e),clearTimeout(t),t=setTimeout((()=>{this.seekTo(e);}),this.isPlaying()?0:200),this.emit("interaction",e*this.getDuration()),this.emit("drag",e));})));}}initPlugins(){var t;(null===(t=this.options.plugins)||void 0===t?void 0:t.length)&&this.options.plugins.forEach((t=>{this.registerPlugin(t);}));}unsubscribePlayerEvents(){this.mediaSubscriptions.forEach((t=>t())),this.mediaSubscriptions=[];}setOptions(t){this.options=Object.assign({},this.options,t),this.renderer.setOptions(this.options),t.audioRate&&this.setPlaybackRate(t.audioRate),null!=t.mediaControls&&(this.getMediaElement().controls=t.mediaControls);}registerPlugin(t){return t.init(this),this.plugins.push(t),this.subscriptions.push(t.once("destroy",(()=>{this.plugins=this.plugins.filter((e=>e!==t));}))),t}getWrapper(){return this.renderer.getWrapper()}getScroll(){return this.renderer.getScroll()}getActivePlugins(){return this.plugins}loadAudio(s,n,r,o){return t$7(this,void 0,void 0,(function*(){if(this.emit("load",s),!this.options.media&&this.isPlaying()&&this.pause(),this.decodedData=null,!n&&!r){const t=t=>this.emit("loading",t);n=yield i$7.fetchBlob(s,t,this.options.fetchParams);}this.setSrc(s,n);const t=(yield Promise.resolve(o||this.getDuration()))||(yield new Promise((t=>{this.onceMediaEvent("loadedmetadata",(()=>t(this.getDuration())));})));if(r)this.decodedData=e$7.createBuffer(r,t||0);else if(n){const t=yield n.arrayBuffer();this.decodedData=yield e$7.decode(t,this.options.sampleRate);}this.decodedData&&(this.emit("decode",this.getDuration()),this.renderer.render(this.decodedData)),this.emit("ready",this.getDuration());}))}load(e,i,s){return t$7(this,void 0,void 0,(function*(){yield this.loadAudio(e,void 0,i,s);}))}loadBlob(e,i,s){return t$7(this,void 0,void 0,(function*(){yield this.loadAudio("blob",e,i,s);}))}zoom(t){if(!this.decodedData)throw new Error("No audio loaded");this.renderer.zoom(t),this.emit("zoom",t);}getDecodedData(){return this.decodedData}exportPeaks({channels:t=2,maxLength:e=8e3,precision:i=1e4}={}){if(!this.decodedData)throw new Error("The audio has not been decoded yet");const s=Math.min(t,this.decodedData.numberOfChannels),n=[];for(let t=0;t<s;t++){const s=this.decodedData.getChannelData(t),r=[],o=Math.round(s.length/e);for(let t=0;t<e;t++){const e=s.slice(t*o,(t+1)*o);let n=0;for(let t=0;t<e.length;t++){const i=e[t];Math.abs(i)>Math.abs(n)&&(n=i);}r.push(Math.round(n*i)/i);}n.push(r);}return n}getDuration(){let t=super.getDuration()||0;return 0!==t&&t!==1/0||!this.decodedData||(t=this.decodedData.duration),t}toggleInteraction(t){this.options.interact=t;}seekTo(t){const e=this.getDuration()*t;this.setTime(e);}playPause(){return t$7(this,void 0,void 0,(function*(){return this.isPlaying()?this.pause():this.play()}))}stop(){this.pause(),this.setTime(0);}skip(t){this.setTime(this.getCurrentTime()+t);}empty(){this.load("",[[0]],.001);}setMediaElement(t){this.unsubscribePlayerEvents(),super.setMediaElement(t),this.initPlayerEvents();}exportImage(e="image/png",i=1,s="dataURL"){return t$7(this,void 0,void 0,(function*(){return this.renderer.exportImage(e,i,s)}))}destroy(){this.emit("destroy"),this.plugins.forEach((t=>t.destroy())),this.subscriptions.forEach((t=>t())),this.unsubscribePlayerEvents(),this.timer.destroy(),this.renderer.destroy(),super.destroy();}}
+
+class t$6{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e);};return this.addEventListener(t,i),i}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class e$6 extends t$6{constructor(t){super(),this.subscriptions=[],this.options=t;}onInit(){}init(t){this.wavesurfer=t,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()));}}function i$6(t,e,i,n,s=3,r=0){if(!t)return ()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const u=n=>{n.preventDefault(),n.stopPropagation();const r=n.clientX,o=n.clientY,a=r-h,u=o-l;if(h=r,l=o,d||Math.abs(a)>s||Math.abs(u)>s){const n=t.getBoundingClientRect(),{left:s,top:c}=n;d||(null==i||i(h-s,l-c),d=!0),e(a,u,r-s,o-c);}},c=()=>{d&&(null==n||n()),o();},v=t=>{d&&(t.stopPropagation(),t.preventDefault());},m=t=>{d&&t.preventDefault();};document.addEventListener("pointermove",u),document.addEventListener("pointerup",c),document.addEventListener("pointerout",c),document.addEventListener("pointercancel",c),document.addEventListener("touchmove",m,{passive:!1}),document.addEventListener("click",v,{capture:!0}),o=()=>{document.removeEventListener("pointermove",u),document.removeEventListener("pointerup",c),document.removeEventListener("pointerout",c),document.removeEventListener("pointercancel",c),document.removeEventListener("touchmove",m),setTimeout((()=>{document.removeEventListener("click",v,{capture:!0});}),10);};};return t.addEventListener("pointerdown",a),()=>{o(),t.removeEventListener("pointerdown",a);}}class n$3 extends t$6{constructor(t,e,i=0){var n,s,r,o,a,h,l;super(),this.totalDuration=e,this.numberOfChannels=i,this.minLength=0,this.maxLength=1/0,this.id=t.id||`region-${Math.random().toString(32).slice(2)}`,this.start=this.clampPosition(t.start),this.end=this.clampPosition(null!==(n=t.end)&&void 0!==n?n:t.start),this.drag=null===(s=t.drag)||void 0===s||s,this.resize=null===(r=t.resize)||void 0===r||r,this.color=null!==(o=t.color)&&void 0!==o?o:"rgba(0, 0, 0, 0.1)",this.minLength=null!==(a=t.minLength)&&void 0!==a?a:this.minLength,this.maxLength=null!==(h=t.maxLength)&&void 0!==h?h:this.maxLength,this.channelIdx=null!==(l=t.channelIdx)&&void 0!==l?l:-1,this.element=this.initElement(),this.setContent(t.content),this.setPart(),this.renderPosition(),this.initMouseEvents();}clampPosition(t){return Math.max(0,Math.min(this.totalDuration,t))}setPart(){const t=this.start===this.end;this.element.setAttribute("part",`${t?"marker":"region"} ${this.id}`);}addResizeHandles(t){const e=document.createElement("div");e.setAttribute("data-resize","left"),e.setAttribute("style","\n        position: absolute;\n        z-index: 2;\n        width: 6px;\n        height: 100%;\n        top: 0;\n        left: 0;\n        border-left: 2px solid rgba(0, 0, 0, 0.5);\n        border-radius: 2px 0 0 2px;\n        cursor: ew-resize;\n        word-break: keep-all;\n      "),e.setAttribute("part","region-handle region-handle-left");const n=e.cloneNode();n.setAttribute("data-resize","right"),n.style.left="",n.style.right="0",n.style.borderRight=n.style.borderLeft,n.style.borderLeft="",n.style.borderRadius="0 2px 2px 0",n.setAttribute("part","region-handle region-handle-right"),t.appendChild(e),t.appendChild(n);i$6(e,(t=>this.onResize(t,"start")),(()=>null),(()=>this.onEndResizing()),1),i$6(n,(t=>this.onResize(t,"end")),(()=>null),(()=>this.onEndResizing()),1);}removeResizeHandles(t){const e=t.querySelector('[data-resize="left"]'),i=t.querySelector('[data-resize="right"]');e&&t.removeChild(e),i&&t.removeChild(i);}initElement(){const t=document.createElement("div"),e=this.start===this.end;let i=0,n=100;return this.channelIdx>=0&&this.channelIdx<this.numberOfChannels&&(n=100/this.numberOfChannels,i=n*this.channelIdx),t.setAttribute("style",`\n      position: absolute;\n      top: ${i}%;\n      height: ${n}%;\n      background-color: ${e?"none":this.color};\n      border-left: ${e?"2px solid "+this.color:"none"};\n      border-radius: 2px;\n      box-sizing: border-box;\n      transition: background-color 0.2s ease;\n      cursor: ${this.drag?"grab":"default"};\n      pointer-events: all;\n    `),!e&&this.resize&&this.addResizeHandles(t),t}renderPosition(){const t=this.start/this.totalDuration,e=(this.totalDuration-this.end)/this.totalDuration;this.element.style.left=100*t+"%",this.element.style.right=100*e+"%";}initMouseEvents(){const{element:t}=this;t&&(t.addEventListener("click",(t=>this.emit("click",t))),t.addEventListener("mouseenter",(t=>this.emit("over",t))),t.addEventListener("mouseleave",(t=>this.emit("leave",t))),t.addEventListener("dblclick",(t=>this.emit("dblclick",t))),i$6(t,(t=>this.onMove(t)),(()=>this.onStartMoving()),(()=>this.onEndMoving())));}onStartMoving(){this.drag&&(this.element.style.cursor="grabbing");}onEndMoving(){this.drag&&(this.element.style.cursor="grab",this.emit("update-end"));}_onUpdate(t,e){if(!this.element.parentElement)return;const i=t/this.element.parentElement.clientWidth*this.totalDuration,n=e&&"start"!==e?this.start:this.start+i,s=e&&"end"!==e?this.end:this.end+i,r=s-n;n>=0&&s<=this.totalDuration&&n<=s&&r>=this.minLength&&r<=this.maxLength&&(this.start=n,this.end=s,this.renderPosition(),this.emit("update"));}onMove(t){this.drag&&this._onUpdate(t);}onResize(t,e){this.resize&&this._onUpdate(t,e);}onEndResizing(){this.resize&&this.emit("update-end");}_setTotalDuration(t){this.totalDuration=t,this.renderPosition();}play(){this.emit("play");}setContent(t){var e;if(null===(e=this.content)||void 0===e||e.remove(),t){if("string"==typeof t){this.content=document.createElement("div");const e=this.start===this.end;this.content.style.padding=`0.2em ${e?.2:.4}em`,this.content.style.display="inline-block",this.content.textContent=t;}else this.content=t;this.content.setAttribute("part","region-content"),this.element.appendChild(this.content);}else this.content=void 0;}setOptions(t){var e,i;if(t.color&&(this.color=t.color,this.element.style.backgroundColor=this.color),void 0!==t.drag&&(this.drag=t.drag,this.element.style.cursor=this.drag?"grab":"default"),void 0!==t.start||void 0!==t.end){const n=this.start===this.end;this.start=this.clampPosition(null!==(e=t.start)&&void 0!==e?e:this.start),this.end=this.clampPosition(null!==(i=t.end)&&void 0!==i?i:n?this.start:this.end),this.renderPosition(),this.setPart();}if(t.content&&this.setContent(t.content),t.id&&(this.id=t.id,this.setPart()),void 0!==t.resize&&t.resize!==this.resize){const e=this.start===this.end;this.resize=t.resize,this.resize&&!e?this.addResizeHandles(this.element):this.removeResizeHandles(this.element);}}remove(){this.emit("remove"),this.element.remove(),this.element=null;}}class s$5 extends e$6{constructor(t){super(t),this.regions=[],this.regionsContainer=this.initRegionsContainer();}static create(t){return new s$5(t)}onInit(){if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");this.wavesurfer.getWrapper().appendChild(this.regionsContainer);let t=[];this.subscriptions.push(this.wavesurfer.on("timeupdate",(e=>{const i=this.regions.filter((t=>t.start<=e&&(t.end===t.start?t.start+.05:t.end)>=e));i.forEach((e=>{t.includes(e)||this.emit("region-in",e);})),t.forEach((t=>{i.includes(t)||this.emit("region-out",t);})),t=i;})));}initRegionsContainer(){const t=document.createElement("div");return t.setAttribute("style","\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      z-index: 3;\n      pointer-events: none;\n    "),t}getRegions(){return this.regions}avoidOverlapping(t){if(!t.content)return;const e=t.content,i=e.getBoundingClientRect(),n=this.regions.map((e=>{if(e===t||!e.content)return 0;const n=e.content.getBoundingClientRect();return i.left<n.left+n.width&&n.left<i.left+i.width?n.height:0})).reduce(((t,e)=>t+e),0);e.style.marginTop=`${n}px`;}saveRegion(t){this.regionsContainer.appendChild(t.element),this.avoidOverlapping(t),this.regions.push(t);const e=[t.on("update-end",(()=>{this.avoidOverlapping(t),this.emit("region-updated",t);})),t.on("play",(()=>{var e,i;null===(e=this.wavesurfer)||void 0===e||e.play(),null===(i=this.wavesurfer)||void 0===i||i.setTime(t.start);})),t.on("click",(e=>{this.emit("region-clicked",t,e);})),t.on("dblclick",(e=>{this.emit("region-double-clicked",t,e);})),t.once("remove",(()=>{e.forEach((t=>t())),this.regions=this.regions.filter((e=>e!==t));}))];this.subscriptions.push(...e),this.emit("region-created",t);}addRegion(t){var e,i;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");const s=this.wavesurfer.getDuration(),r=null===(i=null===(e=this.wavesurfer)||void 0===e?void 0:e.getDecodedData())||void 0===i?void 0:i.numberOfChannels,o=new n$3(t,s,r);return s?this.saveRegion(o):this.subscriptions.push(this.wavesurfer.once("ready",(t=>{o._setTotalDuration(t),this.saveRegion(o);}))),o}enableDragSelection(t){var e;const s=null===(e=this.wavesurfer)||void 0===e?void 0:e.getWrapper();if(!(s&&s instanceof HTMLElement))return ()=>{};let r=null,o=0;return i$6(s,((t,e,i)=>{r&&r._onUpdate(t,i>o?"end":"start");}),(e=>{var i,s;if(o=e,!this.wavesurfer)return;const a=this.wavesurfer.getDuration(),h=null===(s=null===(i=this.wavesurfer)||void 0===i?void 0:i.getDecodedData())||void 0===s?void 0:s.numberOfChannels,l=this.wavesurfer.getWrapper().clientWidth,d=e/l*a,u=(e+5)/l*a;r=new n$3(Object.assign(Object.assign({},t),{start:d,end:u}),a,h),this.regionsContainer.appendChild(r.element);}),(()=>{r&&(this.saveRegion(r),r=null);}))}clearRegions(){this.regions.forEach((t=>t.remove()));}destroy(){this.clearRegions(),super.destroy(),this.regionsContainer.remove();}}
+
+class t$5{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e);};return this.addEventListener(t,i),i}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class e$5 extends t$5{constructor(t){super(),this.subscriptions=[],this.options=t;}onInit(){}init(t){this.wavesurfer=t,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()));}}const i$5={height:20,formatTimeCallback:t=>{if(t/60>1){return `${Math.floor(t/60)}:${`${(t=Math.round(t%60))<10?"0":""}${t}`}`}return `${Math.round(1e3*t)/1e3}`}};class n$2 extends e$5{constructor(t){super(t||{}),this.options=Object.assign({},i$5,t),this.timelineWrapper=this.initTimelineWrapper();}static create(t){return new n$2(t)}onInit(){var t;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");let e=this.wavesurfer.getWrapper();if(this.options.container instanceof HTMLElement)e=this.options.container;else if("string"==typeof this.options.container){const t=document.querySelector(this.options.container);if(!t)throw Error(`No Timeline container found matching ${this.options.container}`);e=t;}this.options.insertPosition?(e.firstElementChild||e).insertAdjacentElement(this.options.insertPosition,this.timelineWrapper):e.appendChild(this.timelineWrapper),this.subscriptions.push(this.wavesurfer.on("redraw",(()=>this.initTimeline()))),((null===(t=this.wavesurfer)||void 0===t?void 0:t.getDuration())||this.options.duration)&&this.initTimeline();}destroy(){this.timelineWrapper.remove(),super.destroy();}initTimelineWrapper(){const t=document.createElement("div");return t.setAttribute("part","timeline"),t.setAttribute("style","pointer-events: none;"),t}defaultTimeInterval(t){return t>=25?1:5*t>=25?5:15*t>=25?15:60*Math.ceil(.5/t)}defaultPrimaryLabelInterval(t){return t>=25?10:5*t>=25?6:4}defaultSecondaryLabelInterval(t){return t>=25?5:2}initTimeline(){var t,e,i,n,s,r,o;const l=null!==(i=null!==(e=null===(t=this.wavesurfer)||void 0===t?void 0:t.getDuration())&&void 0!==e?e:this.options.duration)&&void 0!==i?i:0,a=this.timelineWrapper.scrollWidth/l,h=null!==(n=this.options.timeInterval)&&void 0!==n?n:this.defaultTimeInterval(a),p=null!==(s=this.options.primaryLabelInterval)&&void 0!==s?s:this.defaultPrimaryLabelInterval(a),d=this.options.primaryLabelSpacing,u=null!==(r=this.options.secondaryLabelInterval)&&void 0!==r?r:this.defaultSecondaryLabelInterval(a),c=this.options.secondaryLabelSpacing,v="beforebegin"===this.options.insertPosition,m=document.createElement("div");if(m.setAttribute("style",`\n      height: ${this.options.height}px;\n      overflow: hidden;\n      font-size: ${this.options.height/2}px;\n      white-space: nowrap;\n      position: relative;\n    `),v){const t="\n        position: absolute;\n        top: 0;\n        left: 0;\n        right: 0;\n        z-index: 2;\n      ";m.setAttribute("style",m.getAttribute("style")+t);}"string"==typeof this.options.style?m.setAttribute("style",m.getAttribute("style")+this.options.style):"object"==typeof this.options.style&&Object.assign(m.style,this.options.style);const f=document.createElement("div");f.setAttribute("style",`\n      width: 0;\n      height: 50%;\n      display: flex;\n      flex-direction: column;\n      justify-content: ${v?"flex-start":"flex-end"};\n      ${v?"top: 0;":"bottom: 0;"}\n      overflow: visible;\n      border-left: 1px solid currentColor;\n      opacity: ${null!==(o=this.options.secondaryLabelOpacity)&&void 0!==o?o:.25};\n      position: absolute;\n      z-index: 1;\n    `);for(let t=0,e=0;t<l;t+=h,e++){const i=f.cloneNode(),n=Math.round(100*t)/100%p==0||d&&e%d==0,s=Math.round(100*t)/100%u==0||c&&e%c==0;(n||s)&&(i.style.height="100%",i.style.textIndent="3px",i.textContent=this.options.formatTimeCallback(t),n&&(i.style.opacity="1"));const r=n?"primary":s?"secondary":"tick";i.setAttribute("part",`timeline-notch timeline-notch-${r}`),i.style.left=t*a+"px",m.appendChild(i);}this.timelineWrapper.innerHTML="",this.timelineWrapper.appendChild(m),this.emit("ready");}}
+
+class t$4{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e);};return this.addEventListener(t,i),i}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class e$4 extends t$4{constructor(t){super(),this.subscriptions=[],this.options=t;}onInit(){}init(t){this.wavesurfer=t,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()));}}function i$4(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){try{h(s.next(t));}catch(t){r(t);}}function a(t){try{h(s.throw(t));}catch(t){r(t);}}function h(t){var e;t.done?n(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e);}))).then(o,a);}h((s=s.apply(t,e||[])).next());}))}"function"==typeof SuppressedError&&SuppressedError;const s$4={decode:function(t,e){return i$4(this,void 0,void 0,(function*(){const i=new AudioContext({sampleRate:e});return i.decodeAudioData(t).finally((()=>i.close()))}))},createBuffer:function(t,e){return "number"==typeof t[0]&&(t=[t]),function(t){const e=t[0];if(e.some((t=>t>1||t<-1))){const i=e.length;let s=0;for(let t=0;t<i;t++){const i=Math.abs(e[t]);i>s&&(s=i);}for(const e of t)for(let t=0;t<i;t++)e[t]/=s;}}(t),{duration:e,length:t[0].length,sampleRate:t[0].length/e,numberOfChannels:t.length,getChannelData:e=>null==t?void 0:t[e],copyFromChannel:AudioBuffer.prototype.copyFromChannel,copyToChannel:AudioBuffer.prototype.copyToChannel}}};const n$1={fetchBlob:function(t,e,s){return i$4(this,void 0,void 0,(function*(){const n=yield fetch(t,s);if(!n.ok)throw new Error(`Failed to fetch ${t}: ${n.status} (${n.statusText})`);return function(t,e){i$4(this,void 0,void 0,(function*(){if(!t.body||!t.headers)return;const s=t.body.getReader(),n=Number(t.headers.get("Content-Length"))||0;let r=0;const o=t=>i$4(this,void 0,void 0,(function*(){r+=(null==t?void 0:t.length)||0;const i=Math.round(r/n*100);e(i);})),a=()=>i$4(this,void 0,void 0,(function*(){let t;try{t=yield s.read();}catch(t){return}t.done||(o(t.value),yield a());}));a();}));}(n.clone(),e),n.blob()}))}};class r$1 extends t$4{constructor(t){super(),this.isExternalMedia=!1,t.media?(this.media=t.media,this.isExternalMedia=!0):this.media=document.createElement("audio"),t.mediaControls&&(this.media.controls=!0),t.autoplay&&(this.media.autoplay=!0),null!=t.playbackRate&&this.onceMediaEvent("canplay",(()=>{null!=t.playbackRate&&(this.media.playbackRate=t.playbackRate);}));}onMediaEvent(t,e,i){return this.media.addEventListener(t,e,i),()=>this.media.removeEventListener(t,e)}onceMediaEvent(t,e){return this.onMediaEvent(t,e,{once:!0})}getSrc(){return this.media.currentSrc||this.media.src||""}revokeSrc(){const t=this.getSrc();t.startsWith("blob:")&&URL.revokeObjectURL(t);}setSrc(t,e){if(this.getSrc()===t)return;this.revokeSrc();const i=e instanceof Blob?URL.createObjectURL(e):t;this.media.src=i,this.media.load();}destroy(){this.media.pause(),this.isExternalMedia||(this.media.remove(),this.revokeSrc(),this.media.src="",this.media.load());}setMediaElement(t){this.media=t;}play(){return this.media.play()}pause(){this.media.pause();}isPlaying(){return !this.media.paused&&!this.media.ended}setTime(t){this.media.currentTime=t;}getDuration(){return this.media.duration}getCurrentTime(){return this.media.currentTime}getVolume(){return this.media.volume}setVolume(t){this.media.volume=t;}getMuted(){return this.media.muted}setMuted(t){this.media.muted=t;}getPlaybackRate(){return this.media.playbackRate}setPlaybackRate(t,e){null!=e&&(this.media.preservesPitch=e),this.media.playbackRate=t;}getMediaElement(){return this.media}setSinkId(t){return this.media.setSinkId(t)}}class o$1 extends t$4{constructor(t,e){super(),this.timeouts=[],this.isScrollable=!1,this.audioData=null,this.resizeObserver=null,this.isDragging=!1,this.options=t;const i=this.parentFromOptionsContainer(t.container);this.parent=i;const[s,n]=this.initHtml();i.appendChild(s),this.container=s,this.scrollContainer=n.querySelector(".scroll"),this.wrapper=n.querySelector(".wrapper"),this.canvasWrapper=n.querySelector(".canvases"),this.progressWrapper=n.querySelector(".progress"),this.cursor=n.querySelector(".cursor"),e&&n.appendChild(e),this.initEvents();}parentFromOptionsContainer(t){let e;if("string"==typeof t?e=document.querySelector(t):t instanceof HTMLElement&&(e=t),!e)throw new Error("Container not found");return e}initEvents(){const t=t=>{const e=this.wrapper.getBoundingClientRect(),i=t.clientX-e.left,s=t.clientX-e.left;return [i/e.width,s/e.height]};this.wrapper.addEventListener("click",(e=>{const[i,s]=t(e);this.emit("click",i,s);})),this.wrapper.addEventListener("dblclick",(e=>{const[i,s]=t(e);this.emit("dblclick",i,s);})),this.options.dragToSeek&&this.initDrag(),this.scrollContainer.addEventListener("scroll",(()=>{const{scrollLeft:t,scrollWidth:e,clientWidth:i}=this.scrollContainer,s=t/e,n=(t+i)/e;this.emit("scroll",s,n);}));const e=this.createDelay(100);this.resizeObserver=new ResizeObserver((()=>{e((()=>this.reRender()));})),this.resizeObserver.observe(this.scrollContainer);}initDrag(){!function(t,e,i,s,n=3,r=0){if(!t)return ()=>{};let o=()=>{};const a=a=>{if(a.button!==r)return;a.preventDefault(),a.stopPropagation();let h=a.clientX,l=a.clientY,d=!1;const c=s=>{s.preventDefault(),s.stopPropagation();const r=s.clientX,o=s.clientY,a=r-h,c=o-l;if(h=r,l=o,d||Math.abs(a)>n||Math.abs(c)>n){const s=t.getBoundingClientRect(),{left:n,top:u}=s;d||(null==i||i(h-n,l-u),d=!0),e(a,c,r-n,o-u);}},u=()=>{d&&(null==s||s()),o();},p=t=>{d&&(t.stopPropagation(),t.preventDefault());},m=t=>{d&&t.preventDefault();};document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),document.addEventListener("pointerout",u),document.addEventListener("pointercancel",u),document.addEventListener("touchmove",m,{passive:!1}),document.addEventListener("click",p,{capture:!0}),o=()=>{document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointerout",u),document.removeEventListener("pointercancel",u),document.removeEventListener("touchmove",m),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0});}),10);};};t.addEventListener("pointerdown",a);}(this.wrapper,((t,e,i)=>{this.emit("drag",Math.max(0,Math.min(1,i/this.wrapper.getBoundingClientRect().width)));}),(()=>this.isDragging=!0),(()=>this.isDragging=!1));}getHeight(t){return null==t?128:isNaN(Number(t))?"auto"===t&&this.parent.clientHeight||128:Number(t)}initHtml(){const t=document.createElement("div"),e=t.attachShadow({mode:"open"});return e.innerHTML=`\n      <style>\n        :host {\n          user-select: none;\n          min-width: 1px;\n        }\n        :host audio {\n          display: block;\n          width: 100%;\n        }\n        :host .scroll {\n          overflow-x: auto;\n          overflow-y: hidden;\n          width: 100%;\n          position: relative;\n        }\n        :host .noScrollbar {\n          scrollbar-color: transparent;\n          scrollbar-width: none;\n        }\n        :host .noScrollbar::-webkit-scrollbar {\n          display: none;\n          -webkit-appearance: none;\n        }\n        :host .wrapper {\n          position: relative;\n          overflow: visible;\n          z-index: 2;\n        }\n        :host .canvases {\n          min-height: ${this.getHeight(this.options.height)}px;\n        }\n        :host .canvases > div {\n          position: relative;\n        }\n        :host canvas {\n          display: block;\n          position: absolute;\n          top: 0;\n          image-rendering: pixelated;\n        }\n        :host .progress {\n          pointer-events: none;\n          position: absolute;\n          z-index: 2;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          overflow: hidden;\n        }\n        :host .progress > div {\n          position: relative;\n        }\n        :host .cursor {\n          pointer-events: none;\n          position: absolute;\n          z-index: 5;\n          top: 0;\n          left: 0;\n          height: 100%;\n          border-radius: 2px;\n        }\n      </style>\n\n      <div class="scroll" part="scroll">\n        <div class="wrapper" part="wrapper">\n          <div class="canvases"></div>\n          <div class="progress" part="progress"></div>\n          <div class="cursor" part="cursor"></div>\n        </div>\n      </div>\n    `,[t,e]}setOptions(t){if(this.options.container!==t.container){const e=this.parentFromOptionsContainer(t.container);e.appendChild(this.container),this.parent=e;}t.dragToSeek&&!this.options.dragToSeek&&this.initDrag(),this.options=t,this.reRender();}getWrapper(){return this.wrapper}getScroll(){return this.scrollContainer.scrollLeft}destroy(){var t;this.container.remove(),null===(t=this.resizeObserver)||void 0===t||t.disconnect();}createDelay(t=10){const e={};return this.timeouts.push(e),i=>{e.timeout&&clearTimeout(e.timeout),e.timeout=setTimeout(i,t);}}convertColorValues(t){if(!Array.isArray(t))return t||"";if(t.length<2)return t[0]||"";const e=document.createElement("canvas"),i=e.getContext("2d"),s=e.height*(window.devicePixelRatio||1),n=i.createLinearGradient(0,0,0,s),r=1/(t.length-1);return t.forEach(((t,e)=>{const i=e*r;n.addColorStop(i,t);})),n}renderBarWaveform(t,e,i,s){const n=t[0],r=t[1]||t[0],o=n.length,{width:a,height:h}=i.canvas,l=h/2,d=window.devicePixelRatio||1,c=e.barWidth?e.barWidth*d:1,u=e.barGap?e.barGap*d:e.barWidth?c/2:0,p=e.barRadius||0,m=a/(c+u)/o,v=p&&"roundRect"in i?"roundRect":"rect";i.beginPath();let f=0,g=0,b=0;for(let t=0;t<=o;t++){const o=Math.round(t*m);if(o>f){const t=Math.round(g*l*s),n=t+Math.round(b*l*s)||1;let r=l-t;"top"===e.barAlign?r=0:"bottom"===e.barAlign&&(r=h-n),i[v](f*(c+u),r,c,n,p),f=o,g=0,b=0;}const a=Math.abs(n[t]||0),d=Math.abs(r[t]||0);a>g&&(g=a),d>b&&(b=d);}i.fill(),i.closePath();}renderLineWaveform(t,e,i,s){const n=e=>{const n=t[e]||t[0],r=n.length,{height:o}=i.canvas,a=o/2,h=i.canvas.width/r;i.moveTo(0,a);let l=0,d=0;for(let t=0;t<=r;t++){const r=Math.round(t*h);if(r>l){const t=a+(Math.round(d*a*s)||1)*(0===e?-1:1);i.lineTo(l,t),l=r,d=0;}const o=Math.abs(n[t]||0);o>d&&(d=o);}i.lineTo(l,a);};i.beginPath(),n(0),n(1),i.fill(),i.closePath();}renderWaveform(t,e,i){if(i.fillStyle=this.convertColorValues(e.waveColor),e.renderFunction)return void e.renderFunction(t,i);let s=e.barHeight||1;if(e.normalize){const e=Array.from(t[0]).reduce(((t,e)=>Math.max(t,Math.abs(e))),0);s=e?1/e:1;}e.barWidth||e.barGap||e.barAlign?this.renderBarWaveform(t,e,i,s):this.renderLineWaveform(t,e,i,s);}renderSingleCanvas(t,e,i,s,n,r,o,a){const h=window.devicePixelRatio||1,l=document.createElement("canvas"),d=t[0].length;l.width=Math.round(i*(r-n)/d),l.height=s*h,l.style.width=`${Math.floor(l.width/h)}px`,l.style.height=`${s}px`,l.style.left=`${Math.floor(n*i/h/d)}px`,o.appendChild(l);const c=l.getContext("2d");if(this.renderWaveform(t.map((t=>t.slice(n,r))),e,c),l.width>0&&l.height>0){const t=l.cloneNode(),i=t.getContext("2d");i.drawImage(l,0,0),i.globalCompositeOperation="source-in",i.fillStyle=this.convertColorValues(e.progressColor),i.fillRect(0,0,l.width,l.height),a.appendChild(t);}}renderChannel(t,e,i){const s=document.createElement("div"),n=this.getHeight(e.height);s.style.height=`${n}px`,this.canvasWrapper.style.minHeight=`${n}px`,this.canvasWrapper.appendChild(s);const r=s.cloneNode();this.progressWrapper.appendChild(r);const{scrollLeft:a,scrollWidth:h,clientWidth:l}=this.scrollContainer,d=t[0].length,c=d/h;let u=Math.min(o$1.MAX_CANVAS_WIDTH,l);if(e.barWidth||e.barGap){const t=e.barWidth||.5,i=t+(e.barGap||t/2);u%i!=0&&(u=Math.floor(u/i)*i);}const p=Math.floor(Math.abs(a)*c),m=Math.floor(p+u*c),v=m-p,f=(o,a)=>{this.renderSingleCanvas(t,e,i,n,Math.max(0,o),Math.min(a,d),s,r);},g=this.createDelay(),b=this.createDelay(),y=(t,e)=>{f(t,e),t>0&&g((()=>{y(t-v,e-v);}));},C=(t,e)=>{f(t,e),e<d&&b((()=>{C(t+v,e+v);}));};y(p,m),m<d&&C(m,m+v);}render(t){this.timeouts.forEach((t=>t.timeout&&clearTimeout(t.timeout))),this.timeouts=[],this.canvasWrapper.innerHTML="",this.progressWrapper.innerHTML="",null!=this.options.width&&(this.scrollContainer.style.width="number"==typeof this.options.width?`${this.options.width}px`:this.options.width);const e=window.devicePixelRatio||1,i=this.scrollContainer.clientWidth,s=Math.ceil(t.duration*(this.options.minPxPerSec||0));this.isScrollable=s>i;const n=this.options.fillParent&&!this.isScrollable,r=(n?i:s)*e;if(this.wrapper.style.width=n?"100%":`${s}px`,this.scrollContainer.style.overflowX=this.isScrollable?"auto":"hidden",this.scrollContainer.classList.toggle("noScrollbar",!!this.options.hideScrollbar),this.cursor.style.backgroundColor=`${this.options.cursorColor||this.options.progressColor}`,this.cursor.style.width=`${this.options.cursorWidth}px`,this.options.splitChannels)for(let e=0;e<t.numberOfChannels;e++){const i=Object.assign(Object.assign({},this.options),this.options.splitChannels[e]);this.renderChannel([t.getChannelData(e)],i,r);}else {const e=[t.getChannelData(0)];t.numberOfChannels>1&&e.push(t.getChannelData(1)),this.renderChannel(e,this.options,r);}this.audioData=t,this.emit("render");}reRender(){if(!this.audioData)return;const{scrollWidth:t}=this.scrollContainer,e=this.progressWrapper.clientWidth;if(this.render(this.audioData),this.isScrollable&&t!==this.scrollContainer.scrollWidth){const t=this.progressWrapper.clientWidth;this.scrollContainer.scrollLeft+=t-e;}}zoom(t){this.options.minPxPerSec=t,this.reRender();}scrollIntoView(t,e=!1){const{clientWidth:i,scrollLeft:s,scrollWidth:n}=this.scrollContainer,r=n*t,o=i/2;if(r>s+(e&&this.options.autoCenter&&!this.isDragging?o:i)||r<s)if(this.options.autoCenter&&!this.isDragging){const t=o/20;r-(s+o)>=t&&r<s+i?this.scrollContainer.scrollLeft+=t:this.scrollContainer.scrollLeft=r-o;}else if(this.isDragging){const t=10;this.scrollContainer.scrollLeft=r<s?r-t:r-i+t;}else this.scrollContainer.scrollLeft=r;{const{scrollLeft:t}=this.scrollContainer,e=t/n,s=(t+i)/n;this.emit("scroll",e,s);}}renderProgress(t,e){if(isNaN(t))return;const i=100*t;this.canvasWrapper.style.clipPath=`polygon(${i}% 0, 100% 0, 100% 100%, ${i}% 100%)`,this.progressWrapper.style.width=`${i}%`,this.cursor.style.left=`${i}%`,this.cursor.style.marginLeft=100===Math.round(i)?`-${this.options.cursorWidth}px`:"",this.isScrollable&&this.options.autoScroll&&this.scrollIntoView(t,e);}exportImage(t,e,s){return i$4(this,void 0,void 0,(function*(){const i=this.canvasWrapper.querySelectorAll("canvas");if(!i.length)throw new Error("No waveform data");if("dataURL"===s){const s=Array.from(i).map((i=>i.toDataURL(t,e)));return Promise.resolve(s)}return Promise.all(Array.from(i).map((i=>new Promise(((s,n)=>{i.toBlob((t=>{t?s(t):n(new Error("Could not export image"));}),t,e);})))))}))}}o$1.MAX_CANVAS_WIDTH=4e3;class a extends t$4{constructor(){super(...arguments),this.unsubscribe=()=>{};}start(){this.unsubscribe=this.on("tick",(()=>{requestAnimationFrame((()=>{this.emit("tick");}));})),this.emit("tick");}stop(){this.unsubscribe();}destroy(){this.unsubscribe();}}class h extends t$4{constructor(t=new AudioContext){super(),this.bufferNode=null,this.autoplay=!1,this.playStartTime=0,this.playedDuration=0,this._muted=!1,this.buffer=null,this.currentSrc="",this.paused=!0,this.crossOrigin=null,this.audioContext=t,this.gainNode=this.audioContext.createGain(),this.gainNode.connect(this.audioContext.destination);}load(){return i$4(this,void 0,void 0,(function*(){}))}get src(){return this.currentSrc}set src(t){this.currentSrc=t,fetch(t).then((t=>t.arrayBuffer())).then((t=>this.audioContext.decodeAudioData(t))).then((t=>{this.buffer=t,this.emit("loadedmetadata"),this.emit("canplay"),this.autoplay&&this.play();}));}_play(){var t;this.paused&&(this.paused=!1,null===(t=this.bufferNode)||void 0===t||t.disconnect(),this.bufferNode=this.audioContext.createBufferSource(),this.bufferNode.buffer=this.buffer,this.bufferNode.connect(this.gainNode),this.playedDuration>=this.duration&&(this.playedDuration=0),this.bufferNode.start(this.audioContext.currentTime,this.playedDuration),this.playStartTime=this.audioContext.currentTime,this.bufferNode.onended=()=>{this.currentTime>=this.duration&&(this.pause(),this.emit("ended"));});}_pause(){var t;this.paused||(this.paused=!0,null===(t=this.bufferNode)||void 0===t||t.stop(),this.playedDuration+=this.audioContext.currentTime-this.playStartTime);}play(){return i$4(this,void 0,void 0,(function*(){this._play(),this.emit("play");}))}pause(){this._pause(),this.emit("pause");}stopAt(t){var e,i;const s=t-this.currentTime;null===(e=this.bufferNode)||void 0===e||e.stop(this.audioContext.currentTime+s),null===(i=this.bufferNode)||void 0===i||i.addEventListener("ended",(()=>{this.bufferNode=null,this.pause();}),{once:!0});}setSinkId(t){return i$4(this,void 0,void 0,(function*(){return this.audioContext.setSinkId(t)}))}get playbackRate(){var t,e;return null!==(e=null===(t=this.bufferNode)||void 0===t?void 0:t.playbackRate.value)&&void 0!==e?e:1}set playbackRate(t){this.bufferNode&&(this.bufferNode.playbackRate.value=t);}get currentTime(){return this.paused?this.playedDuration:this.playedDuration+this.audioContext.currentTime-this.playStartTime}set currentTime(t){this.emit("seeking"),this.paused?this.playedDuration=t:(this._pause(),this.playedDuration=t,this._play()),this.emit("timeupdate");}get duration(){var t;return (null===(t=this.buffer)||void 0===t?void 0:t.duration)||0}get volume(){return this.gainNode.gain.value}set volume(t){this.gainNode.gain.value=t,this.emit("volumechange");}get muted(){return this._muted}set muted(t){this._muted!==t&&(this._muted=t,this._muted?this.gainNode.disconnect():this.gainNode.connect(this.audioContext.destination));}getGainNode(){return this.gainNode}}const l={waveColor:"#999",progressColor:"#555",cursorWidth:1,minPxPerSec:0,fillParent:!0,interact:!0,dragToSeek:!1,autoScroll:!0,autoCenter:!0,sampleRate:8e3};class d extends r$1{static create(t){return new d(t)}constructor(t){const e=t.media||("WebAudio"===t.backend?new h:void 0);super({media:e,mediaControls:t.mediaControls,autoplay:t.autoplay,playbackRate:t.audioRate}),this.plugins=[],this.decodedData=null,this.subscriptions=[],this.mediaSubscriptions=[],this.options=Object.assign({},l,t),this.timer=new a;const i=e?void 0:this.getMediaElement();this.renderer=new o$1(this.options,i),this.initPlayerEvents(),this.initRendererEvents(),this.initTimerEvents(),this.initPlugins();const s=this.options.url||this.getSrc()||"";(s||this.options.peaks&&this.options.duration)&&this.load(s,this.options.peaks,this.options.duration);}initTimerEvents(){this.subscriptions.push(this.timer.on("tick",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),!0),this.emit("timeupdate",t),this.emit("audioprocess",t);})));}initPlayerEvents(){this.isPlaying()&&(this.emit("play"),this.timer.start()),this.mediaSubscriptions.push(this.onMediaEvent("timeupdate",(()=>{const t=this.getCurrentTime();this.renderer.renderProgress(t/this.getDuration(),this.isPlaying()),this.emit("timeupdate",t);})),this.onMediaEvent("play",(()=>{this.emit("play"),this.timer.start();})),this.onMediaEvent("pause",(()=>{this.emit("pause"),this.timer.stop();})),this.onMediaEvent("emptied",(()=>{this.timer.stop();})),this.onMediaEvent("ended",(()=>{this.emit("finish");})),this.onMediaEvent("seeking",(()=>{this.emit("seeking",this.getCurrentTime());})));}initRendererEvents(){this.subscriptions.push(this.renderer.on("click",((t,e)=>{this.options.interact&&(this.seekTo(t),this.emit("interaction",t*this.getDuration()),this.emit("click",t,e));})),this.renderer.on("dblclick",((t,e)=>{this.emit("dblclick",t,e);})),this.renderer.on("scroll",((t,e)=>{const i=this.getDuration();this.emit("scroll",t*i,e*i);})),this.renderer.on("render",(()=>{this.emit("redraw");})));{let t;this.subscriptions.push(this.renderer.on("drag",(e=>{this.options.interact&&(this.renderer.renderProgress(e),clearTimeout(t),t=setTimeout((()=>{this.seekTo(e);}),this.isPlaying()?0:200),this.emit("interaction",e*this.getDuration()),this.emit("drag",e));})));}}initPlugins(){var t;(null===(t=this.options.plugins)||void 0===t?void 0:t.length)&&this.options.plugins.forEach((t=>{this.registerPlugin(t);}));}unsubscribePlayerEvents(){this.mediaSubscriptions.forEach((t=>t())),this.mediaSubscriptions=[];}setOptions(t){this.options=Object.assign({},this.options,t),this.renderer.setOptions(this.options),t.audioRate&&this.setPlaybackRate(t.audioRate),null!=t.mediaControls&&(this.getMediaElement().controls=t.mediaControls);}registerPlugin(t){return t.init(this),this.plugins.push(t),this.subscriptions.push(t.once("destroy",(()=>{this.plugins=this.plugins.filter((e=>e!==t));}))),t}getWrapper(){return this.renderer.getWrapper()}getScroll(){return this.renderer.getScroll()}getActivePlugins(){return this.plugins}loadAudio(t,e,r,o){return i$4(this,void 0,void 0,(function*(){if(this.emit("load",t),!this.options.media&&this.isPlaying()&&this.pause(),this.decodedData=null,!e&&!r){const i=t=>this.emit("loading",t);e=yield n$1.fetchBlob(t,i,this.options.fetchParams);}this.setSrc(t,e);const i=(yield Promise.resolve(o||this.getDuration()))||(yield new Promise((t=>{this.onceMediaEvent("loadedmetadata",(()=>t(this.getDuration())));})));if(r)this.decodedData=s$4.createBuffer(r,i||0);else if(e){const t=yield e.arrayBuffer();this.decodedData=yield s$4.decode(t,this.options.sampleRate);}this.decodedData&&(this.emit("decode",this.getDuration()),this.renderer.render(this.decodedData)),this.emit("ready",this.getDuration());}))}load(t,e,s){return i$4(this,void 0,void 0,(function*(){yield this.loadAudio(t,void 0,e,s);}))}loadBlob(t,e,s){return i$4(this,void 0,void 0,(function*(){yield this.loadAudio("blob",t,e,s);}))}zoom(t){if(!this.decodedData)throw new Error("No audio loaded");this.renderer.zoom(t),this.emit("zoom",t);}getDecodedData(){return this.decodedData}exportPeaks({channels:t=2,maxLength:e=8e3,precision:i=1e4}={}){if(!this.decodedData)throw new Error("The audio has not been decoded yet");const s=Math.min(t,this.decodedData.numberOfChannels),n=[];for(let t=0;t<s;t++){const s=this.decodedData.getChannelData(t),r=[],o=Math.round(s.length/e);for(let t=0;t<e;t++){const e=s.slice(t*o,(t+1)*o);let n=0;for(let t=0;t<e.length;t++){const i=e[t];Math.abs(i)>Math.abs(n)&&(n=i);}r.push(Math.round(n*i)/i);}n.push(r);}return n}getDuration(){let t=super.getDuration()||0;return 0!==t&&t!==1/0||!this.decodedData||(t=this.decodedData.duration),t}toggleInteraction(t){this.options.interact=t;}seekTo(t){const e=this.getDuration()*t;this.setTime(e);}playPause(){return i$4(this,void 0,void 0,(function*(){return this.isPlaying()?this.pause():this.play()}))}stop(){this.pause(),this.setTime(0);}skip(t){this.setTime(this.getCurrentTime()+t);}empty(){this.load("",[[0]],.001);}setMediaElement(t){this.unsubscribePlayerEvents(),super.setMediaElement(t),this.initPlayerEvents();}exportImage(t="image/png",e=1,s="dataURL"){return i$4(this,void 0,void 0,(function*(){return this.renderer.exportImage(t,e,s)}))}destroy(){this.emit("destroy"),this.plugins.forEach((t=>t.destroy())),this.subscriptions.forEach((t=>t())),this.unsubscribePlayerEvents(),this.timer.destroy(),this.renderer.destroy(),super.destroy();}}const c={height:50,overlayColor:"rgba(100, 100, 100, 0.1)",insertPosition:"afterend"};class u extends e$4{constructor(t){super(t),this.miniWavesurfer=null,this.container=null,this.options=Object.assign({},c,t),this.minimapWrapper=this.initMinimapWrapper(),this.overlay=this.initOverlay();}static create(t){return new u(t)}onInit(){var t,e;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");this.options.container?("string"==typeof this.options.container?this.container=document.querySelector(this.options.container):this.options.container instanceof HTMLElement&&(this.container=this.options.container),null===(t=this.container)||void 0===t||t.appendChild(this.minimapWrapper)):(this.container=this.wavesurfer.getWrapper().parentElement,null===(e=this.container)||void 0===e||e.insertAdjacentElement(this.options.insertPosition,this.minimapWrapper)),this.initWaveSurferEvents();}initMinimapWrapper(){const t=document.createElement("div");return t.style.position="relative",t.setAttribute("part","minimap"),t}initOverlay(){const t=document.createElement("div");return t.setAttribute("style","position: absolute; z-index: 2; left: 0; top: 0; bottom: 0; transition: left 100ms ease-out; pointer-events: none;"),t.style.backgroundColor=this.options.overlayColor,this.minimapWrapper.appendChild(t),t}initMinimap(){if(this.miniWavesurfer&&(this.miniWavesurfer.destroy(),this.miniWavesurfer=null),!this.wavesurfer)return;const t=this.wavesurfer.getDecodedData(),e=this.wavesurfer.getMediaElement();if(!t||!e)return;const i=[];for(let e=0;e<t.numberOfChannels;e++)i.push(t.getChannelData(e));this.miniWavesurfer=d.create(Object.assign(Object.assign({},this.options),{container:this.minimapWrapper,minPxPerSec:0,fillParent:!0,media:e,peaks:i,duration:t.duration})),this.subscriptions.push(this.miniWavesurfer.on("ready",(()=>{this.emit("ready");})),this.miniWavesurfer.on("interaction",(()=>{this.emit("interaction");})));}getOverlayWidth(){var t;const e=(null===(t=this.wavesurfer)||void 0===t?void 0:t.getWrapper().clientWidth)||1;return Math.round(this.minimapWrapper.clientWidth/e*100)}onRedraw(){const t=this.getOverlayWidth();this.overlay.style.width=`${t}%`;}onScroll(t){if(!this.wavesurfer)return;const e=this.wavesurfer.getDuration();this.overlay.style.left=t/e*100+"%";}initWaveSurferEvents(){this.wavesurfer&&this.subscriptions.push(this.wavesurfer.on("decode",(()=>{this.initMinimap();})),this.wavesurfer.on("scroll",(t=>{this.onScroll(t);})),this.wavesurfer.on("redraw",(()=>{this.onRedraw();})));}destroy(){var t;null===(t=this.miniWavesurfer)||void 0===t||t.destroy(),this.minimapWrapper.remove(),super.destroy();}}
+
+class t$3{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,i){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==i?void 0:i.once){const i=()=>{this.removeEventListener(t,i),this.removeEventListener(t,e);};return this.addEventListener(t,i),i}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var i;null===(i=this.listeners[t])||void 0===i||i.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class e$3 extends t$3{constructor(t){super(),this.subscriptions=[],this.options=t;}onInit(){}init(t){this.wavesurfer=t,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()));}}function i$3(t,e,i,o,n=3,s=0){if(!t)return ()=>{};let r=()=>{};const l=l=>{if(l.button!==s)return;l.preventDefault(),l.stopPropagation();let h=l.clientX,a=l.clientY,u=!1;const d=o=>{o.preventDefault(),o.stopPropagation();const s=o.clientX,r=o.clientY,l=s-h,d=r-a;if(h=s,a=r,u||Math.abs(l)>n||Math.abs(d)>n){const o=t.getBoundingClientRect(),{left:n,top:c}=o;u||(null==i||i(h-n,a-c),u=!0),e(l,d,s-n,r-c);}},c=()=>{u&&(null==o||o()),r();},p=t=>{u&&(t.stopPropagation(),t.preventDefault());},v=t=>{u&&t.preventDefault();};document.addEventListener("pointermove",d),document.addEventListener("pointerup",c),document.addEventListener("pointerout",c),document.addEventListener("pointercancel",c),document.addEventListener("touchmove",v,{passive:!1}),document.addEventListener("click",p,{capture:!0}),r=()=>{document.removeEventListener("pointermove",d),document.removeEventListener("pointerup",c),document.removeEventListener("pointerout",c),document.removeEventListener("pointercancel",c),document.removeEventListener("touchmove",v),setTimeout((()=>{document.removeEventListener("click",p,{capture:!0});}),10);};};return t.addEventListener("pointerdown",l),()=>{r(),t.removeEventListener("pointerdown",l);}}const o={points:[],lineWidth:4,lineColor:"rgba(0, 0, 255, 0.5)",dragPointSize:10,dragPointFill:"rgba(255, 255, 255, 0.8)",dragPointStroke:"rgba(255, 255, 255, 0.8)"};class n extends t$3{constructor(t,e){super(),this.options=t,this.polyPoints=new Map;const o=e.clientWidth,n=e.clientHeight,s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("width","100%"),s.setAttribute("height","100%"),s.setAttribute("viewBox",`0 0 ${o} ${n}`),s.setAttribute("preserveAspectRatio","none"),s.setAttribute("style","position: absolute; left: 0; top: 0; z-index: 4;"),s.setAttribute("part","envelope"),this.svg=s;const r=document.createElementNS("http://www.w3.org/2000/svg","polyline");r.setAttribute("points",`0,${n} ${o},${n}`),r.setAttribute("stroke",t.lineColor),r.setAttribute("stroke-width",t.lineWidth),r.setAttribute("fill","none"),r.setAttribute("part","polyline"),r.setAttribute("style",t.dragLine?"cursor: row-resize; pointer-events: stroke;":""),s.appendChild(r),e.appendChild(s),t.dragLine&&i$3(r,((t,e)=>{const{height:i}=s.viewBox.baseVal,{points:o}=r;for(let t=1;t<o.numberOfItems-1;t++){const n=o.getItem(t);n.y=Math.min(i,Math.max(0,n.y+e));}const n=s.querySelectorAll("ellipse");Array.from(n).forEach((t=>{const o=Math.min(i,Math.max(0,Number(t.getAttribute("cy"))+e));t.setAttribute("cy",o.toString());})),this.emit("line-move",e/i);})),s.addEventListener("dblclick",(t=>{const e=s.getBoundingClientRect(),i=t.clientX-e.left,o=t.clientY-e.top;this.emit("point-create",i/e.width,o/e.height);}));{let t;const e=()=>clearTimeout(t);s.addEventListener("touchstart",(i=>{1===i.touches.length?t=window.setTimeout((()=>{i.preventDefault();const t=s.getBoundingClientRect(),e=i.touches[0].clientX-t.left,o=i.touches[0].clientY-t.top;this.emit("point-create",e/t.width,o/t.height);}),500):e();})),s.addEventListener("touchmove",e),s.addEventListener("touchend",e);}}makeDraggable(t,e){i$3(t,e,(()=>t.style.cursor="grabbing"),(()=>t.style.cursor="grab"),1);}createCircle(t,e){const i=document.createElementNS("http://www.w3.org/2000/svg","ellipse"),o=this.options.dragPointSize/2;return i.setAttribute("rx",o.toString()),i.setAttribute("ry",o.toString()),i.setAttribute("fill",this.options.dragPointFill),this.options.dragPointStroke&&(i.setAttribute("stroke",this.options.dragPointStroke),i.setAttribute("stroke-width","2")),i.setAttribute("style","cursor: grab; pointer-events: all;"),i.setAttribute("part","envelope-circle"),i.setAttribute("cx",t.toString()),i.setAttribute("cy",e.toString()),this.svg.appendChild(i),i}removePolyPoint(t){const e=this.polyPoints.get(t);if(!e)return;const{polyPoint:i,circle:o}=e,{points:n}=this.svg.querySelector("polyline"),s=Array.from(n).findIndex((t=>t.x===i.x&&t.y===i.y));n.removeItem(s),o.remove(),this.polyPoints.delete(t);}addPolyPoint(t,e,i){const{svg:o}=this,{width:n,height:s}=o.viewBox.baseVal,r=t*n,l=s-e*s,h=this.options.dragPointSize/2,a=o.createSVGPoint();a.x=t*n,a.y=s-e*s;const u=this.createCircle(r,l),{points:d}=o.querySelector("polyline"),c=Array.from(d).findIndex((t=>t.x>=r));d.insertItemBefore(a,Math.max(c,1)),this.polyPoints.set(i,{polyPoint:a,circle:u}),this.makeDraggable(u,((t,e)=>{const o=a.x+t,r=a.y+e;if(o<-h||r<-h||o>n+h||r>s+h)return void this.emit("point-dragout",i);const l=Array.from(d).find((t=>t.x>a.x)),c=Array.from(d).findLast((t=>t.x<a.x));l&&o>=l.x||c&&o<=c.x||(a.x=o,a.y=r,u.setAttribute("cx",o.toString()),u.setAttribute("cy",r.toString()),this.emit("point-move",i,o/n,r/s));}));}update(){const{svg:t}=this,e=t.viewBox.baseVal.width/t.clientWidth,i=t.viewBox.baseVal.height/t.clientHeight;t.querySelectorAll("ellipse").forEach((t=>{const o=this.options.dragPointSize/2,n=o*e,s=o*i;t.setAttribute("rx",n.toString()),t.setAttribute("ry",s.toString());}));}destroy(){this.polyPoints.clear(),this.svg.remove();}}class s$3 extends e$3{constructor(t){super(t),this.polyline=null,this.throttleTimeout=null,this.volume=1,this.points=t.points||[],this.options=Object.assign({},o,t),this.options.lineColor=this.options.lineColor||o.lineColor,this.options.dragPointFill=this.options.dragPointFill||o.dragPointFill,this.options.dragPointStroke=this.options.dragPointStroke||o.dragPointStroke,this.options.dragPointSize=this.options.dragPointSize||o.dragPointSize;}static create(t){return new s$3(t)}addPoint(t){var e;t.id||(t.id=Math.random().toString(36).slice(2));const i=this.points.findLastIndex((e=>e.time<t.time));this.points.splice(i+1,0,t),this.emitPoints();const o=null===(e=this.wavesurfer)||void 0===e?void 0:e.getDuration();o&&this.addPolyPoint(t,o);}removePoint(t){var e;const i=this.points.indexOf(t);i>-1&&(this.points.splice(i,1),null===(e=this.polyline)||void 0===e||e.removePolyPoint(t),this.emitPoints());}getPoints(){return this.points}setPoints(t){this.points.slice().forEach((t=>this.removePoint(t))),t.forEach((t=>this.addPoint(t)));}destroy(){var t;null===(t=this.polyline)||void 0===t||t.destroy(),super.destroy();}getCurrentVolume(){return this.volume}setVolume(t){var e;this.volume=t,null===(e=this.wavesurfer)||void 0===e||e.setVolume(t);}onInit(){var t;if(!this.wavesurfer)throw Error("WaveSurfer is not initialized");const{options:e}=this;e.volume=null!==(t=e.volume)&&void 0!==t?t:this.wavesurfer.getVolume(),this.setVolume(e.volume),this.subscriptions.push(this.wavesurfer.on("decode",(t=>{this.initPolyline(),this.points.forEach((e=>{this.addPolyPoint(e,t);}));})),this.wavesurfer.on("redraw",(()=>{var t;null===(t=this.polyline)||void 0===t||t.update();})),this.wavesurfer.on("timeupdate",(t=>{this.onTimeUpdate(t);})));}emitPoints(){this.throttleTimeout&&clearTimeout(this.throttleTimeout),this.throttleTimeout=setTimeout((()=>{this.emit("points-change",this.points);}),200);}initPolyline(){if(this.polyline&&this.polyline.destroy(),!this.wavesurfer)return;const t=this.wavesurfer.getWrapper();this.polyline=new n(this.options,t),this.subscriptions.push(this.polyline.on("point-move",((t,e,i)=>{var o;const n=(null===(o=this.wavesurfer)||void 0===o?void 0:o.getDuration())||0;t.time=e*n,t.volume=1-i,this.emitPoints();})),this.polyline.on("point-dragout",(t=>{this.removePoint(t);})),this.polyline.on("point-create",((t,e)=>{var i;this.addPoint({time:t*((null===(i=this.wavesurfer)||void 0===i?void 0:i.getDuration())||0),volume:1-e});})),this.polyline.on("line-move",(t=>{var e;this.points.forEach((e=>{e.volume=Math.min(1,Math.max(0,e.volume-t));})),this.emitPoints(),this.onTimeUpdate((null===(e=this.wavesurfer)||void 0===e?void 0:e.getCurrentTime())||0);})));}addPolyPoint(t,e){var i;null===(i=this.polyline)||void 0===i||i.addPolyPoint(t.time/e,t.volume,t);}onTimeUpdate(t){if(!this.wavesurfer)return;let e=this.points.find((e=>e.time>t));e||(e={time:this.wavesurfer.getDuration()||0,volume:0});let i=this.points.findLast((e=>e.time<=t));i||(i={time:0,volume:0});const o=e.time-i.time,n=e.volume-i.volume,s=i.volume+(t-i.time)*(n/o),r=Math.min(1,Math.max(0,s)),l=Math.round(100*r)/100;l!==this.getCurrentVolume()&&(this.setVolume(l),this.emit("volume-change",l));}}
+
+class t$2{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(t,e,s){if(this.listeners[t]||(this.listeners[t]=new Set),this.listeners[t].add(e),null==s?void 0:s.once){const s=()=>{this.removeEventListener(t,s),this.removeEventListener(t,e);};return this.addEventListener(t,s),s}return ()=>this.removeEventListener(t,e)}removeEventListener(t,e){var s;null===(s=this.listeners[t])||void 0===s||s.delete(e);}once(t,e){return this.on(t,e,{once:!0})}unAll(){this.listeners={};}emit(t,...e){this.listeners[t]&&this.listeners[t].forEach((t=>t(...e)));}}class e$2 extends t$2{constructor(t){super(),this.subscriptions=[],this.options=t;}onInit(){}init(t){this.wavesurfer=t,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((t=>t()));}}function s$2(t,e,s,i){switch(this.bufferSize=t,this.sampleRate=e,this.bandwidth=2/t*(e/2),this.sinTable=new Float32Array(t),this.cosTable=new Float32Array(t),this.windowValues=new Float32Array(t),this.reverseTable=new Uint32Array(t),this.peakBand=0,this.peak=0,s){case"bartlett":for(a=0;a<t;a++)this.windowValues[a]=2/(t-1)*((t-1)/2-Math.abs(a-(t-1)/2));break;case"bartlettHann":for(a=0;a<t;a++)this.windowValues[a]=.62-.48*Math.abs(a/(t-1)-.5)-.38*Math.cos(2*Math.PI*a/(t-1));break;case"blackman":for(i=i||.16,a=0;a<t;a++)this.windowValues[a]=(1-i)/2-.5*Math.cos(2*Math.PI*a/(t-1))+i/2*Math.cos(4*Math.PI*a/(t-1));break;case"cosine":for(a=0;a<t;a++)this.windowValues[a]=Math.cos(Math.PI*a/(t-1)-Math.PI/2);break;case"gauss":for(i=i||.25,a=0;a<t;a++)this.windowValues[a]=Math.pow(Math.E,-.5*Math.pow((a-(t-1)/2)/(i*(t-1)/2),2));break;case"hamming":for(a=0;a<t;a++)this.windowValues[a]=.54-.46*Math.cos(2*Math.PI*a/(t-1));break;case"hann":case void 0:for(a=0;a<t;a++)this.windowValues[a]=.5*(1-Math.cos(2*Math.PI*a/(t-1)));break;case"lanczoz":for(a=0;a<t;a++)this.windowValues[a]=Math.sin(Math.PI*(2*a/(t-1)-1))/(Math.PI*(2*a/(t-1)-1));break;case"rectangular":for(a=0;a<t;a++)this.windowValues[a]=1;break;case"triangular":for(a=0;a<t;a++)this.windowValues[a]=2/t*(t/2-Math.abs(a-(t-1)/2));break;default:throw Error("No such window function '"+s+"'")}for(var a,r=1,n=t>>1;r<t;){for(a=0;a<r;a++)this.reverseTable[a+r]=this.reverseTable[a]+n;r<<=1,n>>=1;}for(a=0;a<t;a++)this.sinTable[a]=Math.sin(-Math.PI/a),this.cosTable[a]=Math.cos(-Math.PI/a);this.calculateSpectrum=function(t){var e,s,i,a=this.bufferSize,r=this.cosTable,n=this.sinTable,h=this.reverseTable,o=new Float32Array(a),l=new Float32Array(a),c=2/this.bufferSize,f=Math.sqrt,u=new Float32Array(a/2),p=Math.floor(Math.log(a)/Math.LN2);if(Math.pow(2,p)!==a)throw "Invalid buffer size, must be a power of 2.";if(a!==t.length)throw "Supplied buffer is not the same size as defined FFT. FFT Size: "+a+" Buffer Size: "+t.length;for(var d,w,v,M,b,g,m,y,x=1,k=0;k<a;k++)o[k]=t[h[k]]*this.windowValues[h[k]],l[k]=0;for(;x<a;){d=r[x],w=n[x],v=1,M=0;for(var q=0;q<x;q++){for(k=q;k<a;)g=v*o[b=k+x]-M*l[b],m=v*l[b]+M*o[b],o[b]=o[k]-g,l[b]=l[k]-m,o[k]+=g,l[k]+=m,k+=x<<1;v=(y=v)*d-M*w,M=y*w+M*d;}x<<=1;}k=0;for(var E=a/2;k<E;k++)(i=c*f((e=o[k])*e+(s=l[k])*s))>this.peak&&(this.peakBand=k,this.peak=i),u[k]=i;return u};}class i$2 extends e$2{static create(t){return new i$2(t||{})}constructor(t){if(super(t),this.utils={style:(t,e)=>Object.assign(t.style,e)},this.drawSpectrogram=t=>{isNaN(t[0][0])||(t=[t]),this.wrapper.style.height=this.height*t.length+"px",this.width=this.wavesurfer.getWrapper().offsetWidth,this.canvas.width=this.width,this.canvas.height=this.height*t.length;const e=this.spectrCc,s=this.height,i=this.width,a=this.buffer.sampleRate/2,r=this.frequencyMin,n=this.frequencyMax;if(e){for(let h=0;h<t.length;h++){const o=this.resample(t[h]),l=new ImageData(i,s);for(let t=0;t<o.length;t++)for(let e=0;e<o[t].length;e++){const a=this.colorMap[o[t][e]],r=4*((s-e)*i+t);l.data[r]=255*a[0],l.data[r+1]=255*a[1],l.data[r+2]=255*a[2],l.data[r+3]=255*a[3];}createImageBitmap(l).then((t=>{e.drawImage(t,0,s*(1-n/a),i,s*(n-r)/a,0,s*h,i,s);}));}this.loadLabels(this.options.labelsBackground,"12px","12px","",this.options.labelsColor,this.options.labelsHzColor||this.options.labelsColor,"center","#specLabels",t.length),this.emit("ready");}},this.frequenciesDataUrl=t.frequenciesDataUrl,this.container="string"==typeof t.container?document.querySelector(t.container):t.container,t.colorMap){if(t.colorMap.length<256)throw new Error("Colormap must contain 256 elements");for(let e=0;e<t.colorMap.length;e++){if(4!==t.colorMap[e].length)throw new Error("ColorMap entries must contain 4 values")}this.colorMap=t.colorMap;}else {this.colorMap=[];for(let t=0;t<256;t++){const e=(255-t)/256;this.colorMap.push([e,e,e,1]);}}this.fftSamples=t.fftSamples||512,this.height=t.height||this.fftSamples/2,this.noverlap=t.noverlap,this.windowFunc=t.windowFunc,this.alpha=t.alpha,this.frequencyMin=t.frequencyMin||0,this.frequencyMax=t.frequencyMax||0,this.createWrapper(),this.createCanvas();}onInit(){this.container=this.container||this.wavesurfer.getWrapper(),this.container.appendChild(this.wrapper),this.wavesurfer.options.fillParent&&this.utils.style(this.wrapper,{width:"100%",overflowX:"hidden",overflowY:"hidden"}),this.subscriptions.push(this.wavesurfer.on("redraw",(()=>this.render())));}destroy(){this.unAll(),this.wavesurfer.un("ready",this._onReady),this.wavesurfer.un("redraw",this._onRender),this.wavesurfer=null,this.util=null,this.options=null,this.wrapper&&(this.wrapper.remove(),this.wrapper=null),super.destroy();}createWrapper(){if(this.wrapper=document.createElement("div"),this.utils.style(this.wrapper,{display:"block",position:"relative",userSelect:"none"}),this.options.labels){const t=document.createElement("canvas");t.setAttribute("part","spec-labels"),this.utils.style(t,{position:"absolute",zIndex:9,width:"55px",height:"100%"}),this.wrapper.appendChild(t),this.labelsEl=t;}this.wrapper.addEventListener("click",this._onWrapperClick);}_wrapperClickHandler(t){t.preventDefault();const e="offsetX"in t?t.offsetX:t.layerX;this.emit("click",e/this.width||0);}createCanvas(){const t=document.createElement("canvas");this.wrapper.appendChild(t),this.spectrCc=t.getContext("2d"),this.utils.style(t,{position:"absolute",left:0,top:0,width:"100%",height:"100%",zIndex:4}),this.canvas=t;}render(){var t;this.frequenciesDataUrl?this.loadFrequenciesData(this.frequenciesDataUrl):this.drawSpectrogram(this.getFrequencies(null===(t=this.wavesurfer)||void 0===t?void 0:t.getDecodedData()));}getFrequencies(t){var e,i;const a=this.fftSamples,r=(null!==(e=this.options.splitChannels)&&void 0!==e?e:null===(i=this.wavesurfer)||void 0===i?void 0:i.options.splitChannels)?t.numberOfChannels:1;if(this.frequencyMax=this.frequencyMax||t.sampleRate/2,!t)return;this.buffer=t;const n=t.sampleRate,h=[];let o=this.noverlap;if(!o){const e=t.length/this.canvas.width;o=Math.max(0,Math.round(a-e));}const l=new s$2(a,n,this.windowFunc,this.alpha);for(let e=0;e<r;e++){const s=t.getChannelData(e),i=[];let r=0;for(;r+a<s.length;){const t=s.slice(r,r+a),e=l.calculateSpectrum(t),n=new Uint8Array(a/2);for(let t=0;t<a/2;t++)n[t]=Math.max(-255,45*Math.log10(e[t]));i.push(n),r+=a-o;}h.push(i);}return h}loadFrequenciesData(t){return fetch(t).then((t=>t.json())).then(this.drawSpectrogram)}freqType(t){return t>=1e3?(t/1e3).toFixed(1):Math.round(t)}unitType(t){return t>=1e3?"KHz":"Hz"}loadLabels(t,e,s,i,a,r,n,h,o){t=t||"rgba(68,68,68,0)",e=e||"12px",s=s||"12px",i=i||"Helvetica",a=a||"#fff",r=r||"#fff",n=n||"center";const l=this.height||512,c=l/256*5,f=this.frequencyMin,u=(this.frequencyMax-f)/c,p=this.labelsEl.getContext("2d"),d=window.devicePixelRatio;if(this.labelsEl.height=this.height*o*d,this.labelsEl.width=55*d,p.scale(d,d),p)for(let h=0;h<o;h++){let o;for(p.fillStyle=t,p.fillRect(0,h*l,55,(1+h)*l),p.fill(),o=0;o<=c;o++){p.textAlign=n,p.textBaseline="middle";const t=f+u*o,c=this.freqType(t),d=this.unitType(t),w=16;let v;v=0==o?(1+h)*l+o-10:(1+h)*l-50*o+2,p.fillStyle=r,p.font=s+" "+i,p.fillText(d,w+24,v),p.fillStyle=a,p.font=e+" "+i,p.fillText(c,w,v);}}}resample(t){const e=this.width,s=[],i=1/t.length,a=1/e;let r;for(r=0;r<e;r++){const e=new Array(t[0].length);let n;for(n=0;n<t.length;n++){const s=n*i,h=s+i,o=r*a,l=o+a,c=h<=o||l<=s?0:Math.min(Math.max(h,o),Math.max(l,s))-Math.max(Math.min(h,o),Math.min(l,s));let f;if(c>0)for(f=0;f<t[0].length;f++)null==e[f]&&(e[f]=0),e[f]+=c/a*t[n][f];}const h=new Uint8Array(t[0].length);let o;for(o=0;o<t[0].length;o++)h[o]=e[o];s.push(h);}return s}}
+
+function e$1(e,t,i,s){return new(i||(i=Promise))((function(r,o){function n(e){try{d(s.next(e));}catch(e){o(e);}}function a(e){try{d(s.throw(e));}catch(e){o(e);}}function d(e){var t;e.done?r(e.value):(t=e.value,t instanceof i?t:new i((function(e){e(t);}))).then(n,a);}d((s=s.apply(e,t||[])).next());}))}"function"==typeof SuppressedError&&SuppressedError;class t$1{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(e,t,i){if(this.listeners[e]||(this.listeners[e]=new Set),this.listeners[e].add(t),null==i?void 0:i.once){const i=()=>{this.removeEventListener(e,i),this.removeEventListener(e,t);};return this.addEventListener(e,i),i}return ()=>this.removeEventListener(e,t)}removeEventListener(e,t){var i;null===(i=this.listeners[e])||void 0===i||i.delete(t);}once(e,t){return this.on(e,t,{once:!0})}unAll(){this.listeners={};}emit(e,...t){this.listeners[e]&&this.listeners[e].forEach((e=>e(...t)));}}class i$1 extends t$1{constructor(e){super(),this.subscriptions=[],this.options=e;}onInit(){}init(e){this.wavesurfer=e,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((e=>e()));}}const s$1=["audio/webm","audio/wav","audio/mpeg","audio/mp4","audio/mp3"];class r extends i$1{constructor(e){var t,i,s,r;super(Object.assign(Object.assign({},e),{audioBitsPerSecond:null!==(t=e.audioBitsPerSecond)&&void 0!==t?t:128e3,scrollingWaveform:null!==(i=e.scrollingWaveform)&&void 0!==i&&i,scrollingWaveformWindow:null!==(s=e.scrollingWaveformWindow)&&void 0!==s?s:5,renderRecordedAudio:null===(r=e.renderRecordedAudio)||void 0===r||r})),this.stream=null,this.mediaRecorder=null,this.dataWindow=null,this.isWaveformPaused=!1,this.originalOptions={cursorWidth:1,interact:!0};}static create(e){return new r(e||{})}renderMicStream(e){const t=new AudioContext,i=t.createMediaStreamSource(e),s=t.createAnalyser();i.connect(s);const r=s.frequencyBinCount,o=new Float32Array(r);let n;const a=Math.floor((this.options.scrollingWaveformWindow||0)*t.sampleRate),d=()=>{if(this.isWaveformPaused)return void(n=requestAnimationFrame(d));if(s.getFloatTimeDomainData(o),this.options.scrollingWaveform){const e=Math.min(a,this.dataWindow?this.dataWindow.length+r:r),t=new Float32Array(a);if(this.dataWindow){const i=Math.max(0,a-this.dataWindow.length);t.set(this.dataWindow.slice(-e+r),i);}t.set(o,a-r),this.dataWindow=t;}else this.dataWindow=o;const e=this.options.scrollingWaveformWindow;this.wavesurfer&&(this.originalOptions={cursorWidth:this.wavesurfer.options.cursorWidth,interact:this.wavesurfer.options.interact},this.wavesurfer.options.cursorWidth=0,this.wavesurfer.options.interact=!1,this.wavesurfer.load("",[this.dataWindow],e)),n=requestAnimationFrame(d);};return d(),{onDestroy:()=>{cancelAnimationFrame(n),null==i||i.disconnect(),null==t||t.close();},onEnd:()=>{this.isWaveformPaused=!0,cancelAnimationFrame(n),this.stopMic();}}}startMic(t){return e$1(this,void 0,void 0,(function*(){let e;try{e=yield navigator.mediaDevices.getUserMedia({audio:!(null==t?void 0:t.deviceId)||{deviceId:t.deviceId}});}catch(e){throw new Error("Error accessing the microphone: "+e.message)}const{onDestroy:i,onEnd:s}=this.renderMicStream(e);return this.subscriptions.push(this.once("destroy",i)),this.subscriptions.push(this.once("record-end",s)),this.stream=e,e}))}stopMic(){this.stream&&(this.stream.getTracks().forEach((e=>e.stop())),this.stream=null,this.mediaRecorder=null);}startRecording(t){return e$1(this,void 0,void 0,(function*(){const e=this.stream||(yield this.startMic(t));this.dataWindow=null;const i=this.mediaRecorder||new MediaRecorder(e,{mimeType:this.options.mimeType||s$1.find((e=>MediaRecorder.isTypeSupported(e))),audioBitsPerSecond:this.options.audioBitsPerSecond});this.mediaRecorder=i,this.stopRecording();const r=[];i.ondataavailable=e=>{e.data.size>0&&r.push(e.data);},i.onstop=()=>{var e;const t=new Blob(r,{type:i.mimeType});this.emit("record-end",t),this.options.renderRecordedAudio&&(null===(e=this.wavesurfer)||void 0===e||e.load(URL.createObjectURL(t)));},i.start(),this.isWaveformPaused=!1,this.emit("record-start");}))}isRecording(){var e;return "recording"===(null===(e=this.mediaRecorder)||void 0===e?void 0:e.state)}isPaused(){var e;return "paused"===(null===(e=this.mediaRecorder)||void 0===e?void 0:e.state)}isActive(){var e;return "inactive"!==(null===(e=this.mediaRecorder)||void 0===e?void 0:e.state)}stopRecording(){var e;this.isActive()&&(null===(e=this.mediaRecorder)||void 0===e||e.stop());}pauseRecording(){var e;this.isRecording()&&(this.isWaveformPaused=!0,null===(e=this.mediaRecorder)||void 0===e||e.pause(),this.emit("record-pause"));}resumeRecording(){var e;this.isPaused()&&(this.isWaveformPaused=!1,null===(e=this.mediaRecorder)||void 0===e||e.resume(),this.emit("record-resume"));}static getAvailableAudioDevices(){return e$1(this,void 0,void 0,(function*(){return navigator.mediaDevices.enumerateDevices().then((e=>e.filter((e=>"audioinput"===e.kind))))}))}destroy(){this.wavesurfer&&(this.wavesurfer.options.cursorWidth=this.originalOptions.cursorWidth,this.wavesurfer.options.interact=this.originalOptions.interact),super.destroy(),this.stopRecording(),this.stopMic();}}
+
+class e{constructor(){this.listeners={},this.on=this.addEventListener,this.un=this.removeEventListener;}addEventListener(e,t,s){if(this.listeners[e]||(this.listeners[e]=new Set),this.listeners[e].add(t),null==s?void 0:s.once){const s=()=>{this.removeEventListener(e,s),this.removeEventListener(e,t);};return this.addEventListener(e,s),s}return ()=>this.removeEventListener(e,t)}removeEventListener(e,t){var s;null===(s=this.listeners[e])||void 0===s||s.delete(t);}once(e,t){return this.on(e,t,{once:!0})}unAll(){this.listeners={};}emit(e,...t){this.listeners[e]&&this.listeners[e].forEach((e=>e(...t)));}}class t extends e{constructor(e){super(),this.subscriptions=[],this.options=e;}onInit(){}init(e){this.wavesurfer=e,this.onInit();}destroy(){this.emit("destroy"),this.subscriptions.forEach((e=>e()));}}const s={scale:.5};class i extends t{constructor(e){super(e||{}),this.wrapper=void 0,this.container=null,this.onWheel=e=>{if(!this.wavesurfer||!this.container||Math.abs(e.deltaX)>=Math.abs(e.deltaY))return;e.preventDefault();const t=this.wavesurfer.getDuration(),s=this.wavesurfer.options.minPxPerSec,i=e.clientX,r=this.container.clientWidth,n=(this.wavesurfer.getScroll()+i)/s,o=this.calculateNewZoom(s,-e.deltaY),h=r/o*(i/r);o*t<r?(this.wavesurfer.zoom(r/t),this.container.scrollLeft=0):(this.wavesurfer.zoom(o),this.container.scrollLeft=(n-h)*o);},this.calculateNewZoom=(e,t)=>{const s=Math.max(0,e+t*this.options.scale);return void 0===this.options.maxZoom?s:Math.min(s,this.options.maxZoom)},this.options=Object.assign({},s,e);}static create(e){return new i(e)}onInit(){var e;this.wrapper=null===(e=this.wavesurfer)||void 0===e?void 0:e.getWrapper(),this.wrapper&&(this.container=this.wrapper.parentElement,this.wrapper.addEventListener("wheel",this.onWheel));}destroy(){this.wrapper&&this.wrapper.removeEventListener("wheel",this.onWheel),super.destroy();}}
+
 /**!
  * audioMotion-analyzer
  * High-resolution real-time graphic audio spectrum analyzer JS module
@@ -6,4 +21,2584 @@ function t$7(t,e,i,s){return new(i||(i=Promise))((function(n,r){function o(t){tr
  * @version 4.3.0
  * @author  Henrique Avila Vianna <hvianna@gmail.com> <https://henriquevianna.com>
  * @license AGPL-3.0-or-later
- */const VERSION="4.3.0";const PI=Math.PI,TAU=2*PI,HALF_PI=PI/2,C_1=8.17579892;const CANVAS_BACKGROUND_COLOR="#000",CHANNEL_COMBINED="dual-combined",CHANNEL_HORIZONTAL="dual-horizontal",CHANNEL_SINGLE="single",CHANNEL_VERTICAL="dual-vertical",COLOR_BAR_INDEX="bar-index",COLOR_BAR_LEVEL="bar-level",COLOR_GRADIENT="gradient",DEBOUNCE_TIMEOUT=60,EVENT_CLICK="click",EVENT_FULLSCREENCHANGE="fullscreenchange",EVENT_RESIZE="resize",GRADIENT_DEFAULT_BGCOLOR="#111",FILTER_NONE="",FILTER_A="A",FILTER_B="B",FILTER_C="C",FILTER_D="D",FILTER_468="468",FONT_FAMILY="sans-serif",FPS_COLOR="#0f0",LEDS_UNLIT_COLOR="#7f7f7f22",MODE_GRAPH=10,REASON_CREATE="create",REASON_FSCHANGE="fschange",REASON_LORES="lores",REASON_RESIZE=EVENT_RESIZE,REASON_USER="user",SCALEX_BACKGROUND_COLOR="#000c",SCALEX_LABEL_COLOR="#fff",SCALEX_HIGHLIGHT_COLOR="#4f4",SCALEY_LABEL_COLOR="#888",SCALEY_MIDLINE_COLOR="#555",SCALE_BARK="bark",SCALE_LINEAR="linear",SCALE_LOG="log",SCALE_MEL="mel";const PRISM=["#a35","#c66","#e94","#ed0","#9d5","#4d8","#2cb","#0bc","#09c","#36b"],GRADIENTS=[["classic",{colorStops:["red",{color:"yellow",level:.85,pos:.6},{color:"lime",level:.475}]}],["prism",{colorStops:PRISM}],["rainbow",{dir:"h",colorStops:["#817",...PRISM,"#639"]}],["orangered",{bgColor:"#3e2f29",colorStops:["OrangeRed"]}],["steelblue",{bgColor:"#222c35",colorStops:["SteelBlue"]}]];const ERR_AUDIO_CONTEXT_FAIL=["ERR_AUDIO_CONTEXT_FAIL","Could not create audio context. Web Audio API not supported?"],ERR_INVALID_AUDIO_CONTEXT=["ERR_INVALID_AUDIO_CONTEXT","Provided audio context is not valid"],ERR_UNKNOWN_GRADIENT=["ERR_UNKNOWN_GRADIENT","Unknown gradient"],ERR_FREQUENCY_TOO_LOW=["ERR_FREQUENCY_TOO_LOW","Frequency values must be >= 1"],ERR_INVALID_MODE=["ERR_INVALID_MODE","Invalid mode"],ERR_REFLEX_OUT_OF_RANGE=["ERR_REFLEX_OUT_OF_RANGE","Reflex ratio must be >= 0 and < 1"],ERR_INVALID_AUDIO_SOURCE=["ERR_INVALID_AUDIO_SOURCE","Audio source must be an instance of HTMLMediaElement or AudioNode"],ERR_GRADIENT_INVALID_NAME=["ERR_GRADIENT_INVALID_NAME","Gradient name must be a non-empty string"],ERR_GRADIENT_NOT_AN_OBJECT=["ERR_GRADIENT_NOT_AN_OBJECT","Gradient options must be an object"],ERR_GRADIENT_MISSING_COLOR=["ERR_GRADIENT_MISSING_COLOR","Gradient colorStops must be a non-empty array"];class AudioMotionError extends Error{constructor(t,e){const[i,s]=t;super(s+(e!==undefined?`: ${e}`:""));this.name="AudioMotionError";this.code=i}}const deprecate=(t,e)=>console.warn(`${t} is deprecated. Use ${e} instead.`);const validateFromList=(t,e,i="toLowerCase")=>e[Math.max(0,e.indexOf((""+t)[i]()))];const findY=(t,e,i,s,n)=>e+(s-e)*(n-t)/(i-t);if(!Array.prototype.findLastIndex){Array.prototype.findLastIndex=function(t){let e=this.length;while(e-- >0){if(t(this[e]))return e}return-1}}class AudioMotionAnalyzer{constructor(t,e={}){this._ready=false;this._aux={};this._canvasGradients=[];this._destroyed=false;this._energy={val:0,peak:0,hold:0};this._flg={};this._fps=0;this._gradients={};this._last=0;this._outNodes=[];this._ownContext=false;this._selectedGrads=[];this._sources=[];for(const[t,e]of GRADIENTS)this.registerGradient(t,e);this._container=t||document.body;this._defaultWidth=this._container.clientWidth||640;this._defaultHeight=this._container.clientHeight||270;let i;if(e.source&&(i=e.source.context)){}else if(i=e.audioCtx){}else{try{i=new(window.AudioContext||window.webkitAudioContext);this._ownContext=true}catch(t){throw new AudioMotionError(ERR_AUDIO_CONTEXT_FAIL)}}if(!i.createGain)throw new AudioMotionError(ERR_INVALID_AUDIO_CONTEXT);const s=this._analyzer=[i.createAnalyser(),i.createAnalyser()];const n=this._splitter=i.createChannelSplitter(2);const r=this._merger=i.createChannelMerger(2);this._input=i.createGain();this._output=i.createGain();if(e.source)this.connectInput(e.source);for(const t of[0,1])n.connect(s[t],t);r.connect(this._output);if(e.connectSpeakers!==false)this.connectOutput();const o=document.createElement("canvas");o.style="max-width: 100%;";this._ctx=o.getContext("2d");for(const t of["_scaleX","_scaleR"])this[t]=document.createElement("canvas").getContext("2d");this._fsEl=e.fsElement||o;const a=()=>{if(!this._fsTimeout){this._fsTimeout=window.setTimeout((()=>{if(!this._fsChanging){this._setCanvas(REASON_RESIZE);this._fsTimeout=0}}),DEBOUNCE_TIMEOUT)}};if(window.ResizeObserver){this._observer=new ResizeObserver(a);this._observer.observe(this._container)}this._controller=new AbortController;const h=this._controller.signal;window.addEventListener(EVENT_RESIZE,a,{signal:h});o.addEventListener(EVENT_FULLSCREENCHANGE,(()=>{this._fsChanging=true;if(this._fsTimeout)window.clearTimeout(this._fsTimeout);this._setCanvas(REASON_FSCHANGE);this._fsTimeout=window.setTimeout((()=>{this._fsChanging=false;this._fsTimeout=0}),DEBOUNCE_TIMEOUT)}),{signal:h});const l=()=>{if(i.state=="suspended")i.resume();window.removeEventListener(EVENT_CLICK,l)};window.addEventListener(EVENT_CLICK,l);document.addEventListener("visibilitychange",(()=>{if(document.visibilityState!="hidden"){this._frames=0;this._time=performance.now()}}),{signal:h});this._setProps(e,true);if(this.useCanvas)this._container.appendChild(o);this._ready=true;this._setCanvas(REASON_CREATE)}get alphaBars(){return this._alphaBars}set alphaBars(t){this._alphaBars=!!t;this._calcBars()}get ansiBands(){return this._ansiBands}set ansiBands(t){this._ansiBands=!!t;this._calcBars()}get barSpace(){return this._barSpace}set barSpace(t){this._barSpace=+t||0;this._calcBars()}get channelLayout(){return this._chLayout}set channelLayout(t){this._chLayout=validateFromList(t,[CHANNEL_SINGLE,CHANNEL_HORIZONTAL,CHANNEL_VERTICAL,CHANNEL_COMBINED]);this._input.disconnect();this._input.connect(this._chLayout!=CHANNEL_SINGLE?this._splitter:this._analyzer[0]);this._analyzer[0].disconnect();if(this._outNodes.length)this._analyzer[0].connect(this._chLayout!=CHANNEL_SINGLE?this._merger:this._output);this._calcBars();this._makeGrad()}get colorMode(){return this._colorMode}set colorMode(t){this._colorMode=validateFromList(t,[COLOR_GRADIENT,COLOR_BAR_INDEX,COLOR_BAR_LEVEL])}get fftSize(){return this._analyzer[0].fftSize}set fftSize(t){for(const e of[0,1])this._analyzer[e].fftSize=t;const e=this._analyzer[0].frequencyBinCount;this._fftData=[new Float32Array(e),new Float32Array(e)];this._calcBars()}get frequencyScale(){return this._frequencyScale}set frequencyScale(t){this._frequencyScale=validateFromList(t,[SCALE_LOG,SCALE_BARK,SCALE_MEL,SCALE_LINEAR]);this._calcBars()}get gradient(){return this._selectedGrads[0]}set gradient(t){this._setGradient(t)}get gradientLeft(){return this._selectedGrads[0]}set gradientLeft(t){this._setGradient(t,0)}get gradientRight(){return this._selectedGrads[1]}set gradientRight(t){this._setGradient(t,1)}get height(){return this._height}set height(t){this._height=t;this._setCanvas(REASON_USER)}get ledBars(){return this._showLeds}set ledBars(t){this._showLeds=!!t;this._calcBars()}get linearAmplitude(){return this._linearAmplitude}set linearAmplitude(t){this._linearAmplitude=!!t}get linearBoost(){return this._linearBoost}set linearBoost(t){this._linearBoost=t>=1?+t:1}get lineWidth(){return this._lineWidth}set lineWidth(t){this._lineWidth=+t||0}get loRes(){return this._loRes}set loRes(t){this._loRes=!!t;this._setCanvas(REASON_LORES)}get lumiBars(){return this._lumiBars}set lumiBars(t){this._lumiBars=!!t;this._calcBars();this._makeGrad()}get maxDecibels(){return this._analyzer[0].maxDecibels}set maxDecibels(t){for(const e of[0,1])this._analyzer[e].maxDecibels=t}get maxFPS(){return this._maxFPS}set maxFPS(t){this._maxFPS=t<0?0:+t||0}get maxFreq(){return this._maxFreq}set maxFreq(t){if(t<1)throw new AudioMotionError(ERR_FREQUENCY_TOO_LOW);else{this._maxFreq=Math.min(t,this.audioCtx.sampleRate/2);this._calcBars()}}get minDecibels(){return this._analyzer[0].minDecibels}set minDecibels(t){for(const e of[0,1])this._analyzer[e].minDecibels=t}get minFreq(){return this._minFreq}set minFreq(t){if(t<1)throw new AudioMotionError(ERR_FREQUENCY_TOO_LOW);else{this._minFreq=+t;this._calcBars()}}get mirror(){return this._mirror}set mirror(t){this._mirror=Math.sign(t)|0;this._calcBars();this._makeGrad()}get mode(){return this._mode}set mode(t){const e=t|0;if(e>=0&&e<=10&&e!=9){this._mode=e;this._calcBars();this._makeGrad()}else throw new AudioMotionError(ERR_INVALID_MODE,t)}get noteLabels(){return this._noteLabels}set noteLabels(t){this._noteLabels=!!t;this._createScales()}get outlineBars(){return this._outlineBars}set outlineBars(t){this._outlineBars=!!t;this._calcBars()}get peakLine(){return this._peakLine}set peakLine(t){this._peakLine=!!t}get radial(){return this._radial}set radial(t){this._radial=!!t;this._calcBars();this._makeGrad()}get reflexRatio(){return this._reflexRatio}set reflexRatio(t){t=+t||0;if(t<0||t>=1)throw new AudioMotionError(ERR_REFLEX_OUT_OF_RANGE);else{this._reflexRatio=t;this._calcBars();this._makeGrad()}}get roundBars(){return this._roundBars}set roundBars(t){this._roundBars=!!t;this._calcBars()}get smoothing(){return this._analyzer[0].smoothingTimeConstant}set smoothing(t){for(const e of[0,1])this._analyzer[e].smoothingTimeConstant=t}get spinSpeed(){return this._spinSpeed}set spinSpeed(t){t=+t||0;if(this._spinSpeed===undefined||t==0)this._spinAngle=-HALF_PI;this._spinSpeed=t}get splitGradient(){return this._splitGradient}set splitGradient(t){this._splitGradient=!!t;this._makeGrad()}get stereo(){deprecate("stereo","channelLayout");return this._chLayout!=CHANNEL_SINGLE}set stereo(t){deprecate("stereo","channelLayout");this.channelLayout=t?CHANNEL_VERTICAL:CHANNEL_SINGLE}get trueLeds(){return this._trueLeds}set trueLeds(t){this._trueLeds=!!t}get volume(){return this._output.gain.value}set volume(t){this._output.gain.value=t}get weightingFilter(){return this._weightingFilter}set weightingFilter(t){this._weightingFilter=validateFromList(t,[FILTER_NONE,FILTER_A,FILTER_B,FILTER_C,FILTER_D,FILTER_468],"toUpperCase")}get width(){return this._width}set width(t){this._width=t;this._setCanvas(REASON_USER)}get audioCtx(){return this._input.context}get canvas(){return this._ctx.canvas}get canvasCtx(){return this._ctx}get connectedSources(){return this._sources}get connectedTo(){return this._outNodes}get fps(){return this._fps}get fsHeight(){return this._fsHeight}get fsWidth(){return this._fsWidth}get isAlphaBars(){return this._flg.isAlpha}get isBandsMode(){return this._flg.isBands}get isDestroyed(){return this._destroyed}get isFullscreen(){return this._fsEl&&(document.fullscreenElement||document.webkitFullscreenElement)===this._fsEl}get isLedBars(){return this._flg.isLeds}get isLumiBars(){return this._flg.isLumi}get isOctaveBands(){return this._flg.isOctaves}get isOn(){return!!this._runId}get isOutlineBars(){return this._flg.isOutline}get pixelRatio(){return this._pixelRatio}get isRoundBars(){return this._flg.isRound}static get version(){return VERSION}connectInput(t){const e=t instanceof HTMLMediaElement;if(!(e||t.connect))throw new AudioMotionError(ERR_INVALID_AUDIO_SOURCE);const i=e?this.audioCtx.createMediaElementSource(t):t;if(!this._sources.includes(i)){i.connect(this._input);this._sources.push(i)}return i}connectOutput(t=this.audioCtx.destination){if(this._outNodes.includes(t))return;this._output.connect(t);this._outNodes.push(t);if(this._outNodes.length==1){for(const t of[0,1])this._analyzer[t].connect(this._chLayout==CHANNEL_SINGLE&&!t?this._output:this._merger,0,t)}}destroy(){if(!this._ready)return;const{audioCtx:t,canvas:e,_controller:i,_input:s,_merger:n,_observer:r,_ownContext:o,_splitter:a}=this;this._destroyed=true;this._ready=false;this.stop();i.abort();if(r)r.disconnect();this.onCanvasResize=null;this.onCanvasDraw=null;this._fsEl=null;this.disconnectInput();this.disconnectOutput();s.disconnect();a.disconnect();n.disconnect();if(o)t.close();e.remove();this._calcBars()}disconnectInput(t,e){if(!t)t=Array.from(this._sources);else if(!Array.isArray(t))t=[t];for(const i of t){const t=this._sources.indexOf(i);if(e&&i.mediaStream){for(const t of i.mediaStream.getAudioTracks()){t.stop()}}if(t>=0){i.disconnect(this._input);this._sources.splice(t,1)}}}disconnectOutput(t){if(t&&!this._outNodes.includes(t))return;this._output.disconnect(t);this._outNodes=t?this._outNodes.filter((e=>e!==t)):[];if(this._outNodes.length==0){for(const t of[0,1])this._analyzer[t].disconnect()}}getBars(){return Array.from(this._bars,(({posX:t,freq:e,freqLo:i,freqHi:s,hold:n,peak:r,value:o})=>({posX:t,freq:e,freqLo:i,freqHi:s,hold:n,peak:r,value:o})))}getEnergy(t,e){if(t===undefined)return this._energy.val;if(t!=+t){if(t=="peak")return this._energy.peak;const i={bass:[20,250],lowMid:[250,500],mid:[500,2e3],highMid:[2e3,4e3],treble:[4e3,16e3]};if(!i[t])return null;[t,e]=i[t]}const i=this._freqToBin(t),s=e?this._freqToBin(e):i,n=this._chLayout==CHANNEL_SINGLE?1:2;let r=0;for(let t=0;t<n;t++){for(let e=i;e<=s;e++)r+=this._normalizedB(this._fftData[t][e])}return r/(s-i+1)/n}registerGradient(t,e){if(typeof t!="string"||t.trim().length==0)throw new AudioMotionError(ERR_GRADIENT_INVALID_NAME);if(typeof e!="object")throw new AudioMotionError(ERR_GRADIENT_NOT_AN_OBJECT);const{colorStops:i}=e;if(!Array.isArray(i)||!i.length)throw new AudioMotionError(ERR_GRADIENT_MISSING_COLOR);const s=i.length,n=t=>+t!=t||t<0||t>1;i.forEach(((t,e)=>{const r=e/Math.max(1,s-1);if(typeof t!="object")i[e]={pos:r,color:t};else if(n(t.pos))t.pos=r;if(n(t.level))i[e].level=1-e/s}));i.sort(((t,e)=>t.level<e.level?1:t.level>e.level?-1:0));i[0].level=1;this._gradients[t]={bgColor:e.bgColor||GRADIENT_DEFAULT_BGCOLOR,dir:e.dir,colorStops:i};if(this._selectedGrads.includes(t))this._makeGrad()}setCanvasSize(t,e){this._width=t;this._height=e;this._setCanvas(REASON_USER)}setFreqRange(t,e){if(t<1||e<1)throw new AudioMotionError(ERR_FREQUENCY_TOO_LOW);else{this._minFreq=Math.min(t,e);this.maxFreq=Math.max(t,e)}}setLedParams(t){let e,i,s;if(t){e=t.maxLeds|0,i=+t.spaceV,s=+t.spaceH}this._ledParams=e>0&&i>0&&s>=0?[e,i,s]:undefined;this._calcBars()}setOptions(t){this._setProps(t)}setSensitivity(t,e){for(const i of[0,1]){this._analyzer[i].minDecibels=Math.min(t,e);this._analyzer[i].maxDecibels=Math.max(t,e)}}start(){this.toggleAnalyzer(true)}stop(){this.toggleAnalyzer(false)}toggleAnalyzer(t){const e=this.isOn;if(t===undefined)t=!e;if(e&&!t){cancelAnimationFrame(this._runId);this._runId=0}else if(!e&&t&&!this._destroyed){this._frames=0;this._time=performance.now();this._runId=requestAnimationFrame((t=>this._draw(t)))}return this.isOn}toggleFullscreen(){if(this.isFullscreen){if(document.exitFullscreen)document.exitFullscreen();else if(document.webkitExitFullscreen)document.webkitExitFullscreen()}else{const t=this._fsEl;if(!t)return;if(t.requestFullscreen)t.requestFullscreen();else if(t.webkitRequestFullscreen)t.webkitRequestFullscreen()}}_binToFreq(t){return t*this.audioCtx.sampleRate/this.fftSize||1}_calcBars(){const t=this._bars=[];if(!this._ready){this._flg={isAlpha:false,isBands:false,isLeds:false,isLumi:false,isOctaves:false,isOutline:false,isRound:false,noLedGap:false};return}const{_ansiBands:e,_barSpace:i,canvas:s,_chLayout:n,_maxFreq:r,_minFreq:o,_mirror:a,_mode:h,_radial:l,_reflexRatio:d}=this,c=s.width>>1,u=s.height>>1,p=n==CHANNEL_VERTICAL&&!l,f=n==CHANNEL_HORIZONTAL,m=h%10!=0,v=m&&this._frequencyScale==SCALE_LOG,g=this._showLeds&&m&&!l,_=this._lumiBars&&m&&!l,E=this._alphaBars&&!_&&h!=MODE_GRAPH,y=this._outlineBars&&m&&!_&&!g,b=this._roundBars&&m&&!_&&!g,w=n!=CHANNEL_VERTICAL||d>0&&!_,L=s.height-(p&&!g?.5:0)>>p,C=L*(_||l?1:1-d)|0,A=s.width-c*(f||a!=0),R=p?s.height-L*2:0,S=c*(a==-1&&!f&&!l),x=Math.min(s.width,s.height)*(n==CHANNEL_VERTICAL?.375:.125)|0,M=Math.min(c,u);const T=e=>t.push({...e,peak:[0,0],hold:[0],value:[0]});const D=t=>{const e=this._freqToBin(t,"floor"),i=this._binToFreq(e),s=this._binToFreq(e+1),n=Math.log2(t/i)/Math.log2(s/i);return[e,n]};let N,O,P;if(v){const i=(t,e,i)=>+t.toPrecision(i?Math.max(e,1+Math.log10(t)|0):e);const s=t=>{const e=[1,1.12,1.25,1.4,1.6,1.8,2,2.24,2.5,2.8,3.15,3.55,4,4.5,5,5.6,6.3,7.1,8,9,10],i=Math.log10(t)|0,s=t/10**i;let n=1;while(n<e.length&&s>e[n])n++;if(s-e[n-1]<e[n]-s)n--;return(e[n]*10**(i+5)|0)/1e5};const n=[0,24,12,8,6,4,3,2,1][h],a=e?10**(3/(n*10)):2**(1/n),l=a**.5;let d=[],c=e?7.94328235/(n%2?1:l):C_1;do{let t=c;const r=i(t/l,4,true),h=i(t*l,4,true),[d,u]=D(r),[p,f]=D(h);if(e)t=n<4?s(t):i(t,t.toString()[0]<5?3:2);else t=i(t,4,true);if(t>=o)T({posX:0,freq:t,freqLo:r,freqHi:h,binLo:d,binHi:p,ratioLo:u,ratioHi:f});c*=a}while(c<=r);N=A/t.length;t.forEach(((t,e)=>t.posX=S+e*N));const u=t[0],p=t[t.length-1];O=this._freqScaling(u.freqLo);P=A/(this._freqScaling(p.freqHi)-O);if(u.freqLo<o){u.freqLo=o;[u.binLo,u.ratioLo]=D(o)}if(p.freqHi>r){p.freqHi=r;[p.binHi,p.ratioHi]=D(r)}}else if(m){const t=[0,24,12,8,6,4,3,2,1][h]*10;const e=t=>{switch(this._frequencyScale){case SCALE_BARK:return 1960/(26.81/(t+.53)-1);case SCALE_MEL:return 700*(2**t-1);case SCALE_LINEAR:return t}};N=A/t;O=this._freqScaling(o);P=A/(this._freqScaling(r)-O);for(let i=0,s=0;i<t;i++,s+=N){const t=e(O+s/P),i=e(O+(s+N/2)/P),n=e(O+(s+N)/P),[r,o]=D(t),[a,h]=D(n);T({posX:S+s,freq:i,freqLo:t,freqHi:n,binLo:r,binHi:a,ratioLo:o,ratioHi:h})}}else{N=1;O=this._freqScaling(o);P=A/(this._freqScaling(r)-O);const e=this._freqToBin(o,"floor"),i=this._freqToBin(r);let s=-999;for(let n=e;n<=i;n++){const e=this._binToFreq(n),i=S+Math.round(P*(this._freqScaling(e)-O));if(i>s){T({posX:i,freq:e,freqLo:e,freqHi:e,binLo:n,binHi:n,ratioLo:0,ratioHi:0});s=i}else if(t.length){const i=t[t.length-1];i.binHi=n;i.freqHi=e;i.freq=(i.freqLo*e)**.5}}}let I=0,k=0;if(g){const t=this._pixelRatio/(window.devicePixelRatio>1&&window.screen.height<=540?2:1);const e=[[],[128,3,.45],[128,4,.225],[96,6,.225],[80,6,.225],[80,6,.125],[64,6,.125],[48,8,.125],[24,16,.125]];const i=this._ledParams,[s,n,r]=i||e[h];let o,a=C;if(i){const e=2*t;let i;o=s+1;do{o--;i=a/o/(1+n);k=i*n}while((i<e||k<e)&&o>1)}else{const e=540/n;k=Math.min(n*t,Math.max(2,a/e+.1|0))}if(w)a+=k;if(!i)o=Math.min(s,a/(k*2)|0);I=r>=1?r:N*r;this._leds=[o,I,k,a/o-k]}const W=Math.min(N-1,i*(i>0&&i<1?N:1));if(m)N-=Math.max(g?I:0,W);t.forEach(((e,s)=>{let n=e.posX,r=N;if(m){if(i==0&&!g){n|=0;r|=0;if(s>0&&n>t[s-1].posX+t[s-1].width){n--;r++}}else n+=Math.max(g?I:0,W)/2;e.posX=n}e.barCenter=n+(N==1?0:r/2);e.width=r}));const $=[];for(const t of[0,1]){const e=n==CHANNEL_VERTICAL?(L+R)*t:0,i=e+L,s=e+C-(!g||w?0:k);$.push({channelTop:e,channelBottom:i,analyzerBottom:s})}this._aux={analyzerHeight:C,analyzerWidth:A,centerX:c,centerY:u,channelCoords:$,channelHeight:L,channelGap:R,initialX:S,innerRadius:x,outerRadius:M,scaleMin:O,unitWidth:P};this._flg={isAlpha:E,isBands:m,isLeds:g,isLumi:_,isOctaves:v,isOutline:y,isRound:b,noLedGap:w};this._createScales()}_createScales(){if(!this._ready)return;const{analyzerWidth:t,initialX:e,innerRadius:i,scaleMin:s,unitWidth:n}=this._aux,{canvas:r,_frequencyScale:o,_mirror:a,_noteLabels:h,_radial:l,_scaleX:d,_scaleR:c}=this,u=d.canvas,p=c.canvas,f=[],m=this._chLayout==CHANNEL_HORIZONTAL,v=this._chLayout==CHANNEL_VERTICAL,g=["C",,"D",,"E","F",,"G",,"A",,"B"],_=Math.min(r.width,r.height)/34|0,E=u.height>>1,y=_>>1,b=E*(h?.7:1.5),w=y*(h?1:2),L=2**(1/12);if(!h&&(this._ansiBands||o!=SCALE_LOG)){f.push(16,31.5,63,125,250,500,1e3,2e3,4e3);if(o==SCALE_LINEAR)f.push(6e3,8e3,1e4,12e3,14e3,16e3,18e3,2e4,22e3);else f.push(8e3,16e3)}else{let t=C_1;for(let e=-1;e<11;e++){for(let i=0;i<12;i++){if(t>=this._minFreq&&t<=this._maxFreq){const s=g[i],n=s=="C";if(s&&h&&!a&&!m||n)f.push(h?[t,s+(n?e:"")]:t)}t*=L}}}p.width=p.height=(i<<1)+v*_;const C=p.width>>1,A=C-_*.7;const R=(t,e)=>{const i=TAU*(t/r.width),s=i-HALF_PI,n=A*Math.cos(s),o=A*Math.sin(s);c.save();c.translate(C+n,C+o);c.rotate(i);c.fillText(e,0,0);c.restore()};u.width|=0;d.fillStyle=c.strokeStyle=SCALEX_BACKGROUND_COLOR;d.fillRect(0,0,u.width,u.height);c.arc(C,C,C-_/2,0,TAU);c.lineWidth=_;c.stroke();d.fillStyle=c.fillStyle=SCALEX_LABEL_COLOR;d.font=`${E}px ${FONT_FAMILY}`;c.font=`${y}px ${FONT_FAMILY}`;d.textAlign=c.textAlign="center";let S=-b/4,x=-w;for(const i of f){const[p,f]=Array.isArray(i)?i:[i,i<1e3?i|0:`${(i/100|0)/10}k`],g=n*(this._freqScaling(p)-s),_=u.height*.75,y=f[0]=="C",L=E*(h&&!a&&!m?y?1.2:.6:3);d.fillStyle=c.fillStyle=y&&!a&&!m?SCALEX_HIGHLIGHT_COLOR:SCALEX_LABEL_COLOR;if(h){const t=o==SCALE_LOG,e=o==SCALE_LINEAR;let i=["C"];if(t||p>2e3||!e&&p>250||(!l||v)&&(!e&&p>125||p>1e3))i.push("G");if(t||p>4e3||!e&&p>500||(!l||v)&&(!e&&p>250||p>2e3))i.push("E");if(e&&p>4e3||(!l||v)&&(t||p>2e3||!e&&p>500))i.push("D","F","A","B");if(!i.includes(f[0]))continue}if(g>=S+b/2&&g<=t){d.fillText(f,m&&a==-1?t-g:e+g,_,L);if(m||a&&(g>b||a==1))d.fillText(f,m&&a!=1?t+g:(e||r.width)-g,_,L);S=g+Math.min(L,d.measureText(f).width)/2}if(g>=x+w&&g<t-w){R(m&&a==1?t-g:g,f);if(m||a&&(g>w||a==1))R(m&&a!=-1?t+g:-g,f);x=g}}}_draw(t){this._runId=requestAnimationFrame((t=>this._draw(t)));const e=t-this._time,i=t-this._last,s=this._maxFPS?975/this._maxFPS:0;if(i<s)return;this._last=t-(s?i%s:0);this._frames++;if(e>=1e3){this._fps=this._frames/e*1e3;this._frames=0;this._time=t}const{isAlpha:n,isBands:r,isLeds:o,isLumi:a,isOctaves:h,isOutline:l,isRound:d,noLedGap:c}=this._flg,{analyzerHeight:u,centerX:p,centerY:f,channelCoords:m,channelHeight:v,channelGap:g,initialX:_,innerRadius:E,outerRadius:y}=this._aux,{_bars:b,canvas:w,_canvasGradients:L,_chLayout:C,_colorMode:A,_ctx:R,_energy:S,fillAlpha:x,_fps:M,_linearAmplitude:T,_lineWidth:D,maxDecibels:N,minDecibels:O,_mirror:P,_mode:I,overlay:k,_radial:W,showBgColor:$,showPeaks:B,useCanvas:F,_weightingFilter:z}=this,G=this._scaleX.canvas,H=this._scaleR.canvas,q=M>>1,U=C==CHANNEL_COMBINED,V=C==CHANNEL_HORIZONTAL,X=C==CHANNEL_VERTICAL,j=C==CHANNEL_SINGLE,Y=o&&this._trueLeds&&A==COLOR_GRADIENT,Z=W?w.width:this._aux.analyzerWidth,K=_+Z,Q=B&&this._peakLine&&I==MODE_GRAPH,J=W?y-E:u,tt=N-O,[et,it,st,nt]=this._leds||[];if(S.val>0)this._spinAngle+=this._spinSpeed*TAU/(60*M);const rt=t=>{if(this._reflexRatio>0&&!a&&!W){let e,i;if(this.reflexFit||X){e=X&&t==0?v+g:0;i=v-u}else{e=w.height-u*2;i=u}R.save();R.globalAlpha=this.reflexAlpha;if(this.reflexBright!=1)R.filter=`brightness(${this.reflexBright})`;R.setTransform(1,0,0,-1,0,w.height);R.drawImage(w,0,m[t].channelTop,w.width,u,0,e,w.width,i);R.restore()}};const ot=()=>{if(this.showScaleX){if(W){R.save();R.translate(p,f);if(this._spinSpeed)R.rotate(this._spinAngle+HALF_PI);R.drawImage(H,-H.width>>1,-H.width>>1);R.restore()}else R.drawImage(G,0,w.height-G.height)}};const at=t=>{const e=t**2,i=424.36,s=11599.29,n=25122.25,r=544496.41,o=148693636,a=t=>20*Math.log10(t);switch(z){case FILTER_A:const h=o*e**2/((e+i)*Math.sqrt((e+s)*(e+r))*(e+o));return 2+a(h);case FILTER_B:const l=o*e*t/((e+i)*Math.sqrt(e+n)*(e+o));return.17+a(l);case FILTER_C:const d=o*e/((e+i)*(e+o));return.06+a(d);case FILTER_D:const c=((1037918.48-e)**2+1080768.16*e)/((9837328-e)**2+11723776*e),u=t/68966888496476e-18*Math.sqrt(c/((e+79919.29)*(e+1345600)));return a(u);case FILTER_468:const p=-4737338981378384e-39*t**6+2043828333606125e-30*t**4-1.363894795463638e-7*e+1,f=1306612257412824e-34*t**5-2118150887518656e-26*t**3+.0005559488023498642*t,m=.0001246332637532143*t/Math.hypot(p,f);return 18.2+a(m)}return 0};const ht=(t,e,i)=>{R.beginPath();R.moveTo(t,e);R.lineTo(t,i);R.stroke()};const lt=t=>{if(t&&D){const t=R.globalAlpha;R.globalAlpha=1;R.stroke();R.globalAlpha=t}};const dt=t=>Math.max(0,(t*et|0)*(nt+st)-st);const ct=t=>{S.val=t;if(S.peak>0){S.hold--;if(S.hold<0)S.peak+=S.hold/(q*q/2)}if(t>=S.peak){S.peak=t;S.hold=q}};if(k)R.clearRect(0,0,w.width,w.height);let ut=0;const pt=b.length,ft=j?1:2;for(let t=0;t<ft;t++){const{channelTop:e,channelBottom:i,analyzerBottom:s}=m[t],r=this._gradients[this._selectedGrads[t]],h=r.colorStops,c=h.length,y=!$||o&&!k?"#000":r.bgColor,C=X&&W&&t?-1:1,S=!t&&P==-1||t&&P==1,M=!V||t&&P!=1?0:Z>>(t||!S),H=V&&S?-1:1;const j=()=>{const i=G.height,s=i>>1,n=T?100:N,r=T?0:O,o=T?20:5,a=u/(n-r),h=P!=-1&&(!V||t==0||P==1),l=P!=1&&(!V||t!=P);R.save();R.fillStyle=SCALEY_LABEL_COLOR;R.font=`${s}px ${FONT_FAMILY}`;R.textAlign="right";R.lineWidth=1;for(let t=n;t>r;t-=o){const r=e+(n-t)*a,o=t%2==0|0;if(o){const n=r+s*(r==e?.8:.35);if(h)R.fillText(t,i*.85,n);if(l)R.fillText(t,(V?Z:w.width)-i*.1,n);R.strokeStyle=SCALEY_LABEL_COLOR;R.setLineDash([2,4]);R.lineDashOffset=0}else{R.strokeStyle=SCALEY_MIDLINE_COLOR;R.setLineDash([2,8]);R.lineDashOffset=1}R.beginPath();R.moveTo(_+i*o*h,~~r+.5);R.lineTo(K-i*o*l,~~r+.5);R.stroke()}R.restore()};const tt=(t,e)=>{const i=ft[t]+(t<ft.length-1?(ft[t+1]-ft[t])*e:0);return isNaN(i)?-Infinity:i};const et=(t,e=H)=>e*TAU*((t+M)/w.width)+this._spinAngle;const it=(t,e,i)=>{const s=E+e*C,n=et(t,i);return[p+s*Math.cos(n),f+s*Math.sin(n)]};const ot=(t,e,i,s,n)=>{R.beginPath();for(const r of P&&!V?[1,-1]:[H]){const[o,a]=d?[et(t,r),et(t+i,r)]:[];R.moveTo(...it(t,e,r));R.lineTo(...it(t,e+s,r));if(d)R.arc(p,f,E+(e+s)*C,o,a,r!=1);else R.lineTo(...it(t+i,e+s,r));R.lineTo(...it(t+i,e,r));if(d&&!n)R.arc(p,f,E+e*C,a,o,r==1)}lt(n);R.fill()};const ct=(e=0,i=0)=>{let s;if(A==COLOR_GRADIENT&&!Y||I==MODE_GRAPH)s=L[t];else{const t=A==COLOR_BAR_INDEX?i%c:h.findLastIndex((t=>o?dt(e)<=dt(t.level):e<=t.level));s=h[t].color}R.fillStyle=R.strokeStyle=s};if(F){if(V&&!W){const e=Z*(t+S),i=S?-1:1;R.setTransform(i,0,0,1,e,0)}if(!k||$){if(k)R.globalAlpha=this.bgAlpha;R.fillStyle=y;if(t==0||!W&&!U)R.fillRect(_,e-g,Z,(k&&this.reflexAlpha==1?u:v)+g);R.globalAlpha=1}if(this.showScaleY&&!a&&!W&&(t==0||!U))j();if(o){R.setLineDash([nt,st]);R.lineWidth=b[0].width}else R.lineWidth=l?Math.min(D,b[0].width/2):D;R.save();if(!W){const t=new Path2D;t.rect(0,e,w.width,u);R.clip(t)}}let ft=this._fftData[t];this._analyzer[t].getFloatFrequencyData(ft);if(z)ft=ft.map(((t,e)=>t+at(this._binToFreq(e))));R.beginPath();let mt=[];for(let i=0;i<pt;i++){const r=b[i],{posX:u,barCenter:p,width:f,freq:m,binLo:v,binHi:g,ratioLo:E,ratioHi:y}=r;let w=Math.max(tt(v,E),tt(g,y));for(let t=v+1;t<g;t++){if(ft[t]>w)w=ft[t]}w=this._normalizedB(w);r.value[t]=w;ut+=w;if(r.peak[t]>0){r.hold[t]--;if(r.hold[t]<0)r.peak[t]+=r.hold[t]/(q*q/2)}if(w>=r.peak[t]){r.peak[t]=w;r.hold[t]=q}if(!F)continue;if(a||n)R.globalAlpha=w;else if(l)R.globalAlpha=x;ct(w,i);const L=a?J:o?dt(w):w*J|0;if(I==MODE_GRAPH){const t=i?0:(this._normalizedB(ft[b[1].binLo])*J+L)/2;if(W){if(i==0){if(V)R.moveTo(...it(0,0));R.lineTo(...it(0,u<0?t:L))}if(u>=0){const t=[u,L];R.lineTo(...it(...t));mt.push(t)}}else{if(i==0){if(P==-1&&!V)R.moveTo(_,s-(u<_?t:L));else{const t=v?this._normalizedB(ft[v-1])*J:L;R.moveTo(_-D,s-t)}}if(V||P!=-1||u>=_)R.lineTo(u,s-L)}}else{if(o){if($&&!k&&(t==0||!U)){const t=R.globalAlpha;R.strokeStyle=LEDS_UNLIT_COLOR;R.globalAlpha=1;ht(p,e,s);R.strokeStyle=R.fillStyle;R.globalAlpha=t}if(Y){const t=a?0:h.findLastIndex((t=>dt(w)<=dt(t.level)));let e=s;for(let i=c-1;i>=t;i--){R.strokeStyle=h[i].color;let n=s-(i==t?L:dt(h[i].level));ht(p,e,n);e=n-st}}else ht(p,s,s-L)}else if(u>=_){if(W)ot(u,0,f,L,l);else if(d){const t=f/2,e=s+t;R.beginPath();R.moveTo(u,e);R.lineTo(u,e-L);R.arc(p,e-L,t,PI,TAU);R.lineTo(u+f,e);lt(l);R.fill()}else{const t=l?R.lineWidth:0;R.beginPath();R.rect(u,s+t,f,-L-t);lt(l);R.fill()}}}const C=r.peak[t];if(C>0&&B&&!Q&&!a&&u>=_&&u<K){if(l&&D>0)R.globalAlpha=1;else if(n)R.globalAlpha=C;if(A==COLOR_BAR_LEVEL||Y)ct(C);if(o){const t=dt(C);if(t>=st)R.fillRect(u,s-t,f,nt)}else if(!W)R.fillRect(u,s-C*J,f,2);else if(I!=MODE_GRAPH)ot(u,C*J,f,-2)}}if(!F)continue;R.globalAlpha=1;if(I==MODE_GRAPH){ct();if(W&&!V){if(P){let t;while(t=mt.pop())R.lineTo(...it(...t,-1))}R.closePath()}if(D>0)R.stroke();if(x>0){if(W){const t=V?et(Z>>1):0,e=V?et(Z):TAU;R.moveTo(...it(V?Z>>1:0,0));R.arc(p,f,E,t,e,V?!S:true)}else{R.lineTo(K,s);R.lineTo(_,s)}R.globalAlpha=x;R.fill();R.globalAlpha=1}if(Q||W&&B){mt=[];R.beginPath();b.forEach(((e,i)=>{let n=e.posX,r=e.peak[t],o=i?"lineTo":"moveTo";if(W&&n<0){const e=b[i+1];r=findY(n,r,e.posX,e.peak[t],0);n=0}r*=J;if(Q){R[o](...W?it(n,r):[n,s-r]);if(W&&P&&!V)mt.push([n,r])}else if(r>0)ot(n,r,1,-2)}));if(Q){let t;while(t=mt.pop())R.lineTo(...it(...t,-1));R.lineWidth=1;R.stroke()}}}R.restore();if(V&&!W)R.setTransform(1,0,0,1,0,0);if(!V&&!U||t)rt(t)}ct(ut/(pt<<ft-1));if(F){if(P&&!W&&!V){R.setTransform(-1,0,0,1,w.width-_,0);R.drawImage(w,_,0,p,w.height,0,0,p,w.height);R.setTransform(1,0,0,1,0,0)}R.setLineDash([]);ot()}if(this.showFPS){const t=G.height;R.font=`bold ${t}px ${FONT_FAMILY}`;R.fillStyle=FPS_COLOR;R.textAlign="right";R.fillText(Math.round(M),w.width-t,t*2)}if(this.onCanvasDraw){R.save();R.fillStyle=R.strokeStyle=L[0];this.onCanvasDraw(this,{timestamp:t,_canvasGradients:L});R.restore()}}_freqScaling(t){switch(this._frequencyScale){case SCALE_LOG:return Math.log2(t);case SCALE_BARK:return 26.81*t/(1960+t)-.53;case SCALE_MEL:return Math.log2(1+t/700);case SCALE_LINEAR:return t}}_freqToBin(t,e="round"){const i=this._analyzer[0].frequencyBinCount-1,s=Math[e](t*this.fftSize/this.audioCtx.sampleRate);return s<i?s:i}_makeGrad(){if(!this._ready)return;const{canvas:t,_ctx:e,_radial:i,_reflexRatio:s}=this,{analyzerWidth:n,centerX:r,centerY:o,initialX:a,innerRadius:h,outerRadius:l}=this._aux,{isLumi:d}=this._flg,c=this._chLayout==CHANNEL_VERTICAL,u=1-s,p=d?t.height:t.height*(1-s*!c)|0;for(const t of[0,1]){const f=this._gradients[this._selectedGrads[t]],m=f.colorStops,v=f.dir=="h";let g;if(i)g=e.createRadialGradient(r,o,l,r,o,h-(l-h)*c);else g=e.createLinearGradient(...v?[a,0,a+n,0]:[0,0,0,p]);if(m){const t=c&&!this._splitGradient&&(!v||i);for(let e=0;e<1+t;e++){const n=m.length-1;m.forEach(((r,o)=>{let a=r.pos;if(t)a/=2;if(c&&!d&&!i&&!v){a*=u;if(!t&&a>.5*u)a+=.5*s}if(e==1){if(i||d){const t=n-o;r=m[t];a=1-r.pos/2}else{if(o==0&&a>0)g.addColorStop(.5,r.color);a+=.5}}g.addColorStop(a,r.color);if(c&&o==n&&a<.5)g.addColorStop(.5,r.color)}))}}this._canvasGradients[t]=g}}_normalizedB(t){const e=this._linearAmplitude,i=e?1/this._linearBoost:1,s=(t,e,i)=>t<=e?e:t>=i?i:t,n=t=>10**(t/20);let r=this.maxDecibels,o=this.minDecibels;if(e){r=n(r);o=n(o);t=n(t)**i}return s((t-o)/(r-o)**i,0,1)}_setCanvas(t){if(!this._ready)return;const{canvas:e,_ctx:i}=this,s=this._scaleX.canvas,n=window.devicePixelRatio/(this._loRes+1);let r=window.screen.width*n,o=window.screen.height*n;if(Math.abs(window.orientation)==90&&r<o)[r,o]=[o,r];const a=this.isFullscreen,h=a&&this._fsEl==e,l=h?r:(this._width||this._container.clientWidth||this._defaultWidth)*n|0,d=h?o:(this._height||this._container.clientHeight||this._defaultHeight)*n|0;this._pixelRatio=n;this._fsWidth=r;this._fsHeight=o;if(e.width==l&&e.height==d)return;e.width=l;e.height=d;if(!this.overlay){i.fillStyle="#000";i.fillRect(0,0,l,d)}i.lineJoin="bevel";s.width=l;s.height=Math.max(20*n,Math.min(l,d)/32|0);this._calcBars();this._makeGrad();if(this._fsStatus!==undefined&&this._fsStatus!==a)t=REASON_FSCHANGE;this._fsStatus=a;if(this.onCanvasResize)this.onCanvasResize(t,this)}_setGradient(t,e){if(!this._gradients.hasOwnProperty(t))throw new AudioMotionError(ERR_UNKNOWN_GRADIENT,t);if(![0,1].includes(e)){this._selectedGrads[1]=t;e=0}this._selectedGrads[e]=t;this._makeGrad()}_setProps(t,e){const i={alphaBars:false,ansiBands:false,barSpace:.1,bgAlpha:.7,channelLayout:CHANNEL_SINGLE,colorMode:COLOR_GRADIENT,fftSize:8192,fillAlpha:1,frequencyScale:SCALE_LOG,gradient:GRADIENTS[0][0],ledBars:false,linearAmplitude:false,linearBoost:1,lineWidth:0,loRes:false,lumiBars:false,maxDecibels:-25,maxFPS:0,maxFreq:22e3,minDecibels:-85,minFreq:20,mirror:0,mode:0,noteLabels:false,outlineBars:false,overlay:false,peakLine:false,radial:false,reflexAlpha:.15,reflexBright:1,reflexFit:true,reflexRatio:0,roundBars:false,showBgColor:true,showFPS:false,showPeaks:true,showScaleX:true,showScaleY:false,smoothing:.5,spinSpeed:0,splitGradient:false,start:true,trueLeds:false,useCanvas:true,volume:1,weightingFilter:FILTER_NONE};const s=["onCanvasDraw","onCanvasResize"];const n=["gradientLeft","gradientRight","height","width","stereo"];const r=Object.keys(i).filter((t=>t!="start")).concat(s,n);if(e||t===undefined)t={...i,...t};for(const e of Object.keys(t)){if(s.includes(e)&&typeof t[e]!=="function")this[e]=undefined;else if(r.includes(e))this[e]=t[e]}if(t.start!==undefined)this.toggleAnalyzer(t.start)}}module.exports={AudioContext:window.AudioContext||window.webkitAudioContext,AudioMotionAnalyzer:AudioMotionAnalyzer,WaveSurfer:l$1,RegionsPlugin:s$5,TimelinePlugin:n$2,Minimap:u,EnvelopePlugin:s$3,Spectrogram:i$2,RecordPlugin:r,ZoomPlugin:i};
+ */
+
+const VERSION = '4.3.0';
+
+// internal constants
+const PI      = Math.PI,
+	  TAU     = 2 * PI,
+	  HALF_PI = PI / 2,
+	  C_1     = 8.17579892;  // frequency for C -1
+
+const CANVAS_BACKGROUND_COLOR  = '#000',
+	  CHANNEL_COMBINED         = 'dual-combined',
+	  CHANNEL_HORIZONTAL       = 'dual-horizontal',
+	  CHANNEL_SINGLE           = 'single',
+	  CHANNEL_VERTICAL         = 'dual-vertical',
+	  COLOR_BAR_INDEX          = 'bar-index',
+	  COLOR_BAR_LEVEL          = 'bar-level',
+	  COLOR_GRADIENT           = 'gradient',
+	  DEBOUNCE_TIMEOUT         = 60,
+	  EVENT_CLICK              = 'click',
+	  EVENT_FULLSCREENCHANGE   = 'fullscreenchange',
+	  EVENT_RESIZE             = 'resize',
+ 	  GRADIENT_DEFAULT_BGCOLOR = '#111',
+ 	  FILTER_NONE              = '',
+ 	  FILTER_A                 = 'A',
+ 	  FILTER_B                 = 'B',
+ 	  FILTER_C                 = 'C',
+ 	  FILTER_D                 = 'D',
+ 	  FILTER_468               = '468',
+	  FONT_FAMILY              = 'sans-serif',
+	  FPS_COLOR                = '#0f0',
+	  LEDS_UNLIT_COLOR         = '#7f7f7f22',
+	  MODE_GRAPH               = 10,
+	  REASON_CREATE            = 'create',
+	  REASON_FSCHANGE          = 'fschange',
+	  REASON_LORES             = 'lores',
+	  REASON_RESIZE            = EVENT_RESIZE,
+	  REASON_USER              = 'user',
+	  SCALEX_BACKGROUND_COLOR  = '#000c',
+	  SCALEX_LABEL_COLOR       = '#fff',
+	  SCALEX_HIGHLIGHT_COLOR   = '#4f4',
+	  SCALEY_LABEL_COLOR       = '#888',
+	  SCALEY_MIDLINE_COLOR     = '#555',
+	  SCALE_BARK               = 'bark',
+	  SCALE_LINEAR             = 'linear',
+	  SCALE_LOG                = 'log',
+	  SCALE_MEL                = 'mel';
+
+// built-in gradients
+const PRISM = [ '#a35', '#c66', '#e94', '#ed0', '#9d5', '#4d8', '#2cb', '#0bc', '#09c', '#36b' ],
+	  GRADIENTS = [
+	  [ 'classic', {
+			colorStops: [
+				'red',
+				{ color: 'yellow', level: .85, pos: .6 },
+				{ color: 'lime', level: .475 }
+			]
+	  }],
+	  [ 'prism', {
+			colorStops: PRISM
+	  }],
+	  [ 'rainbow', {
+			dir: 'h',
+			colorStops: [ '#817', ...PRISM, '#639' ]
+	  }],
+	  [ 'orangered', {
+	  		bgColor: '#3e2f29',
+	  		colorStops: [ 'OrangeRed' ]
+	  }],
+	  [ 'steelblue', {
+	  		bgColor: '#222c35',
+	  		colorStops: [ 'SteelBlue' ]
+	  }]
+];
+
+// custom error messages
+const ERR_AUDIO_CONTEXT_FAIL     = [ 'ERR_AUDIO_CONTEXT_FAIL', 'Could not create audio context. Web Audio API not supported?' ],
+	  ERR_INVALID_AUDIO_CONTEXT  = [ 'ERR_INVALID_AUDIO_CONTEXT', 'Provided audio context is not valid' ],
+	  ERR_UNKNOWN_GRADIENT       = [ 'ERR_UNKNOWN_GRADIENT', 'Unknown gradient' ],
+	  ERR_FREQUENCY_TOO_LOW      = [ 'ERR_FREQUENCY_TOO_LOW', 'Frequency values must be >= 1' ],
+	  ERR_INVALID_MODE           = [ 'ERR_INVALID_MODE', 'Invalid mode' ],
+	  ERR_REFLEX_OUT_OF_RANGE    = [ 'ERR_REFLEX_OUT_OF_RANGE', 'Reflex ratio must be >= 0 and < 1' ],
+	  ERR_INVALID_AUDIO_SOURCE   = [ 'ERR_INVALID_AUDIO_SOURCE', 'Audio source must be an instance of HTMLMediaElement or AudioNode' ],
+	  ERR_GRADIENT_INVALID_NAME  = [ 'ERR_GRADIENT_INVALID_NAME', 'Gradient name must be a non-empty string' ],
+	  ERR_GRADIENT_NOT_AN_OBJECT = [ 'ERR_GRADIENT_NOT_AN_OBJECT', 'Gradient options must be an object' ],
+	  ERR_GRADIENT_MISSING_COLOR = [ 'ERR_GRADIENT_MISSING_COLOR', 'Gradient colorStops must be a non-empty array' ];
+
+class AudioMotionError extends Error {
+	constructor( error, value ) {
+		const [ code, message ] = error;
+		super( message + ( value !== undefined ? `: ${value}` : '' ) );
+		this.name = 'AudioMotionError';
+		this.code = code;
+	}
+}
+
+// helper function - output deprecation warning message on console
+const deprecate = ( name, alternative ) => console.warn( `${name} is deprecated. Use ${alternative} instead.` );
+
+// helper function - validate a given value with an array of strings (by default, all lowercase)
+// returns the validated value, or the first element of `list` if `value` is not found in the array
+const validateFromList = ( value, list, modifier = 'toLowerCase' ) => list[ Math.max( 0, list.indexOf( ( '' + value )[ modifier ]() ) ) ];
+
+// helper function - find the Y-coordinate of a point located between two other points, given its X-coordinate
+const findY = ( x1, y1, x2, y2, x ) => y1 + ( y2 - y1 ) * ( x - x1 ) / ( x2 - x1 );
+
+// Polyfill for Array.findLastIndex()
+if ( ! Array.prototype.findLastIndex ) {
+	Array.prototype.findLastIndex = function( callback ) {
+		let index = this.length;
+		while ( index-- > 0 ) {
+			if ( callback( this[ index ] ) )
+				return index;
+		}
+		return -1;
+	};
+}
+
+// AudioMotionAnalyzer class
+
+class AudioMotionAnalyzer {
+
+/**
+ * CONSTRUCTOR
+ *
+ * @param {object} [container] DOM element where to insert the analyzer; if undefined, uses the document body
+ * @param {object} [options]
+ * @returns {object} AudioMotionAnalyzer object
+ */
+	constructor( container, options = {} ) {
+
+		this._ready = false;
+
+		// Initialize internal objects
+		this._aux = {};				// auxiliary variables
+		this._canvasGradients = []; // CanvasGradient objects for channels 0 and 1
+		this._destroyed = false;
+		this._energy = { val: 0, peak: 0, hold: 0 };
+		this._flg = {};				// flags
+		this._fps = 0;
+		this._gradients = {};       // registered gradients
+		this._last = 0;				// timestamp of last rendered frame
+		this._outNodes = [];		// output nodes
+		this._ownContext = false;
+		this._selectedGrads = [];   // names of the currently selected gradients for channels 0 and 1
+		this._sources = [];			// input nodes
+
+		// Register built-in gradients
+		for ( const [ name, options ] of GRADIENTS )
+			this.registerGradient( name, options );
+
+		// Set container
+		this._container = container || document.body;
+
+		// Make sure we have minimal width and height dimensions in case of an inline container
+		this._defaultWidth  = this._container.clientWidth  || 640;
+		this._defaultHeight = this._container.clientHeight || 270;
+
+		// Use audio context provided by user, or create a new one
+
+		let audioCtx;
+
+		if ( options.source && ( audioCtx = options.source.context ) ) {
+			// get audioContext from provided source audioNode
+		}
+		else if ( audioCtx = options.audioCtx ) {
+			// use audioContext provided by user
+		}
+		else {
+			try {
+				audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
+				this._ownContext = true;
+			}
+			catch( err ) {
+				throw new AudioMotionError( ERR_AUDIO_CONTEXT_FAIL );
+			}
+		}
+
+		// make sure audioContext is valid
+		if ( ! audioCtx.createGain )
+			throw new AudioMotionError( ERR_INVALID_AUDIO_CONTEXT );
+
+		/*
+			Connection routing:
+			===================
+
+			for dual channel layouts:                +--->  analyzer[0]  ---+
+		    	                                     |                      |
+			(source) --->  input  --->  splitter  ---+                      +--->  merger  --->  output  ---> (destination)
+		    	                                     |                      |
+		        	                                 +--->  analyzer[1]  ---+
+
+			for single channel layout:
+
+			(source) --->  input  ----------------------->  analyzer[0]  --------------------->  output  ---> (destination)
+
+		*/
+
+		// create the analyzer nodes, channel splitter and merger, and gain nodes for input/output connections
+		const analyzer = this._analyzer = [ audioCtx.createAnalyser(), audioCtx.createAnalyser() ];
+		const splitter = this._splitter = audioCtx.createChannelSplitter(2);
+ 		const merger   = this._merger   = audioCtx.createChannelMerger(2);
+ 		this._input    = audioCtx.createGain();
+ 		this._output   = audioCtx.createGain();
+
+ 		// connect audio source if provided in the options
+		if ( options.source )
+			this.connectInput( options.source );
+
+ 		// connect splitter -> analyzers
+ 		for ( const i of [0,1] )
+			splitter.connect( analyzer[ i ], i );
+
+		// connect merger -> output
+		merger.connect( this._output );
+
+		// connect output -> destination (speakers)
+		if ( options.connectSpeakers !== false )
+			this.connectOutput();
+
+		// create analyzer canvas
+		const canvas = document.createElement('canvas');
+		canvas.style = 'max-width: 100%;';
+		this._ctx = canvas.getContext('2d');
+
+		// create auxiliary canvases for the X-axis and radial scale labels
+		for ( const ctx of [ '_scaleX', '_scaleR' ] )
+			this[ ctx ] = document.createElement('canvas').getContext('2d');
+
+		// set fullscreen element (defaults to canvas)
+		this._fsEl = options.fsElement || canvas;
+
+		// Update canvas size on container / window resize and fullscreen events
+
+		// Fullscreen changes are handled quite differently across browsers:
+		// 1. Chromium browsers will trigger a `resize` event followed by a `fullscreenchange`
+		// 2. Firefox triggers the `fullscreenchange` first and then the `resize`
+		// 3. Chrome on Android (TV) won't trigger a `resize` event, only `fullscreenchange`
+		// 4. Safari won't trigger `fullscreenchange` events at all, and on iPadOS the `resize`
+		//    event is triggered **on the window** only (last tested on iPadOS 14)
+
+		// helper function for resize events
+		const onResize = () => {
+			if ( ! this._fsTimeout ) {
+				// delay the resize to prioritize a possible following `fullscreenchange` event
+				this._fsTimeout = window.setTimeout( () => {
+					if ( ! this._fsChanging ) {
+						this._setCanvas( REASON_RESIZE );
+						this._fsTimeout = 0;
+					}
+				}, DEBOUNCE_TIMEOUT );
+			}
+		};
+
+		// if browser supports ResizeObserver, listen for resize on the container
+		if ( window.ResizeObserver ) {
+			this._observer = new ResizeObserver( onResize );
+			this._observer.observe( this._container );
+		}
+
+		// create an AbortController to remove event listeners on destroy()
+		this._controller = new AbortController();
+		const signal = this._controller.signal;
+
+		// listen for resize events on the window - required for fullscreen on iPadOS
+		window.addEventListener( EVENT_RESIZE, onResize, { signal } );
+
+		// listen for fullscreenchange events on the canvas - not available on Safari
+		canvas.addEventListener( EVENT_FULLSCREENCHANGE, () => {
+			// set flag to indicate a fullscreen change in progress
+			this._fsChanging = true;
+
+			// if there is a scheduled resize event, clear it
+			if ( this._fsTimeout )
+				window.clearTimeout( this._fsTimeout );
+
+			// update the canvas
+			this._setCanvas( REASON_FSCHANGE );
+
+			// delay clearing the flag to prevent any shortly following resize event
+			this._fsTimeout = window.setTimeout( () => {
+				this._fsChanging = false;
+				this._fsTimeout = 0;
+			}, DEBOUNCE_TIMEOUT );
+		}, { signal } );
+
+		// Resume audio context if in suspended state (browsers' autoplay policy)
+		const unlockContext = () => {
+			if ( audioCtx.state == 'suspended' )
+				audioCtx.resume();
+			window.removeEventListener( EVENT_CLICK, unlockContext );
+		};
+		window.addEventListener( EVENT_CLICK, unlockContext );
+
+		// reset FPS-related variables when window becomes visible (avoid FPS drop due to frames not rendered while hidden)
+		document.addEventListener( 'visibilitychange', () => {
+			if ( document.visibilityState != 'hidden' ) {
+				this._frames = 0;
+				this._time = performance.now();
+			}
+		}, { signal } );
+
+		// Set configuration options and use defaults for any missing properties
+		this._setProps( options, true );
+
+		// add canvas to the container
+		if ( this.useCanvas )
+			this._container.appendChild( canvas );
+
+		// Finish canvas setup
+		this._ready = true;
+		this._setCanvas( REASON_CREATE );
+	}
+
+	/**
+	 * ==========================================================================
+	 *
+	 * PUBLIC PROPERTIES GETTERS AND SETTERS
+	 *
+	 * ==========================================================================
+	 */
+
+	get alphaBars() {
+		return this._alphaBars;
+	}
+	set alphaBars( value ) {
+		this._alphaBars = !! value;
+		this._calcBars();
+	}
+
+	get ansiBands() {
+		return this._ansiBands;
+	}
+	set ansiBands( value ) {
+		this._ansiBands = !! value;
+		this._calcBars();
+	}
+
+	get barSpace() {
+		return this._barSpace;
+	}
+	set barSpace( value ) {
+		this._barSpace = +value || 0;
+		this._calcBars();
+	}
+
+	get channelLayout() {
+		return this._chLayout;
+	}
+	set channelLayout( value ) {
+		this._chLayout = validateFromList( value, [ CHANNEL_SINGLE, CHANNEL_HORIZONTAL, CHANNEL_VERTICAL, CHANNEL_COMBINED ] );
+
+		// update node connections
+		this._input.disconnect();
+		this._input.connect( this._chLayout != CHANNEL_SINGLE ? this._splitter : this._analyzer[0] );
+		this._analyzer[0].disconnect();
+		if ( this._outNodes.length ) // connect analyzer only if the output is connected to other nodes
+			this._analyzer[0].connect( this._chLayout != CHANNEL_SINGLE ? this._merger : this._output );
+
+		this._calcBars();
+		this._makeGrad();
+	}
+
+	get colorMode() {
+		return this._colorMode;
+	}
+	set colorMode( value ) {
+		this._colorMode = validateFromList( value, [ COLOR_GRADIENT, COLOR_BAR_INDEX, COLOR_BAR_LEVEL ] );
+	}
+
+	get fftSize() {
+		return this._analyzer[0].fftSize;
+	}
+	set fftSize( value ) {
+		for ( const i of [0,1] )
+			this._analyzer[ i ].fftSize = value;
+		const binCount = this._analyzer[0].frequencyBinCount;
+		this._fftData = [ new Float32Array( binCount ), new Float32Array( binCount ) ];
+		this._calcBars();
+	}
+
+	get frequencyScale() {
+		return this._frequencyScale;
+	}
+	set frequencyScale( value ) {
+		this._frequencyScale = validateFromList( value, [ SCALE_LOG, SCALE_BARK, SCALE_MEL, SCALE_LINEAR ] );
+		this._calcBars();
+	}
+
+	get gradient() {
+		return this._selectedGrads[0];
+	}
+	set gradient( value ) {
+		this._setGradient( value );
+	}
+
+	get gradientLeft() {
+		return this._selectedGrads[0];
+	}
+	set gradientLeft( value ) {
+		this._setGradient( value, 0 );
+	}
+
+	get gradientRight() {
+		return this._selectedGrads[1];
+	}
+	set gradientRight( value ) {
+		this._setGradient( value, 1 );
+	}
+
+	get height() {
+		return this._height;
+	}
+	set height( h ) {
+		this._height = h;
+		this._setCanvas( REASON_USER );
+	}
+
+	get ledBars() {
+		return this._showLeds;
+	}
+	set ledBars( value ) {
+		this._showLeds = !! value;
+		this._calcBars();
+	}
+
+	get linearAmplitude() {
+		return this._linearAmplitude;
+	}
+	set linearAmplitude( value ) {
+		this._linearAmplitude = !! value;
+	}
+
+	get linearBoost() {
+		return this._linearBoost;
+	}
+	set linearBoost( value ) {
+		this._linearBoost = value >= 1 ? +value : 1;
+	}
+
+	get lineWidth() {
+		return this._lineWidth;
+	}
+	set lineWidth( value ) {
+		this._lineWidth = +value || 0;
+	}
+
+	get loRes() {
+		return this._loRes;
+	}
+	set loRes( value ) {
+		this._loRes = !! value;
+		this._setCanvas( REASON_LORES );
+	}
+
+	get lumiBars() {
+		return this._lumiBars;
+	}
+	set lumiBars( value ) {
+		this._lumiBars = !! value;
+		this._calcBars();
+		this._makeGrad();
+	}
+
+	get maxDecibels() {
+		return this._analyzer[0].maxDecibels;
+	}
+	set maxDecibels( value ) {
+		for ( const i of [0,1] )
+			this._analyzer[ i ].maxDecibels = value;
+	}
+
+	get maxFPS() {
+		return this._maxFPS;
+	}
+	set maxFPS( value ) {
+		this._maxFPS = value < 0 ? 0 : +value || 0;
+	}
+
+	get maxFreq() {
+		return this._maxFreq;
+	}
+	set maxFreq( value ) {
+		if ( value < 1 )
+			throw new AudioMotionError( ERR_FREQUENCY_TOO_LOW );
+		else {
+			this._maxFreq = Math.min( value, this.audioCtx.sampleRate / 2 );
+			this._calcBars();
+		}
+	}
+
+	get minDecibels() {
+		return this._analyzer[0].minDecibels;
+	}
+	set minDecibels( value ) {
+		for ( const i of [0,1] )
+			this._analyzer[ i ].minDecibels = value;
+	}
+
+	get minFreq() {
+		return this._minFreq;
+	}
+	set minFreq( value ) {
+		if ( value < 1 )
+			throw new AudioMotionError( ERR_FREQUENCY_TOO_LOW );
+		else {
+			this._minFreq = +value;
+			this._calcBars();
+		}
+	}
+
+	get mirror() {
+		return this._mirror;
+	}
+	set mirror( value ) {
+		this._mirror = Math.sign( value ) | 0; // ensure only -1, 0 or 1
+		this._calcBars();
+		this._makeGrad();
+	}
+
+	get mode() {
+		return this._mode;
+	}
+	set mode( value ) {
+		const mode = value | 0;
+		if ( mode >= 0 && mode <= 10 && mode != 9 ) {
+			this._mode = mode;
+			this._calcBars();
+			this._makeGrad();
+		}
+		else
+			throw new AudioMotionError( ERR_INVALID_MODE, value );
+	}
+
+	get noteLabels() {
+		return this._noteLabels;
+	}
+	set noteLabels( value ) {
+		this._noteLabels = !! value;
+		this._createScales();
+	}
+
+	get outlineBars() {
+		return this._outlineBars;
+	}
+	set outlineBars( value ) {
+		this._outlineBars = !! value;
+		this._calcBars();
+	}
+
+	get peakLine() {
+		return this._peakLine;
+	}
+	set peakLine( value ) {
+		this._peakLine = !! value;
+	}
+
+	get radial() {
+		return this._radial;
+	}
+	set radial( value ) {
+		this._radial = !! value;
+		this._calcBars();
+		this._makeGrad();
+	}
+
+	get reflexRatio() {
+		return this._reflexRatio;
+	}
+	set reflexRatio( value ) {
+		value = +value || 0;
+		if ( value < 0 || value >= 1 )
+			throw new AudioMotionError( ERR_REFLEX_OUT_OF_RANGE );
+		else {
+			this._reflexRatio = value;
+			this._calcBars();
+			this._makeGrad();
+		}
+	}
+
+	get roundBars() {
+		return this._roundBars;
+	}
+	set roundBars( value ) {
+		this._roundBars = !! value;
+		this._calcBars();
+	}
+
+	get smoothing() {
+		return this._analyzer[0].smoothingTimeConstant;
+	}
+	set smoothing( value ) {
+		for ( const i of [0,1] )
+			this._analyzer[ i ].smoothingTimeConstant = value;
+	}
+
+	get spinSpeed() {
+		return this._spinSpeed;
+	}
+	set spinSpeed( value ) {
+		value = +value || 0;
+		if ( this._spinSpeed === undefined || value == 0 )
+			this._spinAngle = -HALF_PI; // initialize or reset the rotation angle
+		this._spinSpeed = value;
+	}
+
+	get splitGradient() {
+		return this._splitGradient;
+	}
+	set splitGradient( value ) {
+		this._splitGradient = !! value;
+		this._makeGrad();
+	}
+
+	get stereo() {
+		deprecate( 'stereo', 'channelLayout' );
+		return this._chLayout != CHANNEL_SINGLE;
+	}
+	set stereo( value ) {
+		deprecate( 'stereo', 'channelLayout' );
+		this.channelLayout = value ? CHANNEL_VERTICAL : CHANNEL_SINGLE;
+	}
+
+	get trueLeds() {
+		return this._trueLeds;
+	}
+	set trueLeds( value ) {
+		this._trueLeds = !! value;
+	}
+
+	get volume() {
+		return this._output.gain.value;
+	}
+	set volume( value ) {
+		this._output.gain.value = value;
+	}
+
+	get weightingFilter() {
+		return this._weightingFilter;
+	}
+	set weightingFilter( value ) {
+		this._weightingFilter = validateFromList( value, [ FILTER_NONE, FILTER_A, FILTER_B, FILTER_C, FILTER_D, FILTER_468 ], 'toUpperCase' );
+	}
+
+	get width() {
+		return this._width;
+	}
+	set width( w ) {
+		this._width = w;
+		this._setCanvas( REASON_USER );
+	}
+
+	// Read only properties
+
+	get audioCtx() {
+		return this._input.context;
+	}
+	get canvas() {
+		return this._ctx.canvas;
+	}
+	get canvasCtx() {
+		return this._ctx;
+	}
+	get connectedSources() {
+		return this._sources;
+	}
+	get connectedTo() {
+		return this._outNodes;
+	}
+	get fps() {
+		return this._fps;
+	}
+	get fsHeight() {
+		return this._fsHeight;
+	}
+	get fsWidth() {
+		return this._fsWidth;
+	}
+	get isAlphaBars() {
+		return this._flg.isAlpha;
+	}
+	get isBandsMode() {
+		return this._flg.isBands;
+	}
+	get isDestroyed() {
+		return this._destroyed;
+	}
+	get isFullscreen() {
+		return this._fsEl && ( document.fullscreenElement || document.webkitFullscreenElement ) === this._fsEl;
+	}
+	get isLedBars() {
+		return this._flg.isLeds;
+	}
+	get isLumiBars() {
+		return this._flg.isLumi;
+	}
+	get isOctaveBands() {
+		return this._flg.isOctaves;
+	}
+	get isOn() {
+		return !! this._runId;
+	}
+	get isOutlineBars() {
+		return this._flg.isOutline;
+	}
+	get pixelRatio() {
+		return this._pixelRatio;
+	}
+	get isRoundBars() {
+		return this._flg.isRound;
+	}
+	static get version() {
+		return VERSION;
+	}
+
+	/**
+	 * ==========================================================================
+     *
+	 * PUBLIC METHODS
+	 *
+	 * ==========================================================================
+	 */
+
+	/**
+	 * Connects an HTML media element or audio node to the analyzer
+	 *
+	 * @param {object} an instance of HTMLMediaElement or AudioNode
+	 * @returns {object} a MediaElementAudioSourceNode object if created from HTML element, or the same input object otherwise
+	 */
+	connectInput( source ) {
+		const isHTML = source instanceof HTMLMediaElement;
+
+		if ( ! ( isHTML || source.connect ) )
+			throw new AudioMotionError( ERR_INVALID_AUDIO_SOURCE );
+
+		// if source is an HTML element, create an audio node for it; otherwise, use the provided audio node
+		const node = isHTML ? this.audioCtx.createMediaElementSource( source ) : source;
+
+		if ( ! this._sources.includes( node ) ) {
+			node.connect( this._input );
+			this._sources.push( node );
+		}
+
+		return node;
+	}
+
+	/**
+	 * Connects the analyzer output to another audio node
+	 *
+	 * @param [{object}] an AudioNode; if undefined, the output is connected to the audio context destination (speakers)
+	 */
+	connectOutput( node = this.audioCtx.destination ) {
+		if ( this._outNodes.includes( node ) )
+			return;
+
+		this._output.connect( node );
+		this._outNodes.push( node );
+
+		// when connecting the first node, also connect the analyzer nodes to the merger / output nodes
+		if ( this._outNodes.length == 1 ) {
+			for ( const i of [0,1] )
+				this._analyzer[ i ].connect( ( this._chLayout == CHANNEL_SINGLE && ! i ? this._output : this._merger ), 0, i );
+		}
+	}
+
+	/**
+	 * Destroys instance
+	 */
+	destroy() {
+		if ( ! this._ready )
+			return;
+
+		const { audioCtx, canvas, _controller, _input, _merger, _observer, _ownContext, _splitter } = this;
+
+		this._destroyed = true;
+		this._ready = false;
+		this.stop();
+
+		// remove event listeners
+		_controller.abort();
+		if ( _observer )
+			_observer.disconnect();
+
+		// clear callbacks and fullscreen element
+		this.onCanvasResize = null;
+		this.onCanvasDraw = null;
+		this._fsEl = null;
+
+		// disconnect audio nodes
+		this.disconnectInput();
+		this.disconnectOutput(); // also disconnects analyzer nodes
+		_input.disconnect();
+		_splitter.disconnect();
+		_merger.disconnect();
+
+		// if audio context is our own (not provided by the user), close it
+		if ( _ownContext )
+			audioCtx.close();
+
+		// remove canvas from the DOM
+		canvas.remove();
+
+		// reset flags
+		this._calcBars();
+	}
+
+	/**
+	 * Disconnects audio sources from the analyzer
+	 *
+	 * @param [{object|array}] a connected AudioNode object or an array of such objects; if falsy, all connected nodes are disconnected
+	 * @param [{boolean}] if true, stops/releases audio tracks from disconnected media streams (e.g. microphone)
+	 */
+	disconnectInput( sources, stopTracks ) {
+		if ( ! sources )
+			sources = Array.from( this._sources );
+		else if ( ! Array.isArray( sources ) )
+			sources = [ sources ];
+
+		for ( const node of sources ) {
+			const idx = this._sources.indexOf( node );
+			if ( stopTracks && node.mediaStream ) {
+				for ( const track of node.mediaStream.getAudioTracks() ) {
+					track.stop();
+				}
+			}
+			if ( idx >= 0 ) {
+				node.disconnect( this._input );
+				this._sources.splice( idx, 1 );
+			}
+		}
+	}
+
+	/**
+	 * Disconnects the analyzer output from other audio nodes
+	 *
+	 * @param [{object}] a connected AudioNode object; if undefined, all connected nodes are disconnected
+	 */
+	disconnectOutput( node ) {
+		if ( node && ! this._outNodes.includes( node ) )
+			return;
+
+		this._output.disconnect( node );
+		this._outNodes = node ? this._outNodes.filter( e => e !== node ) : [];
+
+		// if disconnected from all nodes, also disconnect the analyzer nodes so they keep working on Chromium
+		// see https://github.com/hvianna/audioMotion-analyzer/issues/13#issuecomment-808764848
+		if ( this._outNodes.length == 0 ) {
+			for ( const i of [0,1] )
+				this._analyzer[ i ].disconnect();
+		}
+	}
+
+	/**
+	 * Returns analyzer bars data
+     *
+	 * @returns {array}
+	 */
+	getBars() {
+		return Array.from( this._bars, ( { posX, freq, freqLo, freqHi, hold, peak, value } ) => ( { posX, freq, freqLo, freqHi, hold, peak, value } ) );
+	}
+
+	/**
+	 * Returns the energy of a frequency, or average energy of a range of frequencies
+	 *
+	 * @param [{number|string}] single or initial frequency (Hz), or preset name; if undefined, returns the overall energy
+	 * @param [{number}] ending frequency (Hz)
+	 * @returns {number|null} energy value (0 to 1) or null, if the specified preset is unknown
+	 */
+	getEnergy( startFreq, endFreq ) {
+		if ( startFreq === undefined )
+			return this._energy.val;
+
+		// if startFreq is a string, check for presets
+		if ( startFreq != +startFreq ) {
+			if ( startFreq == 'peak' )
+				return this._energy.peak;
+
+			const presets = {
+				bass:    [ 20, 250 ],
+				lowMid:  [ 250, 500 ],
+				mid:     [ 500, 2e3 ],
+				highMid: [ 2e3, 4e3 ],
+				treble:  [ 4e3, 16e3 ]
+			};
+
+			if ( ! presets[ startFreq ] )
+				return null;
+
+			[ startFreq, endFreq ] = presets[ startFreq ];
+		}
+
+		const startBin = this._freqToBin( startFreq ),
+		      endBin   = endFreq ? this._freqToBin( endFreq ) : startBin,
+		      chnCount = this._chLayout == CHANNEL_SINGLE ? 1 : 2;
+
+		let energy = 0;
+		for ( let channel = 0; channel < chnCount; channel++ ) {
+			for ( let i = startBin; i <= endBin; i++ )
+				energy += this._normalizedB( this._fftData[ channel ][ i ] );
+		}
+
+		return energy / ( endBin - startBin + 1 ) / chnCount;
+	}
+
+	/**
+	 * Registers a custom gradient
+	 *
+	 * @param {string} name
+	 * @param {object} options
+	 */
+	registerGradient( name, options ) {
+		if ( typeof name != 'string' || name.trim().length == 0 )
+			throw new AudioMotionError( ERR_GRADIENT_INVALID_NAME );
+
+		if ( typeof options != 'object' )
+			throw new AudioMotionError( ERR_GRADIENT_NOT_AN_OBJECT );
+
+		const { colorStops } = options;
+
+		if ( ! Array.isArray( colorStops ) || ! colorStops.length )
+			throw new AudioMotionError( ERR_GRADIENT_MISSING_COLOR );
+
+		const count     = colorStops.length,
+			  isInvalid = val => +val != val || val < 0 || val > 1;
+
+		// normalize all colorStops as objects with `pos`, `color` and `level` properties
+		colorStops.forEach( ( colorStop, index ) => {
+			const pos = index / Math.max( 1, count - 1 );
+			if ( typeof colorStop != 'object' ) // only color string was defined
+				colorStops[ index ] = {	pos, color: colorStop };
+			else if ( isInvalid( colorStop.pos ) )
+				colorStop.pos = pos;
+
+			if ( isInvalid( colorStop.level ) )
+				colorStops[ index ].level = 1 - index / count;
+		});
+
+		// make sure colorStops is in descending `level` order and that the first one has `level == 1`
+		// this is crucial for proper operation of 'bar-level' colorMode!
+		colorStops.sort( ( a, b ) => a.level < b.level ? 1 : a.level > b.level ? -1 : 0 );
+		colorStops[0].level = 1;
+
+		this._gradients[ name ] = {
+			bgColor:    options.bgColor || GRADIENT_DEFAULT_BGCOLOR,
+			dir:        options.dir,
+			colorStops: colorStops
+		};
+
+		// if the registered gradient is one of the currently selected gradients, regenerate them
+		if ( this._selectedGrads.includes( name ) )
+			this._makeGrad();
+	}
+
+	/**
+	 * Set dimensions of analyzer's canvas
+	 *
+	 * @param {number} w width in pixels
+	 * @param {number} h height in pixels
+	 */
+	setCanvasSize( w, h ) {
+		this._width = w;
+		this._height = h;
+		this._setCanvas( REASON_USER );
+	}
+
+	/**
+	 * Set desired frequency range
+	 *
+	 * @param {number} min lowest frequency represented in the x-axis
+	 * @param {number} max highest frequency represented in the x-axis
+	 */
+	setFreqRange( min, max ) {
+		if ( min < 1 || max < 1 )
+			throw new AudioMotionError( ERR_FREQUENCY_TOO_LOW );
+		else {
+			this._minFreq = Math.min( min, max );
+			this.maxFreq  = Math.max( min, max ); // use the setter for maxFreq
+		}
+	}
+
+	/**
+	 * Set custom parameters for LED effect
+	 * If called with no arguments or if any property is invalid, clears any previous custom parameters
+	 *
+	 * @param {object} [params]
+	 */
+	setLedParams( params ) {
+		let maxLeds, spaceV, spaceH;
+
+		// coerce parameters to Number; `NaN` results are rejected in the condition below
+		if ( params ) {
+			maxLeds = params.maxLeds | 0, // ensure integer
+			spaceV  = +params.spaceV,
+			spaceH  = +params.spaceH;
+		}
+
+		this._ledParams = maxLeds > 0 && spaceV > 0 && spaceH >= 0 ? [ maxLeds, spaceV, spaceH ] : undefined;
+		this._calcBars();
+	}
+
+	/**
+	 * Shorthand function for setting several options at once
+	 *
+	 * @param {object} options
+	 */
+	setOptions( options ) {
+		this._setProps( options );
+	}
+
+	/**
+	 * Adjust the analyzer's sensitivity
+	 *
+	 * @param {number} min minimum decibels value
+	 * @param {number} max maximum decibels value
+	 */
+	setSensitivity( min, max ) {
+		for ( const i of [0,1] ) {
+			this._analyzer[ i ].minDecibels = Math.min( min, max );
+			this._analyzer[ i ].maxDecibels = Math.max( min, max );
+		}
+	}
+
+	/**
+	 * Start the analyzer
+	 */
+	start() {
+		this.toggleAnalyzer( true );
+	}
+
+	/**
+	 * Stop the analyzer
+	 */
+	stop() {
+		this.toggleAnalyzer( false );
+	}
+
+	/**
+	 * Start / stop canvas animation
+	 *
+	 * @param {boolean} [force] if undefined, inverts the current state
+	 * @returns {boolean} resulting state after the change
+	 */
+	toggleAnalyzer( force ) {
+		const hasStarted = this.isOn;
+
+		if ( force === undefined )
+			force = ! hasStarted;
+
+		// Stop the analyzer if it was already running and must be disabled
+		if ( hasStarted && ! force ) {
+			cancelAnimationFrame( this._runId );
+			this._runId = 0;
+		}
+		// Start the analyzer if it was stopped and must be enabled
+		else if ( ! hasStarted && force && ! this._destroyed ) {
+			this._frames = 0;
+			this._time = performance.now();
+			this._runId = requestAnimationFrame( timestamp => this._draw( timestamp ) ); // arrow function preserves the scope of *this*
+		}
+
+		return this.isOn;
+	}
+
+	/**
+	 * Toggles canvas full-screen mode
+	 */
+	toggleFullscreen() {
+		if ( this.isFullscreen ) {
+			if ( document.exitFullscreen )
+				document.exitFullscreen();
+			else if ( document.webkitExitFullscreen )
+				document.webkitExitFullscreen();
+		}
+		else {
+			const fsEl = this._fsEl;
+			if ( ! fsEl )
+				return;
+			if ( fsEl.requestFullscreen )
+				fsEl.requestFullscreen();
+			else if ( fsEl.webkitRequestFullscreen )
+				fsEl.webkitRequestFullscreen();
+		}
+	}
+
+	/**
+	 * ==========================================================================
+	 *
+	 * PRIVATE METHODS
+	 *
+	 * ==========================================================================
+	 */
+
+	/**
+	 * Return the frequency (in Hz) for a given FFT bin
+	 */
+	_binToFreq( bin ) {
+		return bin * this.audioCtx.sampleRate / this.fftSize || 1; // returns 1 for bin 0
+	}
+
+	/**
+	 * Compute all internal data required for the analyzer, based on its current settings
+	 */
+	_calcBars() {
+		const bars = this._bars = []; // initialize object property
+
+		if ( ! this._ready ) {
+			this._flg = { isAlpha: false, isBands: false, isLeds: false, isLumi: false, isOctaves: false, isOutline: false, isRound: false, noLedGap: false };
+			return;
+		}
+
+		const { _ansiBands, _barSpace, canvas, _chLayout, _maxFreq, _minFreq, _mirror, _mode, _radial, _reflexRatio } = this,
+			  centerX          = canvas.width >> 1,
+			  centerY          = canvas.height >> 1,
+			  isDualVertical   = _chLayout == CHANNEL_VERTICAL && ! _radial,
+			  isDualHorizontal = _chLayout == CHANNEL_HORIZONTAL,
+
+			  // COMPUTE FLAGS
+
+			  isBands   = _mode % 10 != 0, // true for modes 1 to 9
+			  isOctaves = isBands && this._frequencyScale == SCALE_LOG,
+			  isLeds    = this._showLeds && isBands && ! _radial,
+			  isLumi    = this._lumiBars && isBands && ! _radial,
+			  isAlpha   = this._alphaBars && ! isLumi && _mode != MODE_GRAPH,
+			  isOutline = this._outlineBars && isBands && ! isLumi && ! isLeds,
+			  isRound   = this._roundBars && isBands && ! isLumi && ! isLeds,
+			  noLedGap  = _chLayout != CHANNEL_VERTICAL || _reflexRatio > 0 && ! isLumi,
+
+			  // COMPUTE AUXILIARY VALUES
+
+			  // channelHeight is the total canvas height dedicated to each channel, including the reflex area, if any)
+			  channelHeight  = canvas.height - ( isDualVertical && ! isLeds ? .5 : 0 ) >> isDualVertical,
+			  // analyzerHeight is the effective height used to render the analyzer, excluding the reflex area
+			  analyzerHeight = channelHeight * ( isLumi || _radial ? 1 : 1 - _reflexRatio ) | 0,
+
+			  analyzerWidth  = canvas.width - centerX * ( isDualHorizontal || _mirror != 0 ),
+
+			  // channelGap is **0** if isLedDisplay == true (LEDs already have spacing); **1** if canvas height is odd (windowed); **2** if it's even
+			  // TODO: improve this, make it configurable?
+			  channelGap     = isDualVertical ? canvas.height - channelHeight * 2 : 0,
+
+			  initialX       = centerX * ( _mirror == -1 && ! isDualHorizontal && ! _radial ),
+			  innerRadius    = Math.min( canvas.width, canvas.height ) * ( _chLayout == CHANNEL_VERTICAL ? .375 : .125 ) | 0,
+			  outerRadius    = Math.min( centerX, centerY );
+
+		/**
+		 *	CREATE ANALYZER BANDS
+		 *
+		 *	USES:
+		 *		analyzerWidth
+		 *		initialX
+		 *		isBands
+		 *		isOctaves
+		 *
+		 *	GENERATES:
+		 *		bars (populates this._bars)
+		 *		bardWidth
+		 *		scaleMin
+		 *		unitWidth
+		 */
+
+		// helper function
+		// bar object: { posX, freq, freqLo, freqHi, binLo, binHi, ratioLo, ratioHi, peak, hold, value }
+		const barsPush = args => bars.push( { ...args, peak: [0,0], hold: [0], value: [0] } );
+
+		/*
+			A simple interpolation is used to obtain an approximate amplitude value for any given frequency,
+			from the available FFT data. We find the FFT bin which closer matches the desired frequency	and
+			interpolate its value with that of the next adjacent bin, like so:
+
+				v = v0 + ( v1 - v0 ) * ( log2( f / f0 ) / log2( f1 / f0 ) )
+				                       \__________________________________/
+				                                        |
+				                                      ratio
+				where:
+
+				f  - desired frequency
+				v  - amplitude (volume) of desired frequency
+				f0 - frequency represented by the lower FFT bin
+				f1 - frequency represented by the upper FFT bin
+				v0 - amplitude of f0
+				v1 - amplitude of f1
+
+			ratio is calculated in advance here, to reduce computational complexity during real-time rendering.
+		*/
+
+		// helper function to calculate FFT bin and interpolation ratio for a given frequency
+		const calcRatio = freq => {
+			const bin   = this._freqToBin( freq, 'floor' ), // find closest FFT bin
+				  lower = this._binToFreq( bin ),
+				  upper = this._binToFreq( bin + 1 ),
+				  ratio = Math.log2( freq / lower ) / Math.log2( upper / lower );
+
+			return [ bin, ratio ];
+		};
+
+		let barWidth, scaleMin, unitWidth;
+
+		if ( isOctaves ) {
+			// helper function to round a value to a given number of significant digits
+			// `atLeast` set to true prevents reducing the number of integer significant digits
+			const roundSD = ( value, digits, atLeast ) => +value.toPrecision( atLeast ? Math.max( digits, 1 + Math.log10( value ) | 0 ) : digits );
+
+			// helper function to find the nearest preferred number (Renard series) for a given value
+			const nearestPreferred = value => {
+				// R20 series is used here, as it provides closer approximations for 1/2 octave bands (non-standard)
+				const preferred = [ 1, 1.12, 1.25, 1.4, 1.6, 1.8, 2, 2.24, 2.5, 2.8, 3.15, 3.55, 4, 4.5, 5, 5.6, 6.3, 7.1, 8, 9, 10 ],
+					  power = Math.log10( value ) | 0,
+					  normalized = value / 10 ** power;
+
+				let i = 1;
+				while ( i < preferred.length && normalized > preferred[ i ] )
+					i++;
+
+				if ( normalized - preferred[ i - 1 ] < preferred[ i ] - normalized )
+					i--;
+
+				return ( preferred[ i ] * 10 ** ( power + 5 ) | 0 ) / 1e5; // keep 5 significant digits
+			};
+
+			// ANSI standard octave bands use the base-10 frequency ratio, as preferred by [ANSI S1.11-2004, p.2]
+			// The equal-tempered scale uses the base-2 ratio
+			const bands = [0,24,12,8,6,4,3,2,1][ _mode ],
+				  bandWidth = _ansiBands ? 10 ** ( 3 / ( bands * 10 ) ) : 2 ** ( 1 / bands ), // 10^(3/10N) or 2^(1/N)
+				  halfBand  = bandWidth ** .5;
+
+			let analyzerBars = [],
+				currFreq = _ansiBands ? 7.94328235 / ( bands % 2 ? 1 : halfBand ) : C_1;
+				// For ANSI bands with even denominators (all except 1/1 and 1/3), the reference frequency (1 kHz)
+				// must fall on the edges of a pair of adjacent bands, instead of midband [ANSI S1.11-2004, p.2]
+				// In the equal-tempered scale, all midband frequencies represent a musical note or quarter-tone.
+
+			do {
+				let freq = currFreq; // midband frequency
+
+				const freqLo = roundSD( freq / halfBand, 4, true ), // lower edge frequency
+					  freqHi = roundSD( freq * halfBand, 4, true ), // upper edge frequency
+					  [ binLo, ratioLo ] = calcRatio( freqLo ),
+					  [ binHi, ratioHi ] = calcRatio( freqHi );
+
+				// for 1/1, 1/2 and 1/3 ANSI bands, use the preferred numbers to find the nominal midband frequency
+				// for 1/4 to 1/24, round to 2 or 3 significant digits, according to the MSD [ANSI S1.11-2004, p.12]
+				if ( _ansiBands )
+					freq = bands < 4 ? nearestPreferred( freq ) : roundSD( freq, freq.toString()[0] < 5 ? 3 : 2 );
+				else
+					freq = roundSD( freq, 4, true );
+
+				if ( freq >= _minFreq )
+					barsPush( { posX: 0, freq, freqLo, freqHi, binLo, binHi, ratioLo, ratioHi } );
+
+				currFreq *= bandWidth;
+			} while ( currFreq <= _maxFreq );
+
+			barWidth = analyzerWidth / bars.length;
+
+			bars.forEach( ( bar, index ) => bar.posX = initialX + index * barWidth );
+
+			const firstBar = bars[0],
+				  lastBar  = bars[ bars.length - 1 ];
+
+			scaleMin = this._freqScaling( firstBar.freqLo );
+			unitWidth = analyzerWidth / ( this._freqScaling( lastBar.freqHi ) - scaleMin );
+
+			// clamp edge frequencies to minFreq / maxFreq, if necessary
+			// this is done after computing scaleMin and unitWidth, for the proper positioning of labels on the X-axis
+			if ( firstBar.freqLo < _minFreq ) {
+				firstBar.freqLo = _minFreq;
+				[ firstBar.binLo, firstBar.ratioLo ] = calcRatio( _minFreq );
+			}
+
+			if ( lastBar.freqHi > _maxFreq ) {
+				lastBar.freqHi = _maxFreq;
+				[ lastBar.binHi, lastBar.ratioHi ] = calcRatio( _maxFreq );
+			}
+		}
+		else if ( isBands ) { // a bands mode is selected, but frequency scale is not logarithmic
+
+			const bands = [0,24,12,8,6,4,3,2,1][ _mode ] * 10;
+
+			const invFreqScaling = x => {
+				switch ( this._frequencyScale ) {
+					case SCALE_BARK :
+						return 1960 / ( 26.81 / ( x + .53 ) - 1 );
+					case SCALE_MEL :
+						return 700 * ( 2 ** x - 1 );
+					case SCALE_LINEAR :
+						return x;
+				}
+			};
+
+			barWidth = analyzerWidth / bands;
+
+			scaleMin = this._freqScaling( _minFreq );
+			unitWidth = analyzerWidth / ( this._freqScaling( _maxFreq ) - scaleMin );
+
+			for ( let i = 0, posX = 0; i < bands; i++, posX += barWidth ) {
+				const freqLo = invFreqScaling( scaleMin + posX / unitWidth ),
+					  freq   = invFreqScaling( scaleMin + ( posX + barWidth / 2 ) / unitWidth ),
+					  freqHi = invFreqScaling( scaleMin + ( posX + barWidth ) / unitWidth ),
+					  [ binLo, ratioLo ] = calcRatio( freqLo ),
+					  [ binHi, ratioHi ] = calcRatio( freqHi );
+
+				barsPush( { posX: initialX + posX, freq, freqLo, freqHi, binLo, binHi, ratioLo, ratioHi } );
+			}
+
+		}
+		else {	// Discrete frequencies modes
+			barWidth = 1;
+
+			scaleMin = this._freqScaling( _minFreq );
+			unitWidth = analyzerWidth / ( this._freqScaling( _maxFreq ) - scaleMin );
+
+			const minIndex = this._freqToBin( _minFreq, 'floor' ),
+				  maxIndex = this._freqToBin( _maxFreq );
+
+	 		let lastPos = -999;
+
+			for ( let i = minIndex; i <= maxIndex; i++ ) {
+				const freq = this._binToFreq( i ), // frequency represented by this index
+					  posX = initialX + Math.round( unitWidth * ( this._freqScaling( freq ) - scaleMin ) ); // avoid fractionary pixel values
+
+				// if it's on a different X-coordinate, create a new bar for this frequency
+				if ( posX > lastPos ) {
+					barsPush( { posX, freq, freqLo: freq, freqHi: freq, binLo: i, binHi: i, ratioLo: 0, ratioHi: 0 } );
+					lastPos = posX;
+				} // otherwise, add this frequency to the last bar's range
+				else if ( bars.length ) {
+					const lastBar = bars[ bars.length - 1 ];
+					lastBar.binHi = i;
+					lastBar.freqHi = freq;
+					lastBar.freq = ( lastBar.freqLo * freq ) ** .5; // compute center frequency (geometric mean)
+				}
+			}
+		}
+
+		/**
+		 *  COMPUTE ATTRIBUTES FOR THE LED BARS
+		 *
+		 *	USES:
+		 *		analyzerHeight
+		 *		barWidth
+		 *		noLedGap
+		 *
+		 *	GENERATES:
+		 * 		spaceH
+		 * 		spaceV
+		 *		this._leds
+		 */
+
+		let spaceH = 0,
+			spaceV = 0;
+
+		if ( isLeds ) {
+			// adjustment for high pixel-ratio values on low-resolution screens (Android TV)
+			const dPR = this._pixelRatio / ( window.devicePixelRatio > 1 && window.screen.height <= 540 ? 2 : 1 );
+
+			const params = [ [],
+				[ 128,  3, .45  ], // mode 1
+				[ 128,  4, .225 ], // mode 2
+				[  96,  6, .225 ], // mode 3
+				[  80,  6, .225 ], // mode 4
+				[  80,  6, .125 ], // mode 5
+				[  64,  6, .125 ], // mode 6
+				[  48,  8, .125 ], // mode 7
+				[  24, 16, .125 ], // mode 8
+			];
+
+			// use custom LED parameters if set, or the default parameters for the current mode
+			const customParams = this._ledParams,
+				  [ maxLeds, spaceVRatio, spaceHRatio ] = customParams || params[ _mode ];
+
+			let ledCount, maxHeight = analyzerHeight;
+
+			if ( customParams ) {
+				const minHeight = 2 * dPR;
+				let blockHeight;
+				ledCount = maxLeds + 1;
+				do {
+					ledCount--;
+					blockHeight = maxHeight / ledCount / ( 1 + spaceVRatio );
+					spaceV = blockHeight * spaceVRatio;
+				} while ( ( blockHeight < minHeight || spaceV < minHeight ) && ledCount > 1 );
+			}
+			else {
+				// calculate vertical spacing - aim for the reference ratio, but make sure it's at least 2px
+				const refRatio = 540 / spaceVRatio;
+				spaceV = Math.min( spaceVRatio * dPR, Math.max( 2, maxHeight / refRatio + .1 | 0 ) );
+			}
+
+			// remove the extra spacing below the last line of LEDs
+			if ( noLedGap )
+				maxHeight += spaceV;
+
+			// recalculate the number of leds, considering the effective spaceV
+			if ( ! customParams )
+				ledCount = Math.min( maxLeds, maxHeight / ( spaceV * 2 ) | 0 );
+
+			spaceH = spaceHRatio >= 1 ? spaceHRatio : barWidth * spaceHRatio;
+
+			this._leds = [
+				ledCount,
+				spaceH,
+				spaceV,
+				maxHeight / ledCount - spaceV // ledHeight
+			];
+		}
+
+		// COMPUTE ADDITIONAL BAR POSITIONING, ACCORDING TO THE CURRENT SETTINGS
+		// uses: _barSpace, barWidth, spaceH
+
+		const barSpacePx = Math.min( barWidth - 1, _barSpace * ( _barSpace > 0 && _barSpace < 1 ? barWidth : 1 ) );
+
+		if ( isBands )
+			barWidth -= Math.max( isLeds ? spaceH : 0, barSpacePx );
+
+		bars.forEach( ( bar, index ) => {
+			let posX  = bar.posX,
+				width = barWidth;
+
+			// in bands modes we need to update bar.posX to account for bar/led spacing
+
+			if ( isBands ) {
+				if ( _barSpace == 0 && ! isLeds ) {
+					// when barSpace == 0 use integer values for perfect gapless positioning
+					posX |= 0;
+					width |= 0;
+					if ( index > 0 && posX > bars[ index - 1 ].posX + bars[ index - 1 ].width ) {
+						posX--;
+						width++;
+					}
+				}
+				else
+					posX += Math.max( ( isLeds ? spaceH : 0 ), barSpacePx ) / 2;
+
+				bar.posX = posX; // update
+			}
+
+			bar.barCenter = posX + ( barWidth == 1 ? 0 : width / 2 );
+			bar.width = width;
+		});
+
+		// COMPUTE CHANNEL COORDINATES (uses spaceV)
+
+		const channelCoords = [];
+		for ( const channel of [0,1] ) {
+			const channelTop     = _chLayout == CHANNEL_VERTICAL ? ( channelHeight + channelGap ) * channel : 0,
+				  channelBottom  = channelTop + channelHeight,
+				  analyzerBottom = channelTop + analyzerHeight - ( ! isLeds || noLedGap ? 0 : spaceV );
+
+			channelCoords.push( { channelTop, channelBottom, analyzerBottom } );
+		}
+
+		// SAVE INTERNAL PROPERTIES
+
+		this._aux = { analyzerHeight, analyzerWidth, centerX, centerY, channelCoords, channelHeight, channelGap, initialX, innerRadius, outerRadius, scaleMin, unitWidth };
+		this._flg = { isAlpha, isBands, isLeds, isLumi, isOctaves, isOutline, isRound, noLedGap };
+
+		// generate the X-axis and radial scales
+		this._createScales();
+	}
+
+	/**
+	 * Generate the X-axis and radial scales in auxiliary canvases
+	 */
+	_createScales() {
+		if ( ! this._ready )
+			return;
+
+		const { analyzerWidth, initialX, innerRadius, scaleMin, unitWidth } = this._aux,
+			  { canvas, _frequencyScale, _mirror, _noteLabels, _radial, _scaleX, _scaleR } = this,
+			  canvasX          = _scaleX.canvas,
+			  canvasR          = _scaleR.canvas,
+			  freqLabels       = [],
+			  isDualHorizontal = this._chLayout == CHANNEL_HORIZONTAL,
+			  isDualVertical   = this._chLayout == CHANNEL_VERTICAL,
+			  scale            = [ 'C',, 'D',, 'E', 'F',, 'G',, 'A',, 'B' ], // for note labels (no sharp notes)
+			  scaleHeight      = Math.min( canvas.width, canvas.height ) / 34 | 0, // circular scale height (radial mode)
+  			  fontSizeX        = canvasX.height >> 1,
+			  fontSizeR        = scaleHeight >> 1,
+			  labelWidthX      = fontSizeX * ( _noteLabels ? .7 : 1.5 ),
+			  labelWidthR      = fontSizeR * ( _noteLabels ? 1 : 2 ),
+		  	  root12           = 2 ** ( 1 / 12 );
+
+		if ( ! _noteLabels && ( this._ansiBands || _frequencyScale != SCALE_LOG ) ) {
+			freqLabels.push( 16, 31.5, 63, 125, 250, 500, 1e3, 2e3, 4e3 );
+			if ( _frequencyScale == SCALE_LINEAR )
+				freqLabels.push( 6e3, 8e3, 10e3, 12e3, 14e3, 16e3, 18e3, 20e3, 22e3 );
+			else
+				freqLabels.push( 8e3, 16e3 );
+		}
+		else {
+			let freq = C_1;
+			for ( let octave = -1; octave < 11; octave++ ) {
+				for ( let note = 0; note < 12; note++ ) {
+					if ( freq >= this._minFreq && freq <= this._maxFreq ) {
+						const pitch = scale[ note ],
+							  isC   = pitch == 'C';
+						if ( ( pitch && _noteLabels && ! _mirror && ! isDualHorizontal ) || isC )
+							freqLabels.push( _noteLabels ? [ freq, pitch + ( isC ? octave : '' ) ] : freq );
+					}
+					freq *= root12;
+				}
+			}
+		}
+
+		// in radial dual-vertical layout, the scale is positioned exactly between both channels, by making the canvas a bit larger than the inner diameter
+		canvasR.width = canvasR.height = ( innerRadius << 1 ) + ( isDualVertical * scaleHeight );
+
+		const centerR = canvasR.width >> 1,
+			  radialY = centerR - scaleHeight * .7;	// vertical position of text labels in the circular scale
+
+		// helper function
+		const radialLabel = ( x, label ) => {
+			const angle  = TAU * ( x / canvas.width ),
+				  adjAng = angle - HALF_PI, // rotate angles so 0 is at the top
+				  posX   = radialY * Math.cos( adjAng ),
+				  posY   = radialY * Math.sin( adjAng );
+
+			_scaleR.save();
+			_scaleR.translate( centerR + posX, centerR + posY );
+			_scaleR.rotate( angle );
+			_scaleR.fillText( label, 0, 0 );
+			_scaleR.restore();
+		};
+
+		// clear scale canvas
+		canvasX.width |= 0;
+
+		_scaleX.fillStyle = _scaleR.strokeStyle = SCALEX_BACKGROUND_COLOR;
+		_scaleX.fillRect( 0, 0, canvasX.width, canvasX.height );
+
+		_scaleR.arc( centerR, centerR, centerR - scaleHeight / 2, 0, TAU );
+		_scaleR.lineWidth = scaleHeight;
+		_scaleR.stroke();
+
+		_scaleX.fillStyle = _scaleR.fillStyle = SCALEX_LABEL_COLOR;
+		_scaleX.font = `${ fontSizeX }px ${FONT_FAMILY}`;
+		_scaleR.font = `${ fontSizeR }px ${FONT_FAMILY}`;
+		_scaleX.textAlign = _scaleR.textAlign = 'center';
+
+		let prevX = -labelWidthX / 4,
+			prevR = -labelWidthR;
+
+		for ( const item of freqLabels ) {
+			const [ freq, label ] = Array.isArray( item ) ? item : [ item, item < 1e3 ? item | 0 : `${ ( item / 100 | 0 ) / 10 }k` ],
+				  x    = unitWidth * ( this._freqScaling( freq ) - scaleMin ),
+				  y    = canvasX.height * .75,
+				  isC  = label[0] == 'C',
+	  			  maxW = fontSizeX * ( _noteLabels && ! _mirror && ! isDualHorizontal ? ( isC ? 1.2 : .6 ) : 3 );
+
+	  		// set label color - no highlight when mirror effect is active (only Cs displayed)
+			_scaleX.fillStyle = _scaleR.fillStyle = isC && ! _mirror && ! isDualHorizontal ? SCALEX_HIGHLIGHT_COLOR : SCALEX_LABEL_COLOR;
+
+			// prioritizes which note labels are displayed, due to the restricted space on some ranges/scales
+			if ( _noteLabels ) {
+				const isLog = _frequencyScale == SCALE_LOG,
+					  isLinear = _frequencyScale == SCALE_LINEAR;
+
+				let allowedLabels = ['C'];
+
+				if ( isLog || freq > 2e3 || ( ! isLinear && freq > 250 ) ||
+					 ( ( ! _radial || isDualVertical ) && ( ! isLinear && freq > 125 || freq > 1e3 ) ) )
+					allowedLabels.push('G');
+				if ( isLog || freq > 4e3 || ( ! isLinear && freq > 500 ) ||
+					 ( ( ! _radial || isDualVertical ) && ( ! isLinear && freq > 250 || freq > 2e3 ) ) )
+					allowedLabels.push('E');
+				if ( isLinear && freq > 4e3 ||
+					 ( ( ! _radial || isDualVertical ) && ( isLog || freq > 2e3 || ( ! isLinear && freq > 500 ) ) ) )
+					allowedLabels.push('D','F','A','B');
+				if ( ! allowedLabels.includes( label[0] ) )
+					continue; // skip this label
+			}
+
+			// linear scale
+			if ( x >= prevX + labelWidthX / 2 && x <= analyzerWidth ) {
+				_scaleX.fillText( label, isDualHorizontal && _mirror == -1 ? analyzerWidth - x : initialX + x, y, maxW );
+				if ( isDualHorizontal || ( _mirror && ( x > labelWidthX || _mirror == 1 ) ) )
+					_scaleX.fillText( label, isDualHorizontal && _mirror != 1 ? analyzerWidth + x : ( initialX || canvas.width ) - x, y, maxW );
+				prevX = x + Math.min( maxW, _scaleX.measureText( label ).width ) / 2;
+			}
+
+			// radial scale
+			if ( x >= prevR + labelWidthR && x < analyzerWidth - labelWidthR ) { // avoid overlapping the last label over the first one
+				radialLabel( isDualHorizontal && _mirror == 1 ? analyzerWidth - x : x, label );
+				if ( isDualHorizontal || ( _mirror && ( x > labelWidthR || _mirror == 1 ) ) ) // avoid overlapping of first labels on mirror mode
+					radialLabel( isDualHorizontal && _mirror != -1 ? analyzerWidth + x : -x, label );
+				prevR = x;
+			}
+		}
+	}
+
+	/**
+	 * Redraw the canvas
+	 * this is called 60 times per second by requestAnimationFrame()
+	 */
+	_draw( timestamp ) {
+		// schedule next canvas update
+		this._runId = requestAnimationFrame( timestamp => this._draw( timestamp ) );
+
+		// frame rate control
+		const elapsed        = timestamp - this._time, // time since last FPS computation
+			  frameTime      = timestamp - this._last, // time since last rendered frame
+			  targetInterval = this._maxFPS ? 975 / this._maxFPS : 0; // small tolerance for best results
+
+		if ( frameTime < targetInterval )
+			return;
+
+		this._last = timestamp - ( targetInterval ? frameTime % targetInterval : 0 ); // thanks https://stackoverflow.com/a/19772220/2370385
+		this._frames++;
+
+		if ( elapsed >= 1000 ) { // update FPS every second
+			this._fps = this._frames / elapsed * 1000;
+			this._frames = 0;
+			this._time = timestamp;
+		}
+
+		// initialize local constants
+
+		const { isAlpha,
+			    isBands,
+			    isLeds,
+			    isLumi,
+			    isOctaves,
+			    isOutline,
+			    isRound,
+			    noLedGap }     = this._flg,
+
+			  { analyzerHeight,
+			    centerX,
+			    centerY,
+			    channelCoords,
+			    channelHeight,
+			    channelGap,
+			    initialX,
+			    innerRadius,
+			    outerRadius }  = this._aux,
+
+			  { _bars,
+			    canvas,
+			    _canvasGradients,
+			    _chLayout,
+			    _colorMode,
+			    _ctx,
+			    _energy,
+			    fillAlpha,
+			    _fps,
+			    _linearAmplitude,
+			    _lineWidth,
+			    maxDecibels,
+			    minDecibels,
+			    _mirror,
+			    _mode,
+			    overlay,
+			    _radial,
+			    showBgColor,
+			    showPeaks,
+			    useCanvas,
+			    _weightingFilter } = this,
+
+			  canvasX          = this._scaleX.canvas,
+			  canvasR          = this._scaleR.canvas,
+			  holdFrames       = _fps >> 1, // number of frames in half a second
+			  isDualCombined   = _chLayout == CHANNEL_COMBINED,
+			  isDualHorizontal = _chLayout == CHANNEL_HORIZONTAL,
+			  isDualVertical   = _chLayout == CHANNEL_VERTICAL,
+			  isSingle         = _chLayout == CHANNEL_SINGLE,
+			  isTrueLeds       = isLeds && this._trueLeds && _colorMode == COLOR_GRADIENT,
+			  analyzerWidth    = _radial ? canvas.width : this._aux.analyzerWidth,
+			  finalX           = initialX + analyzerWidth,
+			  showPeakLine     = showPeaks && this._peakLine && _mode == MODE_GRAPH,
+			  maxBarHeight     = _radial ? outerRadius - innerRadius : analyzerHeight,
+			  dbRange 		   = maxDecibels - minDecibels,
+			  [ ledCount, ledSpaceH, ledSpaceV, ledHeight ] = this._leds || [];
+
+		if ( _energy.val > 0 )
+			this._spinAngle += this._spinSpeed * TAU / ( 60 * _fps ); // spinSpeed * angle increment per frame for 1 RPM
+
+		/* HELPER FUNCTIONS */
+
+		// create Reflex effect
+		const doReflex = channel => {
+			if ( this._reflexRatio > 0 && ! isLumi && ! _radial ) {
+				let posY, height;
+				if ( this.reflexFit || isDualVertical ) { // always fit reflex in vertical stereo mode
+					posY   = isDualVertical && channel == 0 ? channelHeight + channelGap : 0;
+					height = channelHeight - analyzerHeight;
+				}
+				else {
+					posY   = canvas.height - analyzerHeight * 2;
+					height = analyzerHeight;
+				}
+
+				_ctx.save();
+
+				// set alpha and brightness for the reflection
+				_ctx.globalAlpha = this.reflexAlpha;
+				if ( this.reflexBright != 1 )
+					_ctx.filter = `brightness(${this.reflexBright})`;
+
+				// create the reflection
+				_ctx.setTransform( 1, 0, 0, -1, 0, canvas.height );
+				_ctx.drawImage( canvas, 0, channelCoords[ channel ].channelTop, canvas.width, analyzerHeight, 0, posY, canvas.width, height );
+
+				_ctx.restore();
+			}
+		};
+
+		// draw scale on X-axis
+		const drawScaleX = () => {
+			if ( this.showScaleX ) {
+				if ( _radial ) {
+					_ctx.save();
+					_ctx.translate( centerX, centerY );
+					if ( this._spinSpeed )
+						_ctx.rotate( this._spinAngle + HALF_PI );
+					_ctx.drawImage( canvasR, -canvasR.width >> 1, -canvasR.width >> 1 );
+					_ctx.restore();
+				}
+				else
+					_ctx.drawImage( canvasX, 0, canvas.height - canvasX.height );
+			}
+		};
+
+		// returns the gain (in dB) for a given frequency, considering the currently selected weighting filter
+		const weightingdB = freq => {
+			const f2 = freq ** 2,
+				  SQ20_6  = 424.36,
+				  SQ107_7 = 11599.29,
+				  SQ158_5 = 25122.25,
+				  SQ737_9 = 544496.41,
+				  SQ12194 = 148693636,
+				  linearTodB = value => 20 * Math.log10( value );
+
+			switch ( _weightingFilter ) {
+				case FILTER_A : // A-weighting https://en.wikipedia.org/wiki/A-weighting
+					const rA = ( SQ12194 * f2 ** 2 ) / ( ( f2 + SQ20_6 ) * Math.sqrt( ( f2 + SQ107_7 ) * ( f2 + SQ737_9 ) ) * ( f2 + SQ12194 ) );
+					return 2 + linearTodB( rA );
+
+				case FILTER_B :
+					const rB = ( SQ12194 * f2 * freq ) / ( ( f2 + SQ20_6 ) * Math.sqrt( f2 + SQ158_5 ) * ( f2 + SQ12194 ) );
+					return .17 + linearTodB( rB );
+
+				case FILTER_C :
+					const rC = ( SQ12194 * f2 ) / ( ( f2 + SQ20_6 ) * ( f2 + SQ12194 ) );
+					return .06 + linearTodB( rC );
+
+				case FILTER_D :
+					const h = ( ( 1037918.48 - f2 ) ** 2 + 1080768.16 * f2 ) / ( ( 9837328 - f2 ) ** 2 + 11723776 * f2 ),
+						  rD = ( freq / 6.8966888496476e-5 ) * Math.sqrt( h / ( ( f2 + 79919.29 ) * ( f2 + 1345600 ) ) );
+					return linearTodB( rD );
+
+				case FILTER_468 : // ITU-R 468 https://en.wikipedia.org/wiki/ITU-R_468_noise_weighting
+					const h1 = -4.737338981378384e-24 * freq ** 6 + 2.043828333606125e-15 * freq ** 4 - 1.363894795463638e-7 * f2 + 1,
+						  h2 = 1.306612257412824e-19 * freq ** 5 - 2.118150887518656e-11 * freq ** 3 + 5.559488023498642e-4 * freq,
+						  rI = 1.246332637532143e-4 * freq / Math.hypot( h1, h2 );
+					return 18.2 + linearTodB( rI );
+			}
+
+			return 0; // unknown filter
+		};
+
+		// draws (stroke) a bar from x,y1 to x,y2
+		const strokeBar = ( x, y1, y2 ) => {
+			_ctx.beginPath();
+			_ctx.moveTo( x, y1 );
+			_ctx.lineTo( x, y2 );
+			_ctx.stroke();
+		};
+
+		// conditionally strokes current path on canvas
+		const strokeIf = flag => {
+			if ( flag && _lineWidth ) {
+				const alpha = _ctx.globalAlpha;
+				_ctx.globalAlpha = 1;
+				_ctx.stroke();
+				_ctx.globalAlpha = alpha;
+			}
+		};
+
+		// converts a value in [0;1] range to a height in pixels that fits into the current LED elements
+		const ledPosY = value => Math.max( 0, ( value * ledCount | 0 ) * ( ledHeight + ledSpaceV ) - ledSpaceV );
+
+		// update energy information
+		const updateEnergy = newVal => {
+			_energy.val = newVal;
+			if ( _energy.peak > 0 ) {
+				_energy.hold--;
+				if ( _energy.hold < 0 )
+					_energy.peak += _energy.hold / ( holdFrames * holdFrames / 2 );
+			}
+			if ( newVal >= _energy.peak ) {
+				_energy.peak = newVal;
+				_energy.hold = holdFrames;
+			}
+		};
+
+		/* MAIN FUNCTION */
+
+		if ( overlay )
+			_ctx.clearRect( 0, 0, canvas.width, canvas.height );
+
+		let currentEnergy = 0;
+
+		const nBars     = _bars.length,
+			  nChannels = isSingle ? 1 : 2;
+
+		for ( let channel = 0; channel < nChannels; channel++ ) {
+
+			const { channelTop, channelBottom, analyzerBottom } = channelCoords[ channel ],
+				  channelGradient  = this._gradients[ this._selectedGrads[ channel ] ],
+				  colorStops       = channelGradient.colorStops,
+				  colorCount       = colorStops.length,
+				  bgColor          = ( ! showBgColor || isLeds && ! overlay ) ? '#000' : channelGradient.bgColor,
+				  radialDirection  = isDualVertical && _radial && channel ? -1 : 1, // 1 = outwards, -1 = inwards
+				  invertedChannel  = ( ! channel && _mirror == -1 ) || ( channel && _mirror == 1 ),
+				  radialOffsetX    = ! isDualHorizontal || ( channel && _mirror != 1 ) ? 0 : analyzerWidth >> ( channel || ! invertedChannel ),
+				  angularDirection = isDualHorizontal && invertedChannel ? -1 : 1;  // 1 = clockwise, -1 = counterclockwise
+/*
+			Expanded logic for radialOffsetX and angularDirection:
+
+			let radialOffsetX = 0,
+				angularDirection = 1;
+
+			if ( isDualHorizontal ) {
+				if ( channel == 0 ) { // LEFT channel
+					if ( _mirror == -1 ) {
+						radialOffsetX = analyzerWidth;
+						angularDirection = -1;
+					}
+					else
+						radialOffsetX = analyzerWidth >> 1;
+				}
+				else {                // RIGHT channel
+					if ( _mirror == 1 ) {
+						radialOffsetX = analyzerWidth >> 1;
+						angularDirection = -1;
+					}
+				}
+			}
+*/
+			// draw scale on Y-axis (uses: channel, channelTop)
+			const drawScaleY = () => {
+				const scaleWidth = canvasX.height,
+					  fontSize   = scaleWidth >> 1,
+					  max        = _linearAmplitude ? 100 : maxDecibels,
+					  min        = _linearAmplitude ? 0 : minDecibels,
+					  incr       = _linearAmplitude ? 20 : 5,
+					  interval   = analyzerHeight / ( max - min ),
+					  atStart    = _mirror != -1 && ( ! isDualHorizontal || channel == 0 || _mirror == 1 ),
+					  atEnd      = _mirror != 1 && ( ! isDualHorizontal || channel != _mirror );
+
+				_ctx.save();
+				_ctx.fillStyle = SCALEY_LABEL_COLOR;
+				_ctx.font = `${fontSize}px ${FONT_FAMILY}`;
+				_ctx.textAlign = 'right';
+				_ctx.lineWidth = 1;
+
+				for ( let val = max; val > min; val -= incr ) {
+					const posY = channelTop + ( max - val ) * interval,
+						  even = ( val % 2 == 0 ) | 0;
+
+					if ( even ) {
+						const labelY = posY + fontSize * ( posY == channelTop ? .8 : .35 );
+						if ( atStart )
+							_ctx.fillText( val, scaleWidth * .85, labelY );
+						if ( atEnd )
+							_ctx.fillText( val, ( isDualHorizontal ? analyzerWidth : canvas.width ) - scaleWidth * .1, labelY );
+						_ctx.strokeStyle = SCALEY_LABEL_COLOR;
+						_ctx.setLineDash([2,4]);
+						_ctx.lineDashOffset = 0;
+					}
+					else {
+						_ctx.strokeStyle = SCALEY_MIDLINE_COLOR;
+						_ctx.setLineDash([2,8]);
+						_ctx.lineDashOffset = 1;
+					}
+
+					_ctx.beginPath();
+					_ctx.moveTo( initialX + scaleWidth * even * atStart, ~~posY + .5 ); // for sharp 1px line (https://stackoverflow.com/a/13879402/2370385)
+					_ctx.lineTo( finalX - scaleWidth * even * atEnd, ~~posY + .5 );
+					_ctx.stroke();
+				}
+				_ctx.restore();
+			};
+
+			// FFT bin data interpolation (uses fftData)
+			const interpolate = ( bin, ratio ) => {
+				const value = fftData[ bin ] + ( bin < fftData.length - 1 ? ( fftData[ bin + 1 ] - fftData[ bin ] ) * ratio : 0 );
+				return isNaN( value ) ? -Infinity : value;
+			};
+
+			// converts a given X-coordinate to its corresponding angle in radial mode (uses angularDirection)
+			const getAngle = ( x, dir = angularDirection ) => dir * TAU * ( ( x + radialOffsetX ) / canvas.width ) + this._spinAngle;
+
+			// converts planar X,Y coordinates to radial coordinates (uses: getAngle(), radialDirection)
+			const radialXY = ( x, y, dir ) => {
+				const height = innerRadius + y * radialDirection,
+					  angle  = getAngle( x, dir );
+				return [ centerX + height * Math.cos( angle ), centerY + height * Math.sin( angle ) ];
+			};
+
+			// draws a polygon of width `w` and height `h` at (x,y) in radial mode (uses: angularDirection, radialDirection)
+			const radialPoly = ( x, y, w, h, stroke ) => {
+				_ctx.beginPath();
+				for ( const dir of ( _mirror && ! isDualHorizontal ? [1,-1] : [ angularDirection ] ) ) {
+					const [ startAngle, endAngle ] = isRound ? [ getAngle( x, dir ), getAngle( x + w, dir ) ] : [];
+					_ctx.moveTo( ...radialXY( x, y, dir ) );
+					_ctx.lineTo( ...radialXY( x, y + h, dir ) );
+					if ( isRound )
+						_ctx.arc( centerX, centerY, innerRadius + ( y + h ) * radialDirection, startAngle, endAngle, dir != 1 );
+					else
+						_ctx.lineTo( ...radialXY( x + w, y + h, dir ) );
+					_ctx.lineTo( ...radialXY( x + w, y, dir ) );
+					if ( isRound && ! stroke ) // close the bottom line only when not in outline mode
+						_ctx.arc( centerX, centerY, innerRadius + y * radialDirection, endAngle, startAngle, dir == 1 );
+				}
+				strokeIf( stroke );
+				_ctx.fill();
+			};
+
+			// set fillStyle and strokeStyle according to current colorMode (uses: channel, colorStops, colorCount)
+			const setBarColor = ( value = 0, barIndex = 0 ) => {
+				let color;
+				// for graph mode, always use the channel gradient (ignore colorMode)
+				if ( ( _colorMode == COLOR_GRADIENT && ! isTrueLeds ) || _mode == MODE_GRAPH )
+					color = _canvasGradients[ channel ];
+				else {
+					const selectedIndex = _colorMode == COLOR_BAR_INDEX ? barIndex % colorCount : colorStops.findLastIndex( item => isLeds ? ledPosY( value ) <= ledPosY( item.level ) : value <= item.level );
+					color = colorStops[ selectedIndex ].color;
+				}
+				_ctx.fillStyle = _ctx.strokeStyle = color;
+			};
+
+			// CHANNEL START
+
+			if ( useCanvas ) {
+				// set transform (horizontal flip and translation) for dual-horizontal layout
+				if ( isDualHorizontal && ! _radial ) {
+				  	const translateX = analyzerWidth * ( channel + invertedChannel ),
+				  		  flipX      = invertedChannel ? -1 : 1;
+
+					_ctx.setTransform( flipX, 0, 0, 1, translateX, 0 );
+				}
+
+				// fill the analyzer background if needed (not overlay or overlay + showBgColor)
+				if ( ! overlay || showBgColor ) {
+					if ( overlay )
+						_ctx.globalAlpha = this.bgAlpha;
+
+					_ctx.fillStyle = bgColor;
+
+					// exclude the reflection area when overlay is true and reflexAlpha == 1 (avoids alpha over alpha difference, in case bgAlpha < 1)
+					if ( channel == 0 || ( ! _radial && ! isDualCombined ) )
+						_ctx.fillRect( initialX, channelTop - channelGap, analyzerWidth, ( overlay && this.reflexAlpha == 1 ? analyzerHeight : channelHeight ) + channelGap );
+
+					_ctx.globalAlpha = 1;
+				}
+
+				// draw dB scale (Y-axis) - avoid drawing it twice on 'dual-combined' channel layout
+				if ( this.showScaleY && ! isLumi && ! _radial && ( channel == 0 || ! isDualCombined ) )
+					drawScaleY();
+
+				// set line width and dash for LEDs effect
+				if ( isLeds ) {
+					_ctx.setLineDash( [ ledHeight, ledSpaceV ] );
+					_ctx.lineWidth = _bars[0].width;
+				}
+				else // for outline effect ensure linewidth is not greater than half the bar width
+					_ctx.lineWidth = isOutline ? Math.min( _lineWidth, _bars[0].width / 2 ) : _lineWidth;
+
+				// set clipping region
+				_ctx.save();
+				if ( ! _radial ) {
+					const region = new Path2D();
+					region.rect( 0, channelTop, canvas.width, analyzerHeight );
+					_ctx.clip( region );
+				}
+
+			} // if ( useCanvas )
+
+			// get a new array of data from the FFT
+			let fftData = this._fftData[ channel ];
+			this._analyzer[ channel ].getFloatFrequencyData( fftData );
+
+			// apply weighting
+			if ( _weightingFilter )
+				fftData = fftData.map( ( val, idx ) => val + weightingdB( this._binToFreq( idx ) ) );
+
+			// start drawing path (for graph mode)
+			_ctx.beginPath();
+
+			// store line graph points to create mirror effect in radial mode
+			let points = [];
+
+			// draw bars / lines
+
+			for ( let barIndex = 0; barIndex < nBars; barIndex++ ) {
+
+				const bar = _bars[ barIndex ],
+					  { posX, barCenter, width, freq, binLo, binHi, ratioLo, ratioHi } = bar;
+
+				let barValue = Math.max( interpolate( binLo, ratioLo ), interpolate( binHi, ratioHi ) );
+
+				// check additional bins (if any) for this bar and keep the highest value
+				for ( let j = binLo + 1; j < binHi; j++ ) {
+					if ( fftData[ j ] > barValue )
+						barValue = fftData[ j ];
+				}
+
+				// normalize bar amplitude in [0;1] range
+				barValue = this._normalizedB( barValue );
+
+				bar.value[ channel ] = barValue;
+				currentEnergy += barValue;
+
+				// update bar peak
+				if ( bar.peak[ channel ] > 0 ) {
+					bar.hold[ channel ]--;
+					// if hold is negative, it becomes the "acceleration" for peak drop
+					if ( bar.hold[ channel ] < 0 )
+						bar.peak[ channel ] += bar.hold[ channel ] / ( holdFrames * holdFrames / 2 );
+				}
+
+				// check if it's a new peak for this bar
+				if ( barValue >= bar.peak[ channel ] ) {
+					bar.peak[ channel ] = barValue;
+					bar.hold[ channel ] = holdFrames;
+				}
+
+				// if not using the canvas, move earlier to the next bar
+				if ( ! useCanvas )
+					continue;
+
+				// set opacity for bar effects
+				if ( isLumi || isAlpha )
+					_ctx.globalAlpha = barValue;
+				else if ( isOutline )
+					_ctx.globalAlpha = fillAlpha;
+
+				// set fillStyle and strokeStyle for the current bar
+				setBarColor( barValue, barIndex );
+
+				// compute actual bar height on screen
+				const barHeight = isLumi ? maxBarHeight : isLeds ? ledPosY( barValue ) : barValue * maxBarHeight | 0;
+
+				// Draw current bar or line segment
+
+				if ( _mode == MODE_GRAPH ) {
+					// compute the average between the initial bar (barIndex==0) and the next one
+					// used to smooth the curve when the initial posX is off the screen, in mirror and radial modes
+					const nextBarAvg = barIndex ? 0 : ( this._normalizedB( fftData[ _bars[1].binLo ] ) * maxBarHeight + barHeight ) / 2;
+
+					if ( _radial ) {
+						if ( barIndex == 0 ) {
+							if ( isDualHorizontal )
+								_ctx.moveTo( ...radialXY( 0, 0 ) );
+							_ctx.lineTo( ...radialXY( 0, ( posX < 0 ? nextBarAvg : barHeight ) ) );
+						}
+						// draw line to the current point, avoiding overlapping wrap-around frequencies
+						if ( posX >= 0 ) {
+							const point = [ posX, barHeight ];
+							_ctx.lineTo( ...radialXY( ...point ) );
+							points.push( point );
+						}
+					}
+					else { // Linear
+						if ( barIndex == 0 ) {
+							// start the line off-screen using the previous FFT bin value as the initial amplitude
+							if ( _mirror == -1 && ! isDualHorizontal )
+								_ctx.moveTo( initialX, analyzerBottom - ( posX < initialX ? nextBarAvg : barHeight ) );
+							else {
+								const prevFFTData = binLo ? this._normalizedB( fftData[ binLo - 1 ] ) * maxBarHeight : barHeight; // use previous FFT bin value, when available
+								_ctx.moveTo( initialX - _lineWidth, analyzerBottom - prevFFTData );
+							}
+						}
+						// draw line to the current point
+						// avoid X values lower than the origin when mirroring left, otherwise draw them for best graph accuracy
+						if ( isDualHorizontal || _mirror != -1 || posX >= initialX )
+							_ctx.lineTo( posX, analyzerBottom - barHeight );
+					}
+				}
+				else {
+					if ( isLeds ) {
+						// draw "unlit" leds - avoid drawing it twice on 'dual-combined' channel layout
+						if ( showBgColor && ! overlay && ( channel == 0 || ! isDualCombined ) ) {
+							const alpha = _ctx.globalAlpha;
+							_ctx.strokeStyle = LEDS_UNLIT_COLOR;
+							_ctx.globalAlpha = 1;
+							strokeBar( barCenter, channelTop, analyzerBottom );
+							// restore properties
+							_ctx.strokeStyle = _ctx.fillStyle;
+							_ctx.globalAlpha = alpha;
+						}
+						if ( isTrueLeds ) {
+							// ledPosY() is used below to fit one entire led height into the selected range
+							const colorIndex = isLumi ? 0 : colorStops.findLastIndex( item => ledPosY( barValue ) <= ledPosY( item.level ) );
+							let last = analyzerBottom;
+							for ( let i = colorCount - 1; i >= colorIndex; i-- ) {
+								_ctx.strokeStyle = colorStops[ i ].color;
+								let y = analyzerBottom - ( i == colorIndex ? barHeight : ledPosY( colorStops[ i ].level ) );
+								strokeBar( barCenter, last, y );
+								last = y - ledSpaceV;
+							}
+						}
+						else
+							strokeBar( barCenter, analyzerBottom, analyzerBottom - barHeight );
+					}
+					else if ( posX >= initialX ) {
+						if ( _radial )
+							radialPoly( posX, 0, width, barHeight, isOutline );
+						else if ( isRound ) {
+							const halfWidth = width / 2,
+								  y = analyzerBottom + halfWidth; // round caps have an additional height of half bar width
+
+							_ctx.beginPath();
+							_ctx.moveTo( posX, y );
+							_ctx.lineTo( posX, y - barHeight );
+							_ctx.arc( barCenter, y - barHeight, halfWidth, PI, TAU );
+							_ctx.lineTo( posX + width, y );
+							strokeIf( isOutline );
+							_ctx.fill();
+						}
+						else {
+							const offset = isOutline ? _ctx.lineWidth : 0;
+							_ctx.beginPath();
+							_ctx.rect( posX, analyzerBottom + offset, width, -barHeight - offset );
+							strokeIf( isOutline );
+							_ctx.fill();
+						}
+					}
+				}
+
+				// Draw peak
+				const peak = bar.peak[ channel ];
+				if ( peak > 0 && showPeaks && ! showPeakLine && ! isLumi && posX >= initialX && posX < finalX ) {
+					// set opacity
+					if ( isOutline && _lineWidth > 0 )
+						_ctx.globalAlpha = 1;
+					else if ( isAlpha )
+						_ctx.globalAlpha = peak;
+
+					// select the peak color for 'bar-level' colorMode or 'trueLeds'
+					if ( _colorMode == COLOR_BAR_LEVEL || isTrueLeds )
+						setBarColor( peak );
+
+					// render peak according to current mode / effect
+					if ( isLeds ) {
+						const ledPeak = ledPosY( peak );
+						if ( ledPeak >= ledSpaceV ) // avoid peak below first led
+							_ctx.fillRect( posX, analyzerBottom - ledPeak, width, ledHeight );
+					}
+					else if ( ! _radial )
+						_ctx.fillRect( posX, analyzerBottom - peak * maxBarHeight, width, 2 );
+					else if ( _mode != MODE_GRAPH ) // radial - peaks for graph mode are done by the peak line code
+						radialPoly( posX, peak * maxBarHeight, width, -2 );
+				}
+
+			} // for ( let barIndex = 0; barIndex < nBars; barIndex++ )
+
+			// if not using the canvas, move earlier to the next channel
+			if ( ! useCanvas )
+				continue;
+
+			// restore global alpha
+			_ctx.globalAlpha = 1;
+
+			// Fill/stroke drawing path for graph mode
+			if ( _mode == MODE_GRAPH ) {
+				setBarColor(); // select channel gradient
+
+				if ( _radial && ! isDualHorizontal ) {
+					if ( _mirror ) {
+						let p;
+						while ( p = points.pop() )
+							_ctx.lineTo( ...radialXY( ...p, -1 ) );
+					}
+					_ctx.closePath();
+				}
+
+				if ( _lineWidth > 0 )
+					_ctx.stroke();
+
+				if ( fillAlpha > 0 ) {
+					if ( _radial ) {
+						// exclude the center circle from the fill area
+						const start = isDualHorizontal ? getAngle( analyzerWidth >> 1 ) : 0,
+							  end   = isDualHorizontal ? getAngle( analyzerWidth ) : TAU;
+						_ctx.moveTo( ...radialXY( isDualHorizontal ? analyzerWidth >> 1 : 0, 0 ) );
+						_ctx.arc( centerX, centerY, innerRadius, start, end, isDualHorizontal ? ! invertedChannel : true );
+					}
+					else {
+						// close the fill area
+						_ctx.lineTo( finalX, analyzerBottom );
+						_ctx.lineTo( initialX, analyzerBottom );
+					}
+
+					_ctx.globalAlpha = fillAlpha;
+					_ctx.fill();
+					_ctx.globalAlpha = 1;
+				}
+
+				// draw peak line (and standard peaks on radial)
+				if ( showPeakLine || ( _radial && showPeaks ) ) {
+					points = []; // for mirror line on radial
+					_ctx.beginPath();
+					_bars.forEach( ( b, i ) => {
+						let x = b.posX,
+							h = b.peak[ channel ],
+							m = i ? 'lineTo' : 'moveTo';
+						if ( _radial && x < 0 ) {
+							const nextBar = _bars[ i + 1 ];
+							h = findY( x, h, nextBar.posX, nextBar.peak[ channel ], 0 );
+							x = 0;
+						}
+						h *= maxBarHeight;
+						if ( showPeakLine ) {
+							_ctx[ m ]( ...( _radial ? radialXY( x, h ) : [ x, analyzerBottom - h ] ) );
+							if ( _radial && _mirror && ! isDualHorizontal )
+								points.push( [ x, h ] );
+						}
+						else if ( h > 0 )
+							radialPoly( x, h, 1, -2 ); // standard peaks (also does mirror)
+					});
+					if ( showPeakLine ) {
+						let p;
+						while ( p = points.pop() )
+							_ctx.lineTo( ...radialXY( ...p, -1 ) ); // mirror line points
+						_ctx.lineWidth = 1;
+						_ctx.stroke(); // stroke peak line
+					}
+				}
+			}
+
+			_ctx.restore(); // restore clip region
+
+			if ( isDualHorizontal && ! _radial )
+				_ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+
+			// create Reflex effect - for dual-combined and dual-horizontal do it only once, after channel 1
+			if ( ( ! isDualHorizontal && ! isDualCombined ) || channel )
+				doReflex( channel );
+
+		} // for ( let channel = 0; channel < nChannels; channel++ ) {
+
+		updateEnergy( currentEnergy / ( nBars << ( nChannels - 1 ) ) );
+
+		if ( useCanvas ) {
+			// Mirror effect
+			if ( _mirror && ! _radial && ! isDualHorizontal ) {
+				_ctx.setTransform( -1, 0, 0, 1, canvas.width - initialX, 0 );
+				_ctx.drawImage( canvas, initialX, 0, centerX, canvas.height, 0, 0, centerX, canvas.height );
+				_ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+			}
+
+			// restore solid lines
+			_ctx.setLineDash([]);
+
+			// draw frequency scale (X-axis)
+			drawScaleX();
+		}
+
+		// display current frame rate
+		if ( this.showFPS ) {
+			const size = canvasX.height;
+			_ctx.font = `bold ${size}px ${FONT_FAMILY}`;
+			_ctx.fillStyle = FPS_COLOR;
+			_ctx.textAlign = 'right';
+			_ctx.fillText( Math.round( _fps ), canvas.width - size, size * 2 );
+		}
+
+		// call callback function, if defined
+		if ( this.onCanvasDraw ) {
+			_ctx.save();
+			_ctx.fillStyle = _ctx.strokeStyle = _canvasGradients[0];
+			this.onCanvasDraw( this, { timestamp, _canvasGradients } );
+			_ctx.restore();
+		}
+	}
+
+	/**
+	 * Return scaled frequency according to the selected scale
+	 */
+	_freqScaling( freq ) {
+		switch ( this._frequencyScale ) {
+			case SCALE_LOG :
+				return Math.log2( freq );
+			case SCALE_BARK :
+				return ( 26.81 * freq ) / ( 1960 + freq ) - .53;
+			case SCALE_MEL :
+				return Math.log2( 1 + freq / 700 );
+			case SCALE_LINEAR :
+				return freq;
+		}
+	}
+
+	/**
+	 * Return the FFT data bin (array index) which represents a given frequency
+	 */
+	_freqToBin( freq, method = 'round' ) {
+		const max = this._analyzer[0].frequencyBinCount - 1,
+			  bin = Math[ method ]( freq * this.fftSize / this.audioCtx.sampleRate );
+
+		return bin < max ? bin : max;
+	}
+
+	/**
+	 * Generate currently selected gradient
+	 */
+	_makeGrad() {
+		if ( ! this._ready )
+			return;
+
+		const { canvas, _ctx, _radial, _reflexRatio } = this,
+			  { analyzerWidth, centerX, centerY, initialX, innerRadius, outerRadius } = this._aux,
+			  { isLumi }     = this._flg,
+			  isDualVertical = this._chLayout == CHANNEL_VERTICAL,
+			  analyzerRatio  = 1 - _reflexRatio,
+			  gradientHeight = isLumi ? canvas.height : canvas.height * ( 1 - _reflexRatio * ( ! isDualVertical ) ) | 0;
+			  				   // for vertical stereo we keep the full canvas height and handle the reflex areas while generating the color stops
+
+		for ( const channel of [0,1] ) {
+			const currGradient = this._gradients[ this._selectedGrads[ channel ] ],
+				  colorStops   = currGradient.colorStops,
+				  isHorizontal = currGradient.dir == 'h';
+
+			let grad;
+
+			if ( _radial )
+				grad = _ctx.createRadialGradient( centerX, centerY, outerRadius, centerX, centerY, innerRadius - ( outerRadius - innerRadius ) * isDualVertical );
+			else
+				grad = _ctx.createLinearGradient( ...( isHorizontal ? [ initialX, 0, initialX + analyzerWidth, 0 ] : [ 0, 0, 0, gradientHeight ] ) );
+
+			if ( colorStops ) {
+				const dual = isDualVertical && ! this._splitGradient && ( ! isHorizontal || _radial );
+
+				for ( let channelArea = 0; channelArea < 1 + dual; channelArea++ ) {
+					const maxIndex = colorStops.length - 1;
+
+					colorStops.forEach( ( colorStop, index ) => {
+						let offset = colorStop.pos;
+
+						// in dual mode (not split), use half the original offset for each channel
+						if ( dual )
+							offset /= 2;
+
+						// constrain the offset within the useful analyzer areas (avoid reflex areas)
+						if ( isDualVertical && ! isLumi && ! _radial && ! isHorizontal ) {
+							offset *= analyzerRatio;
+							// skip the first reflex area in split mode
+							if ( ! dual && offset > .5 * analyzerRatio )
+								offset += .5 * _reflexRatio;
+						}
+
+						// only for dual-vertical non-split gradient (creates full gradient on both halves of the canvas)
+						if ( channelArea == 1 ) {
+							// add colors in reverse order if radial or lumi are active
+							if ( _radial || isLumi ) {
+								const revIndex = maxIndex - index;
+								colorStop = colorStops[ revIndex ];
+								offset = 1 - colorStop.pos / 2;
+							}
+							else {
+								// if the first offset is not 0, create an additional color stop to prevent bleeding from the first channel
+								if ( index == 0 && offset > 0 )
+									grad.addColorStop( .5, colorStop.color );
+								// bump the offset to the second half of the gradient
+								offset += .5;
+							}
+						}
+
+						// add gradient color stop
+						grad.addColorStop( offset, colorStop.color );
+
+						// create additional color stop at the end of first channel to prevent bleeding
+						if ( isDualVertical && index == maxIndex && offset < .5 )
+							grad.addColorStop( .5, colorStop.color );
+					});
+				} // for ( let channelArea = 0; channelArea < 1 + dual; channelArea++ )
+			}
+
+			this._canvasGradients[ channel ] = grad;
+		} // for ( const channel of [0,1] )
+	}
+
+	/**
+	 * Normalize a dB value in the [0;1] range
+	 */
+	_normalizedB( value ) {
+		const isLinear   = this._linearAmplitude,
+			  boost      = isLinear ? 1 / this._linearBoost : 1,
+			  clamp      = ( val, min, max ) => val <= min ? min : val >= max ? max : val,
+			  dBToLinear = val => 10 ** ( val / 20 );
+
+		let maxValue = this.maxDecibels,
+			minValue = this.minDecibels;
+
+		if ( isLinear ) {
+			maxValue = dBToLinear( maxValue );
+			minValue = dBToLinear( minValue );
+			value = dBToLinear( value ) ** boost;
+		}
+
+		return clamp( ( value - minValue ) / ( maxValue - minValue ) ** boost, 0, 1 );
+	}
+
+	/**
+	 * Internal function to change canvas dimensions on demand
+	 */
+	_setCanvas( reason ) {
+		if ( ! this._ready )
+			return;
+
+		const { canvas, _ctx } = this,
+			  canvasX    = this._scaleX.canvas,
+			  pixelRatio = window.devicePixelRatio / ( this._loRes + 1 );
+
+		let screenWidth  = window.screen.width  * pixelRatio,
+			screenHeight = window.screen.height * pixelRatio;
+
+		// Fix for iOS Safari - swap width and height when in landscape
+		if ( Math.abs( window.orientation ) == 90 && screenWidth < screenHeight )
+			[ screenWidth, screenHeight ] = [ screenHeight, screenWidth ];
+
+		const isFullscreen = this.isFullscreen,
+			  isCanvasFs   = isFullscreen && this._fsEl == canvas,
+			  newWidth     = isCanvasFs ? screenWidth  : ( this._width  || this._container.clientWidth  || this._defaultWidth  ) * pixelRatio | 0,
+			  newHeight    = isCanvasFs ? screenHeight : ( this._height || this._container.clientHeight || this._defaultHeight ) * pixelRatio | 0;
+
+		// set/update object properties
+		this._pixelRatio = pixelRatio;
+		this._fsWidth    = screenWidth;
+		this._fsHeight   = screenHeight;
+
+		// if canvas dimensions haven't changed, quit
+		if ( canvas.width == newWidth && canvas.height == newHeight )
+			return;
+
+		// apply new dimensions
+		canvas.width  = newWidth;
+		canvas.height = newHeight;
+
+		// if not in overlay mode, paint the canvas black
+		if ( ! this.overlay ) {
+			_ctx.fillStyle = '#000';
+			_ctx.fillRect( 0, 0, newWidth, newHeight );
+		}
+
+		// set lineJoin property for area fill mode (this is reset whenever the canvas size changes)
+		_ctx.lineJoin = 'bevel';
+
+		// update dimensions of the scale canvas
+		canvasX.width = newWidth;
+		canvasX.height = Math.max( 20 * pixelRatio, Math.min( newWidth, newHeight ) / 32 | 0 );
+
+		// calculate bar positions and led options
+		this._calcBars();
+
+		// (re)generate gradient
+		this._makeGrad();
+
+		// detect fullscreen changes (for Safari)
+		if ( this._fsStatus !== undefined && this._fsStatus !== isFullscreen )
+			reason = REASON_FSCHANGE;
+		this._fsStatus = isFullscreen;
+
+		// call the callback function, if defined
+		if ( this.onCanvasResize )
+			this.onCanvasResize( reason, this );
+	}
+
+	/**
+	 * Select a gradient for one or both channels
+	 *
+	 * @param {string} name gradient name
+	 * @param [{number}] desired channel (0 or 1) - if empty or invalid, sets both channels
+	 */
+	_setGradient( name, channel ) {
+		if ( ! this._gradients.hasOwnProperty( name ) )
+			throw new AudioMotionError( ERR_UNKNOWN_GRADIENT, name );
+
+		if ( ! [0,1].includes( channel ) ) {
+			this._selectedGrads[1] = name;
+			channel = 0;
+		}
+
+		this._selectedGrads[ channel ] = name;
+		this._makeGrad();
+	}
+
+	/**
+	 * Set object properties
+	 */
+	_setProps( options, useDefaults ) {
+
+		// settings defaults
+		const defaults = {
+			alphaBars      : false,
+			ansiBands      : false,
+			barSpace       : 0.1,
+			bgAlpha        : 0.7,
+			channelLayout  : CHANNEL_SINGLE,
+			colorMode      : COLOR_GRADIENT,
+			fftSize        : 8192,
+			fillAlpha      : 1,
+			frequencyScale : SCALE_LOG,
+			gradient       : GRADIENTS[0][0],
+			ledBars        : false,
+			linearAmplitude: false,
+			linearBoost    : 1,
+			lineWidth      : 0,
+			loRes          : false,
+			lumiBars       : false,
+			maxDecibels    : -25,
+			maxFPS         : 0,
+			maxFreq        : 22000,
+			minDecibels    : -85,
+			minFreq        : 20,
+			mirror         : 0,
+			mode           : 0,
+			noteLabels     : false,
+			outlineBars    : false,
+			overlay        : false,
+			peakLine       : false,
+			radial		   : false,
+			reflexAlpha    : 0.15,
+			reflexBright   : 1,
+			reflexFit      : true,
+			reflexRatio    : 0,
+			roundBars      : false,
+			showBgColor    : true,
+			showFPS        : false,
+			showPeaks      : true,
+			showScaleX     : true,
+			showScaleY     : false,
+			smoothing      : 0.5,
+			spinSpeed      : 0,
+			splitGradient  : false,
+			start          : true,
+			trueLeds       : false,
+			useCanvas      : true,
+			volume         : 1,
+			weightingFilter: FILTER_NONE
+		};
+
+		// callback functions properties
+		const callbacks = [ 'onCanvasDraw', 'onCanvasResize' ];
+
+		// properties undefined by default
+		const defaultUndefined = [ 'gradientLeft', 'gradientRight', 'height', 'width', 'stereo' ];
+
+		// build an array of valid properties; `start` is not an actual property and is handled after setting everything else
+		const validProps = Object.keys( defaults ).filter( e => e != 'start' ).concat( callbacks, defaultUndefined );
+
+		if ( useDefaults || options === undefined )
+			options = { ...defaults, ...options }; // merge options with defaults
+
+		for ( const prop of Object.keys( options ) ) {
+			if ( callbacks.includes( prop ) && typeof options[ prop ] !== 'function' ) // check invalid callback
+				this[ prop ] = undefined;
+			else if ( validProps.includes( prop ) ) // set only valid properties
+				this[ prop ] = options[ prop ];
+		}
+
+		if ( options.start !== undefined )
+			this.toggleAnalyzer( options.start );
+	}
+
+}
+
+module.exports = {
+	AudioContext: window.AudioContext || window.webkitAudioContext,
+	OfflineAudioContext: window.OfflineAudioContext || window.webkitOfflineAudioContext,
+	AudioMotionAnalyzer,
+	WaveSurfer: l$1,
+	RegionsPlugin: s$5,
+	TimelinePlugin: n$2,
+	Minimap: u,
+	EnvelopePlugin: s$3,
+	Spectrogram: i$2,
+	RecordPlugin: r,
+	ZoomPlugin: i,
+};

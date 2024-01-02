@@ -15,6 +15,7 @@ import AudioMotionAnalyzer from "./modules/audio-motion/audio-motion-analyzer.js
 
 module.exports = {
 	AudioContext: window.AudioContext || window.webkitAudioContext,
+	OfflineAudioContext: window.OfflineAudioContext || window.webkitOfflineAudioContext,
 	AudioMotionAnalyzer,
 	WaveSurfer,
 	RegionsPlugin,

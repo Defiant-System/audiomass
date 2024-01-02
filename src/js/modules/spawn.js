@@ -174,6 +174,13 @@
 				file = Spawn.data.tabs.active.file;
 				AudioUtils.Reverse({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
+
+			case "fade-in-region":
+				break;
+			case "fade-out-region":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.FadeOut({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
 			/* FX: END */
 
 			case "deselect-region":

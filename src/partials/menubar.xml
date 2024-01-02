@@ -30,6 +30,8 @@
 		<Menu name="Stop"/>
 		<Menu name="Select All" hotkey="shift+a"/>
 		<Menu name="Deselect"/>
+		<Menu type="divider"/>
+		<Menu name="Crop" click="crop-region"/>
 	</Menu>
 	<Menu name="Effects" for="effects">
 		<Menu name="Fade In" disabled="1"/>

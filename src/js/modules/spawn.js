@@ -163,7 +163,12 @@
 				AudioUtils.InsertSilence({ file, duration: event.duration || 1, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "invert-region":
-				console.log(event);
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.Invert({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
+			case "crop-region":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.Crop({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "reverse-region":
 				file = Spawn.data.tabs.active.file;

@@ -28,9 +28,9 @@ let AudioUtils = {
 							await data.file._ws.loadBlob(event.blob);
 							// what to mark when done, if any
 							if (marker) {
+								// clear regions
+								data.file._regions.clearRegions();
 								if (marker.end) {
-									id: "region-selected",
-									data.file._regions.clearRegions();
 									data.file._regions.addRegion({ ...marker, id: "region-selected" });
 								} else {
 									data.file._ws.skip(marker.start);
@@ -71,6 +71,32 @@ let AudioUtils = {
 		return copySegment;
 	},
 
+	Crop(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let end = region ? region.end : originalBuffer.duration;
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end - start, 3);
+		let rateOffset = (offset   * sampleRate) >> 0;
+		let rateLength = (duration * sampleRate) >> 0;
+		let newSegment = this.CreateBuffer(channels, rateLength, sampleRate);
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
+
+			uberChanData.set(chanData.slice(rateOffset, rateOffset + rateLength));
+		}
+
+		// show new waveform
+		let marker = { start: 0, end: null };
+		this.LoadDecoded(data, newSegment, marker);
+	},
+
 	InsertSegmentToBuffer(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let sampleRate = originalBuffer.sampleRate;
@@ -100,6 +126,33 @@ let AudioUtils = {
 
 		let marker = { start: offset, end: offset + pasteSegment.duration };
 		this.LoadDecoded(data, newSegment, marker);
+	},
+
+	Invert(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let end = region ? region.end : originalBuffer.duration;
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end, 3);
+		let rateOffset = (offset   * sampleRate) >> 0;
+		let rateLength = (duration * sampleRate) >> 0;
+		let newSegment = this.CreateBuffer(channels, originalBuffer.length, sampleRate);
+
+		for (let i=0; i<channels; ++i) {
+			let chanData = originalBuffer.getChannelData(i);
+			let uberChanData = newSegment.getChannelData(i);
+
+			uberChanData.set(chanData.slice(0, rateOffset));
+			uberChanData.set(chanData.slice(rateOffset, rateOffset + rateLength).map(i => i * -1), rateOffset);
+			uberChanData.set(chanData.slice(rateLength), rateLength);
+		}
+
+		// show new waveform
+		this.LoadDecoded(data, newSegment);
 	},
 
 	MakeSilenceBuffer(data) {
@@ -178,7 +231,6 @@ let AudioUtils = {
 		let duration = this.TrimTo(end, 3);
 		let rateOffset = (offset   * sampleRate) >> 0;
 		let rateLength = (duration * sampleRate) >> 0;
-
 		let newSegment = this.CreateBuffer(channels, originalBuffer.length, sampleRate);
 
 		for (let i=0; i<channels; ++i) {
@@ -252,7 +304,7 @@ let AudioUtils = {
 			}
 		}
 		if (found) silArr.push([start, end]);
-		
+
 		if (silArr.length) {
 			if (edgesOnly) {
 				// trim from start & end of range

@@ -101,6 +101,49 @@ let AudioUtils = {
 		this.LoadDecoded(data, newSegment, marker);
 	},
 
+	FadeIn(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let end = region ? region.end : originalBuffer.duration;
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end, 3);
+		let rateOffset = (offset   * sampleRate) >> 0;
+		let rateLength = (duration * sampleRate) >> 0;
+
+		let copy = this.CopyBufferSegment(data);
+		let offlineCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
+		let source = offlineCtx.createBufferSource();
+		source.buffer = copy;
+		
+		let gain = offlineCtx.createGain();
+		gain.gain.setValueAtTime(0, offlineCtx.currentTime);
+		gain.gain.linearRampToValueAtTime(1, offlineCtx.currentTime + duration);
+		gain.connect(offlineCtx.destination);
+		source.connect(gain);
+		source.start();
+		offlineCtx.startRendering();
+
+		offlineCtx.oncomplete = event => {
+			let renderedBuffer = event.renderedBuffer;
+			let newSegment = this.CreateBuffer(channels, originalBuffer.length, sampleRate);
+			
+			for (let i=0; i<channels; ++i) {
+				let chanData = originalBuffer.getChannelData(i);
+				let uberChanData = newSegment.getChannelData(i);
+				let fxChanData = renderedBuffer.getChannelData(i);
+
+				uberChanData.set(chanData);
+				uberChanData.set(fxChanData, rateOffset, fxChanData.length - rateOffset);
+			}
+			// show new waveform
+			this.LoadDecoded(data, newSegment);
+		};
+	},
+
 	FadeOut(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;
@@ -117,17 +160,14 @@ let AudioUtils = {
 		let copy = this.CopyBufferSegment(data);
 		let offlineCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
 		let source = offlineCtx.createBufferSource();
-		
 		source.buffer = copy;
 		
 		let gain = offlineCtx.createGain();
-
-		gain.gain.setValueAtTime (1, offlineCtx.currentTime);
-		gain.gain.linearRampToValueAtTime (0, offlineCtx.currentTime + duration);
+		gain.gain.setValueAtTime(1, offlineCtx.currentTime);
+		gain.gain.linearRampToValueAtTime(0, offlineCtx.currentTime + duration);
 		gain.connect(offlineCtx.destination);
 		source.connect(gain);
 		source.start();
-
 		offlineCtx.startRendering();
 
 		offlineCtx.oncomplete = event => {
@@ -142,12 +182,9 @@ let AudioUtils = {
 				uberChanData.set(chanData);
 				uberChanData.set(fxChanData, rateOffset, fxChanData.length - rateOffset);
 			}
-
 			// show new waveform
 			this.LoadDecoded(data, newSegment);
 		};
-
-		// console.log(offlineCtx.destination);
 	},
 
 	InsertSegmentToBuffer(data) {

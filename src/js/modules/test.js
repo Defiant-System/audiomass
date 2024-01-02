@@ -48,8 +48,8 @@ let Test = {
 			// setTimeout(() => file.dispatch({ type: "ws-region-collapse-start" }), 900);
 			// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
 
-			// setTimeout(() => APP.dispatch({ type: "fade-in-region", spawn }), 600);
-			setTimeout(() => APP.dispatch({ type: "fade-out-region", spawn }), 600);
+			setTimeout(() => APP.dispatch({ type: "fade-in-region", spawn }), 600);
+			// setTimeout(() => APP.dispatch({ type: "fade-out-region", spawn }), 600);
 			return;
 
 

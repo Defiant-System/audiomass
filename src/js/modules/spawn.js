@@ -176,6 +176,8 @@
 				break;
 
 			case "fade-in-region":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.FadeIn({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
 				break;
 			case "fade-out-region":
 				file = Spawn.data.tabs.active.file;

@@ -251,6 +251,7 @@ let AudioUtils = {
 				}
 			}
 		}
+		if (found) silArr.push([start, end]);
 		
 		if (silArr.length) {
 			if (edgesOnly) {
@@ -265,7 +266,7 @@ let AudioUtils = {
 					newArr.push(check);
 				}
 				check = silArr[silArr.length-1];
-				if (check[1] === jl) newArr.push(check);
+				if (jl - check[1] < 8) newArr.push(check);
 				// trim only edges
 				silArr = newArr;
 			}

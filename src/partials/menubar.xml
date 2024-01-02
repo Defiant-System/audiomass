@@ -31,11 +31,18 @@
 		<Menu name="Select All" hotkey="shift+a"/>
 		<Menu name="Deselect"/>
 		<Menu type="divider"/>
+		<Menu name="Reverse" click="reverse-region"/>
+		<Menu name="Invert" click="invert-region"/>
 		<Menu name="Crop" click="crop-region"/>
 	</Menu>
 	<Menu name="Effects" for="effects">
-		<Menu name="Fade In" disabled="1"/>
-		<Menu name="Fade Out" disabled="1"/>
+		<Menu name="Fade In"/>
+		<Menu name="Fade Out"/>
+		<Menu name="Silence&#8230;">
+			<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
+			<Menu name="Remove Silence" click="remove-silence"/>
+			<Menu name="Trim Start &amp; End" click="trim-start-end"/>
+		</Menu>
 		<Menu type="divider"/>
 		<Menu name="Gain" click="open-dialog" arg="dlgGain"/>
 		<Menu name="Normalize" click="open-dialog" arg="dlgNormalize"/>
@@ -49,12 +56,6 @@
 		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
 		<Menu type="divider"/>
 		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
-		<Menu name="Reverse" click="reverse-region"/>
-		<Menu name="Invert" click="invert-region"/>
-		<Menu type="divider"/>
-		<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
-		<Menu name="Remove Silence" click="remove-silence"/>
-		<Menu name="Trim Start &amp; End" click="trim-start-end"/>
 	</Menu>
 	<Menu name="View">
 		<Menu name="Follow Cursor" is-checked="1"/>

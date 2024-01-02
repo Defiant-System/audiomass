@@ -36,13 +36,8 @@
 		<Menu name="Crop" click="crop-region"/>
 	</Menu>
 	<Menu name="Effects" for="effects">
-		<Menu name="Fade In"/>
-		<Menu name="Fade Out"/>
-		<Menu name="Silence&#8230;">
-			<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
-			<Menu name="Remove Silence" click="remove-silence"/>
-			<Menu name="Trim Start &amp; End" click="trim-start-end"/>
-		</Menu>
+		<Menu name="Fade In" click="fade-in-region"/>
+		<Menu name="Fade Out" click="fade-out-region"/>
 		<Menu type="divider"/>
 		<Menu name="Gain" click="open-dialog" arg="dlgGain"/>
 		<Menu name="Normalize" click="open-dialog" arg="dlgNormalize"/>
@@ -54,8 +49,13 @@
 		<Menu name="Delay" click="open-dialog" arg="dlgDelay"/>
 		<Menu name="Distortion" click="open-dialog" arg="dlgDistortion"/>
 		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
-		<Menu type="divider"/>
 		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
+		<Menu type="divider"/>
+		<Menu name="Silence&#8230;">
+			<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>
+			<Menu name="Remove Silence" click="remove-silence"/>
+			<Menu name="Trim Start &amp; End" click="trim-start-end"/>
+		</Menu>
 	</Menu>
 	<Menu name="View">
 		<Menu name="Follow Cursor" is-checked="1"/>

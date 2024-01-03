@@ -26,7 +26,7 @@
 			case "audio-play":
 				// turn on flag
 				Spawn.data._playing = true;
-				if (Data.volumeAnalyser) Self.draw(Spawn);
+				if (Data.splitter) Self.draw(Spawn);
 				break;
 			case "audio-pause":
 			case "audio-stop":
@@ -39,35 +39,37 @@
 				break;
 			// custom events
 			case "connect-file-output":
-				let freqAnalyser = Spawn.data.frequency.analyzer,
-					volumeAnalyser = freqAnalyser.audioCtx.createAnalyser();
-				volumeAnalyser.fftSize = 2048;
+				let freqAnalyser = Spawn.data.frequency.analyzer;
 
-				Data.volumeData = new Uint8Array(volumeAnalyser.frequencyBinCount);
-				Data.pcmData = new Float32Array(volumeAnalyser.fftSize);
-				Data.volumeAnalyser = volumeAnalyser;
+				Data.splitter = freqAnalyser.audioCtx.createChannelSplitter(2);
+				Data.analyserL = freqAnalyser.audioCtx.createAnalyser();
+				Data.analyserR = freqAnalyser.audioCtx.createAnalyser();
+				
+				Data.splitter.connect(Data.analyserL, 1);
+				Data.splitter.connect(Data.analyserR, 0);
+				// volumeAnalyser.fftSize = 32;
+
+				Data.pcmDataL = new Float32Array(Data.analyserL.fftSize);
+				Data.pcmDataR = new Float32Array(Data.analyserR.fftSize);
 				// connect to output of frequency analyzer
-				freqAnalyser.connectOutput(volumeAnalyser);
+				freqAnalyser.connectOutput(Data.splitter);
 				break;
 		}
 	},
 	draw(Spawn) {
-		if (!Spawn.data._playing) return;
-		Spawn.data._rafId = requestAnimationFrame(() => this.draw(Spawn));
+		let Data = Spawn.data;
+		if (!Data._playing) return;
+		Data._rafId = requestAnimationFrame(() => this.draw(Spawn));
 
-		let Data = Spawn.data.speaker;
-
-		// Data.volumeAnalyser.getByteFrequencyData(Data.volumeData);
-		// let data = Data.volumeData;
-		
-		Data.volumeAnalyser.getFloatTimeDomainData(Data.pcmData);
-
-		let peakInstantaneousPower = 0;
-		for (let i=0; i<Data.pcmData.length; i++) {
-			let power = Data.pcmData[i] ** 2;
-			peakInstantaneousPower = Math.max(power, peakInstantaneousPower);
-		}
-		let v = 10 * Math.log10(peakInstantaneousPower) | 0;
-		Spawn.data.speaker.els.left.css({ "transform": `translateY(${v}%)` });
+		Data.speaker.analyserL.getFloatTimeDomainData(Data.speaker.pcmDataL);
+		Data.speaker.analyserR.getFloatTimeDomainData(Data.speaker.pcmDataR);
+		let sumL = 0;
+		let sumR = 0;
+		for (let amplitude of Data.speaker.pcmDataL) { sumL += amplitude ** 2; }
+		for (let amplitude of Data.speaker.pcmDataR) { sumR += amplitude ** 2; }
+		let valueL = Math.min(Math.sqrt(sumL / Data.speaker.pcmDataL.length) * 600, 96);
+		let valueR = Math.min(Math.sqrt(sumR / Data.speaker.pcmDataR.length) * 600, 96);
+		Data.speaker.els.left.css({ "transform": `translateY(-${valueL}%)` });
+		Data.speaker.els.right.css({ "transform": `translateY(-${valueR}%)` });
 	}
 }

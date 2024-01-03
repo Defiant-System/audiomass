@@ -44,9 +44,14 @@
 				break;
 			case "audio-pause":
 			case "audio-stop":
-				// reset flag
-				delete Spawn.data._playing;
-				cancelAnimationFrame(Spawn.data._rafId);
+				// fadeout flag
+				Spawn.data._fadeOut = true;
+				// delayed stop
+				setTimeout(() => {
+					delete Spawn.data._fadeOut;
+					delete Spawn.data._playing;
+					cancelAnimationFrame(Spawn.data._rafId);
+				}, 1e3);
 				break;
 			// custom events
 			case "connect-file-output":
@@ -99,18 +104,25 @@
 			il = data.length,
 			speed = 3;
 
-		Data.swapCtx.drawImage(Data.cvs, 0, 0, width, height);
-		Data.cvs.width = width;
+		if (Spawn.data._fadeOut) {
+			ctx.globalCompositeOperation = "destination-in";
+			ctx.fillStyle = "#ff000077";
+			ctx.fillRect(0, 0, width, height);
+			// ctx.globalCompositeOperation = "source-over"
+		} else {
+			Data.swapCtx.drawImage(Data.cvs, 0, 0, width, height);
+			Data.cvs.width = width;
 
-		for (; i<il; i++) {
-			let y = Math.round (i/il * height);
-			// draw the line at the right side of the canvas
-			ctx.fillStyle = this.getFullColor(data[i]);
-			ctx.fillRect(width - speed, height - y, speed, speed);
+			for (; i<il; i++) {
+				let y = Math.round (i/il * height);
+				// draw the line at the right side of the canvas
+				ctx.fillStyle = this.getFullColor(data[i]);
+				ctx.fillRect(width - speed, height - y, speed, speed);
+			}
+			ctx.translate(-speed, 0);
+			ctx.drawImage(Data.swapCvs, 0, 0, width, height, 0, 0, width, height);
+			ctx.setTransform (1, 0, 0, 1, 0, 0);
 		}
-		ctx.translate(-speed, 0);
-		ctx.drawImage(Data.swapCvs, 0, 0, width, height, 0, 0, width, height);
-		ctx.setTransform (1, 0, 0, 1, 0, 0);
 	},
 	getFullColor(value) {
 		let palette = this.palette,

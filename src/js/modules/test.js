@@ -2,8 +2,8 @@
 let Test = {
 	init(APP, spawn) {
 
-		setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
-		setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 660);
+		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
+		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
 		// return setTimeout(() => spawn.data.tabs.active.file._ws.skip(3), 800);
@@ -12,7 +12,8 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "tab.new", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
-		return;
+
+		// return;
 
 		// return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGain", spawn }), 600);
 
@@ -37,8 +38,8 @@ let Test = {
 
 			file._regions.addRegion({
 				id: "region-selected",
-				start: 0,
-				end: 1.5,
+				start: 1,
+				end: 1.75,
 			});
 
 
@@ -49,7 +50,8 @@ let Test = {
 			// setTimeout(() => APP.dispatch({ type: "remove-silence", spawn }), 1000);
 
 			// setTimeout(() => APP.dispatch({ type: "fade-in-region", spawn }), 600);
-			setTimeout(() => APP.dispatch({ type: "fade-out-region", spawn }), 600);
+			// setTimeout(() => APP.dispatch({ type: "fade-out-region", spawn }), 600);
+			setTimeout(() => APP.dispatch({ type: "temp-gain", spawn }), 600);
 			return;
 
 

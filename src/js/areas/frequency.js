@@ -38,7 +38,7 @@
 			case "audio-pause":
 			case "audio-stop":
 				// delayed stop - waits for all bars to go to "zero"
-				setTimeout(() => Spawn.data.frequency.analyzer.stop(), 1000);
+				setTimeout(() => Spawn.data.frequency.analyzer.stop(), 1e3);
 				break;
 			// custom events
 			case "connect-file-output":

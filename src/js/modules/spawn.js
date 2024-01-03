@@ -180,6 +180,11 @@
 				value = event.type.split("-")[1] === "out";
 				AudioUtils.Fade({ file, spawn: Spawn, sidebar: APP.spawn.sidebar, out: value });
 				break;
+
+			case "temp-gain":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.ApplyEffect({ file, effect: "Gain", spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
 			/* FX: END */
 
 			case "deselect-region":

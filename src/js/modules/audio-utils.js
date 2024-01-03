@@ -75,6 +75,28 @@ let AudioUtils = {
 		return copySegment;
 	},
 
+	ApplyEffect(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+
+		let region = data.file._activeRegion;
+		let start = region ? region.start : data.file._ws.getCurrentTime();
+		let end = region ? region.end : originalBuffer.duration;
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end, 3);
+		let rateOffset = (offset   * sampleRate) >> 0;
+		let rateLength = (duration * sampleRate) >> 0;
+		
+		let copy = this.CopyBufferSegment(data);
+		let offlineCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
+		let source = offlineCtx.createBufferSource();
+		source.buffer = copy;
+		
+		let Effect = AudioFX[data.effect]();
+		console.log( Effect.apply() );
+	},
+
 	Crop(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let channels = originalBuffer.numberOfChannels;

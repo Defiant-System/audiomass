@@ -2,8 +2,8 @@
 let Test = {
 	init(APP, spawn) {
 
-		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 400);
-		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
+		setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
+		setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 660);
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
 		// return setTimeout(() => spawn.data.tabs.active.file._ws.skip(3), 800);
@@ -14,7 +14,7 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
 		return;
 
-		// return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgChannelInfo", spawn }), 200);
+		// return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGain", spawn }), 600);
 
 		/*
 		return setTimeout(() => {

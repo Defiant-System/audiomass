@@ -122,13 +122,12 @@ class FileTabs {
 			}
 
 			// connect frequency analyzer to file
-			let opt = {
+			["frequency", "spectrum", "speaker"]
+				.map(device => this._parent[device].dispatch({
 					type: "connect-file-output",
 					spawn: this._spawn,
 					file: this._active.file,
-				};
-			this._parent.frequency.dispatch(opt);
-			this._parent.spectrum.dispatch(opt);
+				}));
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
 		} else {

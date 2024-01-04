@@ -89,12 +89,13 @@ let AudioUtils = {
 		let rateLength = (duration * sampleRate) >> 0;
 		
 		let copy = this.CopyBufferSegment(data);
-		let offlineCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
-		let source = offlineCtx.createBufferSource();
+		let audioCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
+		let source = audioCtx.createBufferSource();
 		source.buffer = copy;
 		
-		let Effect = AudioFX[data.effect]();
-		console.log( Effect.apply() );
+		let options = { audioCtx, source, value: 1.5 };
+		let Effect = AudioFX[data.effect](options);
+		Effect.apply(options.value);
 	},
 
 	Crop(data) {

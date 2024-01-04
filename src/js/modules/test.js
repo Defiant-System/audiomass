@@ -30,6 +30,18 @@ let Test = {
 		}, 550);
 		*/
 
+		let context = new AudioContext();
+
+		return setTimeout(async () => {
+			await context.audioWorklet.addModule("~/js/worklets/gain.js");
+			let oscillator = new OscillatorNode(context);
+			let bypasser = new AudioWorkletNode(context, "gain-processor");
+			oscillator.connect(bypasser).connect(context.destination);
+			oscillator.start();
+
+			setTimeout(() => oscillator.stop(), 500);
+		}, 500);
+
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			// file._ws.skip(1.5);

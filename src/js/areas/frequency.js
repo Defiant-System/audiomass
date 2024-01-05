@@ -31,6 +31,13 @@
 			isOn,
 			el;
 		switch (event.type) {
+			// system events
+			case "spawn.resize":
+				// update element dimensions
+				let width = +Data.el.prop("offsetWidth"),
+					height = +Data.el.prop("offsetHeight") - 2;
+				Data.analyzer.setCanvasSize(width, height);
+				break;
 			// subscribed events
 			case "audio-play":
 				Spawn.data.frequency.analyzer.start();
@@ -50,11 +57,8 @@
 					Data.el = Spawn.find(`.box[data-area="frequency"] .body`);
 					Data.analyzer = new AudioMotionAnalyzer(Data.el[0], Self.options);
 				}
-
-				// update element dimensions
-				let width = +Data.el.prop("offsetWidth"),
-					height = +Data.el.prop("offsetHeight") - 2;
-				Data.analyzer.setCanvasSize(width, height);
+				// resize canvas
+				Self.dispatch({ type: "spawn.resize", spawn: Spawn });
 				// connect file output
 				event.file.node = Data.analyzer.connectInput(event.file.node || event.file._ws.media);
 				break;

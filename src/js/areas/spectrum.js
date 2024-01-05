@@ -36,6 +36,13 @@
 			el;
 		// console.log(event);
 		switch (event.type) {
+			// system events
+			case "spawn.resize":
+				// make sure canvas fits its parent element
+				let pEl = Data.cvs.parentNode;
+				Data.cvs.width  = Data.swapCvs.width  = +pEl.offsetWidth;
+				Data.cvs.height = Data.swapCvs.height = +pEl.offsetHeight;
+				break;
 			// subscribed events
 			case "audio-play":
 				// turn on flag
@@ -64,11 +71,8 @@
 					// swap canvas
 					Data.swapCvs = document.createElement("canvas");
 					Data.swapCtx = Data.swapCvs.getContext("2d");
-
-					// make sure canvas fits its parent element
-					let pEl = Data.cvs.parentNode;
-					Data.cvs.width  = Data.swapCvs.width  = +pEl.offsetWidth;
-					Data.cvs.height = Data.swapCvs.height = +pEl.offsetHeight;
+					// resize canvas
+					Self.dispatch({ type: "spawn.resize", spawn: Spawn });
 				}
 
 				let freqAnalyser = Spawn.data.frequency.analyzer,

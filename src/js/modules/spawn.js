@@ -53,6 +53,8 @@
 			case "spawn.resize":
 				// proxy event spawn -> tabs -> file
 				Spawn.data.tabs.dispatch(event);
+				Self.frequency.dispatch(event);
+				Self.spectrum.dispatch(event);
 				break;
 
 			// tab related events

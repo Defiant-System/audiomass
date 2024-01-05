@@ -13,7 +13,7 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
 
-		// return;
+		return;
 
 		// return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGain", spawn }), 600);
 
@@ -32,15 +32,15 @@ let Test = {
 
 		let context = new AudioContext();
 
-		return setTimeout(async () => {
-			await context.audioWorklet.addModule("~/js/worklets/gain.js");
-			let oscillator = new OscillatorNode(context);
-			let bypasser = new AudioWorkletNode(context, "gain-processor");
-			oscillator.connect(bypasser).connect(context.destination);
-			oscillator.start();
+		// return setTimeout(async () => {
+		// 	await context.audioWorklet.addModule("~/js/worklets/gain.js");
+		// 	let oscillator = new OscillatorNode(context);
+		// 	let bypasser = new AudioWorkletNode(context, "gain-processor");
+		// 	oscillator.connect(bypasser).connect(context.destination);
+		// 	oscillator.start();
 
-			setTimeout(() => oscillator.stop(), 500);
-		}, 500);
+		// 	setTimeout(() => oscillator.stop(), 500);
+		// }, 500);
 
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;

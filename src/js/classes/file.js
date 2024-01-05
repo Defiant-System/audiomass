@@ -13,19 +13,7 @@ class File {
 		this.channelOn  = { waveColor: "#9fcef6", progressColor: "#6d9dc8" };
 		this.channelOff = { waveColor: "#568", progressColor: "#568" };
 
-		// let timeline = TimelinePlugin.create({
-		// 		height: 8,
-		// 		insertPosition: "beforebegin",
-		// 		timeInterval: 0.05,
-		// 		primaryLabelInterval: 1,
-		// 		secondaryLabelInterval: 1,
-		// 		formatTimeCallback: seconds => seconds.toFixed(2),
-		// 		style: {
-		// 			fontSize: "9px",
-		// 			color: "#71a1ca77",
-		// 		},
-		// 	});
-
+		// custom timeline plugin
 		let timeline = ImaTimeline.create();
 		let zoom = ZoomPlugin.create({ scale: 0.2 });
 		let regions = RegionsPlugin.create();

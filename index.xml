@@ -1,6 +1,7 @@
 <Application>
 	<Build>
 		<task action="skip" source="src/js/bundle.js" destination="public/js/bundle.js"/>
+		<task action="skip" source="src/js/worklets/" destination="public/js/worklets/"/>
 	</Build>
 	<Head>
 		<meta name="id" value="imaudio"/>

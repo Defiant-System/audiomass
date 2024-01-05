@@ -189,6 +189,23 @@
 				break;
 			/* FX: END */
 
+			case "toggle-follow-cursor":
+				file = Spawn.data.tabs.active.file;
+				value = !!event.xMenu.getAttribute("is-checked");
+				file._ws.setOptions({ autoScroll: value });
+				// update menu xml
+				if (value) event.xMenu.removeAttribute("is-checked");
+				else event.xMenu.setAttribute("is-checked", 1);
+				break;
+			case "center-to-cursor":
+				file = Spawn.data.tabs.active.file;
+				value = !!event.xMenu.getAttribute("is-checked");
+				file._ws.setOptions({ autoCenter: !value });
+				// update menu xml
+				if (value) event.xMenu.removeAttribute("is-checked");
+				else event.xMenu.setAttribute("is-checked", 1);
+				break;
+
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });

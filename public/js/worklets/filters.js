@@ -5,7 +5,7 @@
  * @class GainProcessor
  * @extends AudioWorkletProcessor
  */
-class GainProcessor extends AudioWorkletProcessor {
+class FilterProcessor extends AudioWorkletProcessor {
 	// When constructor() undefined, the default constructor will be implicitly
 	// used.
 
@@ -22,4 +22,4 @@ class GainProcessor extends AudioWorkletProcessor {
 	}
 }
 
-registerProcessor("gain-processor", GainProcessor);
+registerProcessor("filter-processor", FilterProcessor);

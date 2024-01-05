@@ -59,7 +59,7 @@
 		</Menu>
 	</Menu>
 	<Menu name="View">
-		<Menu name="Follow Cursor" is-checked="1"/>
+		<Menu name="Follow Cursor" click="toggle-follow-cursor" is-checked="1"/>
 		<Menu name="Peak Separators" is-checked="1"/>
 		<Menu name="Timeline" is-checked="1"/>
 		<Menu type="divider"/>
@@ -68,7 +68,7 @@
 		<Menu name="Tempo Tools"/>
 		<Menu name="ID3 Tags"/>
 		<Menu type="divider"/>
-		<Menu name="Center to Cursor" hotkey="tab"/>
+		<Menu name="Center to Cursor" click="center-to-cursor" is-checked="1" hotkey="tab"/>
 		<Menu name="Reset Zoom"/>
 	</Menu>
 	<Menu name="Window">

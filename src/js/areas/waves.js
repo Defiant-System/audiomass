@@ -46,13 +46,13 @@
 			case "ui-sync-gutter":
 				// to avoid feedback loop on scrollbar DnD
 				if (!Self.drag || Self.drag.type !== "scroll") {
-					let stWidth = +Spawn.data.waves.els.scrollTrack.prop("offsetWidth"),
+					let stWidth = +Spawn.data.waves.els.scrollTrack.prop("offsetWidth") - 2,
 						vWidth = +Spawn.data.waves.els.filesWrapper.prop("offsetWidth"),
 						cWidth = event.ws.getWrapper().clientWidth || 1,
-						width = parseInt(stWidth * (vWidth / cWidth), 10) - 2,
+						width = parseInt(stWidth * (vWidth / cWidth), 10),
 						scroll = event.ws.getScroll(),
 						available = cWidth - vWidth,
-						left = parseInt((scroll / available) * (stWidth - width - 2), 10) + 1;
+						left = parseInt(Math.min(scroll / available, 1) * (stWidth - width), 10) + 1;
 					// sync scrollbar
 					Spawn.data.waves.els.scrollHandle.css({ width, left });
 				}

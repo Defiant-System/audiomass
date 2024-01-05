@@ -25,7 +25,7 @@ class File {
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
 			container: el[0],
-			cursorColor: "#f90", // afdeff
+			cursorColor: "#f90",
 			hideScrollbar: true,
 			sampleRate: 44100,
 			// dragToSeek: true,

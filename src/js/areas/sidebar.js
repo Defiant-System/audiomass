@@ -19,7 +19,7 @@
 		};
 		// default volume knob angle
 		Spawn.data.sidebar.els.volume.css({ "--angle": "62deg" });
-		Spawn.data.sidebar.els.vWrapper.find(".txt-volume h2").html(3);
+		Spawn.data.sidebar.els.vWrapper.find(".txt-volume h2").html(73);
 
 		// subscribe to events
 		Spawn.on("clear-range", this.dispatch);

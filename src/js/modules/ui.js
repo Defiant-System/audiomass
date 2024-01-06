@@ -45,9 +45,11 @@ const UI = {
 		}
 	},
 	doDialog(event) {
-		let Self = UI,
+		let APP = imaudio,
+			Self = UI,
 			Spawn = event.spawn,
 			Drag = Self.drag,
+			file,
 			xNode,
 			xAttr,
 			data,
@@ -196,6 +198,7 @@ const UI = {
 
 			// custom events
 			case "dlg-open":
+				file = Spawn.data.tabs._active.file;
 				dEl = $(`.dialog-box[data-dlg="${event.name}"]`);
 				// add preset buttons, if any
 				if (dEl.find(`.buttons .presets`).length && !dEl.find(`.buttons .presets ul li`).length) {
@@ -209,10 +212,12 @@ const UI = {
 					// add to presets list
 					dEl.find(`.buttons .presets ul`).html(li.join(""));
 				}
+				// disable spawn toolbar
+				APP.spawn.toolbar.dispatch({ type: "disable-tools", exclude: ["display"], spawn: Spawn });
 				// auto reset dialog before show
 				Self.doDialog({ ...event, dEl, type: "dlg-init-fields" });
 				// auto forward open event
-				Dialogs[event.name]({ ...event, dEl });
+				Dialogs[event.name]({ ...event, dEl, file });
 				// prevent mouse from triggering mouseover
 				Spawn.find("content").addClass("dialog-showing");
 
@@ -233,6 +238,8 @@ const UI = {
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
+				// disable spawn toolbar
+				APP.spawn.toolbar.dispatch({ type: "enable-tools", spawn: Spawn });
 				// close dialog
 				dEl.cssSequence("closing", "animationend", el => {
 						// prevent mouse from triggering mouseover
@@ -506,7 +513,7 @@ const UI = {
 					_max = Math.max;
 
 				// pre-knob twist event
-				dlg.func({ ...dlg, val, type: `before:${dlg.type}`, value: +el.data("value") });
+				dlg.func({ ...dlg, iEl, val, type: `before:${dlg.type}`, value: +el.data("value") });
 				// save details
 				Self.drag = { el, dEl, iEl, handle, content, val, dlg, offset, limit, _lerp, _min, _max };
 				// hide mouse
@@ -522,7 +529,7 @@ const UI = {
 				// input field value
 				Drag.iEl.val(value + Drag.val.suffix);
 				// forward event
-				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
+				Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// reset slider element
@@ -593,7 +600,7 @@ const UI = {
 				// input field value
 				Drag.iEl.val(value + Drag.val.suffix);
 				// forward event
-				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
+				Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// reset slider element
@@ -664,7 +671,7 @@ const UI = {
 				value = Drag._lerp(Drag.val.min, Drag.val.max, value / 100).toFixed(Drag.val.decimals);
 				Drag.iEl.val(value + Drag.val.suffix);
 				// forward event
-				Drag.dlg.func({ ...Drag.dlg, val: Drag.val, value: +value });
+				Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
 				break;
 			case "mouseup":
 				// unhide mouse

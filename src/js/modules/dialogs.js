@@ -116,7 +116,9 @@ const Dialogs = {
 		 * 16 KHz   Min: -25 dB     Max: 25 dB
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			filter,
+			band;
 		switch (event.type) {
 			// "fast events"
 			case "set-hz32":
@@ -129,22 +131,29 @@ const Dialogs = {
 			case "set-hz4K":
 			case "set-hz8K":
 			case "set-hz16K":
+				band = +event.iEl.data("fBand");
+				filter = Dialogs._filters.find(f => f.frequency.value === band);
+				filter.gain.value = event.value;
 				break;
 			// standard dialog events
 			case "dlg-open":
-				let mNode = { connect() {} },
-					audioCtx = new AudioContext(),
+				let mNode = event.file.node,
 					filters = event.dEl.find(`input[data-fBand]`).map(iEl => {
-						let band = +iEl.getAttribute("data-fBand"),
-							filter = audioCtx.createBiquadFilter();
+						band = +iEl.getAttribute("data-fBand");
+						filter = mNode.context.createBiquadFilter();
+
 						filter.type = iEl.getAttribute("data-fType");
 						filter.gain.value = 0;
 						filter.Q.value = 1; // resonance
 						filter.frequency.value = band; // the cut-off frequency
+						
 						return filter;
 					}),
 					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, mNode);
-				console.log(equalizer);
+				// connect equalizer to "speakers"
+				equalizer.connect(mNode.context.destination);
+				// save reference to filters
+				Dialogs._filters = filters;
 				break;
 			case "dlg-preview":
 			case "dlg-apply":

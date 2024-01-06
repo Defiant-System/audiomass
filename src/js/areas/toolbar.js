@@ -79,10 +79,14 @@
 				Spawn.data.toolbar.els.display.removeClass("blank-display");
 				break;
 			case "disable-tools":
-				Object.keys(Spawn.data.toolbar.els).map(key =>
-					Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
-				// disable display
-				Spawn.data.toolbar.els.display.addClass("blank-display");
+				let exclude = event.exclude || [];
+				Object.keys(Spawn.data.toolbar.els)
+					.filter(key => !exclude.includes(key))
+					.map(key => Spawn.data.toolbar.els[key].addClass("tool-disabled_"));
+				if (!exclude.includes("display")) {
+					// disable display
+					Spawn.data.toolbar.els.display.addClass("blank-display");
+				}
 				break;
 			// ui events
 			case "toggle-sidebar":

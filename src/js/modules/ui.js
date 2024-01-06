@@ -253,6 +253,7 @@ const UI = {
 						// reset references
 						if (Dialogs._source) Dialogs._source.stop();
 						delete Dialogs._source;
+						delete Dialogs._filters;
 						delete Dialogs._active;
 					});
 				break;
@@ -362,7 +363,12 @@ const UI = {
 			xPath = `//Presets/Dialog[@name="${event.name}"]/Slot[@id="${event.id}"]`,
 			xNode = event.xNode || window.bluePrint.selectSingleNode(xPath);
 		// set dialog in "transition" state
-		event.dEl.cssSequence("switch-trans", "transitionend", el => el.removeClass("switch-trans").css({ "--aStep": "" }));
+		event.dEl.cssSequence("switch-trans", "transitionend", el => {
+			el.removeClass("switch-trans").css({ "--aStep": "" });
+			if (el.hasClass("dialog-box")) {
+				Dialogs[event.name]({ type: "dlg-apply-preset" });
+			}
+		});
 		// console.log(event);
 		switch (event.name) {
 			case "dlgChannelInfo":
@@ -419,6 +425,7 @@ const UI = {
 						iEl.val(a.value + val.suffix);
 						// handle element
 						handle.css({ top });
+
 					});
 				break;
 			case "dlgHardLimiter":

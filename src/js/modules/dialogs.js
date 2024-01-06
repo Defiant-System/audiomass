@@ -134,22 +134,35 @@ const Dialogs = {
 			case "set-hz4K":
 			case "set-hz8K":
 			case "set-hz16K":
-				value = +event.iEl.data("fBand");
-				filter = Self._filters.find(f => f.frequency.value === value);
-				filter.gain.value = event.value;
+				if (Self._filters) {
+					value = +event.iEl.data("fBand");
+					filter = Self._filters.find(f => f.frequency.value === value);
+					filter.gain.value = event.value;
+				}
 				break;
 			// reset buffer & filters
-			case "dlg-reset":
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`input[data-fBand]`).map(iEl => {
+						let suffix = iEl.getAttribute("data-suffix");
+						let band = +iEl.getAttribute("data-fBand");
+						let filter = Self._filters.find(f => f.frequency.value === band);
+						filter.gain.value = +iEl.value.slice(0, -suffix.length);
+					});
+				}
+				break;
+			case "dlg-reset-filters":
 				buffer = AudioUtils.CopyBufferSegment({ file });
 				source = file.node.context.createBufferSource();
 				source.buffer = buffer;
 				source.loop = true;
 
 				let filters = Self._active.find(`input[data-fBand]`).map(iEl => {
+						let suffix = iEl.getAttribute("data-suffix");
 						let band = +iEl.getAttribute("data-fBand");
 						let filter = file.node.context.createBiquadFilter();
 						filter.type = iEl.getAttribute("data-fType");
-						filter.gain.value = 0;
+						filter.gain.value = +iEl.value.slice(0, -suffix.length);
 						filter.Q.value = 1; // resonance
 						filter.frequency.value = band; // the cut-off frequency
 						return filter;
@@ -166,9 +179,10 @@ const Dialogs = {
 			case "dlg-preview":
 				if (Self._source) {
 					Self._source.stop();
+					delete Self._filters;
 					delete Self._source;
 				} else {
-					Self.dlgGraphicEq({ type: "dlg-reset" });
+					Self.dlgGraphicEq({ type: "dlg-reset-filters" });
 					Self._source.start();
 				}
 				break;
@@ -236,7 +250,7 @@ const Dialogs = {
 				filter.gain.value = event.value;
 				break;
 			// reset buffer & filters
-			case "dlg-reset":
+			case "dlg-reset-filters":
 				buffer = AudioUtils.CopyBufferSegment({ file });
 				source = file.node.context.createBufferSource();
 				source.buffer = buffer;
@@ -265,7 +279,7 @@ const Dialogs = {
 					Self._source.stop();
 					delete Self._source;
 				} else {
-					Self.dlgGraphicEq20({ type: "dlg-reset" });
+					Self.dlgGraphicEq20({ type: "dlg-reset-filters" });
 					Self._source.start();
 				}
 				break;

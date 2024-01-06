@@ -186,8 +186,10 @@ const Dialogs = {
 					Self._source.start();
 				}
 				break;
-			case "dlg-open":
 			case "dlg-apply":
+				console.log(event);
+				break;
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq" });

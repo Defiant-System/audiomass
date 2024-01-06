@@ -212,6 +212,8 @@ const UI = {
 					// add to presets list
 					dEl.find(`.buttons .presets ul`).html(li.join(""));
 				}
+				// reset preview button
+				dEl.find(`.toggler`).data({ value: "off" });
 				// disable spawn toolbar
 				APP.spawn.toolbar.dispatch({ type: "disable-tools", exclude: ["display"], spawn: Spawn });
 				// auto reset dialog before show
@@ -235,6 +237,8 @@ const UI = {
 					el.addClass("showing").removeClass("opening"));
 				// save reference to axctive dialog
 				Dialogs._active = dEl;
+				// save reference to file
+				Dialogs._file = file;
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -246,7 +250,9 @@ const UI = {
 						Spawn.find("content").removeClass("dialog-showing");
 						// reset element
 						el.removeClass("showing closing");
-						// reset reference
+						// reset references
+						if (Dialogs._source) Dialogs._source.stop();
+						delete Dialogs._source;
 						delete Dialogs._active;
 					});
 				break;

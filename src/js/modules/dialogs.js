@@ -117,7 +117,7 @@ const Dialogs = {
 		 */
 		let APP = imaudio,
 			Self = Dialogs,
-			file = event.file,
+			file = Self._file,
 			buffer,
 			source,
 			filter,
@@ -135,17 +135,17 @@ const Dialogs = {
 			case "set-hz8K":
 			case "set-hz16K":
 				value = +event.iEl.data("fBand");
-				filter = Dialogs._filters.find(f => f.frequency.value === value);
+				filter = Self._filters.find(f => f.frequency.value === value);
 				filter.gain.value = event.value;
 				break;
-			// standard dialog events
-			case "dlg-open":
+			// reset buffer & filters
+			case "dlg-reset":
 				buffer = AudioUtils.CopyBufferSegment({ file });
 				source = file.node.context.createBufferSource();
 				source.buffer = buffer;
 				source.loop = true;
 
-				let filters = event.dEl.find(`input[data-fBand]`).map(iEl => {
+				let filters = Self._active.find(`input[data-fBand]`).map(iEl => {
 						let band = +iEl.getAttribute("data-fBand");
 						let filter = file.node.context.createBiquadFilter();
 						filter.type = iEl.getAttribute("data-fType");
@@ -158,14 +158,21 @@ const Dialogs = {
 				// connect equalizer to "speakers"
 				equalizer.connect(file.node.context.destination);
 				// save reference to filters
-				Dialogs._filters = filters;
+				Self._filters = filters;
 				// save reference to buffer source
-				Dialogs._source = source;
+				Self._source = source;
 				break;
+			// standard dialog events
 			case "dlg-preview":
-				value = event.el.data("value") === "on";
-				Dialogs._source[value ? "start" : "stop"]();
+				if (Self._source) {
+					Self._source.stop();
+					delete Self._source;
+				} else {
+					Self.dlgGraphicEq({ type: "dlg-reset" });
+					Self._source.start();
+				}
 				break;
+			case "dlg-open":
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":
@@ -197,7 +204,12 @@ const Dialogs = {
 		 * 22 KHz    Min: -25 dB     Max: 25 dB
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			buffer,
+			source,
+			filter,
+			value;
 		switch (event.type) {
 			case "hz32":
 			case "hz44":
@@ -219,10 +231,45 @@ const Dialogs = {
 			case "hz113K":
 			case "hz16K":
 			case "hz22K":
+				value = +event.iEl.data("fBand");
+				filter = Self._filters.find(f => f.frequency.value === value);
+				filter.gain.value = event.value;
+				break;
+			// reset buffer & filters
+			case "dlg-reset":
+				buffer = AudioUtils.CopyBufferSegment({ file });
+				source = file.node.context.createBufferSource();
+				source.buffer = buffer;
+				source.loop = true;
+
+				let filters = Self._active.find(`input[data-fBand]`).map(iEl => {
+						let band = +iEl.getAttribute("data-fBand");
+						let filter = file.node.context.createBiquadFilter();
+						filter.type = iEl.getAttribute("data-fType");
+						filter.gain.value = 0;
+						filter.Q.value = 1; // resonance
+						filter.frequency.value = band; // the cut-off frequency
+						return filter;
+					}),
+					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, source);
+				// connect equalizer to "speakers"
+				equalizer.connect(file.node.context.destination);
+				// save reference to filters
+				Self._filters = filters;
+				// save reference to buffer source
+				Self._source = source;
 				break;
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
+				if (Self._source) {
+					Self._source.stop();
+					delete Self._source;
+				} else {
+					Self.dlgGraphicEq20({ type: "dlg-reset" });
+					Self._source.start();
+				}
+				break;
+			case "dlg-open":
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":

@@ -17,10 +17,10 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGain" });
 				break;
@@ -42,10 +42,10 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgNormalize" });
 				break;
@@ -70,10 +70,10 @@ const Dialogs = {
 				break;
 
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgCompressor" });
 				break;
@@ -93,10 +93,10 @@ const Dialogs = {
 			case "set-q":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
 				break;
@@ -131,10 +131,24 @@ const Dialogs = {
 			case "set-hz16K":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
+				let mNode = { connect() {} },
+					audioCtx = new AudioContext(),
+					filters = event.dEl.find(`input[data-fBand]`).map(iEl => {
+						let band = +iEl.getAttribute("data-fBand"),
+							filter = audioCtx.createBiquadFilter();
+						filter.type = iEl.getAttribute("data-fType");
+						filter.gain.value = 0;
+						filter.Q.value = 1; // resonance
+						filter.frequency.value = band; // the cut-off frequency
+						return filter;
+					}),
+					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, mNode);
+				console.log(equalizer);
+				break;
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq" });
 				break;
@@ -188,10 +202,10 @@ const Dialogs = {
 			case "hz22K":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGraphicEq20" });
 				break;
@@ -211,10 +225,10 @@ const Dialogs = {
 			case "set-look-ahead":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgHardLimiter" });
 				break;
@@ -234,10 +248,10 @@ const Dialogs = {
 			case "set-wet":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDelay" });
 				break;
@@ -254,10 +268,10 @@ const Dialogs = {
 			case "set-gain":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDistortion" });
 				break;
@@ -277,10 +291,10 @@ const Dialogs = {
 			case "set-wet":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });
 				break;
@@ -297,10 +311,10 @@ const Dialogs = {
 			case "set-rate":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSpeed" });
 				break;
@@ -323,8 +337,8 @@ const Dialogs = {
 				Self.dlgSilence({ ...event, type: "dlg-close" });
 				break;
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSilence" });
 				break;
@@ -341,10 +355,10 @@ const Dialogs = {
 			case "set-flip-channels":
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
-			case "dlg-reset":
 			case "dlg-preview":
+			case "dlg-apply":
+			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgChannelInfo" });
 				break;

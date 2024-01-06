@@ -117,8 +117,11 @@ const Dialogs = {
 		 */
 		let APP = imaudio,
 			Self = Dialogs,
+			file = event.file,
+			buffer,
+			source,
 			filter,
-			band;
+			value;
 		switch (event.type) {
 			// "fast events"
 			case "set-hz32":
@@ -131,31 +134,38 @@ const Dialogs = {
 			case "set-hz4K":
 			case "set-hz8K":
 			case "set-hz16K":
-				band = +event.iEl.data("fBand");
-				filter = Dialogs._filters.find(f => f.frequency.value === band);
+				value = +event.iEl.data("fBand");
+				filter = Dialogs._filters.find(f => f.frequency.value === value);
 				filter.gain.value = event.value;
 				break;
 			// standard dialog events
 			case "dlg-open":
-				let mNode = event.file.node,
-					filters = event.dEl.find(`input[data-fBand]`).map(iEl => {
-						band = +iEl.getAttribute("data-fBand");
-						filter = mNode.context.createBiquadFilter();
+				buffer = AudioUtils.CopyBufferSegment({ file });
+				source = file.node.context.createBufferSource();
+				source.buffer = buffer;
+				source.loop = true;
 
+				let filters = event.dEl.find(`input[data-fBand]`).map(iEl => {
+						let band = +iEl.getAttribute("data-fBand");
+						let filter = file.node.context.createBiquadFilter();
 						filter.type = iEl.getAttribute("data-fType");
 						filter.gain.value = 0;
 						filter.Q.value = 1; // resonance
 						filter.frequency.value = band; // the cut-off frequency
-						
 						return filter;
 					}),
-					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, mNode);
+					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, source);
 				// connect equalizer to "speakers"
-				equalizer.connect(mNode.context.destination);
+				equalizer.connect(file.node.context.destination);
 				// save reference to filters
 				Dialogs._filters = filters;
+				// save reference to buffer source
+				Dialogs._source = source;
 				break;
 			case "dlg-preview":
+				value = event.el.data("value") === "on";
+				Dialogs._source[value ? "start" : "stop"]();
+				break;
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":

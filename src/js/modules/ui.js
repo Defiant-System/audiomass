@@ -595,7 +595,7 @@ const UI = {
 			case "mousemove":
 				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
 					perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY),
-					value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
+					value = Drag._lerp(Drag.val.max, Drag.val.min, perc).toFixed(Drag.val.decimals);
 				Drag.handle.css({ top });
 				// input field value
 				Drag.iEl.val(value + Drag.val.suffix);

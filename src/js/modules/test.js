@@ -17,7 +17,7 @@ let Test = {
 		// 	spawn.data.tabs.active.file._ws.skip(6);
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
-		// return;
+		return;
 
 		return setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGraphicEq", spawn }), 600);
 

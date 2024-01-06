@@ -53,11 +53,13 @@ let AudioUtils = {
 	},
 
 	CopyBufferSegment(data) {
-		let region = data.file._activeRegion;
-		let offset = this.TrimTo(region.start, 3);
-		let duration = this.TrimTo(region.end - region.start, 3);
 		let originalBuffer = data.file._ws.getDecodedData();
+		let region = data.file._activeRegion;
+		let start = region ? region.start : 0;
+		let end = region ? region.end : originalBuffer.duration;
 
+		let offset = this.TrimTo(start, 3);
+		let duration = this.TrimTo(end - start, 3);
 		let newLen    = (duration * originalBuffer.sampleRate) >> 0;
 		let newOffset = (offset   * originalBuffer.sampleRate) >> 0;
 

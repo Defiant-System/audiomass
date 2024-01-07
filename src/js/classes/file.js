@@ -196,16 +196,17 @@ class File {
 			// external events
 			case "resize-view":
 				if (ws.exportPeaks().length === 1) {
-					ws.setOptions({
+					value = {
 						splitChannels: [{ ...this.channelOn }],
-						height: +this._el.parent().prop("offsetHeight") - 1,
-					});
+						height: (+this._el.parent().prop("offsetHeight") - 15),
+					};
 				} else {
-					ws.setOptions({
+					value = {
 						splitChannels: [{ ...this.channelOn }, { ...this.channelOn }],
-						height: +this._el.parent().prop("offsetHeight") >> 1,
-					});
+						height: (+this._el.parent().prop("offsetHeight") - 14) >> 1,
+					};
 				}
+				ws.setOptions(value);
 				break;
 			case "toggle-channel":
 				value = [...ws.options.splitChannels];

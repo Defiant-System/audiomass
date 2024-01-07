@@ -443,12 +443,14 @@ content {
 					.file:after {
 						content: "";
 						position: absolute;
-						top: 50%;
+						top: calc( 50% + 5px );
 						left: 0;
 						right: 0;
 						height: 0;
-						border-top: 1px solid rgba(#002,.125);
-						border-bottom: 1px solid rgba(#fff,.05);
+						z-index: 2;
+						border-top: 1px solid rgba(#002,.15);
+						border-bottom: 1px solid rgba(#fff,.1);
+						pointer-events: none;
 					}
 				}
 

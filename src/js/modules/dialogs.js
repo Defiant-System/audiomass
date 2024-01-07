@@ -118,8 +118,7 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
-			buffer,
-			source,
+			context,
 			filter,
 			value;
 		switch (event.type) {
@@ -140,6 +139,26 @@ const Dialogs = {
 					filter.gain.value = event.value;
 				}
 				break;
+			case "create-filter":
+				let buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					filters = Self._active.find(`input[data-fBand]`).map(iEl => {
+						let suffix = iEl.getAttribute("data-suffix");
+						let band = +iEl.getAttribute("data-fBand");
+						let filter = event.context.createBiquadFilter();
+						filter.type = iEl.getAttribute("data-fType");
+						filter.gain.value = +iEl.value.slice(0, -suffix.length);
+						filter.Q.value = 1; // resonance
+						filter.frequency.value = band; // the cut-off frequency
+						return filter;
+					});
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = true;
+				// create equalizer
+				let equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, source);
+				// return stuff
+				return { filters, source, equalizer };
 			// reset buffer & filters
 			case "dlg-apply-preset":
 				if (Self._filters) {
@@ -152,28 +171,14 @@ const Dialogs = {
 				}
 				break;
 			case "dlg-reset-filters":
-				buffer = AudioUtils.CopyBufferSegment({ file });
-				source = file.node.context.createBufferSource();
-				source.buffer = buffer;
-				source.loop = true;
-
-				let filters = Self._active.find(`input[data-fBand]`).map(iEl => {
-						let suffix = iEl.getAttribute("data-suffix");
-						let band = +iEl.getAttribute("data-fBand");
-						let filter = file.node.context.createBiquadFilter();
-						filter.type = iEl.getAttribute("data-fType");
-						filter.gain.value = +iEl.value.slice(0, -suffix.length);
-						filter.Q.value = 1; // resonance
-						filter.frequency.value = band; // the cut-off frequency
-						return filter;
-					}),
-					equalizer = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, source);
+				context = file.node.context;
+				filter = Self.dlgGraphicEq({ type: "create-filter", context });
 				// connect equalizer to "speakers"
-				equalizer.connect(file.node.context.destination);
+				filter.equalizer.connect(file.node.context.destination);
 				// save reference to filters
-				Self._filters = filters;
+				Self._filters = filter.filters;
 				// save reference to buffer source
-				Self._source = source;
+				Self._source = filter.source;
 				break;
 			// standard dialog events
 			case "dlg-preview":
@@ -187,7 +192,11 @@ const Dialogs = {
 				}
 				break;
 			case "dlg-apply":
-				console.log(event);
+				context = AudioFX.CreateOfflineAudioContext({ file });
+				filter = Self.dlgGraphicEq({ type: "create-filter", context });
+				AudioFX.ApplyFilter({ file, filter, context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
+
+				Self.dlgGraphicEq({ spawn: event.spawn, type: "dlg-close" });
 				break;
 			case "dlg-open":
 			case "dlg-reset":

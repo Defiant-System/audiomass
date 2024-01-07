@@ -22,7 +22,7 @@ let AudioUtils = {
 				switch (event.type) {
 					case "progress":
 						// proxy event to sidebar
-						data.sidebar.dispatch({ ...event, spawn: data.spawn });
+						if (data.sidebar) data.sidebar.dispatch({ ...event, spawn: data.spawn });
 						// replace blob in view
 						if (event.value >= 100) {
 							await data.file._ws.loadBlob(event.blob);
@@ -75,29 +75,6 @@ let AudioUtils = {
 		}
 
 		return copySegment;
-	},
-
-	ApplyEffect(data) {
-		let originalBuffer = data.file._ws.getDecodedData();
-		let channels = originalBuffer.numberOfChannels;
-		let sampleRate = originalBuffer.sampleRate;
-
-		let region = data.file._activeRegion;
-		let start = region ? region.start : data.file._ws.getCurrentTime();
-		let end = region ? region.end : originalBuffer.duration;
-		let offset = this.TrimTo(start, 3);
-		let duration = this.TrimTo(end, 3);
-		let rateOffset = (offset   * sampleRate) >> 0;
-		let rateLength = (duration * sampleRate) >> 0;
-		
-		let copy = this.CopyBufferSegment(data);
-		let audioCtx = this.CreateOfflineAudioContext(channels, copy.length, sampleRate);
-		let source = audioCtx.createBufferSource();
-		source.buffer = copy;
-		
-		let options = { audioCtx, source, value: 1.5 };
-		let Effect = AudioFX[data.effect](options);
-		Effect.apply(options.value);
 	},
 
 	Crop(data) {

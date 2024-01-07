@@ -973,6 +973,7 @@ content {
 
 	.button {
 		background: rgba(#bbe, .25);
+		position: relative;
 		display: inline-block;
 		vertical-align: middle;
 		padding: 3px 11px 0;
@@ -987,9 +988,22 @@ content {
 		height: 21px;
 		cursor: pointer;
 
-		&:hover {
-			background: radial-gradient(ellipse at bottom center, rgba(#fff,.3), transparent 50%),
-						rgba(#bbe, .25);
+		&:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: inherit;
+		}
+
+		&:hover:before {
+			background: radial-gradient(ellipse at bottom center, rgba(#fff,.35), transparent 70%);
+		}
+
+		&:active:before {
+			background: rgba(#000,.15);
 		}
 
 		&.disabled {

@@ -67,7 +67,6 @@ let Test = {
 
 			// setTimeout(() => APP.dispatch({ type: "fade-in-region", spawn }), 600);
 			// setTimeout(() => APP.dispatch({ type: "fade-out-region", spawn }), 600);
-			setTimeout(() => APP.dispatch({ type: "temp-gain", spawn }), 600);
 			return;
 
 

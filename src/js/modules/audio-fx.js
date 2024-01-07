@@ -25,9 +25,6 @@ let AudioFX = {
 
 		data.offlineCtx.oncomplete = event => {
 			let renderedBuffer = event.renderedBuffer;
-			// let renderedBuffer = data.filter.source.buffer;
-			// console.log( renderedBuffer );
-
 			let originalBuffer = data.file._ws.getDecodedData();
 			let channels = originalBuffer.numberOfChannels;
 			let sampleRate = originalBuffer.sampleRate;
@@ -35,11 +32,9 @@ let AudioFX = {
 			let newSegment = AudioUtils.CreateBuffer(channels, length, sampleRate);
 			
 			for (let i=0; i<channels; ++i) {
-				let chanData = originalBuffer.getChannelData(i);
 				let fxChanData = renderedBuffer.getChannelData(i);
 				let uberChanData = newSegment.getChannelData(i);
 
-				// uberChanData.set(chanData);
 				uberChanData.set(fxChanData);
 			}
 

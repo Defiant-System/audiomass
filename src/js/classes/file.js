@@ -19,8 +19,8 @@ class File {
 		let regions = RegionsPlugin.create();
 
 		// disable default mouse wheel handler
-		zoom._onWheel = zoom.onWheel;
-		delete zoom.onWheel;
+		// zoom._onWheel = zoom.onWheel;
+		// delete zoom.onWheel;
 
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({

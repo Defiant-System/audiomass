@@ -604,7 +604,7 @@ content {
 							box-shadow: 0 1px 0 rgba(#002,.1);
 							border-top: 1px solid rgba(#fff,.04);
 							border-bottom: 1px solid rgba(#000,.075);
-							height: calc(100% - 15px);
+							height: calc(100% - 2px);
 
 							&:before {
 								content: "";
@@ -620,12 +620,13 @@ content {
 						}
 
 						::part(wrapper) {
-							height: calc(100% - 12px);
+							// height: calc(100% - 12px);
+							height: 100%;
 						}
 
 						::part(region-selected) {
 							background: linear-gradient(-65deg, #43b7c644, #d186d244) !important;
-							height: calc(100% - 13px);
+							height: 100%;
 						}
 						
 						::part(region-handle-left) {

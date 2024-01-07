@@ -14,20 +14,37 @@ let AudioFX = {
 		let channels = originalBuffer.numberOfChannels;
 		let sampleRate = originalBuffer.sampleRate;
 		let length = duration * sampleRate;
-		let context = AudioUtils.CreateOfflineAudioContext(channels, length, sampleRate);
+		let offlineCtx = AudioUtils.CreateOfflineAudioContext(channels, length, sampleRate);
 
-		return context;
+		return offlineCtx;
 	},
 
 	ApplyFilter(data) {
-		// create source and connect to filter
-		data.filter.equalizer.connect(data.context.destination);
-
 		// offline render source
-		data.context.startRendering()
-			.then(buffer => {
-				// copy rendered segment into wavesurfer
-				AudioUtils.LoadDecoded(data, buffer);
-			});
+		data.offlineCtx.startRendering();
+
+		data.offlineCtx.oncomplete = event => {
+			let renderedBuffer = event.renderedBuffer;
+			// let renderedBuffer = data.filter.source.buffer;
+			// console.log( renderedBuffer );
+
+			let originalBuffer = data.file._ws.getDecodedData();
+			let channels = originalBuffer.numberOfChannels;
+			let sampleRate = originalBuffer.sampleRate;
+			let length = originalBuffer.length;
+			let newSegment = AudioUtils.CreateBuffer(channels, length, sampleRate);
+			
+			for (let i=0; i<channels; ++i) {
+				let chanData = originalBuffer.getChannelData(i);
+				let fxChanData = renderedBuffer.getChannelData(i);
+				let uberChanData = newSegment.getChannelData(i);
+
+				// uberChanData.set(chanData);
+				uberChanData.set(fxChanData);
+			}
+
+			AudioUtils.LoadDecoded(data, newSegment);
+
+		};
 	}
 };

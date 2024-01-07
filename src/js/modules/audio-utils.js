@@ -142,6 +142,7 @@ let AudioUtils = {
 				uberChanData.set(chanData);
 				uberChanData.set(fxChanData, rateOffset, fxChanData.length - rateOffset);
 			}
+
 			// show new waveform
 			this.LoadDecoded(data, newSegment);
 		};

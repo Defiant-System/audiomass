@@ -19,10 +19,11 @@ let Test = {
 		// }, 600);
 		// return;
 
-		setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgGraphicEq20", spawn }), 600);
+		let arg = "dlgGraphicEq20";
+		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
-			let dEl = spawn.find(`.dialog-box[data-dlg="dlgGraphicEq20"]`);
-			// UI.renderPreset({ dEl, id: 1, name: "dlgGraphicEq" });
+			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
+			// UI.renderPreset({ dEl, id: 1, name: arg });
 
 			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 200);
 		}, 1000);

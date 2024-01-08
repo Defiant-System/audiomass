@@ -6,20 +6,55 @@ const Dialogs = {
 		 * gain -  Min: 10%   Max: 200%
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			context,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			// "fast events"
 			case "set-gain":
+				if (Self._filters) {
+					let val = event.value / 100;
+					let time = Self._source.context.currentTime;
+					Self._filters[0].gain.linearRampToValueAtTime(val, time);
+				}
 				break;
-			
-			// slow/once events
-			case "before:set-gain":
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					filters = Self._active.find(`input[name="gain"]`).map(iEl => {
+						let filter = event.context.createGain();
+						let suffix = iEl.getAttribute("data-suffix");
+						let val = +iEl.value.slice(0, -suffix.length) / 100;
+						let time = event.context.currentTime;
+						filter.gain.linearRampToValueAtTime(val, time);
+						return filter;
+					});
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+				// create equalizer rack
+				rack = filters.reduce((prev, curr) => { prev.connect(curr); return curr; }, source);
+				// return stuff
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`input[name="gain"]`).map(iEl => {
+						let suffix = iEl.getAttribute("data-suffix");
+						let val = +iEl.value.slice(0, -suffix.length) / 100;
+						let time = Self._source.context.currentTime;
+						Self._filters[0].gain.linearRampToValueAtTime(val, time);
+					});
+				}
 				break;
-
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
 			case "dlg-apply":
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgGain" });
@@ -140,7 +175,7 @@ const Dialogs = {
 					filter.gain.value = event.value;
 				}
 				break;
-			case "create-filter":
+			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext,
 					buffer = AudioUtils.CopyBufferSegment({ file }),
 					source = event.context.createBufferSource(),
@@ -172,39 +207,9 @@ const Dialogs = {
 					});
 				}
 				break;
-			case "dlg-reset-filters":
-				context = file.node.context;
-				filter = Self.dlgGraphicEq({ type: "create-filter", context });
-				// connect equalizer rack to "speakers"
-				filter.rack.connect(file.node.context.destination);
-				// save reference to filters
-				Self._filters = filter.filters;
-				// save reference to buffer source
-				Self._source = filter.source;
-				break;
 			// standard dialog events
 			case "dlg-preview":
-				if (Self._source) {
-					Self._source.stop();
-					delete Self._filters;
-					delete Self._source;
-				} else {
-					Self.dlgGraphicEq({ type: "dlg-reset-filters" });
-					Self._source.start();
-				}
-				break;
 			case "dlg-apply":
-				// create offline context and connect to filter
-				context = AudioFX.CreateOfflineAudioContext({ file });
-				filter = Self.dlgGraphicEq({ type: "create-filter", context });
-				// pipe it all
-				filter.rack.connect(context.destination);
-				filter.source.start();
-				// apply filter for UI
-				AudioFX.ApplyFilter({ file, filter, offlineCtx: context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
-				// close dialog
-				Self.dlgGraphicEq({ spawn: event.spawn, type: "dlg-close" });
-				break;
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
@@ -267,7 +272,7 @@ const Dialogs = {
 				filter = Self._filters.find(f => f.frequency.value === value);
 				filter.gain.value = event.value;
 				break;
-			case "create-filter":
+			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext,
 					buffer = AudioUtils.CopyBufferSegment({ file }),
 					source = event.context.createBufferSource(),
@@ -299,39 +304,9 @@ const Dialogs = {
 					});
 				}
 				break;
-			case "dlg-reset-filters":
-				context = file.node.context;
-				filter = Self.dlgGraphicEq20({ type: "create-filter", context });
-				// connect equalizer rack to "speakers"
-				filter.rack.connect(file.node.context.destination);
-				// save reference to filters
-				Self._filters = filter.filters;
-				// save reference to buffer source
-				Self._source = filter.source;
-				break;
 			// standard dialog events
 			case "dlg-preview":
-				if (Self._source) {
-					Self._source.stop();
-					delete Self._filters;
-					delete Self._source;
-				} else {
-					Self.dlgGraphicEq20({ type: "dlg-reset-filters" });
-					Self._source.start();
-				}
-				break;
 			case "dlg-apply":
-				// create offline context and connect to filter
-				context = AudioFX.CreateOfflineAudioContext({ file });
-				filter = Self.dlgGraphicEq20({ type: "create-filter", context });
-				// pipe it all
-				filter.rack.connect(context.destination);
-				filter.source.start();
-				// apply filter for UI
-				AudioFX.ApplyFilter({ file, filter, offlineCtx: context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
-				// close dialog
-				Self.dlgGraphicEq20({ spawn: event.spawn, type: "dlg-close" });
-				break;
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":

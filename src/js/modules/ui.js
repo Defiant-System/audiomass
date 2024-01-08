@@ -50,6 +50,8 @@ const UI = {
 			Spawn = event.spawn,
 			Drag = Self.drag,
 			file,
+			context,
+			filter,
 			xNode,
 			xAttr,
 			data,
@@ -330,6 +332,15 @@ const UI = {
 				});
 				break;
 			case "dlg-apply-common":
+				// create offline context and connect to filter
+				file = Dialogs._file;
+				context = AudioFX.CreateOfflineAudioContext({ file });
+				filter = Dialogs[event.name]({ type: "create-filter-rack", context });
+				// pipe it all
+				filter.rack.connect(context.destination);
+				filter.source.start();
+				// apply filter for UI
+				AudioFX.ApplyFilter({ file, filter, offlineCtx: context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
 				// close dialog
 				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;
@@ -345,6 +356,23 @@ const UI = {
 				Self.renderPreset({ ...event, dEl, xNode });
 				break;
 			case "dlg-preview-common":
+				if (Dialogs._source) {
+					Dialogs._source.stop();
+					delete Dialogs._filters;
+					delete Dialogs._source;
+				} else {
+					file = Dialogs._file;
+					context = file.node.context;
+					filter = Dialogs[event.name]({ type: "create-filter-rack", context });
+					// connect equalizer rack to "speakers"
+					filter.rack.connect(file.node.context.destination);
+					// save reference to filters
+					Dialogs._filters = filter.filters;
+					// save reference to buffer source
+					Dialogs._source = filter.source;
+					// start source
+					Dialogs._source.start();
+				}
 				Dialogs.preview = event.el.data("value") === "on";
 				break;
 			case "dlg-close-common":

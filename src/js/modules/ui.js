@@ -262,10 +262,6 @@ const UI = {
 						delete Dialogs._active;
 					});
 				break;
-			// common events for all dialogs
-			case "dlg-open-common":
-				// anything to do?
-				break;
 			case "dlg-init-fields":
 				// fast references for UI element events + values
 				Dialogs.data = {};
@@ -333,6 +329,10 @@ const UI = {
 							break;
 					}
 				});
+				break;
+			// common events for all dialogs
+			case "dlg-open-common":
+				// anything to do?
 				break;
 			case "dlg-apply-common":
 				// create offline context and connect to filter

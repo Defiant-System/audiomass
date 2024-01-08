@@ -67,27 +67,49 @@ const Dialogs = {
 		 */
 		let APP = imaudio,
 			Self = Dialogs,
-			file = Self._file,
-			context,
-			filter,
-			value,
-			rack;
+			file = Self._file;
 		switch (event.type) {
 			// "fast events"
 			case "set-normalize":
 				// preview is not available
 				break;
-			case "create-filter-rack":
-				// return stuff
-				return { filters, source, rack };
-			// reset buffer & filters
-			case "dlg-apply-preset":
-				break;
 			// standard dialog events
 			case "dlg-apply":
+				let iEl = Self._active.find(`input[name="normalize"]`),
+					suffix = iEl.data("suffix"),
+					max = {
+						val: +iEl.val().slice(0, -suffix.length) / 100,
+						peak: 0,
+					},
+					context = file.node.context,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = context.createBufferSource(),
+					data = { file, spawn: event.spawn, sidebar: APP.spawn.sidebar };
+				// transfer buffer
+				source.buffer = buffer;
+				// iterating faster first time...
+				for (var i=0; i<buffer.numberOfChannels; ++i) {
+					var chanData = buffer.getChannelData(i);
+					for (var k=1, len=chanData.length; k<len; k=k+10) {
+						var curr = Math.abs(chanData[k]);
+						if (max.peak < curr) max.peak = curr;
+					}
+				}
+				var diff = max.val / max.peak;
+				for (var i=0; i<buffer.numberOfChannels; ++i) {
+					var chanData = buffer.getChannelData(i);
+					for (var k=0, len=chanData.length; k<len; ++k) {
+						chanData[k] *= diff;
+					}
+				}
+				// pipe it all
+				source.connect(context.destination);
+				// apply filter for UI
+				AudioUtils.LoadDecoded(data, buffer);
+				// close dialog
+				Self.dlgNormalize({ ...data, type: "dlg-close" });
 				break;
 			case "dlg-open":
-			case "dlg-preview": // not an option
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgNormalize" });

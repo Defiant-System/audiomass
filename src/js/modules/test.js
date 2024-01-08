@@ -2,7 +2,7 @@
 let Test = {
 	init(APP, spawn) {
 
-		return setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
+		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
@@ -17,7 +17,7 @@ let Test = {
 		// 	spawn.data.tabs.active.file._ws.skip(6);
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
-		// return;
+		return;
 
 		let arg = "dlgNormalize";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
@@ -25,7 +25,7 @@ let Test = {
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 			// UI.renderPreset({ dEl, id: 1, name: arg });
 
-			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 200);
+			setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 200);
 		}, 1000);
 
 		/*

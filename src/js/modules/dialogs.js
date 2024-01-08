@@ -66,7 +66,7 @@ const Dialogs = {
 		 * normalize -  Min: 0%   Max: 200%
 		 */
 		let APP = imaudio,
-			Self = Dialogs
+			Self = Dialogs,
 			file = Self._file,
 			context,
 			filter,
@@ -84,9 +84,10 @@ const Dialogs = {
 			case "dlg-apply-preset":
 				break;
 			// standard dialog events
+			case "dlg-apply":
+				break;
 			case "dlg-open":
 			case "dlg-preview": // not an option
-			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgNormalize" });

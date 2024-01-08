@@ -124,15 +124,48 @@ const Dialogs = {
 		 * release     Min: 0.0       Max: 1.0
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			case "set-threshold":
 			case "set-knee":
 			case "set-ratio":
 			case "set-attack":
 			case "set-release":
+				if (Self._filters) {
+					value = +event.iEl.val();
+					Self._filters[0][event.iEl.attr("name")].setValueAtTime(value, Self._source.context.currentTime);
+				}
 				break;
-
+			// create filter rack
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					compressor = event.context.createDynamicsCompressor(),
+					filters = [compressor];
+				
+				Self._active.find(`input[data-change]`).map(iEl => {
+					compressor[iEl.name].setValueAtTime(iEl.value, event.context.currentTime);
+				});
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+				// connect compressor
+				source.connect(compressor);
+				// return stuff
+				return { filters, source, rack: compressor };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`input[data-change]`).map(iEl => {
+						Self._filters[0][iEl.name].setValueAtTime(iEl.value, Self._source.context.currentTime);
+					});
+				}
+				break;
 			// standard dialog events
 			case "dlg-open":
 			case "dlg-preview":

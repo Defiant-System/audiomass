@@ -201,6 +201,9 @@ const UI = {
 			// custom events
 			case "dlg-open":
 				file = Spawn.data.tabs._active.file;
+				// stop, if playing
+				if (file._ws.isPlaying()) file._ws.stop();
+
 				dEl = $(`.dialog-box[data-dlg="${event.name}"]`);
 				// add preset buttons, if any
 				if (dEl.find(`.buttons .presets`).length && !dEl.find(`.buttons .presets ul li`).length) {

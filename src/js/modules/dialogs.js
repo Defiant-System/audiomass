@@ -66,19 +66,26 @@ const Dialogs = {
 		 * normalize -  Min: 0%   Max: 200%
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs
+			file = Self._file,
+			context,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			// "fast events"
 			case "set-normalize":
+				// preview is not available
 				break;
-			
-			// slow/once events
-			case "before:set-normalize":
+			case "create-filter-rack":
+				// return stuff
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
 				break;
-
 			// standard dialog events
 			case "dlg-open":
-			case "dlg-preview":
+			case "dlg-preview": // not an option
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":

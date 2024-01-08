@@ -2,7 +2,7 @@
 let Test = {
 	init(APP, spawn) {
 
-		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
+		return setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 600);
 		// setTimeout(() => spawn.data.toolbar.els.play.trigger("click"), 1000);
 
 		// setTimeout(() => $(".def-desktop_").trigger("mousedown").trigger("mouseup"), 400);
@@ -19,7 +19,7 @@ let Test = {
 		// }, 600);
 		// return;
 
-		let arg = "dlgGraphicEq20";
+		let arg = "dlgNormalize";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);

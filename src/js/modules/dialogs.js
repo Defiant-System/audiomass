@@ -8,7 +8,6 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
-			context,
 			filter,
 			value,
 			rack;
@@ -183,7 +182,6 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
-			context,
 			filter,
 			value,
 			rack;
@@ -205,6 +203,7 @@ const Dialogs = {
 					filter.gain.value = event.value;
 				}
 				break;
+			// create filter rack
 			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext,
 					buffer = AudioUtils.CopyBufferSegment({ file }),
@@ -273,7 +272,6 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
-			context,
 			filter,
 			value,
 			rack;
@@ -374,16 +372,77 @@ const Dialogs = {
 		 * wet         min: 0    max: 1
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			case "set-time":
+				if (Self._filters) {
+					value = +event.iEl.val();
+					Self._filters[5].delayTime.value = value;
+				}
+				break;
 			case "set-feedback":
+				if (Self._filters) {
+					value = +event.iEl.val();
+					Self._filters[4].gain.value = value;
+				}
+				break;
 			case "set-wet":
+				if (Self._filters) {
+					value = +event.iEl.val();
+					Self._filters[2].gain.value = 1 - ((value - 0.5) * 2);
+					Self._filters[3].gain.value = 1 - ((0.5 - value) * 2);
+				}
+				break;
+			// create filter rack
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					filters = [
+						event.context.createGain(), // 0 inputNode
+						event.context.createGain(), // 1 outputNode
+						event.context.createGain(), // 2 dryGainNode
+						event.context.createGain(), // 3 wetGainNode
+						event.context.createGain(), // 4 feedbackGainNode
+						event.context.createDelay(5) // 5 delayNode
+					];
+				// filter chanin
+				source.connect(filters[0]);
+				filters[0].connect(filters[2]);  // line in to dry mix
+				filters[2].connect(filters[1]);  // dry line out
+				filters[5].connect(filters[4]);  // feedback loop
+				filters[4].connect(filters[5]);
+				filters[0].connect(filters[5]);  // line in to wet mix
+				filters[5].connect(filters[3]);  // wet out
+				filters[3].connect(filters[1]);  // wet line out
+				rack = filters[1];               // connects to destination
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+				// enter values from UI controls
+				Self._filters = filters;
+				Self.dlgDelay({ type: "dlg-apply-preset" });
+
+				// return stuff
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`.field-box input[data-change]`).map(el => {
+						let iEl = $(el),
+							type = iEl.data("change");
+						Self.dlgDelay({ type, iEl });
+					});
+				}
 				break;
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
 			case "dlg-apply":
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDelay" });

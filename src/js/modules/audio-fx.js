@@ -24,15 +24,15 @@ let AudioFX = {
 		data.offlineCtx.startRendering();
 
 		data.offlineCtx.oncomplete = event => {
-			let region = data.file._activeRegion;
-			let start = region ? region.start : 0;
-			let end = region ? region.end : originalBuffer.duration;
-
 			let renderedBuffer = event.renderedBuffer;
 			let originalBuffer = data.file._ws.getDecodedData();
 			let channels = originalBuffer.numberOfChannels;
 			let sampleRate = originalBuffer.sampleRate;
 			let length = originalBuffer.length;
+			
+			let region = data.file._activeRegion;
+			let start = region ? region.start : 0;
+			let end = region ? region.end : originalBuffer.duration;
 			let newSegment = AudioUtils.CreateBuffer(channels, length, sampleRate);
 
 			let offset = (this.TrimTo(start, 3) * sampleRate) >> 0;

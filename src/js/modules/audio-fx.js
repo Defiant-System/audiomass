@@ -37,6 +37,7 @@ let AudioFX = {
 
 			let offset = (this.TrimTo(start, 3) * sampleRate) >> 0;
 			let duration = (this.TrimTo(end - start, 3) * sampleRate) >> 0;
+			let durOffset = offset + duration;
 			
 			for (let i=0; i<channels; ++i) {
 				let chanData = originalBuffer.getChannelData(i);
@@ -45,7 +46,7 @@ let AudioFX = {
 
 				uberChanData.set(chanData.slice(0, offset));
 				uberChanData.set(fxChanData, offset);
-				// uberChanData.set(chanData.slice(offset + duration, length), offset);
+				uberChanData.set(chanData.slice(durOffset, length), durOffset);
 			}
 
 			AudioUtils.LoadDecoded(data, newSegment);

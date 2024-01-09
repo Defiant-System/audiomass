@@ -551,7 +551,33 @@ const Dialogs = {
 		switch (event.type) {
 			case "set-time":
 			case "set-decay":
+				if (Self._filters) {
+					value = {
+						time: +Self._active.find(`input[name="time"]`).val(),
+						decay: +Self._active.find(`input[name="decay"]`).val(),
+					};
+
+					let context = file.node.context;
+					let length = context.sampleRate * value.time;
+					let impulse = context.createBuffer(2, length, context.sampleRate);
+					let impulseL = impulse.getChannelData(0);
+					let impulseR = impulse.getChannelData(1);
+
+					for (let i=0; i<length; i++) {
+						// let n = value.reverse ? length - i : i;
+						impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, value.decay);
+						impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, value.decay);
+					}
+					Self._filters[1].buffer = impulse;
+				}
+				break;
 			case "set-wet":
+				if (Self._filters) {
+					value = +Self._active.find(`input[name="wet"]`).val();
+					// set defaults
+					Self._filters[4].gain.value = 1 - ((value - 0.5) * 2);
+					Self._filters[3].gain.value = 1 - ((0.5 - value) * 2);
+				}
 				break;
 			// create filter rack
 			case "create-filter-rack":
@@ -567,43 +593,19 @@ const Dialogs = {
 					];
 				// filter chaning
 				source.connect(filters[0]);
-
 				filters[0].connect(filters[1]);
 				filters[1].connect(filters[3]);
 				filters[0].connect(filters[4]);
 				filters[4].connect(filters[2]);
 				filters[3].connect(filters[2]);
-
+				// rack / point to connect destination
 				rack = filters[2];
-
 				// preprare source buffer
 				source.buffer = buffer;
 				source.loop = isPreview;
-
-
-				let val = {
-						time: 3,
-						decay: 0.6,
-						mix: 0.3,
-					};
-
-				// set defaults
-				filters[4].gain.value = 1 - ((val.mix - 0.5) * 2);
-				filters[3].gain.value = 1 - ((0.5 - val.mix) * 2);
-
-				let length = event.context.sampleRate * val.time;
-				let impulse = event.context.createBuffer(2, length, event.context.sampleRate);
-				let impulseL = impulse.getChannelData(0);
-				let impulseR = impulse.getChannelData(1);
-
-				for (let i=0; i<length; i++) {
-					// let n = val.reverse ? length - i : i;
-					impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, val.decay);
-					impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, val.decay);
-				}
-				filters[1].buffer = impulse;
-
-
+				// enter values from UI controls
+				Self._filters = filters;
+				Self.dlgReverb({ type: "dlg-apply-preset" });
 
 				// return stuff
 				return { filters, source, rack };
@@ -613,7 +615,7 @@ const Dialogs = {
 					Self._active.find(`.field-box input[data-change]`).map(el => {
 						let iEl = $(el),
 							type = iEl.data("change");
-						Self.dlgDelay({ type, iEl });
+						Self.dlgReverb({ type, iEl });
 					});
 				}
 				break;

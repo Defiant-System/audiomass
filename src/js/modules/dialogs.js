@@ -87,17 +87,17 @@ const Dialogs = {
 				// transfer buffer
 				source.buffer = buffer;
 				// iterating faster first time...
-				for (var i=0; i<buffer.numberOfChannels; ++i) {
-					var chanData = buffer.getChannelData(i);
-					for (var k=1, len=chanData.length; k<len; k=k+10) {
-						var curr = Math.abs(chanData[k]);
+				for (let i=0; i<buffer.numberOfChannels; ++i) {
+					let chanData = buffer.getChannelData(i);
+					for (let k=1, len=chanData.length; k<len; k=k+10) {
+						let curr = Math.abs(chanData[k]);
 						if (max.peak < curr) max.peak = curr;
 					}
 				}
-				var diff = max.val / max.peak;
-				for (var i=0; i<buffer.numberOfChannels; ++i) {
-					var chanData = buffer.getChannelData(i);
-					for (var k=0, len=chanData.length; k<len; ++k) {
+				let diff = max.val / max.peak;
+				for (let i=0; i<buffer.numberOfChannels; ++i) {
+					let chanData = buffer.getChannelData(i);
+					for (let k=0, len=chanData.length; k<len; ++k) {
 						chanData[k] *= diff;
 					}
 				}
@@ -506,11 +506,11 @@ const Dialogs = {
 					buffer = AudioUtils.CopyBufferSegment({ file }),
 					data = { file, spawn: event.spawn, sidebar: APP.spawn.sidebar },
 					computeDistance = val => {
-						var gain = parseInt((val / 1) * 100, 10),
+						let gain = parseInt((val / 1) * 100, 10),
 							samples = 44100,
 							curve = new Float32Array(samples),
 							deg = Math.PI / 180;
-						for (var i=0; i<samples; ++i ) {
+						for (let i=0; i<samples; ++i ) {
 							let x = i * 2 / samples - 1;
 							curve[i] = (3 + gain) * x * 20 * deg / (Math.PI + gain * Math.abs(x));
 						}
@@ -543,16 +543,84 @@ const Dialogs = {
 		 * wet       min: 0    max: 1
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			case "set-time":
 			case "set-decay":
 			case "set-wet":
 				break;
+			// create filter rack
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					filters = [
+						event.context.createGain(),      // 0 inputNode
+						event.context.createConvolver(), // 1 reverbNode
+						event.context.createGain(),      // 2 outputNode
+						event.context.createGain(),      // 3 wetGainNode
+						event.context.createGain(),      // 4 dryGainNode
+					];
+				// filter chaning
+				source.connect(filters[0]);
+
+				filters[0].connect(filters[1]);
+				filters[1].connect(filters[3]);
+				filters[0].connect(filters[4]);
+				filters[4].connect(filters[2]);
+				filters[3].connect(filters[2]);
+
+				rack = filters[2];
+
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+
+
+				let val = {
+						time: 3,
+						decay: 0.6,
+						mix: 0.3,
+					};
+
+				// set defaults
+				filters[4].gain.value = 1 - ((val.mix - 0.5) * 2);
+				filters[3].gain.value = 1 - ((0.5 - val.mix) * 2);
+
+				let length = event.context.sampleRate * val.time;
+				let impulse = event.context.createBuffer(2, length, event.context.sampleRate);
+				let impulseL = impulse.getChannelData(0);
+				let impulseR = impulse.getChannelData(1);
+
+				for (let i=0; i<length; i++) {
+					// let n = val.reverse ? length - i : i;
+					impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, val.decay);
+					impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, val.decay);
+				}
+				filters[1].buffer = impulse;
+
+
+
+				// return stuff
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`.field-box input[data-change]`).map(el => {
+						let iEl = $(el),
+							type = iEl.data("change");
+						Self.dlgDelay({ type, iEl });
+					});
+				}
+				break;
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
 			case "dlg-apply":
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgReverb" });

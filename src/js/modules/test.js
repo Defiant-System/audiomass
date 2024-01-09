@@ -19,13 +19,13 @@ let Test = {
 		// }, 600);
 		// return;
 
-		let arg = "dlgSpeed";
+		let arg = "dlgReverb";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 2, name: arg });
+			UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",

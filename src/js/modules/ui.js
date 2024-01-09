@@ -337,13 +337,13 @@ const UI = {
 			case "dlg-apply-common":
 				// create offline context and connect to filter
 				file = Dialogs._file;
-				context = AudioUtils.FX.CreateOfflineAudioContext({ file });
+				context = AudioUtils.CreateOfflineFXContext({ file });
 				filter = Dialogs[event.name]({ type: "create-filter-rack", context });
 				// pipe it all
 				filter.rack.connect(context.destination);
 				filter.source.start();
 				// apply filter for UI
-				AudioUtils.FX.ApplyFilter({ file, filter, offlineCtx: context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
+				AudioUtils.ApplyFilter({ file, filter, offlineCtx: context, spawn: event.spawn, sidebar: APP.spawn.sidebar });
 				// close dialog
 				Dialogs[event.name]({ ...event, type: "dlg-close" });
 				break;

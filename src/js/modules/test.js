@@ -19,7 +19,7 @@ let Test = {
 		// }, 600);
 		// return;
 
-		let arg = "dlgDistortion";
+		let arg = "dlgSpeed";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;

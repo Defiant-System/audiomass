@@ -487,15 +487,49 @@ const Dialogs = {
 		 * gain -  Min: 0   Max: 2
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			// "fast events"
 			case "set-gain":
+				// preview is not available
 				break;
 			// standard dialog events
-			case "dlg-open":
-			case "dlg-preview":
 			case "dlg-apply":
+				let iEl = Self._active.find(`input[name="gain"]`),
+					context = AudioFX.CreateOfflineAudioContext({ file }),
+					waveShaper = context.createWaveShaper(),
+					source = context.createBufferSource(),
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					data = { file, spawn: event.spawn, sidebar: APP.spawn.sidebar },
+					computeDistance = val => {
+						var gain = parseInt((val / 1) * 100, 10),
+							samples = 44100,
+							curve = new Float32Array(samples),
+							deg = Math.PI / 180;
+						for (var i=0; i<samples; ++i ) {
+							let x = i * 2 / samples - 1;
+							curve[i] = (3 + gain) * x * 20 * deg / (Math.PI + gain * Math.abs(x));
+						}
+						return curve;
+					};
+				// transfer buffer
+				source.buffer = buffer;
+				// wave shaper curve
+				waveShaper.curve = computeDistance(+iEl.val());
+				// pipe it all & render output
+				source.connect(waveShaper);
+				waveShaper.connect(context.destination);
+				source.start();
+				// apply filter for UI
+				AudioFX.ApplyFilter({ ...data, offlineCtx: context });
+				// close dialog
+				Self.dlgDistortion({ ...data, type: "dlg-close" });
+				break;
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgDistortion" });

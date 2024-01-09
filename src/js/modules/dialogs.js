@@ -500,7 +500,7 @@ const Dialogs = {
 			// standard dialog events
 			case "dlg-apply":
 				let iEl = Self._active.find(`input[name="gain"]`),
-					context = AudioFX.CreateOfflineAudioContext({ file }),
+					context = AudioUtils.FX.CreateOfflineAudioContext({ file }),
 					waveShaper = context.createWaveShaper(),
 					source = context.createBufferSource(),
 					buffer = AudioUtils.CopyBufferSegment({ file }),
@@ -525,7 +525,7 @@ const Dialogs = {
 				waveShaper.connect(context.destination);
 				source.start();
 				// apply filter for UI
-				AudioFX.ApplyFilter({ ...data, offlineCtx: context });
+				AudioUtils.FX.ApplyFilter({ ...data, offlineCtx: context });
 				// close dialog
 				Self.dlgDistortion({ ...data, type: "dlg-close" });
 				break;

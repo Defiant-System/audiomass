@@ -17,15 +17,23 @@ let Test = {
 		// 	spawn.data.tabs.active.file._ws.skip(6);
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
-		return;
+		// return;
 
-		let arg = "dlgNormalize";
+		let arg = "dlgDistortion";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
+			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
-			// UI.renderPreset({ dEl, id: 1, name: arg });
 
-			setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 200);
+			// UI.renderPreset({ dEl, id: 2, name: arg });
+
+			// file._regions.addRegion({
+			// 	id: "region-selected",
+			// 	start: 1,
+			// 	end: 1.75,
+			// });
+
+			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 400);
 		}, 1000);
 
 		/*

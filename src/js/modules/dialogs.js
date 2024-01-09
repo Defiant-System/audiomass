@@ -443,7 +443,7 @@ const Dialogs = {
 						event.context.createGain(), // 4 feedbackGainNode
 						event.context.createDelay(5) // 5 delayNode
 					];
-				// filter chanin
+				// filter chaning
 				source.connect(filters[0]);
 				filters[0].connect(filters[2]);  // line in to dry mix
 				filters[2].connect(filters[1]);  // dry line out
@@ -564,15 +564,46 @@ const Dialogs = {
 		 * rate -  Min: 0.2   Max: 2
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			// "fast events"
 			case "set-rate":
+				if (Self._filters) {
+					value = +event.iEl.val();
+					Self._source.playbackRate.value = value;
+				}
+				break;
+			// create filter rack
+			case "create-filter-rack":
+				// return stuff
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					rack = event.context.createGain(),
+					filters = [rack];
+				// filter chaning
+				source.connect(rack);
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					let iEl = Self._active.find(`input[name="rate"]`),
+						type = iEl.data("change");
+					Self.dlgSpeed({ type, iEl });
+				}
 				break;
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
 			case "dlg-apply":
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSpeed" });

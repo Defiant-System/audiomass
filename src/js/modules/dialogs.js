@@ -552,28 +552,25 @@ const Dialogs = {
 			case "set-time":
 			case "set-decay":
 				if (Self._filters) {
-					value = {
-						time: +Self._active.find(`input[name="time"]`).val(),
-						decay: +Self._active.find(`input[name="decay"]`).val(),
-					};
+					// prevent overload calls
+					if (Self._reverb.woring) return;
+					Self._reverb.woring = true;
 
-					let context = file.node.context;
-					let length = context.sampleRate * value.time;
-					let impulse = context.createBuffer(2, length, context.sampleRate);
-					let impulseL = impulse.getChannelData(0);
-					let impulseR = impulse.getChannelData(1);
-
-					for (let i=0; i<length; i++) {
-						// let n = value.reverse ? length - i : i;
-						impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, value.decay);
-						impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, value.decay);
+					Self._reverb.time = event.val && event.val.name === "time" ? event.value : Self._reverb.time;
+					Self._reverb.decay = event.val && event.val.name === "decay" ? event.value : Self._reverb.decay;
+					
+					for (let i=0, il=Self._reverb.sampleRate*Self._reverb.time; i<il; i++) {
+						Self._reverb.impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / il, Self._reverb.decay);
+						Self._reverb.impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / il, Self._reverb.decay);
 					}
-					Self._filters[1].buffer = impulse;
+					Self._filters[1].buffer = Self._reverb.impulse;
+					// reset working flag
+					delete Self._reverb.woring;
 				}
 				break;
 			case "set-wet":
 				if (Self._filters) {
-					value = +Self._active.find(`input[name="wet"]`).val();
+					value = event.value ? event.value : +Self._active.find(`input[name="wet"]`).val();
 					// set defaults
 					Self._filters[4].gain.value = 1 - ((value - 0.5) * 2);
 					Self._filters[3].gain.value = 1 - ((0.5 - value) * 2);
@@ -598,6 +595,16 @@ const Dialogs = {
 				filters[0].connect(filters[4]);
 				filters[4].connect(filters[2]);
 				filters[3].connect(filters[2]);
+
+				let context = event.context;
+				let sampleRate = event.context.sampleRate;
+				let impulse = event.context.createBuffer(2, sampleRate, sampleRate);
+				let impulseL = impulse.getChannelData(0);
+				let impulseR = impulse.getChannelData(1);
+				let time = +Self._active.find(`input[name="time"]`).val()
+				let decay = +Self._active.find(`input[name="decay"]`).val()
+				Self._reverb = { context, sampleRate, impulse, impulseL, impulseR, time, decay };
+
 				// rack / point to connect destination
 				rack = filters[2];
 				// preprare source buffer

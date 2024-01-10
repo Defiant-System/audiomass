@@ -382,16 +382,20 @@ const Dialogs = {
 		 * look-ahead    min: 1     max: 500
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			case "set-limit-to":
 			case "set-ratio":
 			case "set-look-ahead":
 				break;
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
 			case "dlg-apply":
+			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgHardLimiter" });
@@ -560,8 +564,9 @@ const Dialogs = {
 					Self._reverb.decay = event.val && event.val.name === "decay" ? event.value : Self._reverb.decay;
 					
 					for (let i=0, il=Self._reverb.sampleRate*Self._reverb.time; i<il; i++) {
-						Self._reverb.impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / il, Self._reverb.decay);
-						Self._reverb.impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / il, Self._reverb.decay);
+						let p = Math.pow(1 - i / il, Self._reverb.decay);
+						Self._reverb.impulseL[i] = (Math.random() * 2 - 1) * p;
+						Self._reverb.impulseR[i] = (Math.random() * 2 - 1) * p;
 					}
 					Self._filters[1].buffer = Self._reverb.impulse;
 					// reset working flag

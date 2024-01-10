@@ -392,6 +392,58 @@ const Dialogs = {
 			case "set-ratio":
 			case "set-look-ahead":
 				break;
+			// create filter rack
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					val = {
+						limit: 0.99,
+						ratio: 0,
+						ahead: 10,
+					},
+					maxPeak = 0,
+					filters = [];
+
+				val.ahead = (val.ahead * buffer.sampleRate / 1e3) >> 0;
+				// transfer buffer
+				source.buffer = buffer;
+
+				for (let i=0, il=buffer.numberOfChannels; i<il; ++i) {
+					let chanData = buffer.getChannelData(i);
+					chanData.set(source.buffer.getChannelData(i));
+
+					// iterating faster first time...
+					for (let b=0, len=chanData.length; b<len; ++b) {
+						for (let k=0; k<val.ahead; k=k+10) {
+							let curr = Math.abs(chanData[b+k]);
+							if (maxPeak < curr) maxPeak = curr;
+						}
+						let diff = val.limit / maxPeak;
+						for (let k=0; k<val.ahead; ++k) {
+							let origVal = chanData[b+k];
+							let newVal = origVal * diff;
+							let diffPeak = val.limit - Math.abs(newVal);
+							diffPeak *= origVal < 0 ? -val.ratio : val.ratio;
+							chanData[b+k] = (newVal + diffPeak);
+						}
+						b += val.ahead;
+						maxPeak = 0;
+					}
+				}
+
+				// return stuff
+				return { filters, source, rack };
+			// reset buffer & filters
+			case "dlg-apply-preset":
+				if (Self._filters) {
+					Self._active.find(`.field-box input[data-change]`).map(el => {
+						let iEl = $(el),
+							type = iEl.data("change");
+						Self.dlgDelay({ type, iEl });
+					});
+				}
+				break;
 			// standard dialog events
 			case "dlg-preview":
 			case "dlg-apply":
@@ -713,26 +765,6 @@ const Dialogs = {
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgSilence" });
-				break;
-		}
-	},
-	dlgChannelInfo(event) {
-		/*
-		 * 
-		 */
-		let APP = imaudio,
-			Self = Dialogs;
-		switch (event.type) {
-			// "fast events"
-			case "set-flip-channels":
-				break;
-			// standard dialog events
-			case "dlg-open":
-			case "dlg-preview":
-			case "dlg-apply":
-			case "dlg-reset":
-			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgChannelInfo" });
 				break;
 		}
 	},

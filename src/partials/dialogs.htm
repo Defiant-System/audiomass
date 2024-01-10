@@ -398,11 +398,11 @@
 			<div class="field-box">
 				<span class="label">Limit to</span>
 				<div class="knob"></div>
-				<span class="value"><input type="text" name="limit-to" data-min="10" data-max="100" data-suffix="%" data-default="99" data-change="set-limit-to"></span>
+				<span class="value"><input type="text" name="limit" data-min="10" data-max="100" data-suffix="%" data-default="99" data-change="set-limit-to"></span>
 			</div>
 			
-			<div class="field-box">
-				<span class="label" title="Between lows & highs">Ratio</span>
+			<div class="field-box" title="Between lows & highs">
+				<span class="label">Ratio</span>
 				<div class="knob"></div>
 				<span class="value"><input type="text" name="ratio" data-min="0" data-max="100" data-suffix="%" data-default="0" data-change="set-ratio"></span>
 			</div>
@@ -410,7 +410,7 @@
 			<div class="field-box">
 				<span class="label">Look Ahead</span>
 				<div class="knob"></div>
-				<span class="value"><input type="text" name="look-ahead" data-min="1" data-max="500" data-suffix="ms" data-default="30" data-change="set-look-ahead"></span>
+				<span class="value"><input type="text" name="ahead" data-min="1" data-max="500" data-suffix="ms" data-default="30" data-change="set-look-ahead"></span>
 			</div>
 		</div>
 		<div class="buttons">
@@ -563,22 +563,6 @@
 				<div class="slider"><span class="handle"></span></div>
 				<span class="value"><input type="text" name="duration" data-min="0" data-max="10" data-step="0.1" data-default="3" data-suffix=" s" data-change="set-duration"></span>
 			</div>
-		</div>
-		<div class="buttons">
-			<div class="button" data-click="dlg-apply">Apply</div>
-			<div class="button" data-click="dlg-reset">Reset</div>
-		</div>
-	</div>
-</div>
-
-<div class="dialog-box" data-dlg="dlgChannelInfo">
-	<div class="dlg-content">
-		<h2>
-			<i class="icon-dlg-close" data-click="dlg-close"></i>
-			Channel Info
-		</h2>
-		<div class="dlg-body">
-			
 		</div>
 		<div class="buttons">
 			<div class="button" data-click="dlg-apply">Apply</div>

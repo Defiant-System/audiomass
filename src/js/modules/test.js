@@ -19,13 +19,13 @@ let Test = {
 		// }, 600);
 		// return;
 
-		let arg = "dlgReverb";
+		let arg = "dlgHardLimiter";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			UI.renderPreset({ dEl, id: 2, name: arg });
+			// UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",
@@ -33,6 +33,7 @@ let Test = {
 			// 	end: 1.75,
 			// });
 
+			setTimeout(() => dEl.find(`.toggler`).trigger("click"), 400);
 			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 400);
 		}, 1000);
 

@@ -402,7 +402,6 @@ const UI = {
 		});
 		// console.log(event);
 		switch (event.name) {
-			case "dlgChannelInfo":
 			case "dlgDistortion":
 			case "dlgNormalize":
 			case "dlgSilence":

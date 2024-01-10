@@ -408,6 +408,7 @@ const Dialogs = {
 				val.ahead = (val.ahead * buffer.sampleRate / 1e3) >> 0;
 				// transfer buffer
 				source.buffer = buffer;
+				source.loop = isPreview;
 
 				for (let i=0, il=buffer.numberOfChannels; i<il; ++i) {
 					let chanData = buffer.getChannelData(i);
@@ -431,7 +432,8 @@ const Dialogs = {
 						maxPeak = 0;
 					}
 				}
-
+				// rack / point to connect destination
+				rack = source;
 				// return stuff
 				return { filters, source, rack };
 			// reset buffer & filters

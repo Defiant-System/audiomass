@@ -384,6 +384,7 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
+			context,
 			filter,
 			value,
 			rack;
@@ -391,44 +392,62 @@ const Dialogs = {
 			case "set-limit-to":
 			case "set-ratio":
 			case "set-look-ahead":
+				if (Self._limiter) {
+					Self._limiter[event.val.name] = event.val.name === "ahead" ? event.value : event.value / 100;
+					// stop current source
+					Self._source.disconnect();
+					Self._source.buffer = null;
+					Self._source = null;
+					// re-create filter
+					context = file.node.context;
+					filter = Self.dlgHardLimiter({ type: "create-filter-rack", context });
+					// connect rack to "speakers"
+					filter.rack.connect(context.destination);
+					// save reference to buffer source
+					Dialogs._source = filter.source;
+					// start source
+					Dialogs._source.start();
+				}
 				break;
 			// create filter rack
 			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext,
 					buffer = AudioUtils.CopyBufferSegment({ file }),
 					source = event.context.createBufferSource(),
-					val = {
-						limit: 0.99,
-						ratio: 0,
-						ahead: 10,
-					},
+					val = Self._limiter,
 					maxPeak = 0,
 					filters = [];
-
-				val.ahead = (val.ahead * buffer.sampleRate / 1e3) >> 0;
+				// get values if missing
+				if (!val) {
+					Self._limiter = val = {
+						limit: parseInt(Self._active.find(`input[name="limit"]`).val(), 10) / 100,
+						ratio: parseInt(Self._active.find(`input[name="ratio"]`).val(), 10) / 100,
+						ahead: parseInt(Self._active.find(`input[name="ahead"]`).val(), 10),
+					};
+				}
+				val.look = (val.ahead * buffer.sampleRate / 1e3) >> 0;
 				// transfer buffer
 				source.buffer = buffer;
 				source.loop = isPreview;
-
+				// process buffer
 				for (let i=0, il=buffer.numberOfChannels; i<il; ++i) {
 					let chanData = buffer.getChannelData(i);
 					chanData.set(source.buffer.getChannelData(i));
-
 					// iterating faster first time...
 					for (let b=0, len=chanData.length; b<len; ++b) {
-						for (let k=0; k<val.ahead; k=k+10) {
+						for (let k=0; k<val.look; k=k+10) {
 							let curr = Math.abs(chanData[b+k]);
 							if (maxPeak < curr) maxPeak = curr;
 						}
 						let diff = val.limit / maxPeak;
-						for (let k=0; k<val.ahead; ++k) {
+						for (let k=0; k<val.look; ++k) {
 							let origVal = chanData[b+k];
 							let newVal = origVal * diff;
 							let diffPeak = val.limit - Math.abs(newVal);
 							diffPeak *= origVal < 0 ? -val.ratio : val.ratio;
 							chanData[b+k] = (newVal + diffPeak);
 						}
-						b += val.ahead;
+						b += val.look;
 						maxPeak = 0;
 					}
 				}
@@ -436,22 +455,13 @@ const Dialogs = {
 				rack = source;
 				// return stuff
 				return { filters, source, rack };
-			// reset buffer & filters
-			case "dlg-apply-preset":
-				if (Self._filters) {
-					Self._active.find(`.field-box input[data-change]`).map(el => {
-						let iEl = $(el),
-							type = iEl.data("change");
-						Self.dlgDelay({ type, iEl });
-					});
-				}
-				break;
 			// standard dialog events
 			case "dlg-preview":
 			case "dlg-apply":
 			case "dlg-open":
 			case "dlg-reset":
 			case "dlg-close":
+				if (event.type === "dlg-close") delete Self._limiter;
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgHardLimiter" });
 				break;
 		}

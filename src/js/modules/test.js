@@ -33,7 +33,7 @@ let Test = {
 			// 	end: 1.75,
 			// });
 
-			setTimeout(() => dEl.find(`.toggler`).trigger("click"), 400);
+			// setTimeout(() => dEl.find(`.toggler`).trigger("click"), 400);
 			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 400);
 		}, 1000);
 

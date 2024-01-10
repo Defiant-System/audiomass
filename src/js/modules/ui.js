@@ -367,7 +367,7 @@ const UI = {
 					file = Dialogs._file;
 					context = file.node.context;
 					filter = Dialogs[event.name]({ type: "create-filter-rack", context });
-					// connect equalizer rack to "speakers"
+					// connect rack to "speakers"
 					if (filter.rack) filter.rack.connect(file.node.context.destination);
 					// save reference to filters
 					Dialogs._filters = filter.filters;

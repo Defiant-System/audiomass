@@ -11,10 +11,10 @@
 		</Menu>
 		<Menu type="divider"/>
 		<Menu name="Make mono&#8230;">
-			<Menu name="Left Channel"/>
-			<Menu name="Right Channel"/>
+			<Menu name="Left Channel" click="mono-left-channel"/>
+			<Menu name="Right Channel" click="mono-right-channel"/>
 		</Menu>
-		<Menu name="Flip Channels"/>
+		<Menu name="Flip Channels" click="flip-channels"/>
 		<Menu type="divider"/>
 		<Menu name="Quit ImAudio" shell="win -c"/>
 	</Menu>

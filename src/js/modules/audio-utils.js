@@ -200,6 +200,22 @@ let AudioUtils = {
 		};
 	},
 
+	Flip(data) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let channels = originalBuffer.numberOfChannels;
+		let sampleRate = originalBuffer.sampleRate;
+		let length = originalBuffer.length;
+		let newSegment = this.CreateBuffer(channels, length, sampleRate);
+
+		let newChan0 = newSegment.getChannelData(0);
+		let newChan1 = newSegment.getChannelData(1);
+		// flip data
+		newChan0.set(originalBuffer.getChannelData(1));
+		newChan1.set(originalBuffer.getChannelData(0));
+
+		this.LoadDecoded(data, newSegment);
+	},
+
 	InsertSegmentToBuffer(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let sampleRate = originalBuffer.sampleRate;

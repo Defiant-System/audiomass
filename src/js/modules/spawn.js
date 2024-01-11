@@ -184,6 +184,15 @@
 				break;
 			/* FX: END */
 
+			case "mono-left-channel":
+			case "mono-right-channel":
+				console.log(event);
+				break;
+			case "flip-channels":
+				file = Spawn.data.tabs.active.file;
+				AudioUtils.Flip({ file, spawn: Spawn, sidebar: APP.spawn.sidebar });
+				break;
+
 			case "toggle-follow-cursor":
 				file = Spawn.data.tabs.active.file;
 				value = !!event.xMenu.getAttribute("is-checked");

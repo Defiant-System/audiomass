@@ -716,13 +716,28 @@
 			);
 		}
 
-		canvas {
+		.media-analyzer {
+			position: absolute;
+			top: 1px;
+			left: 4px;
+			width: calc( 100% - 4px );
+			height: calc( 100% - 5px );
+			pointer-events: none;
+			z-index: 3;
+
+			canvas {
+				// background: red;
+			}
+		}
+
+		canvas.peq-line {
 			// background: red;
 			position: absolute;
 			top: 1px;
 			left: 4px;
 			width: calc( 100% - 4px );
 			height: calc( 100% - 5px );
+			pointer-events: none;
 		}
 
 		.gutter-vert {

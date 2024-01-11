@@ -220,11 +220,11 @@ let AudioUtils = {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let sampleRate = originalBuffer.sampleRate;
 		let length = originalBuffer.length;
-		let newSegment = this.CreateBuffer(1, length, sampleRate);
-
-		newSegment.getChannelData(0).set(originalBuffer.getChannelData(from));
+		let monoSegment = this.CreateBuffer(1, length, sampleRate);
+		// transfer channel to mono segment
+		monoSegment.getChannelData(0).set(originalBuffer.getChannelData(from));
 		
-		this.LoadDecoded(data, newSegment);
+		this.LoadDecoded(data, monoSegment);
 	},
 
 	InsertSegmentToBuffer(data) {

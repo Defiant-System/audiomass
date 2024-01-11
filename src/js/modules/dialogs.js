@@ -180,7 +180,12 @@ const Dialogs = {
 		/*
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file,
+			context,
+			filter,
+			value,
+			rack;
 		switch (event.type) {
 			case "remove-row":
 			case "toggle-row":
@@ -189,9 +194,78 @@ const Dialogs = {
 			case "set-freq":
 			case "set-q":
 				break;
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext,
+					buffer = AudioUtils.CopyBufferSegment({ file }),
+					source = event.context.createBufferSource(),
+					filters = [];
+
+				// preprare source buffer
+				source.buffer = buffer;
+				source.loop = isPreview;
+
+				filter = event.context.createBiquadFilter();
+				filter.type = "peaking";
+				filter.gain.value = 0;
+				filter.Q.value = 1;
+				filter.frequency.value = 500;
+
+				filters.push(filter);
+				rack = filters[filters.length-1]; // output node
+
+				// connect source to first filter
+				source.connect(filters[0]);
+
+				// return stuff
+				return { filters, source, rack };
 			// standard dialog events
-			case "dlg-open":
 			case "dlg-preview":
+				if (Self._source) {
+					Self._source.stop();
+					delete Self._filters;
+					delete Self._source;
+				} else {
+					context = Self._analyzer.audioCtx;
+					filter = Self.dlgParagraphicEq({ type: "create-filter-rack", context });
+					// connect rack to "speakers"
+					if (filter.rack) filter.rack.connect(context.destination);
+					// save reference to filters
+					Self._filters = filter.filters;
+					// save reference to buffer source
+					Self._source = filter.source;
+					// start source
+					Self._source.start();
+					// connect analyzer animation
+					Self._analyzer.connectInput(Self._source);
+				}
+				Self.preview = event.el.data("value") === "on";
+				break;
+
+			case "dlg-open":
+				let options = {
+						start: true,
+						mode: 0,
+						// barSpace: .1,
+						gradient: "steelblue",
+						// gradientLeft: "prism",
+						// gradientRight: "prism",
+						channelLayout: "dual-combined",
+						bgAlpha: 0,
+						overlay: true,
+						showScaleX: false,
+						// minFreq: 30,
+						// maxFreq: 20000,
+						// frequencyScale: "log",
+						// showPeaks: true,
+						// peakLine: true,
+						// showBgColor: true,
+						// ledBars: true,
+						// trueLeds: true,
+					};
+				let el = event.dEl.find(`.peq-cvs .media-analyzer`);
+				Self._analyzer = new AudioMotionAnalyzer(el[0], options);
+				break;
+
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":

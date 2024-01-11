@@ -17,21 +17,21 @@ let Test = {
 		// 	spawn.data.tabs.active.file._ws.skip(6);
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
-		return;
+		// return;
 
-		setTimeout(() => {
-			APP.spawn.dispatch({ type: "mono-left-channel", spawn });
-			// APP.spawn.dispatch({ type: "mono-right-channel", spawn });
-			// APP.spawn.dispatch({ type: "flip-channels", spawn });
-		}, 600);
+		// setTimeout(() => {
+		// 	APP.spawn.dispatch({ type: "mono-left-channel", spawn });
+		// 	// APP.spawn.dispatch({ type: "mono-right-channel", spawn });
+		// 	// APP.spawn.dispatch({ type: "flip-channels", spawn });
+		// }, 600);
 
-		let arg = "dlgHardLimiter";
+		let arg = "dlgParagraphicEq";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 2, name: arg });
+			// UI.renderPreset({ dEl, id: 1, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",
@@ -39,7 +39,8 @@ let Test = {
 			// 	end: 1.75,
 			// });
 
-			// setTimeout(() => dEl.find(`.toggler`).trigger("click"), 400);
+			setTimeout(() => dEl.find(`.toggler`).trigger("click"), 200);
+			// setTimeout(() => dEl.find(`.toggler`).trigger("click"), 1500);
 			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 400);
 		}, 1000);
 

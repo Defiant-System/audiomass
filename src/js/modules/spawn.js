@@ -186,7 +186,9 @@
 
 			case "mono-left-channel":
 			case "mono-right-channel":
-				console.log(event);
+				file = Spawn.data.tabs.active.file;
+				value = event.type.split("-")[1] === "left" ? 0 : 1;
+				AudioUtils.MakeMono({ file, spawn: Spawn, sidebar: APP.spawn.sidebar }, value);
 				break;
 			case "flip-channels":
 				file = Spawn.data.tabs.active.file;

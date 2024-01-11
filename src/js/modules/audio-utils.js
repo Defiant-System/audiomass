@@ -216,6 +216,17 @@ let AudioUtils = {
 		this.LoadDecoded(data, newSegment);
 	},
 
+	MakeMono(data, from) {
+		let originalBuffer = data.file._ws.getDecodedData();
+		let sampleRate = originalBuffer.sampleRate;
+		let length = originalBuffer.length;
+		let newSegment = this.CreateBuffer(1, length, sampleRate);
+
+		newSegment.getChannelData(0).set(originalBuffer.getChannelData(from));
+		
+		this.LoadDecoded(data, newSegment);
+	},
+
 	InsertSegmentToBuffer(data) {
 		let originalBuffer = data.file._ws.getDecodedData();
 		let sampleRate = originalBuffer.sampleRate;

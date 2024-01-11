@@ -17,13 +17,13 @@ let Test = {
 		// 	spawn.data.tabs.active.file._ws.skip(6);
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
+		return;
 
 		setTimeout(() => {
-			// APP.spawn.dispatch({ type: "mono-left-channel", spawn });
+			APP.spawn.dispatch({ type: "mono-left-channel", spawn });
 			// APP.spawn.dispatch({ type: "mono-right-channel", spawn });
-			APP.spawn.dispatch({ type: "flip-channels", spawn });
+			// APP.spawn.dispatch({ type: "flip-channels", spawn });
 		}, 600);
-		return;
 
 		let arg = "dlgHardLimiter";
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);

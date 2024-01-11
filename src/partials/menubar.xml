@@ -10,12 +10,6 @@
 			<Menu name="Silence Non-selected" disabled="1"/>
 		</Menu>
 		<Menu type="divider"/>
-		<Menu name="Make mono&#8230;">
-			<Menu name="Left Channel" click="mono-left-channel"/>
-			<Menu name="Right Channel" click="mono-right-channel"/>
-		</Menu>
-		<Menu name="Flip Channels" click="flip-channels"/>
-		<Menu type="divider"/>
 		<Menu name="Quit ImAudio" shell="win -c"/>
 	</Menu>
 	<Menu name="File">
@@ -40,6 +34,12 @@
 		<Menu name="Reverse" click="reverse-region"/>
 		<Menu name="Invert" click="invert-region"/>
 		<Menu name="Crop" click="crop-region"/>
+		<Menu name="Flip Channels" click="flip-channels"/>
+		<Menu type="divider"/>
+		<Menu name="Make mono&#8230;">
+			<Menu name="From Left Channel" click="mono-left-channel"/>
+			<Menu name="From Right Channel" click="mono-right-channel"/>
+		</Menu>
 	</Menu>
 	<Menu name="Effects" for="effects">
 		<Menu name="Fade In" click="fade-in-region"/>

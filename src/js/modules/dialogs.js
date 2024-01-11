@@ -187,6 +187,15 @@ const Dialogs = {
 			value,
 			rack;
 		switch (event.type) {
+			case "draw-line":
+				Self._lineCtx.clearRect(0, 0, 1e3, 1e3);
+				// Self._lineCtx.strokeRect(50, 50, 100, 100);
+				Self._lineCtx.beginPath();
+				Self._lineCtx.moveTo(0, 99);
+				Self._lineCtx.lineTo(446, 99);
+				Self._lineCtx.stroke();
+				break;
+
 			case "remove-row":
 			case "toggle-row":
 			case "set-type":
@@ -245,25 +254,24 @@ const Dialogs = {
 				let options = {
 						start: true,
 						mode: 0,
-						// barSpace: .1,
 						gradient: "steelblue",
-						// gradientLeft: "prism",
-						// gradientRight: "prism",
 						channelLayout: "dual-combined",
 						bgAlpha: 0,
 						overlay: true,
 						showScaleX: false,
-						// minFreq: 30,
-						// maxFreq: 20000,
-						// frequencyScale: "log",
-						// showPeaks: true,
-						// peakLine: true,
-						// showBgColor: true,
-						// ledBars: true,
-						// trueLeds: true,
 					};
-				let el = event.dEl.find(`.peq-cvs .media-analyzer`);
+				let el = event.dEl.find(`.peq-cvs .media-analyzer`),
+					width = el.prop("offsetWidth"),
+					height = el.prop("offsetHeight");
 				Self._analyzer = new AudioMotionAnalyzer(el[0], options);
+				// prepare canvas
+				Self._lineCvs = event.dEl.find("canvas.peq-line").attr({ width, height });
+				Self._lineCtx = Self._lineCvs[0].getContext("2d");
+				Self._lineCtx.strokeStyle = "#d0f6ff";
+				Self._lineCtx.lineWidth = 1;
+				Self._lineCtx.translate(.5, .5);
+				// initial draw line
+				Self.dlgParagraphicEq({ type: "draw-line" });
 				break;
 
 			case "dlg-apply":

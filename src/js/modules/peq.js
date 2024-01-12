@@ -36,10 +36,9 @@ let Peq = {
 		Self._lineCtx = Self._lineCvs[0].getContext("2d");
 		Self._lineCtx.strokeStyle = "#d0f6ff";
 		Self._lineCtx.lineWidth = 1;
-		Self._lineCtx.translate(.5, .5);
+		// Self._lineCtx.translate(.5, .5);
 		// initial draw line
 		Self.render();
-
 
 		// ctx.beginPath();
 		// ctx.moveTo(0, 99);
@@ -52,46 +51,42 @@ let Peq = {
 			cw = Self._width,
 			ch = Self._height,
 			ch_half = ch / 2,
-			max_db_val = 35,
+			db = { max: 35 },
 			first = true,
 			arr = [],
-			total = line_arr.length;
+			t1 = line_arr.length,
+			t2 = t1 / 2,
+			t3 = t1 / 4;
 
 
-		for (var o=0; o<ranges.length; ++o) {
-			var curr = ranges[o];
+		for (let o=0; o<ranges.length; ++o) {
+			let curr = ranges[o];
 			if (first) {
 				first = false;
-				for (var i=0; i<total; ++i) {
+				for (let i=0; i<t1; ++i) {
 					line_arr[i] = curr._arr[i];
 				}
 			} else {
-				for (var i=0; i<total; ++i) {
+				for (let i=0; i<t1; ++i) {
 					line_arr[i] += curr._arr[i];
 				}
 			}
 		}
 
-
 		ctx.clearRect(0, 0, 1e3, 1e3);
-
 		ctx.beginPath();
-		ctx.moveTo(0, ch_half - (line_arr[ 0 ] * (ch_half / max_db_val)));
+		ctx.moveTo(0, ch_half - (line_arr[0] * (ch_half / db.max)));
 
-		for (var i=0; i<(total/4); i+=1) {
-			var el = line_arr[i];
-			var x = (i * 2) * (cw / total);
-			var y = ch_half - (el * (ch_half / max_db_val));
+		for (let i=0; i<t3; i+=1) {
+			let x = (i * 2) * (cw / t1);
+			let y = ch_half - (line_arr[i] * (ch_half / db.max));
 			ctx.lineTo(x, y);
 		}
 
-		var hh = 0;
-		for (var i=(total/4); i<total; i+=3) {
-			var el = line_arr[i];
-			hh += 2;
-			var x = ((total / 2) + hh) * (cw / total);
-			var y = ch_half - (el * (ch_half / max_db_val));
-			ctx.lineTo ( x, y );
+		for (let i=t3, h=0; i<t1; i+=3, h+=2) {
+			let x = (t2 + h) * (cw / t1);
+			let y = ch_half - (line_arr[i] * (ch_half / db.max));
+			ctx.lineTo (x, y);
 		}
 		ctx.stroke ();
 	}

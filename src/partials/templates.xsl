@@ -73,13 +73,13 @@
 		<div>
 			<div class="type-options" data-change="set-type">
 				<i data-arg="peak" class="icon-curve-peak" title="Peaking">
-					<xsl:if test="@type = 'peak'"><xsl:attribute name="class">icon-curve-peak active</xsl:attribute></xsl:if>
+					<xsl:if test="@type = 'peaking'"><xsl:attribute name="class">icon-curve-peak active</xsl:attribute></xsl:if>
 				</i>
 				<i data-arg="high" class="icon-curve-high" title="Highpass">
-					<xsl:if test="@type = 'high'"><xsl:attribute name="class">icon-curve-high active</xsl:attribute></xsl:if>
+					<xsl:if test="@type = 'highpass'"><xsl:attribute name="class">icon-curve-high active</xsl:attribute></xsl:if>
 				</i>
 				<i data-arg="low" class="icon-curve-low" title="Lowpass">
-					<xsl:if test="@type = 'low'"><xsl:attribute name="class">icon-curve-low active</xsl:attribute></xsl:if>
+					<xsl:if test="@type = 'lowpass'"><xsl:attribute name="class">icon-curve-low active</xsl:attribute></xsl:if>
 				</i>
 			</div>
 		</div>

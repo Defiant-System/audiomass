@@ -496,12 +496,16 @@ const UI = {
 				// iterate dots
 				xNode.selectNodes("./*").map(x => {
 					let id = x.getAttribute("id"),
-						isOff = x.getAttribute("state") === "off" ? "off" : "",
+						on = x.getAttribute("state") != "off",
+						type = x.getAttribute("type"),
 						gain = +x.getAttribute("gain"),
 						freq = +x.getAttribute("freq"),
-						top = Math.lerp(data.minY, data.maxY, (gain + 50) / 100),
+						q = +x.getAttribute("q"),
+						top = Math.lerp(data.maxY, data.minY, (gain + 50) / 100),
 						left = (Math.log(freq) - Self.logScale.min) / data.scale + data.minX;
-					str.push(`<div class="peq-dot ${isOff}" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+					str.push(`<div class="peq-dot ${on ? "" : "off"}" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
+					// add entry to Peq line-canvas
+					Peq.Add({ id, type, on, freq, gain, q });
 				});
 				event.dEl.find(`.peq-dot-wrapper`).html(str.join(""));
 				// render table list

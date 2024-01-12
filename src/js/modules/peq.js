@@ -1,25 +1,4 @@
 
-let ranges = [];
-
-ranges.push({
-	freq: 1000,
-	gain: 30,
-	q: 5,
-	type: "peaking",
-	_on: true,
-});
-
-ranges.push({
-	freq: 8000,
-	gain: -30,
-	q: 5,
-	type: "peaking",
-	_on: true,
-});
-
-
-
-
 let seed = 1000;
 let line_arr = new Array(seed);
 
@@ -29,6 +8,7 @@ let jump = freq.max / seed >> 0;
 
 
 let Peq = {
+	_entries: [],
 	init(dEl) {
 		let Self = this,
 			el = dEl.find(`.peq-cvs .media-analyzer`),
@@ -43,23 +23,33 @@ let Peq = {
 		Self._lineCtx.strokeStyle = "#d0f6ff";
 		Self._lineCtx.lineWidth = 1;
 
-		// loop entries
-		ranges.map(range => Self.range_compute_arr(range));
-
-		// initial draw line
-		Self.render();
+		// Self.Add({ id: 1, type: "peaking", on: true, freq: 1000, gain: 30, q: 5 });
+		// Self.Add({ id: 2, type: "peaking", on: true, freq: 8000, gain: -30, q: 5 });
 	},
-	render() {
+	Get(id) {
+		return this._entries.find(entry => entry.id === id);
+	},
+	Add(entry) {
+		this._entries.push(entry);
+		// loop entries
+		this._entries.map(entry => this.Compute(entry));
+		// draw line
+		this.Render();
+	},
+	Remove(entry) {
+
+	},
+	Render() {
 		let Self = this,
 			ctx = Self._lineCtx,
 			cw = Self._width,
 			ch = Self._height,
-			ch_half = ch / 2,
+			chh = ch / 2,
 			t2 = seed / 2,
 			t3 = seed / 4;
 
-		for (let o=0; o<ranges.length; ++o) {
-			let curr = ranges[o];
+		for (let o=0; o<Self._entries.length; ++o) {
+			let curr = Self._entries[o];
 			if (o === 0) {
 				for (let i=0; i<seed; ++i) {
 					line_arr[i] = curr._arr[i];
@@ -71,84 +61,83 @@ let Peq = {
 			}
 		}
 
-		ctx.clearRect(0, 0, 1e3, 1e3);
+		ctx.clearRect(0, 0, cw, ch);
 		ctx.beginPath();
-		ctx.moveTo(0, ch_half - (line_arr[0] * (ch_half / db.max)));
+		ctx.moveTo(0, chh - (line_arr[0] * (chh / db.max)));
 
 		for (let i=0; i<t3; i+=1) {
 			let x = (i * 2) * (cw / seed);
-			let y = ch_half - (line_arr[i] * (ch_half / db.max));
+			let y = chh - (line_arr[i] * (chh / db.max));
 			ctx.lineTo(x, y);
 		}
 
 		for (let i=t3, h=0; i<seed; i+=3, h+=2) {
 			let x = (t2 + h) * (cw / seed);
-			let y = ch_half - (line_arr[i] * (ch_half / db.max));
+			let y = chh - (line_arr[i] * (chh / db.max));
 			ctx.lineTo (x, y);
 		}
 		ctx.stroke ();
 	},
-	range_compute_arr(range) {
+	Compute(entry) {
 		let ease = t => t*t*t*t*t,
 			ease_out = t => t*t*t*t,
 			edge = {},
 			start,
 			end,
-			rounding = freq.max * (2 / range.q),
+			rounding = freq.max * (2 / entry.q),
 			hr = rounding / jump >> 0;
 
-		if (!range._arr) range._arr = [];
+		if (!entry._arr) entry._arr = [];
 		for (let i=0; i<seed; ++i) {
-			range._arr[i] = 0;
+			entry._arr[i] = 0;
 		}
 
-		switch (range.type) {
+		switch (entry.type) {
 			case "peaking":
-				edge.left = range.freq - (rounding / 2);
-				edge.right = range.freq + (rounding / 2);
+				edge.left = entry.freq - (rounding / 2);
+				edge.right = entry.freq + (rounding / 2);
 				start = edge.left  / jump >> 0;
 				end = edge.right / jump >> 0;
 				
 				for (let i=start, j=0; i<end; ++i) {
-					if (i * jump < range.freq) {
+					if (i * jump < entry.freq) {
 						++j;
-						range._arr[i] += ease(j / (hr / 2)) * range.gain;
+						entry._arr[i] += ease(j / (hr / 2)) * entry.gain;
 					} else {
 						--j;
-						range._arr[i] += ease(j / (hr / 2)) * range.gain;
+						entry._arr[i] += ease(j / (hr / 2)) * entry.gain;
 					}
 				}
 				break;
 			case "highpass":
-				edge.left = range.freq - rounding;
+				edge.left = entry.freq - rounding;
 				start = edge.left  / jump >> 0;
-				end = range.freq / jump >> 0;
+				end = entry.freq / jump >> 0;
 
 				for (let i = 0; i<start; ++i) {
-					range._arr[i] = -db.max;
+					entry._arr[i] = -db.max;
 				}
 				// todo improve this!!!
 				for (let i=start, j=hr; i<end; ++i) {
 					--j;
-					range._arr[i] -= ease_out(j / hr) * db.max;
+					entry._arr[i] -= ease_out(j / hr) * db.max;
 				}
 				break;
 			case "lowpass":
-				edge.right = range.freq + rounding;
-				start = range.freq  / jump >> 0;
+				edge.right = entry.freq + rounding;
+				start = entry.freq  / jump >> 0;
 				end = edge.right  / jump >> 0;
 
 				for (let i = end; i<seed; ++i) {
-					range._arr[i] = -db.max;
+					entry._arr[i] = -db.max;
 				}
 				// todo improve this!!!
 				for (let i=start, j=0; i<end; ++i) {
 					++j;
-					range._arr[i] -= ease_out(j / hr) * db.max;
+					entry._arr[i] -= ease_out(j / hr) * db.max;
 				}
 				break;
 		}
 	}
 };
-
 

@@ -31,7 +31,7 @@ let Test = {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 1, name: arg });
+			UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",
@@ -39,8 +39,8 @@ let Test = {
 			// 	end: 1.75,
 			// });
 
-			setTimeout(() => dEl.find(`.toggler`).trigger("click"), 100);
-			setTimeout(() => dEl.find(`.toggler`).trigger("click"), 1500);
+			// setTimeout(() => dEl.find(`.toggler`).trigger("click"), 100);
+			// setTimeout(() => dEl.find(`.toggler`).trigger("click"), 1500);
 			// setTimeout(() => dEl.find(`.button[data-click="dlg-apply"]`).trigger("click"), 400);
 		}, 1000);
 

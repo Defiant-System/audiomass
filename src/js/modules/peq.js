@@ -26,8 +26,13 @@ let Peq = {
 		// Self.Add({ id: 1, type: "peaking", on: true, freq: 1000, gain: 30, q: 5 });
 		// Self.Add({ id: 2, type: "peaking", on: true, freq: 8000, gain: -30, q: 5 });
 	},
-	Get(id) {
-		return this._entries.find(entry => entry.id === id);
+	Update(id, data) {
+		let entry = this._entries.find(entry => entry.id === id);
+		for (let key in data) entry[key] = data[key];
+		// compute entries
+		this.Compute(entry)
+		// draw line
+		this.Render();
 	},
 	Add(entry) {
 		this._entries.push(entry);

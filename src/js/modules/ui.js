@@ -897,7 +897,8 @@ const UI = {
 				// make dot active
 				el.addClass("active");
 				// prepare info about drag
-				let content = dEl.parents("content"),
+				let id = el.data("id"),
+					content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
 					yiEl = row.find(`span[data-name="gain"]`),
 					xiEl = row.find(`span[data-name="freq"]`),
@@ -931,7 +932,7 @@ const UI = {
 				val.scale = (log.max-log.min) / (limit.maxX-limit.minX);
 
 				// save details
-				Self.drag = { el, row, val, log, content, offset, limit, _min, _max, _lerp, _round, _exp };
+				Self.drag = { el, id, row, val, log, content, offset, limit, _min, _max, _lerp, _round, _exp };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -940,15 +941,18 @@ const UI = {
 			case "mousemove":
 				let top = Drag._max(Drag._min(event.clientY + Drag.offset.y, Drag.limit.maxY), Drag.limit.minY),
 					left = Drag._max(Drag._min(event.clientX + Drag.offset.x, Drag.limit.maxX), Drag.limit.minX),
-					perc, value;
+					data = {},
+					perc;
 				Drag.el.css({ top, left });
 				// calculate gain
 				perc = (top - Drag.limit.minY) / (Drag.limit.maxY - Drag.limit.minY);
-				value = Drag._round(Drag._lerp(Drag.val.yMax, Drag.val.yMin, perc));
-				Drag.val.yiEl.html(value + Drag.val.ySuffix);
+				data.gain = Drag._round(Drag._lerp(Drag.val.yMax, Drag.val.yMin, perc));
+				Drag.val.yiEl.html(data.gain + Drag.val.ySuffix);
 				// calculate frequency
-				value = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
-				Drag.val.xiEl.html(value + Drag.val.xSuffix);
+				data.freq = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
+				Drag.val.xiEl.html(data.freq + Drag.val.xSuffix);
+
+				Peq.Update(Drag.id, data)
 				break;
 			case "mouseup":
 				// reset dot element

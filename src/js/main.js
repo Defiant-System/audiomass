@@ -5,6 +5,7 @@
 
 @import "./modules/audio-utils.js"
 @import "./modules/dialogs.js"
+@import "./modules/peq.js"
 @import "./modules/ui.js"
 @import "./modules/test.js"
 

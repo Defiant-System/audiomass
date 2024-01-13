@@ -891,7 +891,7 @@ const UI = {
 					let id = Date.now(),
 						top = event.offsetY - 2,
 						left = event.offsetX - 2,
-						node = $.nodeFromString(`<i id="${id}" type="peak" gain="0" freq="0" q="5" state="on"/>`);
+						node = $.nodeFromString(`<i id="${id}" type="peaking" gain="0" freq="0" q="5" state="on"/>`);
 					// add dot to "canvas"
 					el = el.prepend(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
 					// render new list row

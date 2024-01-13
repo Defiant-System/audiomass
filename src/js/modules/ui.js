@@ -495,7 +495,7 @@ const UI = {
 				data.scale = (Self.logScale.max - Self.logScale.min) / (data.maxX - data.minX),
 				// iterate dots
 				xNode.selectNodes("./*").map(x => {
-					let id = x.getAttribute("id"),
+					let id = +x.getAttribute("id"),
 						on = x.getAttribute("state") != "off",
 						type = x.getAttribute("type"),
 						gain = +x.getAttribute("gain"),
@@ -902,11 +902,12 @@ const UI = {
 						prepend: dEl.find(`.peq-list .list-body`),
 					});
 					// return console.log(event);
+					Peq.Add({ id, type: "peaking", on: true, freq: 1000, gain: 30, q: 5 });
 				}
 				// make dot active
 				el.addClass("active");
 				// prepare info about drag
-				let id = el.data("id"),
+				let id = +el.data("id"),
 					content = dEl.parents("content"),
 					row = dEl.find(`.list-row[data-id="${el.data("id")}"]`).addClass("active"),
 					yiEl = row.find(`span[data-name="gain"]`),

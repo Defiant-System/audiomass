@@ -122,7 +122,7 @@ const UI = {
 						data = {
 							dEl,
 							row,
-							type: "toggle-row",
+							type: "remove-row",
 							func: Dialogs[dEl.data("dlg")],
 						};
 						// proxy values

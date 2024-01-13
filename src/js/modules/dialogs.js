@@ -187,15 +187,18 @@ const Dialogs = {
 			value,
 			rack;
 		switch (event.type) {
-			case "remove-row":
-			case "toggle-row":
 			case "set-gain":
 			case "set-freq":
 			case "set-q":
 				break;
+			case "remove-row":
+				Peq.Remove(event.row.data("id"));
+				break;
+			case "toggle-row":
+				Peq.Update(event.row.data("id"), { on: event.value });
+				break;
 			case "set-type":
-				let id = event.row.data("id");
-				Peq.Update(id, { type: event.value });
+				Peq.Update(event.row.data("id"), { type: event.value });
 				break;
 			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext,

@@ -1,6 +1,6 @@
 
 let seed = 1000;
-let line_arr = new Array(seed);
+let lineArr = new Array(seed);
 
 let db = { max: 35 };
 let freq = { max: 20000 };
@@ -37,12 +37,14 @@ let Peq = {
 	Add(entry) {
 		this._entries.push(entry);
 		// loop entries
-		this._entries.map(entry => this.Compute(entry));
+		this._entries
+			.filter(entry => entry.on)
+			.map(entry => this.Compute(entry));
 		// draw line
 		this.Render();
 	},
-	Remove(entry) {
-
+	Remove(id) {
+		console.log(id);
 	},
 	Render() {
 		let Self = this,
@@ -53,32 +55,32 @@ let Peq = {
 			t2 = seed / 2,
 			t3 = seed / 4;
 
-		for (let o=0; o<Self._entries.length; ++o) {
-			let curr = Self._entries[o];
+		for (let o=0, ol=Self._entries.length; o<ol; ++o) {
+			if (!Self._entries[o].on) continue;
 			if (o === 0) {
 				for (let i=0; i<seed; ++i) {
-					line_arr[i] = curr._arr[i];
+					lineArr[i] = Self._entries[o]._arr[i];
 				}
 			} else {
 				for (let i=0; i<seed; ++i) {
-					line_arr[i] += curr._arr[i];
+					lineArr[i] += Self._entries[o]._arr[i];
 				}
 			}
 		}
 
 		ctx.clearRect(0, 0, cw, ch);
 		ctx.beginPath();
-		ctx.moveTo(0, chh - (line_arr[0] * (chh / db.max)));
+		ctx.moveTo(0, chh - (lineArr[0] * (chh / db.max)));
 
 		for (let i=0; i<t3; i+=1) {
 			let x = (i * 2) * (cw / seed);
-			let y = chh - (line_arr[i] * (chh / db.max));
+			let y = chh - (lineArr[i] * (chh / db.max));
 			ctx.lineTo(x, y);
 		}
 
 		for (let i=t3, h=0; i<seed; i+=3, h+=2) {
 			let x = (t2 + h) * (cw / seed);
-			let y = chh - (line_arr[i] * (chh / db.max));
+			let y = chh - (lineArr[i] * (chh / db.max));
 			ctx.lineTo (x, y);
 		}
 		ctx.stroke ();

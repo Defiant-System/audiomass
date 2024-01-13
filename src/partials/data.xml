@@ -31,7 +31,6 @@
 			</Slot>
 			<Slot id="2">
 				<i id="1" type="peaking" gain="15" freq="500" q="5" state="on"/>
-				<i id="2" type="lowpass" gain="0" freq="7060" q="5" state="off"/>
 			</Slot>
 		</Dialog>
 		<Dialog name="dlgGraphicEq">

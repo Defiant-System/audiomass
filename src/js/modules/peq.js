@@ -44,7 +44,15 @@ let Peq = {
 		this.Render();
 	},
 	Remove(id) {
-		console.log(id);
+		// find entry and remove
+		let index = this._entries.findIndex(entry => entry.id === id);
+		this._entries.splice(index, 1);
+		// loop entries
+		this._entries
+			.filter(entry => entry.on)
+			.map(entry => this.Compute(entry));
+		// draw line
+		this.Render();
 	},
 	Render() {
 		let Self = this,

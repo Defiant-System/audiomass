@@ -72,13 +72,13 @@
 		<xsl:attribute name="data-id"><xsl:value-of select="@id"/></xsl:attribute>
 		<div>
 			<div class="type-options" data-change="set-type">
-				<i data-arg="peak" class="icon-curve-peak" title="Peaking">
+				<i data-arg="peaking" class="icon-curve-peak" title="Peaking">
 					<xsl:if test="@type = 'peaking'"><xsl:attribute name="class">icon-curve-peak active</xsl:attribute></xsl:if>
 				</i>
-				<i data-arg="high" class="icon-curve-high" title="Highpass">
+				<i data-arg="highpass" class="icon-curve-high" title="Highpass">
 					<xsl:if test="@type = 'highpass'"><xsl:attribute name="class">icon-curve-high active</xsl:attribute></xsl:if>
 				</i>
-				<i data-arg="low" class="icon-curve-low" title="Lowpass">
+				<i data-arg="lowpass" class="icon-curve-low" title="Lowpass">
 					<xsl:if test="@type = 'lowpass'"><xsl:attribute name="class">icon-curve-low active</xsl:attribute></xsl:if>
 				</i>
 			</div>

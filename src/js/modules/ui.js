@@ -772,6 +772,8 @@ const UI = {
 					},
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
+					id = row.data("id"),
+					func = Peq.Update.bind(Peq),
 					_lerp = Math.lerp,
 					_exp = Math.exp,
 					_round = Math.round,
@@ -809,7 +811,7 @@ const UI = {
 				dEl.find(".bubble-knob").removeClass("hidden").css({ top, left });
 
 				// save details
-				Self.drag = { srcEl, row, dot, dEl, knobEl, content, dlg, val, limit, _lerp, _exp, _round, _min, _max };
+				Self.drag = { srcEl, row, dot, dEl, id, func, knobEl, content, dlg, val, limit, _lerp, _exp, _round, _min, _max };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -831,6 +833,8 @@ const UI = {
 						// table cell update
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 						Drag.srcEl.html(value + Drag.val.suffix);
+						// forward value
+						Drag.func(Drag.id, { gain: value });
 						break;
 					case "freq":
 						perc = value / 100;
@@ -838,7 +842,10 @@ const UI = {
 						Drag.dot.css(data);
 						// table cell update
 						data.val = Drag._exp(Drag.limit.log.min + Drag.limit.log.scale * (data.left - Drag.limit.dot.minX));
-						Drag.srcEl.html(Drag._round(data.val) + Drag.val.suffix);
+						data.val = Drag._round(data.val);
+						Drag.srcEl.html(data.val + Drag.val.suffix);
+						// forward value
+						Drag.func(Drag.id, { freq: data.val });
 						break;
 					case "q":
 						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min)
@@ -846,6 +853,8 @@ const UI = {
 						// table cell update
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 						Drag.srcEl.html(value + Drag.val.suffix);
+						// forward value
+						Drag.func(Drag.id, { q: value });
 						break;
 				}
 				// forward event
@@ -923,6 +932,7 @@ const UI = {
 						maxY: +el.parent().prop("offsetHeight") - 2,
 						maxX: +el.parent().prop("offsetWidth") - 2,
 					},
+					func = Peq.Update.bind(Peq),
 					_exp = Math.exp,
 					_min = Math.min,
 					_max = Math.max,
@@ -932,7 +942,7 @@ const UI = {
 				val.scale = (log.max-log.min) / (limit.maxX-limit.minX);
 
 				// save details
-				Self.drag = { el, id, row, val, log, content, offset, limit, _min, _max, _lerp, _round, _exp };
+				Self.drag = { el, id, row, val, log, content, offset, limit, func, _min, _max, _lerp, _round, _exp };
 				// hide mouse
 				Self.drag.content.addClass("cover hideMouse");
 				// bind event handlers
@@ -951,8 +961,8 @@ const UI = {
 				// calculate frequency
 				data.freq = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
 				Drag.val.xiEl.html(data.freq + Drag.val.xSuffix);
-
-				Peq.Update(Drag.id, data)
+				// forward value
+				Drag.func(Drag.id, data);
 				break;
 			case "mouseup":
 				// reset dot element

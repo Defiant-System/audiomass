@@ -1,9 +1,5 @@
 
 const UI = {
-	logScale: {
-		min: Math.log(20),
-		max: Math.log(20000)
-	},
 	init(Spawn) {
 		// fast references
 		this.doc = $(document);
@@ -772,7 +768,7 @@ const UI = {
 					},
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
-					id = row.data("id"),
+					id = +row.data("id"),
 					func = Peq.Update.bind(Peq),
 					_lerp = Math.lerp,
 					_exp = Math.exp,
@@ -874,6 +870,10 @@ const UI = {
 				Self.doc.off("mousemove mouseup", Self.doBubbleKnob);
 		}
 	},
+	logScale: {
+		min: Math.log(1),
+		max: Math.log(24000)
+	},
 	doPeqDot(event) {
 		let Self = UI,
 			Spawn = event.spawn,
@@ -891,7 +891,11 @@ const UI = {
 					let id = Date.now(),
 						top = event.offsetY - 2,
 						left = event.offsetX - 2,
-						node = $.nodeFromString(`<i id="${id}" type="peaking" gain="0" freq="0" q="5" state="on"/>`);
+						type = "peaking",
+						gain = 0,
+						freq = 1000,
+						q = 5,
+						node = $.nodeFromString(`<i id="${id}" type="${type}" gain="${gain}" freq="${freq}" q="${q}" state="on"/>`);
 					// add dot to "canvas"
 					el = el.prepend(`<div class="peq-dot" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
 					// render new list row
@@ -902,7 +906,7 @@ const UI = {
 						prepend: dEl.find(`.peq-list .list-body`),
 					});
 					// return console.log(event);
-					Peq.Add({ id, type: "peaking", on: true, freq: 1000, gain: 30, q: 5 });
+					Peq.Add({ id, on: true, type, freq, gain, q });
 				}
 				// make dot active
 				el.addClass("active");

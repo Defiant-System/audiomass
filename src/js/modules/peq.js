@@ -2,8 +2,8 @@
 let seed = 1000;
 let lineArr = new Array(seed);
 
-let db = { max: 35 };
-let freq = { max: 20000 };
+let db = { max: 36 };
+let freq = { max: 22000 };
 let jump = freq.max / seed >> 0;
 
 
@@ -61,9 +61,12 @@ let Peq = {
 			ch = Self._height,
 			chh = ch / 2,
 			t2 = seed / 2,
-			t3 = seed / 4;
-
-		for (let o=0, ol=Self._entries.length; o<ol; ++o) {
+			t3 = seed / 4,
+			ol = Self._entries.length,
+			o = 0;
+		// reset array if no entries
+		if (!ol) lineArr = new Array(seed);
+		for (; o<ol; ++o) {
 			if (!Self._entries[o].on) continue;
 			if (o === 0) {
 				for (let i=0; i<seed; ++i) {

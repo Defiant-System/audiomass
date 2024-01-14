@@ -201,6 +201,11 @@ const UI = {
 				if (file._ws.isPlaying()) file._ws.stop();
 
 				dEl = $(`.dialog-box[data-dlg="${event.name}"]`);
+				// save reference to file
+				Dialogs._file = file;
+				// save reference to axctive dialog
+				Dialogs._active = dEl;
+				
 				// add preset buttons, if any
 				if (dEl.find(`.buttons .presets`).length && !dEl.find(`.buttons .presets ul li`).length) {
 					let xPath = `//Presets/Dialog[@name="${event.name}"]/Slot`,
@@ -236,10 +241,6 @@ const UI = {
 				// open dialog
 				dEl.cssSequence("opening", "animationend", el =>
 					el.addClass("showing").removeClass("opening"));
-				// save reference to axctive dialog
-				Dialogs._active = dEl;
-				// save reference to file
-				Dialogs._file = file;
 				break;
 			case "dlg-close":
 				dEl = event.el ? event.el.parents(".dialog-box") : Dialogs._active;
@@ -871,7 +872,7 @@ const UI = {
 		}
 	},
 	logScale: {
-		min: Math.log(1),
+		min: Math.log(10),
 		max: Math.log(24000)
 	},
 	doPeqDot(event) {

@@ -178,6 +178,7 @@ const Dialogs = {
 	},
 	dlgParagraphicEq(event) {
 		/*
+		 * user dynamic entries
 		 */
 		let APP = imaudio,
 			Self = Dialogs,

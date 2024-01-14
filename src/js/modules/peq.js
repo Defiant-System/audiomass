@@ -33,18 +33,17 @@ let Peq = {
 		Self._filters.push(filter);
 		Self._context = context;
 
-		let len = width;
-		while (len--) {
-			// Convert to log frequency scale (octaves)
-			Self._data.frequencyHz[len] = Self._data.nyquist * Math.pow(2, Self._data.noctaves * (len/width - 1));
-		}
-		filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
-
-
 		Self.Render();
 	},
 	Update(id, data) {
+		let Self = this,
+			filter = Self._filters[0],
+			hz = { min: 10, max: 22000 },
+			v1 = Math.clamp(data.freq, hz.min, hz.max) / hz.max,
+			v2 = Math.pow(2.0, Self._data.noctaves * (v1 - 1));
 
+		filter.frequency.value = v2 * Self._data.nyquist;
+		Self.Render();
 	},
 	Add(entry) {
 
@@ -65,7 +64,14 @@ let Peq = {
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		
-		console.time("plot");
+		// console.time("plot");
+		let len = cw;
+		while (len--) {
+			// Convert to log frequency scale (octaves)
+			Self._data.frequencyHz[len] = Self._data.nyquist * Math.pow(2, Self._data.noctaves * (len/cw - 1));
+		}
+		filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
+
 		for (let x=0; x<cw; ++x) {
 			let response = Self._data.magResponse[x];
 			let dbResponse = 20 * Math.log(response) / Math.LN10;
@@ -74,7 +80,7 @@ let Peq = {
 			else ctx.lineTo(x, y);
 		}
 		ctx.stroke();
-		console.timeEnd("plot");
+		// console.timeEnd("plot");
 	},
 	Compute(entry) {
 

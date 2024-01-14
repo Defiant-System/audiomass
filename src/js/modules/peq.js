@@ -2,9 +2,7 @@
 let Peq = {
 	_filters: [],
 	init(dEl) {
-		let context = Dialogs._file.node.context,
-			filter = context.createBiquadFilter(),
-			Self = this,
+		let Self = this,
 			el = dEl.find(`.peq-cvs .media-analyzer`),
 			width = el.prop("offsetWidth"),
 			height = el.prop("offsetHeight");
@@ -17,23 +15,18 @@ let Peq = {
 		Self._lineCtx.strokeStyle = "#9fcef6";
 		Self._lineCtx.lineWidth = 2;
 
+		Self._context = Dialogs._file.node.context;
+
 		Self._data = {
 			noctaves: 11,
-			nyquist: 0.5 * context.sampleRate,
+			nyquist: 0.5 * Self._context.sampleRate,
 			frequencyHz: new Float32Array(width),
 			magResponse: new Float32Array(width),
 			phaseResponse: new Float32Array(width),
 		};
 
-		filter.Q.value = 5;
-		filter.frequency.value = 2000;
-		filter.gain.value = 2;
-		filter.connect(context.destination);
-
-		Self._filters.push(filter);
-		Self._context = context;
-
-		Self.Render();
+		Self.Add({ type: "highpass", frequency: 100, gain: -2, Q: 0 });
+		Self.Add({ type: "lowpass", frequency: 2000, gain: 10, Q: 5 });
 	},
 	Update(id, data) {
 		let Self = this,
@@ -46,7 +39,19 @@ let Peq = {
 		Self.Render();
 	},
 	Add(entry) {
+		let Self = this,
+			filter = Self._context.createBiquadFilter(),
+			destination = Self._filters.length ? Self._filters[0] : Self._context.destination;
 
+		filter.Q.value = entry.Q;
+		filter.frequency.value = entry.frequency;
+		filter.gain.value = entry.gain;
+		filter.type = entry.type;
+
+		filter.connect(destination);
+
+		Self._filters.unshift(filter);
+		Self.Render();
 	},
 	Remove(id) {
 

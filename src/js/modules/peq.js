@@ -17,6 +17,14 @@ let Peq = {
 		Self._lineCtx.strokeStyle = "#9fcef6";
 		Self._lineCtx.lineWidth = 2;
 
+		Self._data = {
+			noctaves: 11,
+			nyquist: 0.5 * context.sampleRate,
+			frequencyHz: new Float32Array(width),
+			magResponse: new Float32Array(width),
+			phaseResponse: new Float32Array(width),
+		};
+
 		filter.Q.value = 5;
 		filter.frequency.value = 2000;
 		filter.gain.value = 2;
@@ -24,6 +32,14 @@ let Peq = {
 
 		Self._filters.push(filter);
 		Self._context = context;
+
+		let len = width;
+		while (len--) {
+			// Convert to log frequency scale (octaves)
+			Self._data.frequencyHz[len] = Self._data.nyquist * Math.pow(2, Self._data.noctaves * (len/width - 1));
+		}
+		filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
+
 
 		Self.Render();
 	},
@@ -42,38 +58,23 @@ let Peq = {
 			ctx = Self._lineCtx,
 			cw = Self._width,
 			ch = Self._height,
-			dbScale = 37,
-			pixelsPerDb = (0.5 * ch) / dbScale,
-			dbToY = db => (0.5 * ch) - pixelsPerDb * db;
+			pixelsPerDb = (ch >> 1) / 35, // dbScale = 35
+			dbToY = db => (ch >> 1) - pixelsPerDb * db;
 
 		ctx.clearRect(0, 0, cw, ch);
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
-
-		let noctaves = 11;
-		let frequencyHz = new Float32Array(cw);
-		let magResponse = new Float32Array(cw);
-		let phaseResponse = new Float32Array(cw);
-		let nyquist = 0.5 * Self._context.sampleRate;
-		// First get response.
-		for (let i=0; i<cw; ++i) {
-			// Convert to log frequency scale (octaves).
-			frequencyHz[i] = nyquist * Math.pow(2.0, noctaves * (i / cw - 1.0));
-		}
-
-		filter.getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
-
-		for (let i=0; i<cw; ++i) {
-			let f = magResponse[i];
-			let response = magResponse[i];
-			let dbResponse = 20.0 * Math.log(response) / Math.LN10;
-			let x = i;
+		
+		console.time("plot");
+		for (let x=0; x<cw; ++x) {
+			let response = Self._data.magResponse[x];
+			let dbResponse = 20 * Math.log(response) / Math.LN10;
 			let y = dbToY(dbResponse);
-			
-			if (i == 0) ctx.moveTo(x, y);
+			if (x == 0) ctx.moveTo(x, y);
 			else ctx.lineTo(x, y);
 		}
 		ctx.stroke();
+		console.timeEnd("plot");
 	},
 	Compute(entry) {
 

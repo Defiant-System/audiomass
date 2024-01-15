@@ -764,10 +764,7 @@ const Dialogs = {
 		let APP = imaudio,
 			Self = Dialogs,
 			file = Self._file,
-			context,
-			filter,
-			value,
-			rack;
+			Data = Self.peq._data;
 		// console.log(event.type);
 		switch (event.type) {
 			case "set-gain":
@@ -781,9 +778,16 @@ const Dialogs = {
 				break;
 			// standard dialog events
 			case "dlg-preview":
-				
+				if (Data._started) {
+					Data.source.stop();
+					delete Data._started;
+				} else {
+					// start source
+					Data.source.start();
+					Data._started = true;
+				}
+				Self.preview = event.el.data("value") === "on";
 				break;
-
 			case "dlg-open":
 				let options = {
 						start: true,
@@ -794,10 +798,10 @@ const Dialogs = {
 						overlay: true,
 						showScaleX: false,
 					};
-				let el = event.dEl.find(`.peq-cvs .media-analyzer`);
-				Self._analyzer = new AudioMotionAnalyzer(el[0], options);
+				let el = event.dEl.find(`.peq-cvs .media-analyzer`),
+					analyzer = new AudioMotionAnalyzer(el[0], options);
 				// init Peq object
-				Self.peq.init(event.dEl);
+				Self.peq.init(event.dEl, analyzer);
 				break;
 
 			case "dlg-apply":
@@ -809,12 +813,34 @@ const Dialogs = {
 	},
 	// paragraphic equalizer
 	peq: {
-		init(dEl) {
+		init(dEl, analyzer) {
 			let Self = this,
 				el = dEl.find(`.peq-cvs .media-analyzer`),
 				width = el.prop("offsetWidth"),
 				height = el.prop("offsetHeight"),
-				context = Dialogs._file.node.context;
+				file = Dialogs._file,
+				context = analyzer.audioCtx,
+				buffer = AudioUtils.CopyBufferSegment({ file }),
+				source = context.createBufferSource();
+
+			// preprare source buffer
+			source.buffer = buffer;
+			source.loop = true;
+
+			// rack.connect(context.destination);
+
+			// prepare for faster calculations
+			Self._data = {
+				source,
+				context,
+				analyzer,
+				filters: [],
+				noctaves: 11,
+				nyquist: context.sampleRate * 0.5,
+				frequencyHz: new Float32Array(width),
+				magResponse: new Float32Array(width),
+				phaseResponse: new Float32Array(width),
+			};
 
 			// fast references
 			Self._width = width;
@@ -824,18 +850,7 @@ const Dialogs = {
 			Self._ctx = Self._cvs[0].getContext("2d");
 			Self._ctx.strokeStyle = "#9fcef6";
 			Self._ctx.lineWidth = 2;
-
-			// prepare for faster calculations
-			Self._data = {
-				context,
-				filters: [],
-				noctaves: 11,
-				nyquist: context.sampleRate * 0.5,
-				frequencyHz: new Float32Array(width),
-				magResponse: new Float32Array(width),
-				phaseResponse: new Float32Array(width),
-			};
-
+			// render filter line
 			Self.render();
 		},
 		add(node) {
@@ -850,7 +865,11 @@ const Dialogs = {
 			filter.gain.value = node.gain;
 			filter.type = node.type;
 
+			Self._data.source.connect(filter);
 			filter.connect(destination);
+
+			// connect analyzer animation
+			Self._data.analyzer.connectInput(filter);
 
 			Self._data.filters.unshift({ id, filter });
 			Self.render();

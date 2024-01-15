@@ -176,101 +176,6 @@ const Dialogs = {
 				break;
 		}
 	},
-	dlgParagraphicEq(event) {
-		/*
-		 * user dynamic entries
-		 */
-		let APP = imaudio,
-			Self = Dialogs,
-			file = Self._file,
-			context,
-			filter,
-			value,
-			rack;
-		switch (event.type) {
-			case "set-gain":
-			case "set-freq":
-			case "set-q":
-				break;
-			case "remove-row":
-				Peq.Remove(+event.row.data("id"));
-				break;
-			case "toggle-row":
-				Peq.Update(+event.row.data("id"), { on: event.value });
-				break;
-			case "set-type":
-				Peq.Update(+event.row.data("id"), { type: event.value });
-				break;
-			case "create-filter-rack":
-				let isPreview = event.context.constructor != OfflineAudioContext,
-					buffer = AudioUtils.CopyBufferSegment({ file }),
-					source = event.context.createBufferSource(),
-					filters = [];
-
-				// preprare source buffer
-				source.buffer = buffer;
-				source.loop = isPreview;
-
-				filter = event.context.createBiquadFilter();
-				filter.type = "peaking";
-				filter.gain.value = 0;
-				filter.Q.value = 1;
-				filter.frequency.value = 500;
-
-				filters.push(filter);
-				rack = filters[filters.length-1]; // output node
-
-				// connect source to first filter
-				source.connect(filters[0]);
-
-				// return stuff
-				return { filters, source, rack };
-			// standard dialog events
-			case "dlg-preview":
-				if (Self._source) {
-					Self._source.stop();
-					delete Self._filters;
-					delete Self._source;
-				} else {
-					context = Self._analyzer.audioCtx;
-					filter = Self.dlgParagraphicEq({ type: "create-filter-rack", context });
-					// connect rack to "speakers"
-					if (filter.rack) filter.rack.connect(context.destination);
-					// save reference to filters
-					Self._filters = filter.filters;
-					// save reference to buffer source
-					Self._source = filter.source;
-					// start source
-					Self._source.start();
-					// connect analyzer animation
-					Self._analyzer.connectInput(Self._source);
-				}
-				Self.preview = event.el.data("value") === "on";
-				break;
-
-			case "dlg-open":
-				let options = {
-						start: true,
-						mode: 0,
-						gradient: "steelblue",
-						channelLayout: "dual-combined",
-						bgAlpha: 0,
-						overlay: true,
-						showScaleX: false,
-					};
-				let el = event.dEl.find(`.peq-cvs .media-analyzer`);
-				Self._analyzer = new AudioMotionAnalyzer(el[0], options);
-				// init Peq object
-				Peq.init(event.dEl);
-				break;
-
-			case "dlg-apply":
-			case "dlg-reset":
-			case "dlg-close":
-				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
-				break;
-		}
-	},
 	dlgGraphicEq(event) {
 		/*
 		 * 32Hz     Min: -25 dB     Max: 25 dB
@@ -852,4 +757,141 @@ const Dialogs = {
 				break;
 		}
 	},
+	dlgParagraphicEq(event) {
+		/*
+		 * user dynamic entries
+		 */
+		let APP = imaudio,
+			Self = Dialogs,
+			file = Self._file,
+			context,
+			filter,
+			value,
+			rack;
+		// console.log(event.type);
+		switch (event.type) {
+			case "set-gain":
+			case "set-freq":
+			case "set-q":
+			case "remove-row":
+			case "toggle-row":
+			case "set-type":
+				break;
+			// standard dialog events
+			case "dlg-preview":
+				
+				break;
+
+			case "dlg-open":
+				let options = {
+						start: true,
+						mode: 0,
+						gradient: "steelblue",
+						channelLayout: "dual-combined",
+						bgAlpha: 0,
+						overlay: true,
+						showScaleX: false,
+					};
+				let el = event.dEl.find(`.peq-cvs .media-analyzer`);
+				Self._analyzer = new AudioMotionAnalyzer(el[0], options);
+				// init Peq object
+				Self.peq.init(event.dEl);
+				break;
+
+			case "dlg-apply":
+			case "dlg-reset":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
+				break;
+		}
+	},
+	// paragraphic equalizer
+	peq: {
+		init(dEl) {
+			let Self = this,
+				el = dEl.find(`.peq-cvs .media-analyzer`),
+				width = el.prop("offsetWidth"),
+				height = el.prop("offsetHeight"),
+				context = Dialogs._file.node.context;
+
+			// fast references
+			Self._width = width;
+			Self._height = height;
+			// prepare canvas
+			Self._cvs = el.nextAll("canvas.peq-line:first").attr({ width, height });
+			Self._ctx = Self._cvs[0].getContext("2d");
+			Self._ctx.strokeStyle = "#9fcef6";
+			Self._ctx.lineWidth = 2;
+
+			// prepare for faster calculations
+			Self._data = {
+				context,
+				filters: [],
+				noctaves: 11,
+				nyquist: context.sampleRate * 0.5,
+				frequencyHz: new Float32Array(width),
+				magResponse: new Float32Array(width),
+				phaseResponse: new Float32Array(width),
+			};
+
+			Self.render();
+		},
+		add(entry) {
+		let Self = this,
+				filter = Self._data.context.createBiquadFilter(),
+				destination = Self._data.filters.length ? Self._data.filters[0] : Self._data.context.destination;
+
+			filter.Q.value = entry.Q;
+			filter.frequency.value = entry.frequency;
+			filter.gain.value = entry.gain;
+			filter.type = entry.type;
+
+			filter.connect(destination);
+
+			Self._data.filters.unshift(filter);
+			Self.render();
+		},
+		remove(id) {
+			
+		},
+		update(id, data) {
+			console.log(id, data);
+		},
+		render() {
+			let Self = this,
+				cw = Self._width,
+				ch = Self._height,
+				ch2 = ch >> 1,
+				pixelsPerDb = (ch >> 1) / 35, // dbScale = 35
+				dbToY = db => (ch >> 1) - pixelsPerDb * db,
+				weightedAverage = (a, b) => [a, b].reduce((acc, curr) => acc + curr * curr, 0) / (a + b),
+				base = new Float32Array(cw),
+				avg = [];
+
+			let len = cw;
+			while (len--) {
+				// Convert to log frequency scale (octaves)
+				Self._data.frequencyHz[len] = Self._data.nyquist * Math.pow(2, Self._data.noctaves * (len/cw - 1));
+				// reset average array
+				avg[len] = 0;
+			}
+
+			Self._data.filters.map(filter => {
+				filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
+				for (let i=0; i<cw; ++i) {
+					let dbResponse = 20 * Math.log(Self._data.magResponse[i]) / Math.LN10;
+					avg[i] = weightedAverage(avg[i], dbResponse);
+				}
+			});
+
+			Self._ctx.clearRect(0, 0, cw, ch);
+			Self._ctx.beginPath();
+			for (let x=0; x<cw; ++x) {
+				let y = ch2 - (ch2 / 35) * avg[x]; // dbScale = 35
+				if (x == 0) Self._ctx.moveTo(x, y);
+				else Self._ctx.lineTo(x, y);
+			}
+			Self._ctx.stroke();
+		}
+	}
 };

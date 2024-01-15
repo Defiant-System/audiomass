@@ -56,38 +56,43 @@ let Peq = {
 	Remove(id) {
 
 	},
+	Compute(entry) {
+
+	},
 	Render() {
 		let Self = this,
-			filter = Self._filters[0],
 			ctx = Self._lineCtx,
 			cw = Self._width,
 			ch = Self._height,
 			pixelsPerDb = (ch >> 1) / 35, // dbScale = 35
-			dbToY = db => (ch >> 1) - pixelsPerDb * db;
+			dbToY = db => (ch >> 1) - pixelsPerDb * db,
+			weightedAverage = (a, b) => [a, b].reduce((acc, curr) => acc + curr * curr, 0) / (a + b),
+			base = new Float32Array(cw),
+			avg = [];
 
-		ctx.clearRect(0, 0, cw, ch);
-		ctx.beginPath();
-		ctx.moveTo(0, 0);
-		
-		// console.time("plot");
 		let len = cw;
 		while (len--) {
 			// Convert to log frequency scale (octaves)
 			Self._data.frequencyHz[len] = Self._data.nyquist * Math.pow(2, Self._data.noctaves * (len/cw - 1));
+			// reset average array
+			avg[len] = 0;
 		}
-		filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
 
+		Self._filters.map(filter => {
+			filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
+			for (let i=0; i<cw; ++i) {
+				let dbResponse = 20 * Math.log(Self._data.magResponse[i]) / Math.LN10;
+				avg[i] = weightedAverage(avg[i], dbResponse);
+			}
+		});
+
+		ctx.clearRect(0, 0, cw, ch);
+		ctx.beginPath();
 		for (let x=0; x<cw; ++x) {
-			let response = Self._data.magResponse[x];
-			let dbResponse = 20 * Math.log(response) / Math.LN10;
-			let y = dbToY(dbResponse);
+			let y = dbToY(avg[x]);
 			if (x == 0) ctx.moveTo(x, y);
 			else ctx.lineTo(x, y);
 		}
 		ctx.stroke();
-		// console.timeEnd("plot");
-	},
-	Compute(entry) {
-
 	}
 };

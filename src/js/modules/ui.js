@@ -851,7 +851,7 @@ const UI = {
 						value = Drag._lerp(Drag.val.min, Drag.val.max, perc).toFixed(Drag.val.decimals);
 						Drag.srcEl.html(value + Drag.val.suffix);
 						// forward value
-						Drag.func(Drag.id, { q: value });
+						Drag.func(Drag.id, { Q: value });
 						break;
 				}
 				// forward event
@@ -966,7 +966,7 @@ const UI = {
 				Drag.val.yiEl.html(data.gain + Drag.val.ySuffix);
 				// calculate frequency
 				data.frequency = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
-				Drag.val.xiEl.html(data.freq + Drag.val.xSuffix);
+				Drag.val.xiEl.html(data.frequency + Drag.val.xSuffix);
 				// forward value
 				Drag.func(Drag.id, data);
 				break;

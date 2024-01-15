@@ -842,7 +842,7 @@ const UI = {
 						data.val = Drag._round(data.val);
 						Drag.srcEl.html(data.val + Drag.val.suffix);
 						// forward value
-						Drag.func(Drag.id, { freq: data.val });
+						Drag.func(Drag.id, { frequency: data.val });
 						break;
 					case "q":
 						perc = (value - Drag.limit.min) / (Drag.limit.max - Drag.limit.min)
@@ -965,7 +965,7 @@ const UI = {
 				data.gain = Drag._round(Drag._lerp(Drag.val.yMax, Drag.val.yMin, perc));
 				Drag.val.yiEl.html(data.gain + Drag.val.ySuffix);
 				// calculate frequency
-				data.freq = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
+				data.frequency = Drag._round(Drag._exp(Drag.log.min + Drag.val.scale * (left - Drag.limit.minX)));
 				Drag.val.xiEl.html(data.freq + Drag.val.xSuffix);
 				// forward value
 				Drag.func(Drag.id, data);

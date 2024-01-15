@@ -836,26 +836,30 @@ const Dialogs = {
 
 			Self.render();
 		},
-		add(entry) {
-		let Self = this,
+		add(node) {
+			let Self = this,
+				id = node.id,
 				filter = Self._data.context.createBiquadFilter(),
-				destination = Self._data.filters.length ? Self._data.filters[0] : Self._data.context.destination;
+				destination = Self._data.context.destination;
+			if (Self._data.filters.length) destination = Self._data.filters[0].filter;
 
-			filter.Q.value = entry.Q;
-			filter.frequency.value = entry.frequency;
-			filter.gain.value = entry.gain;
-			filter.type = entry.type;
+			filter.Q.value = node.Q;
+			filter.frequency.value = node.frequency;
+			filter.gain.value = node.gain;
+			filter.type = node.type;
 
 			filter.connect(destination);
 
-			Self._data.filters.unshift(filter);
+			Self._data.filters.unshift({ id, filter });
 			Self.render();
 		},
 		remove(id) {
 			
 		},
 		update(id, data) {
-			console.log(id, data);
+			let node = this._data.filters.find(node => node.id === id);
+			for (let key in data) node.filter[key].value = data[key];
+			this.render();
 		},
 		render() {
 			let Self = this,
@@ -876,8 +880,8 @@ const Dialogs = {
 				avg[len] = 0;
 			}
 
-			Self._data.filters.map(filter => {
-				filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
+			Self._data.filters.map(node => {
+				node.filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
 				for (let i=0; i<cw; ++i) {
 					let dbResponse = 20 * Math.log(Self._data.magResponse[i]) / Math.LN10;
 					avg[i] = weightedAverage(avg[i], dbResponse);

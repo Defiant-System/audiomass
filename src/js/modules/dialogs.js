@@ -775,7 +775,9 @@ const Dialogs = {
 			case "set-q":
 			case "remove-row":
 			case "toggle-row":
+				break;
 			case "set-type":
+				Self.peq.update(+event.row.data("id"), { type: event.value });
 				break;
 			// standard dialog events
 			case "dlg-preview":
@@ -858,7 +860,8 @@ const Dialogs = {
 		},
 		update(id, data) {
 			let node = this._data.filters.find(node => node.id === id);
-			for (let key in data) node.filter[key].value = data[key];
+			if (data.type) node.filter.type = data.type;
+			else for (let key in data) node.filter[key].value = data[key];
 			this.render();
 		},
 		render() {

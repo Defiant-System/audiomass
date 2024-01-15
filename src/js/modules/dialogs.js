@@ -827,7 +827,10 @@ const Dialogs = {
 			source.buffer = buffer;
 			source.loop = true;
 
-			// rack.connect(context.destination);
+			// no filter initially
+			source.connect(context.destination);
+			// connect analyzer animation
+			analyzer.connectInput(source);
 
 			// prepare for faster calculations
 			Self._data = {
@@ -875,7 +878,7 @@ const Dialogs = {
 			Self.render();
 		},
 		remove(id) {
-			
+			console.log(id);
 		},
 		update(id, data) {
 			let node = this._data.filters.find(node => node.id === id);

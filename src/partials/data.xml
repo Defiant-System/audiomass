@@ -26,8 +26,8 @@
 		</Dialog>
 		<Dialog name="dlgParagraphicEq">
 			<Slot id="1">
-				<i id="1" type="highpass" gain="0" freq="5800" q="5.8" state="on"/>
-				<i id="2" type="lowpass" gain="0" freq="7060" q="5" state="off"/>
+				<i id="1" type="highpass" gain="-5" freq="477" q="9.8" state="on"/>
+				<i id="2" type="lowpass" gain="-21" freq="5800" q="22.6" state="off"/>
 			</Slot>
 			<Slot id="2">
 				<i id="1" type="lowpass" gain="15" freq="500" q="5" state="on"/>

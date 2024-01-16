@@ -770,8 +770,10 @@ const Dialogs = {
 			case "set-gain":
 			case "set-freq":
 			case "set-q":
-			case "remove-row":
 			case "toggle-row":
+				break;
+			case "remove-row":
+				Self.peq.remove(+event.row.data("id"));
 				break;
 			case "set-type":
 				Self.peq.update(+event.row.data("id"), { type: event.value });
@@ -879,12 +881,32 @@ const Dialogs = {
 			Self.render();
 		},
 		remove(id) {
-			console.log(id);
+			// find entry and remove
+			let index = this._data.filters.findIndex(node => node.id === id),
+				node = this._data.filters[index],
+				source = this._data.source;
+			// disonnect node before delete
+			node.filter.disconnect();
+			// remove from filters list
+			this._data.filters.splice(index, 1);
+			// reconnect filters
+			// this._data.filters.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
+
+			// ui update
+			this.render();
 		},
 		update(id, data) {
 			let node = this._data.filters.find(node => node.id === id);
 			if (data.type) node.filter.type = data.type;
-			else for (let key in data) node.filter[key].value = data[key];
+			else {
+				for (let key in data) {
+					let value = data[key];
+					switch (key) {
+						case "frequency": value = Math.clamp(value, 1, 17000); break;
+					}
+					node.filter[key].value = value;
+				}
+			}
 			this.render();
 		},
 		render() {

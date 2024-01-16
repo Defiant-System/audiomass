@@ -26,12 +26,12 @@ let Test = {
 		// }, 600);
 
 		let arg = "dlgParagraphicEq";
-		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 600);
+		setTimeout(() => APP.dispatch({ type: "open-dialog", arg, spawn }), 700);
 		return setTimeout(() => {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			UI.renderPreset({ dEl, id: 2, name: arg });
+			UI.renderPreset({ dEl, id: 1, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",

@@ -317,9 +317,10 @@ const UI = {
 							// input field value
 							iEl.val(val.value.toFixed(val.ui.decimals) + val.suffix);
 							// ui element update
-							uEl = el.find(`.knob`);
+							uEl = el.find(`.knob, .pan-knob`);
 
 							value = Math.round(Math.lerp(val.ui.min, val.ui.max, val.ui.perc));
+							if (uEl.hasClass("pan-knob")) value -= 50;
 							uEl.data({ value });
 							// initial field value
 							Dialogs.data[iEl.attr("name")] = val.value;
@@ -459,6 +460,7 @@ const UI = {
 			case "dlgDelay":
 			case "dlgReverb":
 			case "dlgCompressor":
+			case "dlgVocoder":
 				// translates to animation index
 				let knobIndex = i => (i % 2 === 1 ? i-1 : i) >> 1;
 				// iterate attributes

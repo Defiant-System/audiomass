@@ -56,6 +56,7 @@
 		<Menu name="Distortion" click="open-dialog" arg="dlgDistortion"/>
 		<Menu name="Reverb" click="open-dialog" arg="dlgReverb"/>
 		<Menu name="Speed Up / Down" click="open-dialog" arg="dlgSpeed"/>
+		<Menu name="Vocoder" click="open-dialog" arg="dlgVocoder"/>
 		<Menu type="divider"/>
 		<Menu name="Silence&#8230;">
 			<Menu name="Insert Silence" click="open-dialog" arg="dlgSilence"/>

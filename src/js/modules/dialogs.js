@@ -757,6 +757,34 @@ const Dialogs = {
 				break;
 		}
 	},
+	dlgVocoder(event) {
+		/*
+		 * gain     - Min: 0   Max: 4.0
+		 * sample   - Min: 0   Max: 2.00
+		 * synth    - Min: 0   Max: 2.00
+		 * noise    - Min: 0   Max: 2.00
+		 * detune   - Min: -1.20   Max: 1.20
+		 */
+		let APP = imaudio,
+			Self = Dialogs;
+		switch (event.type) {
+			// "fast events"
+			case "set-gain":
+			case "set-sample":
+			case "set-synth":
+			case "set-noise":
+			case "set-detune":
+				break;
+			// standard dialog events
+			case "dlg-apply":
+			case "dlg-open":
+			case "dlg-preview":
+			case "dlg-reset":
+			case "dlg-close":
+				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgVocoder" });
+				break;
+		}
+	},
 	dlgParagraphicEq(event) {
 		/*
 		 * user dynamic entries
@@ -859,39 +887,46 @@ const Dialogs = {
 			Self.render();
 		},
 		add(node) {
-			let Self = this,
+			let Data = this._data,
 				id = node.id,
-				filter = Self._data.context.createBiquadFilter(),
-				destination = Self._data.context.destination;
-			if (Self._data.filters.length) destination = Self._data.filters[0].filter;
+				filter = Data.context.createBiquadFilter(),
+				destination = Data.context.destination;
+			if (Data.filters.length) destination = Data.filters[0].filter;
 
 			filter.Q.value = node.Q;
 			filter.frequency.value = node.frequency;
 			filter.gain.value = node.gain;
 			filter.type = node.type;
 
-			Self._data.source.connect(filter);
+			Data.source.connect(filter);
 			filter.connect(destination);
 
 			// connect analyzer animation
-			Self._data.analyzer.disconnectInput();
-			Self._data.analyzer.connectInput(filter);
+			Data.analyzer.disconnectInput();
+			Data.analyzer.connectInput(filter);
 
-			Self._data.filters.unshift({ id, filter });
-			Self.render();
+			Data.filters.unshift({ id, filter });
+			// ui update
+			this.render();
 		},
 		remove(id) {
 			// find entry and remove
-			let index = this._data.filters.findIndex(node => node.id === id),
-				node = this._data.filters[index],
-				source = this._data.source;
+			let Data = this._data,
+				index = Data.filters.findIndex(node => node.id === id),
+				node = Data.filters[index],
+				source = Data.source;
 			// disonnect node before delete
 			node.filter.disconnect();
 			// remove from filters list
-			this._data.filters.splice(index, 1);
+			Data.filters.splice(index, 1);
 			// reconnect filters
-			// this._data.filters.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
+			// Data.filters.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
 
+			if (!Data.filters.length) {
+				// Data.analyzer.disconnectInput();
+				// connect analyzer animation
+				Data.analyzer.connectInput(source);
+			}
 			// ui update
 			this.render();
 		},

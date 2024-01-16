@@ -872,6 +872,7 @@ const Dialogs = {
 			filter.connect(destination);
 
 			// connect analyzer animation
+			Self._data.analyzer.disconnectInput();
 			Self._data.analyzer.connectInput(filter);
 
 			Self._data.filters.unshift({ id, filter });
@@ -890,9 +891,8 @@ const Dialogs = {
 			let Self = this,
 				cw = Self._width,
 				ch = Self._height,
-				ch2 = ch >> 1,
-				pixelsPerDb = (ch >> 1) / 35, // dbScale = 35
-				dbToY = db => (ch >> 1) - pixelsPerDb * db,
+				ch2 = ch * .5,
+				dbToY = db => ch2 - (ch2 / 35) * db, // dbScale = 35
 				weightedAverage = (a, b) => [a, b].reduce((acc, curr) => acc + curr * curr, 0) / (a + b),
 				base = new Float32Array(cw),
 				avg = [];

@@ -18,8 +18,8 @@ let Test = {
 		// 	spawn.data.toolbar.els.play.trigger("click");
 		// }, 600);
 
-		setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
 		return;
+		setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
 
 		// setTimeout(() => {
 		// 	APP.spawn.dispatch({ type: "mono-left-channel", spawn });

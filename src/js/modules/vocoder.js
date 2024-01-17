@@ -54,7 +54,7 @@ let Vocoder = (() => {
 		modify(name, value) {
 			switch (name) {
 				case "oscillatorNode":
-					filters.oscillatorNode.detune.value = value * 100;
+					filters.oscillatorNode.detune.value = value * 1000;
 					break;
 				case "modulatorGain":
 				case "carrierSampleGain":

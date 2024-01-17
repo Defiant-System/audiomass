@@ -162,6 +162,7 @@ const UI = {
 					case el.hasClass("show-knob-bubble"):
 						return Self.doBubbleKnob(event);
 					case el.hasClass("knob"):
+					case el.hasClass("pan-knob"):
 						return Self.doDialogKnob(event);
 					case el.hasClass("peq-dot-wrapper"):
 					case el.hasClass("peq-dot"):
@@ -671,6 +672,7 @@ const UI = {
 				let el = $(event.target),
 					iEl = el.parents(".field-box:first").find("input"),
 					dEl = el.parents(".dialog-box"),
+					isPanKnob = el.hasClass("pan-knob"),
 					content = el.parents("content"),
 					step = +iEl.data("step") || 1,
 					val = {
@@ -695,6 +697,7 @@ const UI = {
 					val,
 					dlg,
 					content,
+					isPanKnob,
 					value: +el.data("value"),
 					clientY: event.clientY,
 					_min: Math.min,
@@ -711,13 +714,23 @@ const UI = {
 				Self.doc.on("mousemove mouseup", Self.doDialogKnob);
 				break;
 			case "mousemove":
-				let value = Drag._min(Drag._max((Drag.clientY - event.clientY) + Drag.value, 0), 100);
-				Drag.el.data({ value });
-				// input field value
-				value = Drag._lerp(Drag.val.min, Drag.val.max, value / 100).toFixed(Drag.val.decimals);
-				Drag.iEl.val(value + Drag.val.suffix);
-				// forward event
-				Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
+				if (Drag.isPanKnob) {
+					let value = Drag._min(Drag._max((Drag.clientY - event.clientY) + Drag.value, -50), 50);
+					Drag.el.data({ value });
+					// input field value
+					value = Drag._lerp(Drag.val.min, Drag.val.max, (value+50)/100).toFixed(Drag.val.decimals);
+					Drag.iEl.val(value + Drag.val.suffix);
+					// forward event
+					Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
+				} else {
+					let value = Drag._min(Drag._max((Drag.clientY - event.clientY) + Drag.value, 0), 100);
+					Drag.el.data({ value });
+					// input field value
+					value = Drag._lerp(Drag.val.min, Drag.val.max, value / 100).toFixed(Drag.val.decimals);
+					Drag.iEl.val(value + Drag.val.suffix);
+					// forward event
+					Drag.dlg.func({ ...Drag.dlg, iEl: Drag.iEl, val: Drag.val, value: +value });
+				}
 				break;
 			case "mouseup":
 				// unhide mouse

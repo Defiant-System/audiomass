@@ -766,19 +766,28 @@ const Dialogs = {
 		 * detune   - Min: -1.20   Max: 1.20
 		 */
 		let APP = imaudio,
-			Self = Dialogs;
+			Self = Dialogs,
+			file = Self._file;
+		// console.log(event);
 		switch (event.type) {
 			// "fast events"
-			case "set-gain":
-			case "set-sample":
-			case "set-synth":
-			case "set-noise":
-			case "set-detune":
+			case "set-modulatorGain":
+			case "set-carrierSampleGain":
+			case "set-oscillatorGain":
+			case "set-noiseGain":
+			case "set-oscillatorNode":
+				Vocoder.modify(event.type.split("-")[1], event.value);
 				break;
 			// standard dialog events
-			case "dlg-apply":
 			case "dlg-open":
+				Vocoder.init(file.node.context);
+				break;
 			case "dlg-preview":
+				let buffer = AudioUtils.CopyBufferSegment({ file });
+				if (Vocoder._started) Vocoder.stop();
+				else Vocoder.start(buffer);
+				break;
+			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgVocoder" });

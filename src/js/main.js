@@ -4,6 +4,7 @@
 @import "./classes/ima-timeline-plugin.js"
 
 @import "./modules/audio-utils.js"
+@import "./modules/vocoder.js"
 @import "./modules/dialogs.js"
 @import "./modules/ui.js"
 @import "./modules/test.js"

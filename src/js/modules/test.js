@@ -21,7 +21,7 @@ let Test = {
 				end: 2.15,
 			});
 
-			// APP.spawn.dispatch({ type: "new-from-selection", spawn });
+			APP.spawn.dispatch({ type: "new-from-selection", spawn });
 		}, 600);
 
 		// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);

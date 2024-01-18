@@ -32,6 +32,7 @@
 		};
 		
 		// subscribe to events
+		Spawn.on("file-focus", this.dispatch);
 		Spawn.on("timeupdate", this.dispatch);
 		Spawn.on("clear-range", this.dispatch);
 		Spawn.on("update-range", this.dispatch);
@@ -49,6 +50,10 @@
 		// console.log(event);
 		switch (event.type) {
 			// subscribed events
+			case "file-focus":
+				if (!event.detail.file._activeRegion) Self.dispatch({ ...event, type: "clear-range" });
+				else Self.dispatch({ ...event, type: "update-range", detail: { region: event.detail.file._activeRegion } });
+				break;
 			case "timeupdate":
 				if (event.detail.ws) {
 					value = Self.format(event.detail.ws.decodedData.duration);

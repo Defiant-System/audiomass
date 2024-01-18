@@ -76,17 +76,12 @@ class File {
 		this._ws.on("scroll", (visibleStartTime, visibleEndTime) => this.dispatch({ type: "ws-scroll", visibleStartTime, visibleEndTime }));
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
 
-		// load file blob
-		let callback = blob => {
-				if (blob) this._file.blob = blob;
-				this._ws.loadBlob(this._file.blob);
-			};
-
 		if (buffer) {
 			// load file blob when done
-			AudioUtils.LoadDecoded({ file: this, callback }, buffer);
+			AudioUtils.LoadDecoded({ file: this, callback: blob => this._file.blob = blob }, buffer);
 		} else {
-			callback();
+			// load file blob
+			this._ws.loadBlob(this._file.blob);
 		}
 	}
 

@@ -22,6 +22,7 @@
 		Spawn.data.sidebar.els.vWrapper.find(".txt-volume h2").html(73);
 
 		// subscribe to events
+		Spawn.on("file-focus", this.dispatch);
 		Spawn.on("clear-range", this.dispatch);
 		Spawn.on("update-range", this.dispatch);
 		Spawn.on("time-update-range", this.dispatch);
@@ -38,6 +39,10 @@
 		// console.log(event);
 		switch (event.type) {
 			// subscribed events
+			case "file-focus":
+				if (!event.detail.file._activeRegion) Self.dispatch({ ...event, type: "clear-range" });
+				else Self.dispatch({ ...event, type: "update-range", detail: { region: event.detail.file._activeRegion } });
+				break;
 			case "clear-range":
 				// hide text fields
 				Spawn.data.sidebar.els.txtSelection.removeClass("show-text");

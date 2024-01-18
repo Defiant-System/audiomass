@@ -130,6 +130,8 @@ class FileTabs {
 				}));
 			// enable toolbar tools
 			this._parent.toolbar.dispatch({ type: "enable-tools", spawn: this._spawn });
+			// emit event
+			this._spawn.emit("file-focus", { file: this._active.file });
 		} else {
 			// reset view / show blank view
 			this.dispatch({ type: "show-blank-view" });

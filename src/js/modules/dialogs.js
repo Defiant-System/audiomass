@@ -778,6 +778,18 @@ const Dialogs = {
 			case "set-oscillatorNode":
 				Vocoder.modify(event.type.split("-")[1], event.value);
 				break;
+			case "create-filter-rack":
+				// connect to "offlineContext"
+				Vocoder.init(event.context);
+				// prepare custom start / pipe file data
+				let source = {
+					start() {
+						let buffer = AudioUtils.CopyBufferSegment({ file });
+						Vocoder.start(buffer);
+					}
+				};
+				// return stuff
+				return { result };
 			// standard dialog events
 			case "dlg-open":
 				Vocoder.init(file.node.context);

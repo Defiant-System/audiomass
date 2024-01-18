@@ -14,12 +14,16 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
 
 		// setTimeout(() => {
-		// 	spawn.data.tabs.active.file._ws.skip(6);
-		// 	spawn.data.toolbar.els.play.trigger("click");
+		// 	let file = spawn.data.tabs.active.file;
+		// 	file._regions.addRegion({
+		// 		id: "region-selected",
+		// 		start: 1,
+		// 		end: 2.15,
+		// 	});
 		// }, 600);
 
-		return;
 		setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
+		return;
 
 		// setTimeout(() => {
 		// 	APP.spawn.dispatch({ type: "mono-left-channel", spawn });

@@ -1,6 +1,6 @@
 
 class File {
-	constructor(parent, fsFile, el) {
+	constructor(parent, fsFile, el, buffer) {
 		// save reference to parent object
 		this._parent = parent;
 		this._el = el;
@@ -17,10 +17,6 @@ class File {
 		let timeline = ImaTimeline.create();
 		let zoom = ZoomPlugin.create({ scale: 0.2 });
 		let regions = RegionsPlugin.create();
-
-		// disable default mouse wheel handler
-		// zoom._onWheel = zoom.onWheel;
-		// delete zoom.onWheel;
 
 		// instantiate wavesurfer object
 		this._ws = WaveSurfer.create({
@@ -81,7 +77,17 @@ class File {
 		this._ws.on("zoom", minPxPerSec => this.dispatch({ type: "ws-zoom", minPxPerSec }));
 
 		// load file blob
-		this._ws.loadBlob(this._file.blob);
+		let callback = blob => {
+				if (blob) this._file.blob = blob;
+				this._ws.loadBlob(this._file.blob);
+			};
+
+		if (buffer) {
+			// load file blob when done
+			AudioUtils.LoadDecoded({ file: this, callback }, buffer);
+		} else {
+			callback();
+		}
 	}
 
 	dispatch(event) {

@@ -35,7 +35,7 @@ class FileTabs {
 		return this._active.file.toBlob(this._active.fileEl, opt);
 	}
 
-	add(fsFile) {
+	add(fsFile, buffer) {
 		if (fsFile.new) {
 			let tId = "f"+ Date.now(),
 				fileEl = this._els.content,
@@ -49,7 +49,7 @@ class FileTabs {
 			this.focus(tId);
 		} else {
 			let fileEl = this._els.filesWrapper.append(this._template.clone(true)),
-				file = new File(this, fsFile, fileEl),
+				file = new File(this, fsFile, fileEl, buffer),
 				tabEl = this._spawn.tabs.add(fsFile.base, file.id),
 				history = new window.History;
 
@@ -139,21 +139,27 @@ class FileTabs {
 	}
 
 	dispatch(event) {
+		let Self = this;
 		// console.log(event);
 		switch (event.type) {
 			case "spawn.resize":
 				// exit if "blank-view" for instance
-				if (!this._active.file) return;
+				if (!Self._active.file) return;
 				// proxy event spawn -> tabs -> file
-				Object.keys(this._stack).map(key => this._active.file.dispatch({ ...event, type: "resize-view" }));
+				Object.keys(Self._stack).map(key => Self._active.file.dispatch({ ...event, type: "resize-view" }));
 				break;
 			case "show-blank-view":
 				// show blank view
-				this._els.content.addClass("show-blank-view");
+				Self._els.content.addClass("show-blank-view");
 				break;
 			case "hide-blank-view":
 				// hide blank view
-				this._els.content.removeClass("show-blank-view");
+				Self._els.content.removeClass("show-blank-view");
+				break;
+			case "new-from-selection":
+				let file = new karaqu.File({ kind: "wav" }),
+					buffer = AudioUtils.CopyBufferSegment({ file: event.file });
+				Self.add(file, buffer);
 				break;
 		}
 	}

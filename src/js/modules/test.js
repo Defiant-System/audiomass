@@ -13,16 +13,18 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
 
-		// setTimeout(() => {
-		// 	let file = spawn.data.tabs.active.file;
-		// 	file._regions.addRegion({
-		// 		id: "region-selected",
-		// 		start: 1,
-		// 		end: 2.15,
-		// 	});
-		// }, 600);
+		setTimeout(() => {
+			let file = spawn.data.tabs.active.file;
+			file._regions.addRegion({
+				id: "region-selected",
+				start: 1,
+				end: 2.15,
+			});
 
-		setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
+			// APP.spawn.dispatch({ type: "new-from-selection", spawn });
+		}, 600);
+
+		// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
 		return;
 
 		// setTimeout(() => {

@@ -100,8 +100,9 @@
 		<Menu name="Copy" hotkey="alt+c"/>
 		<Menu name="Cut" hotkey="alt+x"/>
 		<Menu name="Paste" hotkey="alt+v"/>
+		<Menu name="Crop" click="crop-region"/>
 		<Menu name="Deselect" click="deselect-region"/>
 		<Menu type="divider"/>
-		<Menu name="New from Selection"/>
+		<Menu name="New from Selection" click="new-from-selection"/>
 	</Menu>
 </MenuBar>

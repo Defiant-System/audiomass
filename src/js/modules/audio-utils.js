@@ -7,13 +7,14 @@ let AudioUtils = {
 	},
 
 	LoadDecoded(data, buffer, marker) {
-		let args = {
-				numberOfChannels: buffer.numberOfChannels,
+		let numberOfChannels = buffer.numberOfChannels,
+			args = {
+				numberOfChannels,
 				left: buffer.getChannelData(0),
-				right: buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : null,
+				right: numberOfChannels > 1 ? buffer.getChannelData(1) : null,
 				sampleRate: buffer.sampleRate,
 				duration: buffer.duration,
-				type: data.file._file.blob.type,
+				type: data.file.kind || data.file._file.blob.type,
 			};
 		// engage worker
 		imaudio.workers.wav
@@ -35,9 +36,9 @@ let AudioUtils = {
 								} else {
 									data.file._ws.skip(marker.start);
 								}
-							// } else {
-							// 	data.file.dispatch({ type: "ws-region-collapse-start" });
 							}
+							// run callback, if any
+							if (data.callback) data.callback(event.blob);
 						}
 						break;
 				}

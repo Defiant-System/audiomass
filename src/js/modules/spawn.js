@@ -105,7 +105,6 @@
 				});
 				break;
 			case "save-file":
-				break;
 			case "save-file-as":
 				break;
 			case "new-spawn":
@@ -215,6 +214,10 @@
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });
+				break;
+			case "new-from-selection":
+				file = Spawn.data.tabs.active.file;
+				Spawn.data.tabs.dispatch({ ...event, file });
 				break;
 			case "toggle-dock":
 				el = Spawn.data.els.content;

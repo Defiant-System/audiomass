@@ -234,17 +234,14 @@ class File {
 	}
 
 	toBlob(opt={}) {
-		let data = "",
-			// file kind, if not specified
-			kind = opt.kind || this.kind,
-			type;
-
-		switch (this.kind) {
-			case "mp3": break;
-			case "wav": break;
-			case "ogg": break;
-		}
-		// console.log( data );
-		return new Blob([data], { type });
+		// file kind, if not specified
+		let kind = opt.kind || this.kind,
+			buffer = AudioUtils.CopyBufferSegment({ file: this });
+		// return a promise
+		return new Promise(resolve => AudioUtils.LoadDecoded({
+			file: this,
+			blobOnly: kind,
+			callback: blob => resolve(blob),
+		}, buffer));
 	}
 }

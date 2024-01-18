@@ -15,9 +15,10 @@ let AudioUtils = {
 				sampleRate: buffer.sampleRate,
 				duration: buffer.duration,
 				type: data.file.kind || data.file._file.blob.type,
-			};
+			},
+			kind = data.blobOnly || "wav";
 		// engage worker
-		imaudio.workers.wav
+		imaudio.workers[kind]
 			.send(args)
 			.on("message", async event => {
 				switch (event.type) {
@@ -26,15 +27,19 @@ let AudioUtils = {
 						if (data.sidebar) data.sidebar.dispatch({ ...event, spawn: data.spawn });
 						// replace blob in view
 						if (event.value >= 100) {
-							await data.file._ws.loadBlob(event.blob);
-							// what to mark when done, if any
-							if (marker) {
-								// clear regions
-								data.file._regions.clearRegions();
-								if (marker.end) {
-									data.file._regions.addRegion({ ...marker, id: "region-selected" });
-								} else {
-									data.file._ws.skip(marker.start);
+							// do not put result in UI - used for save
+							if (!data.blobOnly) {
+								// update UI
+								await data.file._ws.loadBlob(event.blob);
+								// what to mark when done, if any
+								if (marker) {
+									// clear regions
+									data.file._regions.clearRegions();
+									if (marker.end) {
+										data.file._regions.addRegion({ ...marker, id: "region-selected" });
+									} else {
+										data.file._ws.skip(marker.start);
+									}
 								}
 							}
 							// run callback, if any

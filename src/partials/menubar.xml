@@ -16,8 +16,8 @@
 		<Menu name="New File" click="tab.new" hotkey="alt+t"/>
 		<Menu name="Open&#8230;" click="open-file" hotkey="alt+o"/>
 		<Menu type="divider"/>
-		<Menu name="Save" click="save-file"/>
-		<Menu name="Save As&#8230;" click="save-file-as"/>
+		<Menu name="Save" click="save-file" hotkey="alt+s"/>
+		<Menu name="Save As&#8230;" click="save-file-as" hotkey="alt+shift+s"/>
 		<Menu type="divider"/>
 		<Menu name="Close File" click="close-file" hotkey="alt+w"/>
 	</Menu>

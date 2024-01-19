@@ -105,15 +105,15 @@
 				});
 				break;
 			case "save-file":
-				if (Tabs.active.file.isNew) {
+				if (Tabs.file.isNew) {
 					return Self.dispatch({ ...event, type: "save-file-as" });
 				}
-				window.dialog.save(Tabs.active.file._file, Tabs.active.file.toBlob());
+				window.dialog.save(Tabs.file._file, Tabs.file.toBlob());
 			case "save-file-as":
 				// pass on available file types
 				Spawn.dialog.saveAs(Tabs.file, {
-					mp3: () => Tabs._active.file.toBlob({ kind: "mp3" }),
-					wav: () => Tabs._active.file.toBlob({ kind: "wav" }),
+					mp3: () => Tabs.active.file.toBlob({ kind: "mp3" }),
+					wav: () => Tabs.active.file.toBlob({ kind: "wav" }),
 				});
 				break;
 			case "new-spawn":

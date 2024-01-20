@@ -13,19 +13,19 @@ let Test = {
 		// setTimeout(() => APP.dispatch({ type: "close-tab", spawn }), 500);
 		// setTimeout(() => APP.dispatch({ type: "invert-region", spawn }), 600);
 
-		setTimeout(async () => {
-			let Tabs = spawn.data.tabs,
-				file = Tabs.active.file;
-			file._regions.addRegion({
-				id: "region-selected",
-				start: 1,
-				end: 2.15,
-			});
+		// setTimeout(async () => {
+		// 	let Tabs = spawn.data.tabs,
+		// 		file = Tabs.active.file;
+		// 	file._regions.addRegion({
+		// 		id: "region-selected",
+		// 		start: 1,
+		// 		end: 2.15,
+		// 	});
 
-			// APP.spawn.dispatch({ type: "save-file-as", spawn });
-			let blob = await Tabs.active.file.toBlob({ kind: "wav" });
-			console.log(blob);
-		}, 900);
+		// 	// APP.spawn.dispatch({ type: "save-file-as", spawn });
+		// 	let blob = await Tabs.active.file.toBlob({ kind: "mp3" });
+		// 	console.log(blob);
+		// }, 900);
 
 		// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
 		return;
@@ -42,7 +42,7 @@ let Test = {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 2, name: arg });
+			UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",

@@ -1,5 +1,33 @@
 
 &[data-theme="dark"] {
+	&.win-body-focused_ {
+		.blank-view {
+			color: #ddd;
+			text-shadow: 0 1px 0 rgba(#000,.125);
+
+			h2 {
+				color: #ddd;
+			}
+
+			> div {
+				> h3 {
+					color: #ddd;
+				}
+			}
+
+			.block-recent,
+			.block-samples {
+				color: #ccc;
+
+				.sample {
+					i {
+						filter: hue-rotate(175deg) brightness(2) invert(1) drop-shadow(0 1px 0 rgba(#000,.5));
+					}
+				}
+			}
+		}
+	}
+
 	.blank-view {
 		background: transparent;
 		color: #bbb;

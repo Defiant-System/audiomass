@@ -822,10 +822,10 @@ const Dialogs = {
 			case "toggle-row":
 				break;
 			case "remove-row":
-				Self.peq.remove(+event.row.data("id"));
+				Peq.remove(+event.row.data("id"));
 				break;
 			case "set-type":
-				Self.peq.update(+event.row.data("id"), { type: event.value });
+				Peq.update(+event.row.data("id"), { type: event.value });
 				break;
 			// standard dialog events
 			case "dlg-preview":
@@ -852,7 +852,7 @@ const Dialogs = {
 				let el = event.dEl.find(`.peq-cvs .media-analyzer`),
 					analyzer = new AudioMotionAnalyzer(el[0], options);
 				// init Peq object
-				Self.peq.init(event.dEl, analyzer);
+				Peq.init(event.dEl, analyzer);
 				break;
 
 			case "dlg-apply":

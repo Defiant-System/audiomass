@@ -56,6 +56,13 @@
 				Self.frequency.dispatch(event);
 				Self.spectrum.dispatch(event);
 				break;
+			case "open.file":
+				(event.files || [event]).map(async fHandle => {
+					let file = await fHandle.open({ responseType: "blob" });
+					// auto add first base "tab"
+					Self.dispatch({ ...event, type: "prepare-file", file });
+				});
+				break;
 
 			// tab related events
 			case "tab.new":

@@ -505,7 +505,7 @@ const UI = {
 						left = (Math.log(frequency) - Self.logScale.min) / data.scale + data.minX;
 					str.push(`<div class="peq-dot ${on ? "" : "off"}" data-hover="peq-dot" data-id="${id}" style="top: ${top}px; left: ${left}px;"></div>`);
 					// add entry to Peq line-canvas
-					Dialogs.peq.add({ id, type, on, frequency, gain, Q });
+					Peq.add({ id, type, on, frequency, gain, Q });
 				});
 				event.dEl.find(`.peq-dot-wrapper`).html(str.join(""));
 				// render table list
@@ -785,7 +785,7 @@ const UI = {
 					top = fieldOffset.top - 60,
 					left = fieldOffset.left + (fieldOffset.width >> 1) - 25,
 					id = +row.data("id"),
-					func = Dialogs.peq.update.bind(Dialogs.peq),
+					func = Peq.update.bind(Peq),
 					_lerp = Math.lerp,
 					_exp = Math.exp,
 					_round = Math.round,
@@ -922,7 +922,7 @@ const UI = {
 						prepend: dEl.find(`.peq-list .list-body`),
 					});
 					// return console.log(event);
-					Dialogs.peq.add({ id, on: true, type, frequency, gain, Q });
+					Peq.add({ id, on: true, type, frequency, gain, Q });
 				}
 				// make dot active
 				el.addClass("active");
@@ -953,7 +953,7 @@ const UI = {
 						maxY: +el.parent().prop("offsetHeight") - 2,
 						maxX: +el.parent().prop("offsetWidth") - 2,
 					},
-					func = Dialogs.peq.update.bind(Dialogs.peq),
+					func = Peq.update.bind(Peq),
 					_exp = Math.exp,
 					_min = Math.min,
 					_max = Math.max,

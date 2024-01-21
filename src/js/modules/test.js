@@ -28,7 +28,7 @@ let Test = {
 		// }, 900);
 
 		// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
-		return;
+		// return;
 
 		// setTimeout(() => {
 		// 	APP.spawn.dispatch({ type: "mono-left-channel", spawn });
@@ -42,7 +42,7 @@ let Test = {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 2, name: arg });
+			UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",

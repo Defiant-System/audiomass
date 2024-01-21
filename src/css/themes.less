@@ -14,7 +14,12 @@
 
 [data-ui="karaqu-dark"] {
 	.win-body_ content {
-		filter: grayscale(1);
+		filter: saturate(0.15);
+
+		.toggler {
+			&:before { filter: hue-rotate(25deg) saturate(4) brightness(1.25); }
+			&:after { filter: hue-rotate(345deg) brightness(.75) saturate(5); }
+		}
 	}
 }
 
@@ -27,6 +32,11 @@
 [data-ui="royale-amber"] {
 	.win-body_ content {
 		filter: saturate(.75) hue-rotate(165deg) brightness(0.85);
+
+		.toggler {
+			&:before { filter: hue-rotate(215deg) brightness(1.5); }
+			&:after { filter: hue-rotate(165deg) brightness(1.35) saturate(1.35); }
+		}
 
 		.area {
 			.workarea {
@@ -59,18 +69,33 @@
 [data-ui="royale-emerald"] {
 	.win-body_ content {
 		filter: saturate(.85) hue-rotate(255deg) brightness(0.85);
+
+		.toggler {
+			&:before { filter: hue-rotate(105deg) brightness(1.5); }
+			&:after { filter: hue-rotate(145deg) brightness(1.35) saturate(1.35); }
+		}
 	}
 }
 
 [data-ui="royale-purple"] {
 	.win-body_ content {
 		filter: saturate(1.35) hue-rotate(65deg);
+
+		.toggler {
+			&:before { filter: hue-rotate(265deg) brightness(1.5); }
+			&:after { filter: hue-rotate(245deg) brightness(1.35) saturate(1.35); }
+		}
 	}
 }
 
 [data-ui="royale-pink"] {
 	.win-body_ content {
 		filter: saturate(1.75) brightness(1.35) hue-rotate(70deg);
+
+		.toggler {
+			&:before { filter: hue-rotate(275deg) brightness(1.5); }
+			&:after { filter: hue-rotate(255deg) brightness(1.35) saturate(1.35); }
+		}
 
 		.blank-view {
 			.block-buttons {

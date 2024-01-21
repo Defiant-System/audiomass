@@ -9,21 +9,10 @@ let Peq = (() => {
 				width = el.prop("offsetWidth"),
 				height = el.prop("offsetHeight"),
 				file = Dialogs._file,
-				context = analyzer.audioCtx,
-				buffer = AudioUtils.CopyBufferSegment({ file }),
-				source = context.createBufferSource();
-
-			// preprare source buffer
-			source.buffer = buffer;
-			source.loop = true;
-			// no filter initially
-			source.connect(context.destination);
-			// connect analyzer animation
-			analyzer.connectInput(source);
+				context = analyzer.audioCtx;
 
 			// prepare for faster calculations
 			Self._data = {
-				source,
 				context,
 				analyzer,
 				filters: [],
@@ -45,8 +34,26 @@ let Peq = (() => {
 			// render filter line
 			Self.render();
 		},
-		destroy() {
-			
+		connect(file, loop) {
+			let Self = this,
+				buffer = AudioUtils.CopyBufferSegment({ file }),
+				source = Self._data.context.createBufferSource();
+
+			// preprare source buffer
+			source.buffer = buffer;
+			source.loop = loop;
+			// no filter initially
+			source.connect(Self._data.context.destination);
+			// connect analyzer animation
+			Self._data.analyzer.connectInput(source);
+
+			// save reference to source
+			Self._data.source = source;
+
+			return { source };
+		},
+		disconnect() {
+			console.log( "disconnect" );
 		},
 		add(node) {
 			let Data = this._data,

@@ -783,13 +783,18 @@ const Dialogs = {
 				Vocoder.init(event.context);
 				// prepare custom start / pipe file data
 				let source = {
-					start() {
-						let buffer = AudioUtils.CopyBufferSegment({ file });
-						Vocoder.start(buffer);
-					}
-				};
+						start() {
+							let buffer = AudioUtils.CopyBufferSegment({ file });
+							Vocoder.start(buffer);
+						}
+					},
+					rack = {
+						connect(destination) {
+
+						}
+					};
 				// return stuff
-				return { result };
+				return { source, rack };
 			// standard dialog events
 			case "dlg-open":
 				Vocoder.init(file.node.context);
@@ -826,14 +831,21 @@ const Dialogs = {
 			case "set-type":
 				Peq.update(+event.row.data("id"), { type: event.value });
 				break;
+
+			case "create-filter-rack":
+				let isPreview = event.context.constructor != OfflineAudioContext;
+				// return stuff
+				return Peq.connect(file, isPreview);
+
 			// standard dialog events
 			case "dlg-preview":
 				if (Peq._data._started) {
-					Peq.destroy();
+					Peq.disconnect();
 					Peq._data.source.stop();
 					delete Peq._data._started;
 				} else {
 					// start source
+					Peq.connect(file, true);
 					Peq._data.source.start();
 					Peq._data._started = true;
 				}

@@ -75,6 +75,9 @@
 				<i data-arg="peaking" class="icon-curve-peak" title="Peaking">
 					<xsl:if test="@type = 'peaking'"><xsl:attribute name="class">icon-curve-peak active</xsl:attribute></xsl:if>
 				</i>
+				<i data-arg="notch" class="icon-curve-notch" title="Notch">
+					<xsl:if test="@type = 'notch'"><xsl:attribute name="class">icon-curve-notch active</xsl:attribute></xsl:if>
+				</i>
 				<i data-arg="highpass" class="icon-curve-high" title="Highpass">
 					<xsl:if test="@type = 'highpass'"><xsl:attribute name="class">icon-curve-high active</xsl:attribute></xsl:if>
 				</i>

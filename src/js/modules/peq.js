@@ -15,13 +15,15 @@ let Peq = (() => {
 			Self._data = {
 				context,
 				analyzer,
-				filters: [],
+				nodes: [],
 				noctaves: 11,
 				nyquist: context.sampleRate * 0.5,
 				frequencyHz: new Float32Array(width),
 				magResponse: new Float32Array(width),
 				phaseResponse: new Float32Array(width),
 			};
+
+			// Self.connect();
 
 			// fast references
 			Self._width = width;
@@ -34,18 +36,26 @@ let Peq = (() => {
 			// render filter line
 			Self.render();
 		},
-		connect(file, loop) {
+		connect(loop) {
 			let Self = this,
+				file = Dialogs._file,
 				buffer = AudioUtils.CopyBufferSegment({ file }),
-				source = Self._data.context.createBufferSource();
+				source = Self._data.context.createBufferSource(),
+				destination = Self._data.context.destination,
+				nodes = Self._data.nodes,
+				rack = nodes.reduce((prev, curr) => { prev.connect(curr.filter); return curr.filter; }, source);
 
 			// preprare source buffer
 			source.buffer = buffer;
 			source.loop = loop;
-			// no filter initially
-			source.connect(Self._data.context.destination);
+			
+			// connect rack to animation/destination
+			rack.connect(destination);
+
 			// connect analyzer animation
-			Self._data.analyzer.connectInput(source);
+			Self._data.analyzer.disconnectInput();
+			Self._data.analyzer.connectInput(rack);
+
 
 			// save reference to source
 			Self._data.source = source;
@@ -53,45 +63,47 @@ let Peq = (() => {
 			return { source };
 		},
 		disconnect() {
-			console.log( "disconnect" );
+			let Self = this;
+			Self._data.source.stop();
+			Self._data.analyzer.disconnectInput();
 		},
 		add(node) {
 			let Data = this._data,
 				id = node.id,
-				filter = Data.context.createBiquadFilter(),
-				destination = Data.context.destination;
-			if (Data.filters.length) destination = Data.filters[0].filter;
+				filter = Data.context.createBiquadFilter();
+			// 	destination = Data.context.destination;
+			// if (Data.nodes.length) destination = Data.nodes[0].filter;
 
 			filter.Q.value = node.Q;
 			filter.frequency.value = node.frequency;
 			filter.gain.value = node.gain;
 			filter.type = node.type;
 
-			Data.source.connect(filter);
-			filter.connect(destination);
+			// Data.source.connect(filter);
+			// filter.connect(destination);
 
 			// connect analyzer animation
-			Data.analyzer.disconnectInput();
-			Data.analyzer.connectInput(filter);
+			// Data.analyzer.disconnectInput();
+			// Data.analyzer.connectInput(filter);
 
-			Data.filters.unshift({ id, filter });
+			Data.nodes.unshift({ id, filter });
 			// ui update
 			this.render();
 		},
 		remove(id) {
 			// find entry and remove
 			let Data = this._data,
-				index = Data.filters.findIndex(node => node.id === id),
-				node = Data.filters[index],
+				index = Data.nodes.findIndex(node => node.id === id),
+				node = Data.nodes[index],
 				source = Data.source;
 			// disonnect node before delete
 			node.filter.disconnect();
-			// remove from filters list
-			Data.filters.splice(index, 1);
-			// reconnect filters
-			// Data.filters.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
+			// remove from nodes list
+			Data.nodes.splice(index, 1);
+			// reconnect nodes
+			// Data.nodes.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
 
-			if (!Data.filters.length) {
+			if (!Data.nodes.length) {
 				// Data.analyzer.disconnectInput();
 				// connect analyzer animation
 				Data.analyzer.connectInput(source);
@@ -100,7 +112,7 @@ let Peq = (() => {
 			this.render();
 		},
 		update(id, data) {
-			let node = this._data.filters.find(node => node.id === id);
+			let node = this._data.nodes.find(node => node.id === id);
 			if (data.type) node.filter.type = data.type;
 			else {
 				for (let key in data) {
@@ -131,7 +143,7 @@ let Peq = (() => {
 				avg[len] = 0;
 			}
 
-			Self._data.filters.map(node => {
+			Self._data.nodes.map(node => {
 				node.filter.getFrequencyResponse(Self._data.frequencyHz, Self._data.magResponse, Self._data.phaseResponse);
 				for (let i=0; i<cw; ++i) {
 					let dbResponse = 20 * Math.log(Self._data.magResponse[i]) / Math.LN10;

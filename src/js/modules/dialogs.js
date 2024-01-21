@@ -835,17 +835,17 @@ const Dialogs = {
 			case "create-filter-rack":
 				let isPreview = event.context.constructor != OfflineAudioContext;
 				// return stuff
-				return Peq.connect(file, isPreview);
+				return Peq.connect(isPreview);
 
 			// standard dialog events
 			case "dlg-preview":
 				if (Peq._data._started) {
 					Peq.disconnect();
-					Peq._data.source.stop();
+					// started flag
 					delete Peq._data._started;
 				} else {
+					Peq.connect(true);
 					// start source
-					Peq.connect(file, true);
 					Peq._data.source.start();
 					Peq._data._started = true;
 				}

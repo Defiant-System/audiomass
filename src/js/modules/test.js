@@ -42,7 +42,7 @@ let Test = {
 			let file = spawn.data.tabs.active.file;
 			let dEl = spawn.find(`.dialog-box[data-dlg="${arg}"]`);
 
-			// UI.renderPreset({ dEl, id: 2, name: arg });
+			UI.renderPreset({ dEl, id: 2, name: arg });
 
 			// file._regions.addRegion({
 			// 	id: "region-selected",

@@ -81,6 +81,10 @@
 	.win-body_ content {
 		filter: saturate(1.35) hue-rotate(55deg);
 
+		.box[data-area="spectrum"] .body canvas {
+			filter: hue-rotate(290deg) opacity(0.75);
+		}
+
 		.toggler {
 			&:before { filter: hue-rotate(265deg) brightness(1.5); }
 			&:after { filter: hue-rotate(245deg) brightness(1.35) saturate(1.35); }
@@ -91,6 +95,10 @@
 [data-ui="royale-pink"] {
 	.win-body_ content {
 		filter: saturate(1.75) brightness(1.35) hue-rotate(70deg);
+
+		.box[data-area="spectrum"] .body canvas {
+			filter: hue-rotate(290deg) opacity(0.75);
+		}
 
 		.toggler {
 			&:before { filter: hue-rotate(275deg) brightness(1.5); }

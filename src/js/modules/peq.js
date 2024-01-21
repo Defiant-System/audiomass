@@ -23,8 +23,6 @@ let Peq = (() => {
 				phaseResponse: new Float32Array(width),
 			};
 
-			// Self.connect();
-
 			// fast references
 			Self._width = width;
 			Self._height = height;
@@ -36,26 +34,55 @@ let Peq = (() => {
 			// render filter line
 			Self.render();
 		},
-		connect(loop) {
+		destroy() {
+			let Self = this;
+			if (Self._data._started) Self._data.source.stop();
+			Self._data.analyzer.destroy();
+
+			Dialogs._active.find(".list-body .list-row").remove();
+			Dialogs._active.find(".peq-dot-wrapper .peq-dot").remove();
+
+			Self._data.nodes.map(node => Self.remove(node.id));
+
+			// started flag
+			delete Self._data._started;
+		},
+		connect(offlineContext) {
 			let Self = this,
 				file = Dialogs._file,
 				buffer = AudioUtils.CopyBufferSegment({ file }),
-				source = Self._data.context.createBufferSource(),
-				destination = Self._data.context.destination,
-				nodes = Self._data.nodes,
-				rack = nodes.reduce((prev, curr) => { prev.connect(curr.filter); return curr.filter; }, source);
+				context = offlineContext || Self._data.context,
+				source = context.createBufferSource(),
+				destination = context.destination,
+				nodes = Self._data.nodes;
+
+			// if offline, re-create filters
+			if (offlineContext) {
+				nodes = nodes.map(node => {
+					let id = node.id,
+						filter = context.createBiquadFilter();
+					filter.Q.value = node.filter.Q.value;
+					filter.frequency.value = node.filter.frequency.value;
+					filter.gain.value = node.filter.gain.value;
+					filter.type = node.filter.type;
+					return { id, filter };
+				});
+			}
+			// pipe / connect filter rack
+			let rack = nodes.reduce((prev, curr) => { prev.connect(curr.filter); return curr.filter; }, source);
 
 			// preprare source buffer
 			source.buffer = buffer;
-			source.loop = loop;
-			
+			source.loop = !!context;
+
 			// connect rack to animation/destination
 			rack.connect(destination);
 
-			// connect analyzer animation
-			Self._data.analyzer.disconnectInput();
-			Self._data.analyzer.connectInput(rack);
-
+			if (!offlineContext) {
+				// connect analyzer animation
+				Self._data.analyzer.disconnectInput();
+				Self._data.analyzer.connectInput(rack);
+			}
 
 			// save reference to source
 			Self._data.source = source;
@@ -71,20 +98,11 @@ let Peq = (() => {
 			let Data = this._data,
 				id = node.id,
 				filter = Data.context.createBiquadFilter();
-			// 	destination = Data.context.destination;
-			// if (Data.nodes.length) destination = Data.nodes[0].filter;
 
 			filter.Q.value = node.Q;
 			filter.frequency.value = node.frequency;
 			filter.gain.value = node.gain;
 			filter.type = node.type;
-
-			// Data.source.connect(filter);
-			// filter.connect(destination);
-
-			// connect analyzer animation
-			// Data.analyzer.disconnectInput();
-			// Data.analyzer.connectInput(filter);
 
 			Data.nodes.unshift({ id, filter });
 			// ui update
@@ -96,18 +114,8 @@ let Peq = (() => {
 				index = Data.nodes.findIndex(node => node.id === id),
 				node = Data.nodes[index],
 				source = Data.source;
-			// disonnect node before delete
-			node.filter.disconnect();
 			// remove from nodes list
 			Data.nodes.splice(index, 1);
-			// reconnect nodes
-			// Data.nodes.reduce((prev, curr) => { prev.disconnect(); prev.connect(curr); return curr; }, source);
-
-			if (!Data.nodes.length) {
-				// Data.analyzer.disconnectInput();
-				// connect analyzer animation
-				Data.analyzer.connectInput(source);
-			}
 			// ui update
 			this.render();
 		},

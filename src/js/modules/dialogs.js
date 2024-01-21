@@ -833,9 +833,8 @@ const Dialogs = {
 				break;
 
 			case "create-filter-rack":
-				let isPreview = event.context.constructor != OfflineAudioContext;
 				// return stuff
-				return Peq.connect(isPreview);
+				return Peq.connect(event.context);
 
 			// standard dialog events
 			case "dlg-preview":
@@ -844,7 +843,7 @@ const Dialogs = {
 					// started flag
 					delete Peq._data._started;
 				} else {
-					Peq.connect(true);
+					Peq.connect();
 					// start source
 					Peq._data.source.start();
 					Peq._data._started = true;
@@ -870,6 +869,10 @@ const Dialogs = {
 			case "dlg-apply":
 			case "dlg-reset":
 			case "dlg-close":
+				if (event.type === "dlg-close") {
+					// reset peq engine
+					Peq.destroy();
+				}
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
 				break;
 		}

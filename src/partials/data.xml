@@ -30,8 +30,7 @@
 				<i id="2" type="lowpass" gain="-21" freq="5800" q="22.6" state="off"/>
 			</Slot>
 			<Slot id="2">
-				<i id="1" type="highpass" gain="1" freq="300" q="3" state="on"/>
-				<i id="2" type="lowpass" gain="15" freq="3000" q="5" state="on"/>
+				<i id="1" type="lowpass" gain="15" freq="500" q="5" state="on"/>
 			</Slot>
 		</Dialog>
 		<Dialog name="dlgGraphicEq">

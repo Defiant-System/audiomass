@@ -253,6 +253,8 @@ const UI = {
 						Spawn.find("content").removeClass("dialog-showing");
 						// reset element
 						el.removeClass("showing closing");
+						// close dialog
+						Peq.destroy();
 						// reset references
 						if (Dialogs._source) Dialogs._source.stop();
 						delete Dialogs._source;

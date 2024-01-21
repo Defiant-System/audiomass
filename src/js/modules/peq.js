@@ -37,13 +37,12 @@ let Peq = (() => {
 		destroy() {
 			let Self = this;
 			if (Self._data._started) Self._data.source.stop();
-			Self._data.analyzer.destroy();
-
+			// DOM clean up
 			Dialogs._active.find(".list-body .list-row").remove();
 			Dialogs._active.find(".peq-dot-wrapper .peq-dot").remove();
-
+			// data reverences clean up
+			Self._data.analyzer.destroy();
 			Self._data.nodes.map(node => Self.remove(node.id));
-
 			// started flag
 			delete Self._data._started;
 		},
@@ -70,11 +69,9 @@ let Peq = (() => {
 			}
 			// pipe / connect filter rack
 			let rack = nodes.reduce((prev, curr) => { prev.connect(curr.filter); return curr.filter; }, source);
-
 			// preprare source buffer
 			source.buffer = buffer;
 			source.loop = !!context;
-
 			// connect rack to animation/destination
 			rack.connect(destination);
 

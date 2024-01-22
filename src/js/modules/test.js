@@ -28,7 +28,7 @@ let Test = {
 		// }, 900);
 
 		// setTimeout(() => APP.dispatch({ type: "open-dialog", arg: "dlgVocoder", spawn }), 700);
-		// return;
+		return;
 
 		// setTimeout(() => {
 		// 	APP.spawn.dispatch({ type: "mono-left-channel", spawn });

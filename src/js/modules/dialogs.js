@@ -867,12 +867,11 @@ const Dialogs = {
 				break;
 
 			case "dlg-apply":
+				if (event.type === "dlg-apply") {
+					if (Peq._data._started) Peq.disconnect();
+				}
 			case "dlg-reset":
 			case "dlg-close":
-				if (event.type === "dlg-close") {
-					// reset peq engine
-					Peq.destroy();
-				}
 				UI.doDialog({ ...event, type: `${event.type}-common`, name: "dlgParagraphicEq" });
 				break;
 		}

@@ -1,9 +1,9 @@
 <Data>
 	<Samples>
-		<i type="sample" icon="file-mp3" name="piano.mp3" sizeB="12065" duration="2.88s"/>
-		<i type="cdn" icon="file-mp3" name="llama.mp3" sizeB="38789" duration="5.33s"/>
-		<i type="cdn" icon="file-mp3" name="dream.mp3" sizeB="28003" duration="1.75s"/>
-		<i type="cdn" icon="file-ogg" name="the-underworld.ogg" sizeB="1540107" duration="1.35m"/>
+		<i icon="file-mp3" name="piano.mp3" sizeB="12065" duration="2.88s"/>
+		<i icon="file-mp3" path="/cdn/audio/mp3" name="llama.mp3" sizeB="38789" duration="5.33s"/>
+		<i icon="file-mp3" path="/cdn/audio/mp3" name="dream.mp3" sizeB="28003" duration="1.75s"/>
+		<i icon="file-ogg" path="/cdn/audio/ogg" name="the-underworld.ogg" sizeB="1540107" duration="1.35m"/>
 		<!-- <i type="cdn" icon="file-mp3" name="drum.mp3" sizeB="10089" duration="2.40s"/> -->
 	</Samples>
 	<Recents>

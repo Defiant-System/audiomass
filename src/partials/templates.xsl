@@ -32,6 +32,7 @@
 <xsl:template name="sample-list">
 	<xsl:for-each select="./Samples/*">
 		<div class="sample">
+			<xsl:if test="@path"><xsl:attribute name="data-path"><xsl:value-of select="@path"/></xsl:attribute></xsl:if>
 			<i>
 				<xsl:attribute name="class"><xsl:value-of select="@icon"/></xsl:attribute>
 			</i>

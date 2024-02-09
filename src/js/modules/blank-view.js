@@ -10,7 +10,7 @@
 				el: Spawn.find(".blank-view"),
 			}
 		};
-		
+
 		// get settings, if any
 		let xList = $.xmlFromString(`<Recents/>`);
 		let xSamples = window.bluePrint.selectSingleNode(`//Samples`);
@@ -57,7 +57,12 @@
 				// close "current tab"
 				APP.spawn.dispatch({ type: "close-tab", spawn: Spawn, delayed: true });
 				// send event to APP for proxy down to spawn
-				APP.dispatch({ ...event, type: "load-samples", samples: [el.find("h4").text()] });
+				name = el.find("h4").html();
+				if (el.data("path")) {
+					APP.dispatch({ ...event, type: "open-url", url: [`${el.data("path")}/${name}`] });
+				} else {
+					APP.dispatch({ ...event, type: "load-samples", samples: [name] });
+				}
 				break;
 		}
 	}

@@ -91,7 +91,7 @@
 	<Menu name="Help">
 		<Menu name="ImAudio Help" click="open-help"/>
 		<Menu type="divider"/>
-		<Menu name="License"/>
+		<Menu name="License" shell="win -al"/>
 	</Menu>
 
 	<Menu for="selection">

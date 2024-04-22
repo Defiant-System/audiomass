@@ -18,12 +18,6 @@
 			.block-recent,
 			.block-samples {
 				color: #ccc;
-
-				.sample {
-					i {
-						filter: hue-rotate(175deg) brightness(2) invert(1) drop-shadow(0 1px 0 rgba(#000,.5));
-					}
-				}
 			}
 		}
 	}
@@ -63,13 +57,13 @@
 		}
 
 		.block-recent,
-		.block-presets {
+		.block-samples {
 			color: #aaa;
 
-			// .recent-file,
-			.preset {
+			.recent-file,
+			.sample {
 				background-color: rgba(#000,.125);
-				box-shadow: inset 0 0 0 3px rgba(#fff,.15);
+				// box-shadow: inset 0 0 0 3px rgba(#fff,.15);
 
 				&:hover {
 					color: #eee;
@@ -85,7 +79,7 @@
 				}
 
 				i {
-					filter: invert(1) opacity(0.75);
+					filter: hue-rotate(95deg) brightness(1.5) drop-shadow(0 1px 0 rgba(#000,.5));
 				}
 			}
 		}

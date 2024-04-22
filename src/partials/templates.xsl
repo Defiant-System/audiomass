@@ -4,12 +4,17 @@
 	<h2>Welcome to ImAudio.</h2>
 
 	<div class="block-buttons">
+		<div class="btn disabled_" data-click="new-file">
+			<i class="icon-new-file"></i>
+			New
+		</div>
+		
 		<div class="btn" data-click="open-filesystem">
 			<i class="icon-folder-open"></i>
 			Open&#8230;
 		</div>
 
-		<div class="btn" data-click="from-clipboard">
+		<div class="btn disabled_" data-click="from-clipboard">
 			<i class="icon-clipboard"></i>
 			From clipboard
 		</div>

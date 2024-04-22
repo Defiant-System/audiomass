@@ -215,6 +215,11 @@
 		 6,10.9 2,6.9 -0.1,9 6,15.1"/>
 	</svg>
 
+	<svg id="icon-new-file" viewBox="0 0 17 17">
+		<polygon fill="#333" points="3,2 3,15 14,15 14,7 8.9,7 8.9,2 "/>
+		<polygon fill="#333" points="9.7,6.3 13.9,6.3 9.7,2.1 "/>
+	</svg>
+
 	<svg id="icon-folder-open" viewBox="0 0 17 17">
 		<style type="text/css">
 			.st0{fill:#333;}

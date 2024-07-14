@@ -10,7 +10,7 @@
 @import "./modules/ui.js"
 @import "./modules/test.js"
 
-
+// bundled libs, etc
 let {
 	AudioContext,
 	AudioMotionAnalyzer,
@@ -26,8 +26,22 @@ let {
 } = await window.fetch("~/js/bundle.js");
 
 
+// default preferences
+let Pref = {
+		dock: true,
+		cursor: {
+			follow: true,
+			center: true,
+		}
+	};
+
+
 const imaudio = {
 	init() {
+		// get settings, if any
+		this.settings = window.settings.getItem("settings") || { ...Pref };
+		
+		// auto fire events
 		this.dispatch({ type: "init-workers" });
 	},
 	dispose(event) {

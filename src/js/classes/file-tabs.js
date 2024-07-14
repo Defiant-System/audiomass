@@ -59,6 +59,8 @@ class FileTabs {
 			this._stack[file.id] = { tabEl, history, file, fileEl };
 			// focus on file
 			this.focus(file.id);
+			// new tab: obey settings
+			this._parent.dispatch({ type: "apply-settings", spawn: this._spawn });
 		}
 	}
 

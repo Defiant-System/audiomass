@@ -29,7 +29,7 @@
 			// system events
 			case "spawn.open":
 				Spawn.data.tabs = new FileTabs(Self, Spawn);
-				
+
 				// fast references
 				Spawn.data.els = {
 					content: Spawn.find("content"),
@@ -57,6 +57,10 @@
 				Self.spectrum.dispatch(event);
 				break;
 			case "open.file":
+				// hide blank view
+				Tabs.dispatch({ ...event, type: "hide-blank-view" });
+
+				// console.log(event);
 				(event.files || [event]).map(async fHandle => {
 					let file = await fHandle.open({ responseType: "blob" });
 					// auto add first base "tab"
@@ -74,6 +78,10 @@
 				break;
 			case "tab.close":
 				Tabs.remove(event.el.data("id"));
+				break;
+
+			case "apply-settings":
+				console.log(APP.settings);
 				break;
 
 			case "open-url":
@@ -226,7 +234,7 @@
 				if (value) event.xMenu.removeAttribute("is-checked");
 				else event.xMenu.setAttribute("is-checked", 1);
 				break;
-
+				
 			case "deselect-region":
 				file = Spawn.data.tabs.active.file;
 				file.dispatch({ type: "ws-region-reset" });
@@ -251,6 +259,12 @@
 				if (value) event.xMenu.removeAttribute("is-checked");
 				else event.xMenu.setAttribute("is-checked", "1");
 				break;
+
+			// proxy event
+			case "reset-zoom":
+				APP.spawn.waves.dispatch(event);
+				break;
+			
 			default:
 				if (event.el) {
 					let pEl = event.el.parents(`div[data-area]`);

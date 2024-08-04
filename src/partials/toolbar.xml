@@ -1,6 +1,6 @@
 <CaptionToolBar has="display">
 	<Group>
-		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="active"/>
+		<Tool symbol="icon-sidebar" click="toggle-sidebar" state="disabled"/>
 		<Options>
 			<Tool symbol="icon-undo" click="file-undo" state="disabled"/>
 			<Tool symbol="icon-redo" click="file-redo" state="disabled"/>
